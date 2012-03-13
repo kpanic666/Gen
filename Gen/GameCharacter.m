@@ -13,10 +13,6 @@
 @synthesize characterHealth;
 @synthesize characterState;
 
-- (void)dealloc {
-    [super dealloc];
-}
-
 - (int)getWeaponDamage {
     return 0;
 }

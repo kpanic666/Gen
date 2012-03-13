@@ -16,12 +16,14 @@
 		E98319EB150E0E43006F2E31 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319EA150E0E43006F2E31 /* Default.png */; };
 		E98319F4150E0EC2006F2E31 /* genbyatlas-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E98319EC150E0EC2006F2E31 /* genbyatlas-hd.plist */; };
 		E98319F5150E0EC2006F2E31 /* genbyatlas-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319ED150E0EC2006F2E31 /* genbyatlas-hd.png */; };
-		E98319F6150E0EC2006F2E31 /* genbyatlas-ipad-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E98319EE150E0EC2006F2E31 /* genbyatlas-ipad-hd.plist */; };
-		E98319F7150E0EC2006F2E31 /* genbyatlas-ipad-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319EF150E0EC2006F2E31 /* genbyatlas-ipad-hd.png */; };
 		E98319F8150E0EC2006F2E31 /* genbyatlas-ipad.plist in Resources */ = {isa = PBXBuildFile; fileRef = E98319F0150E0EC2006F2E31 /* genbyatlas-ipad.plist */; };
 		E98319F9150E0EC2006F2E31 /* genbyatlas-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319F1150E0EC2006F2E31 /* genbyatlas-ipad.png */; };
 		E98319FA150E0EC2006F2E31 /* genbyatlas.plist in Resources */ = {isa = PBXBuildFile; fileRef = E98319F2150E0EC2006F2E31 /* genbyatlas.plist */; };
 		E98319FB150E0EC2006F2E31 /* genbyatlas.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319F3150E0EC2006F2E31 /* genbyatlas.png */; };
+		E98319FE150F0370006F2E31 /* genbyatlas-ipadhd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E98319FC150F0370006F2E31 /* genbyatlas-ipadhd.plist */; };
+		E98319FF150F0370006F2E31 /* genbyatlas-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319FD150F0370006F2E31 /* genbyatlas-ipadhd.png */; };
+		E9831A02150F0792006F2E31 /* GameManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9831A01150F0792006F2E31 /* GameManager.mm */; };
+		E9831A04150F12C6006F2E31 /* SoundEffects.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9831A03150F12C6006F2E31 /* SoundEffects.plist */; };
 		E9958701150B77550006115C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958700150B77550006115C /* QuartzCore.framework */; };
 		E9958703150B77550006115C /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958702150B77550006115C /* OpenGLES.framework */; };
 		E9958705150B77550006115C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958704150B77550006115C /* OpenAL.framework */; };
@@ -213,12 +215,15 @@
 		E98319EA150E0E43006F2E31 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		E98319EC150E0EC2006F2E31 /* genbyatlas-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-hd.plist"; sourceTree = "<group>"; };
 		E98319ED150E0EC2006F2E31 /* genbyatlas-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-hd.png"; sourceTree = "<group>"; };
-		E98319EE150E0EC2006F2E31 /* genbyatlas-ipad-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad-hd.plist"; sourceTree = "<group>"; };
-		E98319EF150E0EC2006F2E31 /* genbyatlas-ipad-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad-hd.png"; sourceTree = "<group>"; };
 		E98319F0150E0EC2006F2E31 /* genbyatlas-ipad.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad.plist"; sourceTree = "<group>"; };
 		E98319F1150E0EC2006F2E31 /* genbyatlas-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad.png"; sourceTree = "<group>"; };
 		E98319F2150E0EC2006F2E31 /* genbyatlas.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = genbyatlas.plist; sourceTree = "<group>"; };
 		E98319F3150E0EC2006F2E31 /* genbyatlas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = genbyatlas.png; sourceTree = "<group>"; };
+		E98319FC150F0370006F2E31 /* genbyatlas-ipadhd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipadhd.plist"; sourceTree = "<group>"; };
+		E98319FD150F0370006F2E31 /* genbyatlas-ipadhd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipadhd.png"; sourceTree = "<group>"; };
+		E9831A00150F0792006F2E31 /* GameManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameManager.h; sourceTree = "<group>"; };
+		E9831A01150F0792006F2E31 /* GameManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GameManager.mm; sourceTree = "<group>"; };
+		E9831A03150F12C6006F2E31 /* SoundEffects.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SoundEffects.plist; sourceTree = "<group>"; };
 		E99586FC150B77550006115C /* Gen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9958700150B77550006115C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E9958702150B77550006115C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -1180,6 +1185,7 @@
 		E995892A150B7D9E0006115C /* Plists */ = {
 			isa = PBXGroup;
 			children = (
+				E9831A03150F12C6006F2E31 /* SoundEffects.plist */,
 			);
 			name = Plists;
 			sourceTree = "<group>";
@@ -1189,6 +1195,8 @@
 			children = (
 				E9958916150B77570006115C /* AppDelegate.h */,
 				E9958917150B77570006115C /* AppDelegate.mm */,
+				E9831A00150F0792006F2E31 /* GameManager.h */,
+				E9831A01150F0792006F2E31 /* GameManager.mm */,
 			);
 			name = Singletons;
 			sourceTree = "<group>";
@@ -1307,10 +1315,10 @@
 		E995893C150B80910006115C /* Atlases */ = {
 			isa = PBXGroup;
 			children = (
+				E98319FC150F0370006F2E31 /* genbyatlas-ipadhd.plist */,
+				E98319FD150F0370006F2E31 /* genbyatlas-ipadhd.png */,
 				E98319EC150E0EC2006F2E31 /* genbyatlas-hd.plist */,
 				E98319ED150E0EC2006F2E31 /* genbyatlas-hd.png */,
-				E98319EE150E0EC2006F2E31 /* genbyatlas-ipad-hd.plist */,
-				E98319EF150E0EC2006F2E31 /* genbyatlas-ipad-hd.png */,
 				E98319F0150E0EC2006F2E31 /* genbyatlas-ipad.plist */,
 				E98319F1150E0EC2006F2E31 /* genbyatlas-ipad.png */,
 				E98319F2150E0EC2006F2E31 /* genbyatlas.plist */,
@@ -1454,12 +1462,13 @@
 				E98319EB150E0E43006F2E31 /* Default.png in Resources */,
 				E98319F4150E0EC2006F2E31 /* genbyatlas-hd.plist in Resources */,
 				E98319F5150E0EC2006F2E31 /* genbyatlas-hd.png in Resources */,
-				E98319F6150E0EC2006F2E31 /* genbyatlas-ipad-hd.plist in Resources */,
-				E98319F7150E0EC2006F2E31 /* genbyatlas-ipad-hd.png in Resources */,
 				E98319F8150E0EC2006F2E31 /* genbyatlas-ipad.plist in Resources */,
 				E98319F9150E0EC2006F2E31 /* genbyatlas-ipad.png in Resources */,
 				E98319FA150E0EC2006F2E31 /* genbyatlas.plist in Resources */,
 				E98319FB150E0EC2006F2E31 /* genbyatlas.png in Resources */,
+				E98319FE150F0370006F2E31 /* genbyatlas-ipadhd.plist in Resources */,
+				E98319FF150F0370006F2E31 /* genbyatlas-ipadhd.png in Resources */,
+				E9831A04150F12C6006F2E31 /* SoundEffects.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1622,6 +1631,7 @@
 				E995895D150CB5730006115C /* Box2DSprite.mm in Sources */,
 				E9958960150CB6050006115C /* Box2DHelpers.mm in Sources */,
 				E9958963150CB7040006115C /* ChildCell.mm in Sources */,
+				E9831A02150F0792006F2E31 /* GameManager.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

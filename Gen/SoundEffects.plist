@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>kGameLevel2</key>
+	<dict/>
+	<key>kNoSceneUninitialized</key>
+	<dict/>
+	<key>kMainMenuScene</key>
+	<dict/>
+	<key>kOptionsScene</key>
+	<dict/>
+	<key>kCreditsScene</key>
+	<dict/>
+	<key>kIntroScene</key>
+	<dict/>
+	<key>kLevelCompleteScene</key>
+	<dict/>
+	<key>kGameLevel1</key>
+	<dict/>
+	<key>kGameLevel3</key>
+	<dict/>
+	<key>kGameLevel4</key>
+	<dict/>
+	<key>kGameLevel5</key>
+	<dict/>
+</dict>
+</plist>

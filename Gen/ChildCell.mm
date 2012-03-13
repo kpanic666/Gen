@@ -10,11 +10,19 @@
 
 @implementation ChildCell
 
-- (id)init
+- (void)createBodyAtLocation:(CGPoint)location
+{
+    
+}
+
+- (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location
 {
     if ((self = [super init])) {
-        [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childCell.png"]];
+        world = theWorld;
+        [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_idle.png"]];
         gameObjectType = kChildCellType;
+        characterHealth = 100.0f;
+        [self createBodyAtLocation:location];
     }
     return self;
 }
@@ -22,11 +30,6 @@
 - (BOOL)mouseJointBegan
 {
     return TRUE;
-}
-
--(void) dealloc
-{
-    [super dealloc];
 }
 
 @end

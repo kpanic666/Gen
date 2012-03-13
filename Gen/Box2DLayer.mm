@@ -40,7 +40,7 @@
 
 -(void) setupDebugDraw
 {
-    m_debugDraw = new GLESDebugDraw(PTM_RATIO);
+    m_debugDraw = new GLESDebugDraw(PTM_RATIO * [[CCDirector sharedDirector] contentScaleFactor]);
     world->SetDebugDraw(m_debugDraw);
     uint32 flags = 0;
 	flags += b2Draw::e_shapeBit;

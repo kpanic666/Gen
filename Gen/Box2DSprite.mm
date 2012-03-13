@@ -16,10 +16,5 @@
     return TRUE;
 }
 
--(void) dealloc
-{
-    [super dealloc];
-}
-
 @end
 
