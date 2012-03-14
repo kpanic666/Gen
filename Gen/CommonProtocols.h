@@ -9,7 +9,6 @@
 typedef enum {
     kStateSpawning,
     kStateIdle,
-    kStateWalking,
     kStateBreathing,
     kStateTakingDamage,
     kStateDead,

@@ -34,7 +34,7 @@
 #import "CCTextureCache.h"
 #import "CCDrawingPrimitives.h"
 #import "CCShaderCache.h"
-#import "ccGLState.h"
+#import "ccGLStateCache.h"
 #import "CCGLProgram.h"
 #import "CCDirector.h"
 #import "Support/CGPointExtension.h"
@@ -650,8 +650,6 @@
 	}
 }
 
-
-
 //
 // CCNode property overloads
 // used only when parent is CCSpriteBatchNode
@@ -661,6 +659,7 @@
 -(void) setReorderChildDirtyRecursively
 {
 	//only set parents flag the first time
+
 	if ( ! isReorderChildDirty_ )
 	{
 		isReorderChildDirty_ = YES;
@@ -886,11 +885,11 @@
 
 	NSAssert( a, @"CCSprite#setDisplayFrameWithAnimationName: Frame not found");
 
-	CCSpriteFrame *frame = [[a frames] objectAtIndex:frameIndex];
+	CCAnimationFrame *frame = [[a frames] objectAtIndex:frameIndex];
 
 	NSAssert( frame, @"CCSprite#setDisplayFrame. Invalid frame");
 
-	[self setDisplayFrame:frame];
+	[self setDisplayFrame:frame.spriteFrame];
 }
 
 
@@ -902,7 +901,7 @@
 			CGPointEqualToPoint( frame.offset, unflippedOffsetPositionFromCenter_ ) );
 }
 
--(CCSpriteFrame*) displayedFrame
+-(CCSpriteFrame*) displayFrame
 {
 	return [CCSpriteFrame frameWithTexture:texture_
 							  rectInPixels:CC_RECT_POINTS_TO_PIXELS(rect_)

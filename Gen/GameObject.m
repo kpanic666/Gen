@@ -82,7 +82,7 @@
     
     for (NSString *frameNumber in animationFrameNumbers) {
         NSString *frameName = [NSString stringWithFormat:@"%@%@.png",animationFramePrefix,frameNumber];
-        [animationToReturn addFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:frameName]];
+        [animationToReturn addSpriteFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:frameName]];
     }
     
     return animationToReturn;

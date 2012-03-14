@@ -4,7 +4,7 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>background1-ipad.png</key>
+            <key>background1.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{0,0},{1024,768}}</string>
@@ -17,7 +17,7 @@
                 <key>sourceSize</key>
                 <string>{1024,768}</string>
             </dict>
-            <key>childcell_idle-ipad.png</key>
+            <key>childcell_idle.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{0,804},{32,32}}</string>
@@ -30,7 +30,7 @@
                 <key>sourceSize</key>
                 <string>{32,32}</string>
             </dict>
-            <key>childcell_travelling-ipad.png</key>
+            <key>childcell_travelling.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{0,770},{32,32}}</string>
@@ -53,7 +53,7 @@
             <key>size</key>
             <string>{1024,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:8c0dad755f30996f486822d795b8973e$</string>
+            <string>$TexturePacker:SmartUpdate:132cf6445a8f748f9007040e8e1ff4c2$</string>
             <key>textureFileName</key>
             <string>genbyatlas-ipad.png</string>
         </dict>

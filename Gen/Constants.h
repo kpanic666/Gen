@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 kpanic666@gmail.com. All rights reserved.
 //
 
+#define kChildCellHealth 100
+#define kRedCellDamage 100
+
 typedef enum {
     kNoSceneUninitialized=0,
     kMainMenuScene=1,
