@@ -367,7 +367,7 @@ static GameManager* _sharedGameManager = nil;
     }
     
     if ([[CCDirector sharedDirector] runningScene] == nil) {
-        [[CCDirector sharedDirector] runWithScene:sceneToRun];
+        [[CCDirector sharedDirector] pushScene:sceneToRun];
     } else {
         [[CCDirector sharedDirector] replaceScene:[CCTransitionFlipAngular transitionWithDuration:0.5f scene:sceneToRun]];
     }

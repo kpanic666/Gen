@@ -20,7 +20,7 @@
             <key>childcell_idle.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,804},{32,32}}</string>
+                <string>{{0,870},{32,32}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -33,7 +33,7 @@
             <key>childcell_travelling.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,770},{32,32}}</string>
+                <string>{{0,836},{32,32}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -42,6 +42,19 @@
                 <string>{{0,0},{32,32}}</string>
                 <key>sourceSize</key>
                 <string>{32,32}</string>
+            </dict>
+            <key>parentcell_travelling.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{0,770},{64,64}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{64,64}}</string>
+                <key>sourceSize</key>
+                <string>{64,64}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -53,7 +66,7 @@
             <key>size</key>
             <string>{1024,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:132cf6445a8f748f9007040e8e1ff4c2$</string>
+            <string>$TexturePacker:SmartUpdate:48fc6b16a3641167cc0d58613894ff55$</string>
             <key>textureFileName</key>
             <string>genbyatlas-ipad.png</string>
         </dict>

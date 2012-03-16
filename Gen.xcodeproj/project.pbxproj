@@ -141,6 +141,7 @@
 		E9831C3F15108877006F2E31 /* example_Twist.fsh in Sources */ = {isa = PBXBuildFile; fileRef = E9831C2F15108877006F2E31 /* example_Twist.fsh */; };
 		E9831C4015108877006F2E31 /* example_Twist.vsh in Sources */ = {isa = PBXBuildFile; fileRef = E9831C3015108877006F2E31 /* example_Twist.vsh */; };
 		E9831C44151089AF006F2E31 /* fps_images-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = E9831C43151089AE006F2E31 /* fps_images-ipadhd.png */; };
+		E9831C481511D9F6006F2E31 /* ParentCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9831C471511D9F5006F2E31 /* ParentCell.mm */; };
 		E9958701150B77550006115C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958700150B77550006115C /* QuartzCore.framework */; };
 		E9958703150B77550006115C /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958702150B77550006115C /* OpenGLES.framework */; };
 		E9958705150B77550006115C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958704150B77550006115C /* OpenAL.framework */; };
@@ -471,6 +472,9 @@
 		E9831C2F15108877006F2E31 /* example_Twist.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = example_Twist.fsh; sourceTree = "<group>"; };
 		E9831C3015108877006F2E31 /* example_Twist.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = example_Twist.vsh; sourceTree = "<group>"; };
 		E9831C43151089AE006F2E31 /* fps_images-ipadhd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "fps_images-ipadhd.png"; path = "Resources/fps_images-ipadhd.png"; sourceTree = "<group>"; };
+		E9831C451510A4C9006F2E31 /* SimpleQueryCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleQueryCallback.h; sourceTree = "<group>"; };
+		E9831C461511D9F4006F2E31 /* ParentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParentCell.h; sourceTree = "<group>"; };
+		E9831C471511D9F5006F2E31 /* ParentCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ParentCell.mm; sourceTree = "<group>"; };
 		E99586FC150B77550006115C /* Gen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9958700150B77550006115C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E9958702150B77550006115C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -1009,9 +1013,9 @@
 				E9958931150B7FAC0006115C /* Enemy Objects */,
 				E9958930150B7F7F0006115C /* Game Objects */,
 				E995892A150B7D9E0006115C /* Plists */,
-				E9958713150B77550006115C /* Resources */,
 				E9958929150B7D920006115C /* Scenes */,
 				E995892B150B7DAB0006115C /* Singletons */,
+				E9958713150B77550006115C /* Resources */,
 				E9958744150B77550006115C /* libs */,
 				E9831C2015108876006F2E31 /* Shaders */,
 				E9958912150B77570006115C /* Supporting Files */,
@@ -1276,6 +1280,7 @@
 		E9958933150B7FD80006115C /* Box2D */ = {
 			isa = PBXGroup;
 			children = (
+				E9831C451510A4C9006F2E31 /* SimpleQueryCallback.h */,
 				E9831A0D15106931006F2E31 /* GLES-Render.h */,
 				E9831A0E15106931006F2E31 /* GLES-Render.mm */,
 				E995894B150C78E90006115C /* Helper.h */,
@@ -1424,6 +1429,8 @@
 				E995895C150CB5730006115C /* Box2DSprite.mm */,
 				E9958961150CB7030006115C /* ChildCell.h */,
 				E9958962150CB7030006115C /* ChildCell.mm */,
+				E9831C461511D9F4006F2E31 /* ParentCell.h */,
+				E9831C471511D9F5006F2E31 /* ParentCell.mm */,
 			);
 			name = Box2D;
 			sourceTree = "<group>";
@@ -1681,6 +1688,7 @@
 				E9831C3E15108877006F2E31 /* example_Plasma.vsh in Sources */,
 				E9831C3F15108877006F2E31 /* example_Twist.fsh in Sources */,
 				E9831C4015108877006F2E31 /* example_Twist.vsh in Sources */,
+				E9831C481511D9F6006F2E31 /* ParentCell.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

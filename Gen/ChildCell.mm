@@ -16,6 +16,8 @@
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO);
+    bodyDef.linearDamping = 0.4f;
+    bodyDef.fixedRotation = TRUE;
     body = world->CreateBody(&bodyDef);
     body->SetUserData(self);
     
@@ -23,9 +25,9 @@
     b2CircleShape shape;
     shape.m_radius = self.contentSize.width * 0.5f / PTM_RATIO;
     fixtureDef.shape = &shape;
-    fixtureDef.density = 1.0;
-    fixtureDef.friction = 0.5;
-    fixtureDef.restitution = 0.5;
+    fixtureDef.density = 0.5;
+    fixtureDef.friction = 1.0;
+    fixtureDef.restitution = 0.1;
     body->CreateFixture(&fixtureDef);
 }
 
@@ -55,7 +57,7 @@
         world = theWorld;
         [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_idle.png"]];
         gameObjectType = kChildCellType;
-//        characterState = kStateSpawning;
+        characterState = kStateSpawning;
         characterHealth = kChildCellHealth;
         [self createBodyAtLocation:location];
     }

@@ -11,9 +11,27 @@
 @implementation Box2DSprite
 @synthesize body;
 
+- (void)createBodyAtLocation:(CGPoint)location
+{
+    
+}
+
+- (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location
+{
+    world = theWorld;
+    return self;
+}
+
 - (BOOL)mouseJointBegan
 {
     return TRUE;
+}
+
+- (void) dealloc
+{
+    world = nil;
+    body = nil;
+    [super dealloc];
 }
 
 @end

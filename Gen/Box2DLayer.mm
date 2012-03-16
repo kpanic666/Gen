@@ -9,6 +9,7 @@
 #import "Box2DLayer.h"
 #import "SimpleAudioEngine.h"
 #import "AppDelegate.h"
+#import "Box2DSprite.h"
 
 @implementation Box2DLayer
 
@@ -30,7 +31,7 @@
 -(void) setupWorld
 {
     b2Vec2 gravity;
-    gravity.Set(0.0f, -10.0f);
+    gravity.Set(0.0f, 0.0f);
     world = new b2World(gravity);
 	
 	// Do we want to let bodies sleep?
@@ -40,11 +41,11 @@
 
 -(void) setupDebugDraw
 {
-    m_debugDraw = new GLESDebugDraw(PTM_RATIO * [[CCDirector sharedDirector] contentScaleFactor]);
+    m_debugDraw = new GLESDebugDraw(PTM_RATIO);
     world->SetDebugDraw(m_debugDraw);
     uint32 flags = 0;
 	flags += b2Draw::e_shapeBit;
-	//		flags += b2Draw::e_jointBit;
+	flags += b2Draw::e_jointBit;
 	//		flags += b2Draw::e_aabbBit;
 	//		flags += b2Draw::e_pairBit;
 	//		flags += b2Draw::e_centerOfMassBit;
@@ -143,6 +144,21 @@
     while (timeAccumulator >= UPDATE_INTERVAL) {
         timeAccumulator -= UPDATE_INTERVAL;
         world->Step(UPDATE_INTERVAL, velocityIterations, positionIterations);
+    }
+    
+    // Adjust sprite for physics bodies
+    for (b2Body *b = world->GetBodyList(); b != NULL; b = b->GetNext()) {
+        if (b->GetUserData() != NULL) {
+            Box2DSprite *sprite = (Box2DSprite*) b->GetUserData();
+            sprite.position = ccp(b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO);
+            sprite.rotation = CC_RADIANS_TO_DEGREES(b->GetAngle() * -1);
+        }
+    }
+    
+    // Force update all objects
+    CCArray *listOfGameObjects = [sceneSpriteBatchNode children];
+    for (GameCharacter *tempChar in listOfGameObjects) {
+        [tempChar updateStateWithDeltaTime:dt andListOfGameObjects:listOfGameObjects];
     }
 }
 

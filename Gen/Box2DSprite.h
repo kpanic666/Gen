@@ -11,6 +11,7 @@
 
 @interface Box2DSprite : GameCharacter {
     b2Body *body;
+    b2World *world;
 }
 
 @property (assign) b2Body *body;
@@ -18,5 +19,7 @@
 // Return TRUE to accept the mouse joint
 // Return FALSE to reject the mouse joint
 - (BOOL)mouseJointBegan;
+- (id)initWithWorld:(b2World*)theWorld atLocation:(CGPoint)location;
+- (void)createBodyAtLocation:(CGPoint)location;
 
 @end

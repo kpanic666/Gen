@@ -8,7 +8,13 @@
 
 #import "Box2DLayer.h"
 
-@interface Scene1 : Box2DLayer
+@class ChildCell;
+@class ParentCell;
+
+@interface Scene1 : Box2DLayer {
+    CCArray *childCellsArray;
+    ParentCell *parentCell;
+}
 
 @end
 

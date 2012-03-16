@@ -7,7 +7,11 @@
 //
 
 #define kChildCellHealth 100
+#define kChildCellSpriteTagValue 1
+#define kChildCellStartNum 10
+#define kParentCellSpriteTagValue 10
 #define kRedCellDamage 100
+
 
 typedef enum {
     kNoSceneUninitialized=0,
