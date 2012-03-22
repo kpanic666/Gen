@@ -126,6 +126,7 @@
 - (void)dealloc
 {
     childCellsArray = nil;
+    parentCell = nil;
     [super dealloc];
 }
 

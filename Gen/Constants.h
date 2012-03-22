@@ -8,10 +8,15 @@
 
 #define kChildCellHealth 100
 #define kChildCellSpriteTagValue 1
-#define kChildCellStartNum 10
+#define kChildCellStartNum 25
 #define kParentCellSpriteTagValue 10
 #define kRedCellDamage 100
 
+// Collision Filter Categories
+typedef enum {
+    kParentCellFilterCategory = 0x0002,
+    kChildCellFilterCategory = 0x0003
+} FilterCategories;
 
 typedef enum {
     kNoSceneUninitialized=0,
@@ -69,4 +74,4 @@ typedef enum {
 //#define BACKGROUND_TRACK_ESCAPE @"EscapeTheFutureV3.mp3"
 
 // PTM ratio for Box2D
-#define PTM_RATIO ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 64.0 : 32.0)
+#define PTM_RATIO ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 32.0 : 16.0)

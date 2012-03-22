@@ -9,7 +9,9 @@
 #import "Box2DSprite.h"
 
 @implementation Box2DSprite
+
 @synthesize body;
+@synthesize markedForDestruction;
 
 - (void)createBodyAtLocation:(CGPoint)location
 {
@@ -19,6 +21,7 @@
 - (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location
 {
     world = theWorld;
+    markedForDestruction = FALSE;
     return self;
 }
 

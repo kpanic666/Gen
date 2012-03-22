@@ -12,9 +12,11 @@
 @interface Box2DSprite : GameCharacter {
     b2Body *body;
     b2World *world;
+    BOOL markedForDestruction;
 }
 
 @property (assign) b2Body *body;
+@property (readwrite, assign) BOOL markedForDestruction;
 
 // Return TRUE to accept the mouse joint
 // Return FALSE to reject the mouse joint

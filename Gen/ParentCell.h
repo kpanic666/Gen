@@ -9,6 +9,9 @@
 #import "Box2DSprite.h"
 
 @interface ParentCell : Box2DSprite
+{
+    NSMutableArray *disJointsToDestroy;
+}
 
 - (void)changeBodyPosition:(b2Vec2)position;
 

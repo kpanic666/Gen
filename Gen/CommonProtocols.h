@@ -7,12 +7,16 @@
 //
 
 typedef enum {
-    kStateSpawning,
-    kStateIdle,
+    kStateSpawning,         // Начальное состояние для всех объектов
+    kStateIdle,             // ParentCell without touch, ChildCell вне радиуса действия ParentCell
     kStateBreathing,
-    kStateTakingDamage,
-    kStateDead,
-    kStateTraveling
+    kStateTakingDamage,     // ChildCell при соприкосновении с RedCell
+    kStateDead,             // ChildCell при смерти
+    kStateTraveling,        // ParentCell при нажатии на экран
+    kStateConnecting,       // ChildCell при входе в зону сенсора ParentCell
+    kStateConnected,        // ChildCell в зоне действия сенсора, уже с задействованными джойнтами
+    kStateDisconnecting,    // ChildCell при выходе из зоны сенсора. Следующее состояние kStateIdle уже без джоинтов
+    kStateSaved             // ChildCell которые добрались до выхода и плавают в нем, но не выходят
 } CharacterStates;
 
 typedef enum {

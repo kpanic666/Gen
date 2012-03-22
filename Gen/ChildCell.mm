@@ -7,7 +7,6 @@
 //
 
 #import "ChildCell.h"
-#import "Box2DHelpers.h"
 
 @implementation ChildCell
 
@@ -16,17 +15,19 @@
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO);
-    bodyDef.linearDamping = 0.4f;
+    bodyDef.linearDamping = 0.5f;
     bodyDef.fixedRotation = TRUE;
+    bodyDef.allowSleep = FALSE;
     body = world->CreateBody(&bodyDef);
     body->SetUserData(self);
     
     b2FixtureDef fixtureDef;
     b2CircleShape shape;
-    shape.m_radius = self.contentSize.width * 0.5f / PTM_RATIO;
+    shape.m_radius = self.contentSize.width * 0.3f / PTM_RATIO;
     fixtureDef.shape = &shape;
-    fixtureDef.density = 0.5;
-    fixtureDef.friction = 1.0;
+    fixtureDef.filter.categoryBits = kChildCellFilterCategory;
+    fixtureDef.density = 10.0;
+    fixtureDef.friction = 0.1;
     fixtureDef.restitution = 0.1;
     body->CreateFixture(&fixtureDef);
 }
@@ -42,12 +43,7 @@
     if ([self numberOfRunningActions] == 0) {
         if (characterHealth <= 0) {
             [self changeState:kStateDead];
-        } else {
-            [self changeState:kStateIdle];
         }
-    }
-    if (isBodyCollidingWithObjectType(body, kEnemyTypeRedCell)) {
-        [self changeState:kStateTakingDamage];
     }
 }
 
@@ -94,12 +90,20 @@
             break;
         }
             
-        case kStateTraveling:
+        case kStateConnecting:
+            // Клетка уже в зоне действия сенсора ParentCell, но джойнта еще нет
+            break;
+            
+        case kStateConnected:
         {
-            // Нужно менять вид клетки. Это состояние принимается клеткой, когда она попадает в зону влияния главной клетки
+            // Нужно менять вид клетки. Это состояние принимается клеткой когда был создан джойнт
             [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_travelling.png"]];
             break;
         }
+            
+        case kStateDisconnecting:
+            // Клетка вышла из зоны действия сенсора, но джойнт еще не разорван
+            break;
             
         case kStateIdle:
         {

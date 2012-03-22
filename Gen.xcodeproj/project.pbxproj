@@ -142,6 +142,7 @@
 		E9831C4015108877006F2E31 /* example_Twist.vsh in Sources */ = {isa = PBXBuildFile; fileRef = E9831C3015108877006F2E31 /* example_Twist.vsh */; };
 		E9831C44151089AF006F2E31 /* fps_images-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = E9831C43151089AE006F2E31 /* fps_images-ipadhd.png */; };
 		E9831C481511D9F6006F2E31 /* ParentCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9831C471511D9F5006F2E31 /* ParentCell.mm */; };
+		E9831C8915171821006F2E31 /* ContactListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9831C8815171820006F2E31 /* ContactListener.mm */; };
 		E9958701150B77550006115C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958700150B77550006115C /* QuartzCore.framework */; };
 		E9958703150B77550006115C /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958702150B77550006115C /* OpenGLES.framework */; };
 		E9958705150B77550006115C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958704150B77550006115C /* OpenAL.framework */; };
@@ -475,6 +476,8 @@
 		E9831C451510A4C9006F2E31 /* SimpleQueryCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleQueryCallback.h; sourceTree = "<group>"; };
 		E9831C461511D9F4006F2E31 /* ParentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParentCell.h; sourceTree = "<group>"; };
 		E9831C471511D9F5006F2E31 /* ParentCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ParentCell.mm; sourceTree = "<group>"; };
+		E9831C8715171820006F2E31 /* ContactListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactListener.h; sourceTree = "<group>"; };
+		E9831C8815171820006F2E31 /* ContactListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ContactListener.mm; sourceTree = "<group>"; };
 		E99586FC150B77550006115C /* Gen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9958700150B77550006115C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E9958702150B77550006115C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -972,6 +975,13 @@
 			path = Shaders;
 			sourceTree = "<group>";
 		};
+		E9831C8E15186E79006F2E31 /* Box2D */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Box2D;
+			sourceTree = "<group>";
+		};
 		E99586F1150B77550006115C = {
 			isa = PBXGroup;
 			children = (
@@ -1264,6 +1274,7 @@
 		E9958931150B7FAC0006115C /* Enemy Objects */ = {
 			isa = PBXGroup;
 			children = (
+				E9831C8E15186E79006F2E31 /* Box2D */,
 			);
 			name = "Enemy Objects";
 			sourceTree = "<group>";
@@ -1280,6 +1291,8 @@
 		E9958933150B7FD80006115C /* Box2D */ = {
 			isa = PBXGroup;
 			children = (
+				E995895E150CB6050006115C /* Box2DHelpers.h */,
+				E995895F150CB6050006115C /* Box2DHelpers.mm */,
 				E9831C451510A4C9006F2E31 /* SimpleQueryCallback.h */,
 				E9831A0D15106931006F2E31 /* GLES-Render.h */,
 				E9831A0E15106931006F2E31 /* GLES-Render.mm */,
@@ -1287,6 +1300,8 @@
 				E995894C150C78E90006115C /* Helper.mm */,
 				E9958951150CA9C60006115C /* Box2DLayer.h */,
 				E9958952150CA9C60006115C /* Box2DLayer.mm */,
+				E9831C8715171820006F2E31 /* ContactListener.h */,
+				E9831C8815171820006F2E31 /* ContactListener.mm */,
 			);
 			name = Box2D;
 			sourceTree = "<group>";
@@ -1423,8 +1438,6 @@
 		E995895A150CB52C0006115C /* Box2D */ = {
 			isa = PBXGroup;
 			children = (
-				E995895E150CB6050006115C /* Box2DHelpers.h */,
-				E995895F150CB6050006115C /* Box2DHelpers.mm */,
 				E995895B150CB5730006115C /* Box2DSprite.h */,
 				E995895C150CB5730006115C /* Box2DSprite.mm */,
 				E9958961150CB7030006115C /* ChildCell.h */,
@@ -1689,6 +1702,7 @@
 				E9831C3F15108877006F2E31 /* example_Twist.fsh in Sources */,
 				E9831C4015108877006F2E31 /* example_Twist.vsh in Sources */,
 				E9831C481511D9F6006F2E31 /* ParentCell.mm in Sources */,
+				E9831C8915171821006F2E31 /* ContactListener.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

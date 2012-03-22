@@ -6,9 +6,6 @@
 //  Copyright (c) 2012 kpanic666@gmail.com. All rights reserved.
 //
 
-#ifndef SpaceViking_SimpleQueryCallback_h
-#define SpaceViking_SimpleQueryCallback_h
-
 #include "Box2D.h"
 
 class SimpleQueryCallback : public b2QueryCallback
@@ -35,5 +32,3 @@ public:
         return true;
     }
 };
-
-#endif

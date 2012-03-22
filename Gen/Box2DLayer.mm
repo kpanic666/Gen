@@ -33,10 +33,14 @@
     b2Vec2 gravity;
     gravity.Set(0.0f, 0.0f);
     world = new b2World(gravity);
+    
+    // Add custom listener
+    contactListener = new ContactListener();
+    world->SetContactListener(contactListener);
 	
 	// Do we want to let bodies sleep?
-	world->SetAllowSleeping(true);
-	world->SetContinuousPhysics(true);
+	world->SetAllowSleeping(TRUE);
+	world->SetContinuousPhysics(TRUE);
 }
 
 -(void) setupDebugDraw
@@ -46,7 +50,7 @@
     uint32 flags = 0;
 	flags += b2Draw::e_shapeBit;
 	flags += b2Draw::e_jointBit;
-	//		flags += b2Draw::e_aabbBit;
+//    flags += b2Draw::e_aabbBit;
 	//		flags += b2Draw::e_pairBit;
 	//		flags += b2Draw::e_centerOfMassBit;
 	m_debugDraw->SetFlags(flags);
@@ -87,6 +91,8 @@
         // enable events
         self.isTouchEnabled = YES;
         
+        bodiesToDestroy = [[NSMutableArray alloc] init];
+        
         [self setupWorld];
         [self createGround];
         [self setupDebugDraw];
@@ -97,6 +103,12 @@
 
 -(void) dealloc
 {
+    delete contactListener;
+    contactListener = NULL;
+    
+    [bodiesToDestroy release];
+    bodiesToDestroy = nil;
+    
     if (world) {
         delete world;
         world = NULL;
@@ -106,6 +118,7 @@
         delete m_debugDraw;
         m_debugDraw = nil;
     }
+    
     [super dealloc];
 }
 
@@ -140,7 +153,7 @@
     }
     
     int32 velocityIterations = 8;
-    int32 positionIterations = 1;
+    int32 positionIterations = 3;
     while (timeAccumulator >= UPDATE_INTERVAL) {
         timeAccumulator -= UPDATE_INTERVAL;
         world->Step(UPDATE_INTERVAL, velocityIterations, positionIterations);
@@ -160,6 +173,26 @@
     for (GameCharacter *tempChar in listOfGameObjects) {
         [tempChar updateStateWithDeltaTime:dt andListOfGameObjects:listOfGameObjects];
     }
+    
+    [self destroyBodies];
+}
+
+- (void)markBodyForDestruction:(Box2DSprite *)obj
+{
+    obj.markedForDestruction = TRUE;
+    [bodiesToDestroy addObject:[NSValue valueWithPointer:obj]];
+}
+
+- (void)destroyBodies
+{
+    for (NSValue *value in bodiesToDestroy) {
+        Box2DSprite *obj = (Box2DSprite*)[value pointerValue];
+        if (obj && obj.body && !obj.markedForDestruction) {
+            obj.body->SetTransform(b2Vec2(0,0), 0);
+            world->DestroyBody(obj.body);
+        }
+    }
+    [bodiesToDestroy removeAllObjects];
 }
 
 @end
