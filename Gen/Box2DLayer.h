@@ -12,6 +12,7 @@
 #import "GLES-Render.h"
 #import "Constants.h"
 #import "ContactListener.h"
+
 @class Box2DSprite;
 
 @interface Box2DLayer : CCLayer
@@ -29,7 +30,7 @@
     NSMutableArray *bodiesToDestroy;
 }
 
-+ (CCScene *) scene;
++ (CCScene *)scene;
 - (void)markBodyForDestruction:(Box2DSprite*)obj;
 - (void)destroyBodies;
 

@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E966EAC0151F411A00D76508 /* genbyatlas-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E966EAB8151F411A00D76508 /* genbyatlas-hd.plist */; };
+		E966EAC1151F411A00D76508 /* genbyatlas-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E966EAB9151F411A00D76508 /* genbyatlas-hd.png */; };
+		E966EAC2151F411A00D76508 /* genbyatlas-ipad-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E966EABA151F411A00D76508 /* genbyatlas-ipad-hd.plist */; };
+		E966EAC3151F411A00D76508 /* genbyatlas-ipad-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E966EABB151F411A00D76508 /* genbyatlas-ipad-hd.png */; };
+		E966EAC4151F411A00D76508 /* genbyatlas-ipad.plist in Resources */ = {isa = PBXBuildFile; fileRef = E966EABC151F411A00D76508 /* genbyatlas-ipad.plist */; };
+		E966EAC5151F411A00D76508 /* genbyatlas-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = E966EABD151F411A00D76508 /* genbyatlas-ipad.png */; };
+		E966EAC6151F411A00D76508 /* genbyatlas.plist in Resources */ = {isa = PBXBuildFile; fileRef = E966EABE151F411A00D76508 /* genbyatlas.plist */; };
+		E966EAC7151F411A00D76508 /* genbyatlas.png in Resources */ = {isa = PBXBuildFile; fileRef = E966EABF151F411A00D76508 /* genbyatlas.png */; };
 		E98319E4150E0E19006F2E31 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319DE150E0E19006F2E31 /* Icon-72.png */; };
 		E98319E5150E0E19006F2E31 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319DF150E0E19006F2E31 /* Icon-Small-50.png */; };
 		E98319E6150E0E19006F2E31 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319E0150E0E19006F2E31 /* Icon-Small.png */; };
@@ -14,16 +22,8 @@
 		E98319E8150E0E19006F2E31 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319E2150E0E19006F2E31 /* Icon.png */; };
 		E98319E9150E0E19006F2E31 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319E3150E0E19006F2E31 /* Icon@2x.png */; };
 		E98319EB150E0E43006F2E31 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319EA150E0E43006F2E31 /* Default.png */; };
-		E98319F4150E0EC2006F2E31 /* genbyatlas-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E98319EC150E0EC2006F2E31 /* genbyatlas-hd.plist */; };
-		E98319F5150E0EC2006F2E31 /* genbyatlas-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319ED150E0EC2006F2E31 /* genbyatlas-hd.png */; };
-		E98319FA150E0EC2006F2E31 /* genbyatlas.plist in Resources */ = {isa = PBXBuildFile; fileRef = E98319F2150E0EC2006F2E31 /* genbyatlas.plist */; };
-		E98319FB150E0EC2006F2E31 /* genbyatlas.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319F3150E0EC2006F2E31 /* genbyatlas.png */; };
 		E9831A02150F0792006F2E31 /* GameManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9831A01150F0792006F2E31 /* GameManager.mm */; };
 		E9831A04150F12C6006F2E31 /* SoundEffects.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9831A03150F12C6006F2E31 /* SoundEffects.plist */; };
-		E9831A09150F4618006F2E31 /* genbyatlas-ipad-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9831A05150F4614006F2E31 /* genbyatlas-ipad-hd.plist */; };
-		E9831A0A150F4618006F2E31 /* genbyatlas-ipad-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E9831A06150F4614006F2E31 /* genbyatlas-ipad-hd.png */; };
-		E9831A0B150F4618006F2E31 /* genbyatlas-ipad.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9831A07150F4615006F2E31 /* genbyatlas-ipad.plist */; };
-		E9831A0C150F4618006F2E31 /* genbyatlas-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = E9831A08150F4616006F2E31 /* genbyatlas-ipad.png */; };
 		E9831A0F15106931006F2E31 /* GLES-Render.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9831A0E15106931006F2E31 /* GLES-Render.mm */; };
 		E9831B691510875C006F2E31 /* CCAction.m in Sources */ = {isa = PBXBuildFile; fileRef = E9831A121510875B006F2E31 /* CCAction.m */; };
 		E9831B6A1510875C006F2E31 /* CCActionCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = E9831A141510875B006F2E31 /* CCActionCamera.m */; };
@@ -143,6 +143,7 @@
 		E9831C44151089AF006F2E31 /* fps_images-ipadhd.png in Resources */ = {isa = PBXBuildFile; fileRef = E9831C43151089AE006F2E31 /* fps_images-ipadhd.png */; };
 		E9831C481511D9F6006F2E31 /* ParentCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9831C471511D9F5006F2E31 /* ParentCell.mm */; };
 		E9831C8915171821006F2E31 /* ContactListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9831C8815171820006F2E31 /* ContactListener.mm */; };
+		E9835E60151AEC8100836385 /* ExitCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9835E5F151AEC8100836385 /* ExitCell.mm */; };
 		E9958701150B77550006115C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958700150B77550006115C /* QuartzCore.framework */; };
 		E9958703150B77550006115C /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958702150B77550006115C /* OpenGLES.framework */; };
 		E9958705150B77550006115C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958704150B77550006115C /* OpenAL.framework */; };
@@ -213,6 +214,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E966EAB8151F411A00D76508 /* genbyatlas-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-hd.plist"; sourceTree = "<group>"; };
+		E966EAB9151F411A00D76508 /* genbyatlas-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-hd.png"; sourceTree = "<group>"; };
+		E966EABA151F411A00D76508 /* genbyatlas-ipad-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad-hd.plist"; sourceTree = "<group>"; };
+		E966EABB151F411A00D76508 /* genbyatlas-ipad-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad-hd.png"; sourceTree = "<group>"; };
+		E966EABC151F411A00D76508 /* genbyatlas-ipad.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad.plist"; sourceTree = "<group>"; };
+		E966EABD151F411A00D76508 /* genbyatlas-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad.png"; sourceTree = "<group>"; };
+		E966EABE151F411A00D76508 /* genbyatlas.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = genbyatlas.plist; sourceTree = "<group>"; };
+		E966EABF151F411A00D76508 /* genbyatlas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = genbyatlas.png; sourceTree = "<group>"; };
 		E98319DE150E0E19006F2E31 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		E98319DF150E0E19006F2E31 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
 		E98319E0150E0E19006F2E31 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
@@ -220,17 +229,9 @@
 		E98319E2150E0E19006F2E31 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		E98319E3150E0E19006F2E31 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		E98319EA150E0E43006F2E31 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		E98319EC150E0EC2006F2E31 /* genbyatlas-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-hd.plist"; sourceTree = "<group>"; };
-		E98319ED150E0EC2006F2E31 /* genbyatlas-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-hd.png"; sourceTree = "<group>"; };
-		E98319F2150E0EC2006F2E31 /* genbyatlas.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = genbyatlas.plist; sourceTree = "<group>"; };
-		E98319F3150E0EC2006F2E31 /* genbyatlas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = genbyatlas.png; sourceTree = "<group>"; };
 		E9831A00150F0792006F2E31 /* GameManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameManager.h; sourceTree = "<group>"; };
 		E9831A01150F0792006F2E31 /* GameManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GameManager.mm; sourceTree = "<group>"; };
 		E9831A03150F12C6006F2E31 /* SoundEffects.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SoundEffects.plist; sourceTree = "<group>"; };
-		E9831A05150F4614006F2E31 /* genbyatlas-ipad-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad-hd.plist"; sourceTree = "<group>"; };
-		E9831A06150F4614006F2E31 /* genbyatlas-ipad-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad-hd.png"; sourceTree = "<group>"; };
-		E9831A07150F4615006F2E31 /* genbyatlas-ipad.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad.plist"; sourceTree = "<group>"; };
-		E9831A08150F4616006F2E31 /* genbyatlas-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad.png"; sourceTree = "<group>"; };
 		E9831A0D15106931006F2E31 /* GLES-Render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GLES-Render.h"; sourceTree = "<group>"; };
 		E9831A0E15106931006F2E31 /* GLES-Render.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "GLES-Render.mm"; sourceTree = "<group>"; };
 		E9831A111510875B006F2E31 /* CCAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCAction.h; sourceTree = "<group>"; };
@@ -478,6 +479,9 @@
 		E9831C471511D9F5006F2E31 /* ParentCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ParentCell.mm; sourceTree = "<group>"; };
 		E9831C8715171820006F2E31 /* ContactListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactListener.h; sourceTree = "<group>"; };
 		E9831C8815171820006F2E31 /* ContactListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ContactListener.mm; sourceTree = "<group>"; };
+		E9835E5E151AEC8100836385 /* ExitCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExitCell.h; sourceTree = "<group>"; };
+		E9835E5F151AEC8100836385 /* ExitCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ExitCell.mm; sourceTree = "<group>"; };
+		E9835E66151B1C6D00836385 /* ToDo.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = ToDo.rtf; sourceTree = "<group>"; };
 		E99586FC150B77550006115C /* Gen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9958700150B77550006115C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E9958702150B77550006115C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -633,6 +637,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E956DE7B152068230002F744 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				E9958951150CA9C60006115C /* Box2DLayer.h */,
+				E9958952150CA9C60006115C /* Box2DLayer.mm */,
+			);
+			name = Scene;
+			sourceTree = "<group>";
+		};
 		E9831A101510875B006F2E31 /* cocos2d */ = {
 			isa = PBXGroup;
 			children = (
@@ -1018,6 +1031,7 @@
 		E9958712150B77550006115C /* Gen */ = {
 			isa = PBXGroup;
 			children = (
+				E9835E66151B1C6D00836385 /* ToDo.rtf */,
 				E9958933150B7FD80006115C /* Box2D */,
 				E9958932150B7FBB0006115C /* Constants */,
 				E9958931150B7FAC0006115C /* Enemy Objects */,
@@ -1291,6 +1305,7 @@
 		E9958933150B7FD80006115C /* Box2D */ = {
 			isa = PBXGroup;
 			children = (
+				E956DE7B152068230002F744 /* Scene */,
 				E995895E150CB6050006115C /* Box2DHelpers.h */,
 				E995895F150CB6050006115C /* Box2DHelpers.mm */,
 				E9831C451510A4C9006F2E31 /* SimpleQueryCallback.h */,
@@ -1298,8 +1313,6 @@
 				E9831A0E15106931006F2E31 /* GLES-Render.mm */,
 				E995894B150C78E90006115C /* Helper.h */,
 				E995894C150C78E90006115C /* Helper.mm */,
-				E9958951150CA9C60006115C /* Box2DLayer.h */,
-				E9958952150CA9C60006115C /* Box2DLayer.mm */,
 				E9831C8715171820006F2E31 /* ContactListener.h */,
 				E9831C8815171820006F2E31 /* ContactListener.mm */,
 			);
@@ -1379,14 +1392,14 @@
 		E995893C150B80910006115C /* Atlases */ = {
 			isa = PBXGroup;
 			children = (
-				E9831A05150F4614006F2E31 /* genbyatlas-ipad-hd.plist */,
-				E9831A06150F4614006F2E31 /* genbyatlas-ipad-hd.png */,
-				E9831A07150F4615006F2E31 /* genbyatlas-ipad.plist */,
-				E9831A08150F4616006F2E31 /* genbyatlas-ipad.png */,
-				E98319EC150E0EC2006F2E31 /* genbyatlas-hd.plist */,
-				E98319ED150E0EC2006F2E31 /* genbyatlas-hd.png */,
-				E98319F2150E0EC2006F2E31 /* genbyatlas.plist */,
-				E98319F3150E0EC2006F2E31 /* genbyatlas.png */,
+				E966EAB8151F411A00D76508 /* genbyatlas-hd.plist */,
+				E966EAB9151F411A00D76508 /* genbyatlas-hd.png */,
+				E966EABA151F411A00D76508 /* genbyatlas-ipad-hd.plist */,
+				E966EABB151F411A00D76508 /* genbyatlas-ipad-hd.png */,
+				E966EABC151F411A00D76508 /* genbyatlas-ipad.plist */,
+				E966EABD151F411A00D76508 /* genbyatlas-ipad.png */,
+				E966EABE151F411A00D76508 /* genbyatlas.plist */,
+				E966EABF151F411A00D76508 /* genbyatlas.png */,
 			);
 			name = Atlases;
 			sourceTree = "<group>";
@@ -1444,6 +1457,8 @@
 				E9958962150CB7030006115C /* ChildCell.mm */,
 				E9831C461511D9F4006F2E31 /* ParentCell.h */,
 				E9831C471511D9F5006F2E31 /* ParentCell.mm */,
+				E9835E5E151AEC8100836385 /* ExitCell.h */,
+				E9835E5F151AEC8100836385 /* ExitCell.mm */,
 			);
 			name = Box2D;
 			sourceTree = "<group>";
@@ -1510,17 +1525,17 @@
 				E98319E8150E0E19006F2E31 /* Icon.png in Resources */,
 				E98319E9150E0E19006F2E31 /* Icon@2x.png in Resources */,
 				E98319EB150E0E43006F2E31 /* Default.png in Resources */,
-				E98319F4150E0EC2006F2E31 /* genbyatlas-hd.plist in Resources */,
-				E98319F5150E0EC2006F2E31 /* genbyatlas-hd.png in Resources */,
-				E98319FA150E0EC2006F2E31 /* genbyatlas.plist in Resources */,
-				E98319FB150E0EC2006F2E31 /* genbyatlas.png in Resources */,
 				E9831A04150F12C6006F2E31 /* SoundEffects.plist in Resources */,
-				E9831A09150F4618006F2E31 /* genbyatlas-ipad-hd.plist in Resources */,
-				E9831A0A150F4618006F2E31 /* genbyatlas-ipad-hd.png in Resources */,
-				E9831A0B150F4618006F2E31 /* genbyatlas-ipad.plist in Resources */,
-				E9831A0C150F4618006F2E31 /* genbyatlas-ipad.png in Resources */,
 				E9831C041510875C006F2E31 /* ChangeLog in Resources */,
 				E9831C051510875C006F2E31 /* CMakeLists.txt in Resources */,
+				E966EAC0151F411A00D76508 /* genbyatlas-hd.plist in Resources */,
+				E966EAC1151F411A00D76508 /* genbyatlas-hd.png in Resources */,
+				E966EAC2151F411A00D76508 /* genbyatlas-ipad-hd.plist in Resources */,
+				E966EAC3151F411A00D76508 /* genbyatlas-ipad-hd.png in Resources */,
+				E966EAC4151F411A00D76508 /* genbyatlas-ipad.plist in Resources */,
+				E966EAC5151F411A00D76508 /* genbyatlas-ipad.png in Resources */,
+				E966EAC6151F411A00D76508 /* genbyatlas.plist in Resources */,
+				E966EAC7151F411A00D76508 /* genbyatlas.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1703,6 +1718,7 @@
 				E9831C4015108877006F2E31 /* example_Twist.vsh in Sources */,
 				E9831C481511D9F6006F2E31 /* ParentCell.mm in Sources */,
 				E9831C8915171821006F2E31 /* ContactListener.mm in Sources */,
+				E9835E60151AEC8100836385 /* ExitCell.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

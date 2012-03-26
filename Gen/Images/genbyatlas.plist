@@ -17,36 +17,10 @@
                 <key>sourceSize</key>
                 <string>{480,320}</string>
             </dict>
-            <key>childcell_idle.png</key>
+            <key>childcell_connected.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{484,20},{16,16}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{16,16}}</string>
-                <key>sourceSize</key>
-                <string>{16,16}</string>
-            </dict>
-            <key>childcell_travelling.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{484,2},{16,16}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{16,16}}</string>
-                <key>sourceSize</key>
-                <string>{16,16}</string>
-            </dict>
-            <key>parentcell_travelling.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,324},{32,32}}</string>
+                <string>{{77,462},{32,32}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -55,6 +29,45 @@
                 <string>{{0,0},{32,32}}</string>
                 <key>sourceSize</key>
                 <string>{32,32}</string>
+            </dict>
+            <key>childcell_idle.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{77,428},{32,32}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{32,32}}</string>
+                <key>sourceSize</key>
+                <string>{32,32}</string>
+            </dict>
+            <key>exitcell_idle.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,324},{102,102}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{102,102}}</string>
+                <key>sourceSize</key>
+                <string>{102,102}</string>
+            </dict>
+            <key>parentcell_travelling.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,428},{73,73}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{73,73}}</string>
+                <key>sourceSize</key>
+                <string>{73,73}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -66,7 +79,7 @@
             <key>size</key>
             <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:884c03268c38e28d8145e5302a557bfe$</string>
+            <string>$TexturePacker:SmartUpdate:9d2fbbf9699fcbaffec99b225fd9a888$</string>
             <key>textureFileName</key>
             <string>genbyatlas.png</string>
         </dict>

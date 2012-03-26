@@ -15,7 +15,7 @@
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO);
-    bodyDef.linearDamping = 0.5f;
+    bodyDef.linearDamping = 0.2f;
     bodyDef.fixedRotation = TRUE;
     bodyDef.allowSleep = FALSE;
     body = world->CreateBody(&bodyDef);
@@ -23,10 +23,10 @@
     
     b2FixtureDef fixtureDef;
     b2CircleShape shape;
-    shape.m_radius = self.contentSize.width * 0.3f / PTM_RATIO;
+    shape.m_radius = self.contentSize.width * 0.25f / PTM_RATIO;
     fixtureDef.shape = &shape;
     fixtureDef.filter.categoryBits = kChildCellFilterCategory;
-    fixtureDef.density = 10.0;
+    fixtureDef.density = 8.0;
     fixtureDef.friction = 0.1;
     fixtureDef.restitution = 0.1;
     body->CreateFixture(&fixtureDef);
@@ -44,6 +44,10 @@
         if (characterHealth <= 0) {
             [self changeState:kStateDead];
         }
+    }
+    
+    if (characterState == kStateSoul) {
+        self.markedForDestruction = YES;
     }
 }
 
@@ -97,7 +101,7 @@
         case kStateConnected:
         {
             // Нужно менять вид клетки. Это состояние принимается клеткой когда был создан джойнт
-            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_travelling.png"]];
+            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_connected.png"]];
             break;
         }
             
@@ -112,6 +116,10 @@
             [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_idle.png"]];
             break;
         }
+            
+        case kStateSoul:
+            // Клетка ударилась об выход и должна уничтожить физ тело и сменить спрайт и дрыгаться внутри выхода
+            break;
             
         case kStateDead:
             // Клетка умирает от первого же прикосновения

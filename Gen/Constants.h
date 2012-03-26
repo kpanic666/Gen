@@ -8,14 +8,15 @@
 
 #define kChildCellHealth 100
 #define kChildCellSpriteTagValue 1
-#define kChildCellStartNum 25
+#define kChildCellStartNum 30
 #define kParentCellSpriteTagValue 10
 #define kRedCellDamage 100
 
 // Collision Filter Categories
 typedef enum {
     kParentCellFilterCategory = 0x0002,
-    kChildCellFilterCategory = 0x0003
+    kChildCellFilterCategory = 0x0003,
+    kExitCellFilterCategory = 0x0004
 } FilterCategories;
 
 typedef enum {
@@ -47,6 +48,9 @@ typedef enum {
     kAudioManagerReady=300
 } GameManagerSoundState;
 
+// Turn ON=1 or OFF=0 DEBUG DRAW
+#define DEBUG_DRAW 1
+
 // Audio Items
 #define AUDIO_MAX_WAITTIME 150
 
@@ -74,4 +78,4 @@ typedef enum {
 //#define BACKGROUND_TRACK_ESCAPE @"EscapeTheFutureV3.mp3"
 
 // PTM ratio for Box2D
-#define PTM_RATIO ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 32.0 : 16.0)
+#define PTM_RATIO ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 64.0 : 32.0)

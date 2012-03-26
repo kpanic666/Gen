@@ -10,10 +10,12 @@
 
 @class ChildCell;
 @class ParentCell;
+@class ExitCell;
 
 @interface Scene1 : Box2DLayer {
     CCArray *childCellsArray;
     ParentCell *parentCell;
+    ExitCell *exitCell;
 }
 
 @end

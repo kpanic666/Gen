@@ -7,6 +7,7 @@
 //
 
 #import "ParentCell.h"
+#import "Helper.h"
 
 @implementation ParentCell
 
@@ -34,7 +35,7 @@
     
     b2FixtureDef fixtureDef;
     b2CircleShape shape;
-    shape.m_radius = self.contentSize.width * 0.5f / PTM_RATIO;
+    shape.m_radius = self.contentSize.width * 0.25f / PTM_RATIO;
     fixtureDef.shape = &shape;
     // Задаем маску фильтрации столкновений. Главная клетка будет игнорироваться абсолютно всеми. Можно свободно двигаться
     fixtureDef.filter.categoryBits = kParentCellFilterCategory;
@@ -44,7 +45,7 @@
     
     // Создаем сенсор, который будет определять радиус, в котором будут притягиваться клетки
     fixtureDef.isSensor = TRUE;
-    shape.m_radius = self.contentSize.width * 4 / PTM_RATIO;
+    shape.m_radius = self.contentSize.width * 2 / PTM_RATIO;
     // Активируем коллизии для сенсора
     fixtureDef.filter.categoryBits = kParentCellFilterCategory;
     fixtureDef.filter.maskBits = kChildCellFilterCategory;
@@ -61,7 +62,7 @@
                 
                 [spriteObj changeState:kStateConnected];
                 
-                // Joint Creation
+                // Distance Joint between ChildCell and ParentCell Creation
                 
                 b2DistanceJointDef disJointDef;
                 disJointDef.bodyA = body;
@@ -70,7 +71,7 @@
                 disJointDef.localAnchorB.SetZero();
                 disJointDef.frequencyHz = 0.25f;
                 disJointDef.dampingRatio = 0.4f;
-                disJointDef.length = self.contentSize.width / PTM_RATIO;
+                disJointDef.length = self.contentSize.width * 0.7 / PTM_RATIO;
                 disJointDef.collideConnected = TRUE;
                 world->CreateJoint(&disJointDef);
             }
@@ -95,10 +96,10 @@
                 for (b2JointEdge *edge = childCellBody->GetJointList(); edge; edge = edge->next)
                 {
                     [disJointsToDestroy addObject:[NSValue valueWithPointer:edge->joint]];
-                    [self changeBodyPosition:b2Vec2(0,0)];
                 }
             }
         }
+        [self changeBodyPosition:b2Vec2(-10,-10)];
     }
     // После того как просканировали все объекты - удаляем джойнты
     [self destroyDisJoints];
@@ -162,6 +163,36 @@
     disJointsToDestroy = nil;
     
     [super dealloc];
+}
+
+- (void)drawDisJoints
+{
+    for (b2Joint *jointList = world->GetJointList(); jointList; jointList = jointList->GetNext())
+    {
+        if (jointList->GetType() == e_distanceJoint)
+        {
+            CHECK_GL_ERROR_DEBUG();
+            
+            // Вычисляем расстояние между клетками и центром притяжение. Чем больше расстояние тем прозрачней линия
+            CGPoint anchorA = [Helper toPoints:jointList->GetAnchorA()];
+            CGPoint anchorB = [Helper toPoints:jointList->GetAnchorB()];
+//            int16 jointLenght = ccpDistance(anchorA, anchorB);
+//            
+//            // Прозрачность линии
+//            GLubyte lineAlpha = 150;
+//            if (lineAlpha < 1) {
+//                lineAlpha = 1; 
+//            } else if (lineAlpha > 255) {
+//                lineAlpha = 255;
+//            }
+            
+            ccDrawColor4B(172, 255, 255, 230);
+            
+
+            glLineWidth(1.0f);
+            ccDrawLine(anchorA, anchorB);
+        }
+    }
 }
 
 @end

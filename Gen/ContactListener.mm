@@ -22,6 +22,14 @@ void ContactListener::BeginContact(b2Contact* contact)
     else if (spriteB.gameObjectType == kParentCellType) {
         [spriteA changeState:kStateConnecting];
     }
+    
+    // Обработка столкновениий ExitCell с ChildCell
+    if (spriteA.gameObjectType == kExitCellType) {
+        [spriteB changeState:kStateSoul];
+    }
+    else if (spriteB.gameObjectType == kExitCellType) {
+        [spriteA changeState:kStateSoul];
+    }
 }
 
 void ContactListener::EndContact(b2Contact* contact)

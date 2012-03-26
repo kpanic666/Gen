@@ -13,22 +13,18 @@
 
 @implementation Box2DLayer
 
-+(CCScene *) scene
++ (CCScene *)scene
 {
-	// 'scene' is an autorelease object.
-	CCScene *scene = [CCScene node];
-	
-	// 'layer' is an autorelease object.
-	Box2DLayer *layer = [self node];
-	
-	// add layer as a child to scene
-	[scene addChild: layer];
-	
-	// return the scene
-	return scene;
+    CCScene *scene = [CCScene node];
+    
+    // add Gameplay layer for Maincharacter, enemies, background. 
+    Box2DLayer *layer = [self node];
+    [scene addChild:layer z:0];
+    
+    return scene;
 }
 
--(void) setupWorld
+- (void)setupWorld
 {
     b2Vec2 gravity;
     gravity.Set(0.0f, 0.0f);
@@ -43,7 +39,7 @@
 	world->SetContinuousPhysics(TRUE);
 }
 
--(void) setupDebugDraw
+- (void)setupDebugDraw
 {
     m_debugDraw = new GLESDebugDraw(PTM_RATIO);
     world->SetDebugDraw(m_debugDraw);
@@ -56,7 +52,7 @@
 	m_debugDraw->SetFlags(flags);
 }
 
--(void) createGround
+- (void)createGround
 {
     CGSize screenSize = [[CCDirector sharedDirector] winSize];
     b2Vec2 lowerLeft = b2Vec2(0, 0);
@@ -85,9 +81,12 @@
     groundBody->CreateFixture(&groundShape, 0);
 }
 
--(id) init
+
+
+- (id)init
 {
     if ((self = [super init])) {
+        
         // enable events
         self.isTouchEnabled = YES;
         
@@ -95,7 +94,9 @@
         
         [self setupWorld];
         [self createGround];
+#if DEBUG_DRAW
         [self setupDebugDraw];
+#endif
         [self scheduleUpdate];
     }
     return self;
@@ -122,15 +123,16 @@
     [super dealloc];
 }
 
--(void) draw
+- (void)draw
 {
 	//
 	// IMPORTANT:
 	// This is only for debug purposes
 	// It is recommend to disable it
-	//
+    //
 	[super draw];
-	
+    
+#if DEBUG_DRAW	
 	ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position );
 	
 	kmGLPushMatrix();
@@ -138,9 +140,10 @@
 	world->DrawDebugData();	
 	
 	kmGLPopMatrix();
+#endif
 }
 
--(void) update:(ccTime)dt
+- (void)update:(ccTime)dt
 {
 	// Fixed Time Step
     static double UPDATE_INTERVAL = 1.0f/60.0f;
@@ -165,6 +168,10 @@
             Box2DSprite *sprite = (Box2DSprite*) b->GetUserData();
             sprite.position = ccp(b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO);
             sprite.rotation = CC_RADIANS_TO_DEGREES(b->GetAngle() * -1);
+            // Mark body for delete
+            if (sprite.markedForDestruction) {
+                [self markBodyForDestruction:sprite];
+            }
         }
     }
     
@@ -179,7 +186,6 @@
 
 - (void)markBodyForDestruction:(Box2DSprite *)obj
 {
-    obj.markedForDestruction = TRUE;
     [bodiesToDestroy addObject:[NSValue valueWithPointer:obj]];
 }
 
@@ -187,7 +193,7 @@
 {
     for (NSValue *value in bodiesToDestroy) {
         Box2DSprite *obj = (Box2DSprite*)[value pointerValue];
-        if (obj && obj.body && !obj.markedForDestruction) {
+        if (obj && obj.body && obj.markedForDestruction) {
             obj.body->SetTransform(b2Vec2(0,0), 0);
             world->DestroyBody(obj.body);
         }

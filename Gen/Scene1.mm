@@ -12,6 +12,7 @@
 #import "ParentCell.h"
 #import "Helper.h"
 #import "SimpleQueryCallback.h"
+#import "ExitCell.h"
 
 
 @implementation Scene1
@@ -26,7 +27,9 @@
 - (id)init
 {
     if ((self = [super init])) {
-        CGPoint screenCenter = [Helper screenCenter];
+        CGSize screenSize = [[CCDirector sharedDirector] winSize];
+        CGPoint screenCenter = ccp(screenSize.width * 0.5, screenSize.height * 0.5);
+    
         
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"genbyatlas.plist"];
         sceneSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"genbyatlas.png"];
@@ -35,7 +38,7 @@
         // add background
         CCSprite *background = [CCSprite spriteWithSpriteFrameName:@"background1.png"];
         [background setPosition:screenCenter];
-        [self addChild:background z:-1];
+        [self addChild:background z:-2];
         
         // add ChildCells
         for (int i = 0; i < kChildCellStartNum; i++) {
@@ -45,6 +48,12 @@
         // add ParentCell (main hero will always be under the finger)
         parentCell = [[[ParentCell alloc] initWithWorld:world atLocation:ccp(100, 100)] autorelease];
         [sceneSpriteBatchNode addChild:parentCell z:10 tag:kParentCellSpriteTagValue];
+        
+        // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
+        exitCell = [[[ExitCell alloc] initWithWorld:world atLocation:ccp(screenSize.width*0.9, screenSize.height*0.1)] autorelease];
+        [sceneSpriteBatchNode addChild:exitCell z:-1];
+        
+        
     }
     return self;
 }
@@ -125,9 +134,18 @@
 
 - (void)dealloc
 {
+    exitCell = nil;
     childCellsArray = nil;
     parentCell = nil;
     [super dealloc];
+}
+
+- (void)draw
+{
+    [super draw];
+    
+    // Draw lines for distance joints between ChildCell and ParentCell
+    [parentCell drawDisJoints];
 }
 
 @end

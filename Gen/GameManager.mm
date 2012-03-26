@@ -151,9 +151,7 @@ static GameManager* _sharedGameManager = nil;
     
     // 4: Если listOfSoundEffects пуст, то загружаем его
     if ((listOfSoundEffectFiles == nil) || ([listOfSoundEffectFiles count] < 1)) {
-        NSLog(@"Before");
         [self setListOfSoundEffectFiles:[[NSMutableDictionary alloc] init]];
-        NSLog(@"After");
         for (NSString *sceneSoundDictionary in plistDictionary) {
             [listOfSoundEffectFiles addEntriesFromDictionary:[plistDictionary objectForKey:sceneSoundDictionary]];
         }

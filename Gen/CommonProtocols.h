@@ -16,7 +16,7 @@ typedef enum {
     kStateConnecting,       // ChildCell при входе в зону сенсора ParentCell
     kStateConnected,        // ChildCell в зоне действия сенсора, уже с задействованными джойнтами
     kStateDisconnecting,    // ChildCell при выходе из зоны сенсора. Следующее состояние kStateIdle уже без джоинтов
-    kStateSaved             // ChildCell которые добрались до выхода и плавают в нем, но не выходят
+    kStateSoul              // ChildCell которые добрались до выхода и плавают в нем, но не выходят
 } CharacterStates;
 
 typedef enum {
@@ -26,7 +26,8 @@ typedef enum {
     kEnemyTypeRepulsiveCell,
     kParentCellType,
     kChildCellType,
-    kGroundType
+    kGroundType,
+    kExitCellType
 } GameObjectType;
 
 @protocol GameplayLayerDelegate

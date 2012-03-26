@@ -14,5 +14,6 @@
 }
 
 - (void)changeBodyPosition:(b2Vec2)position;
+- (void)drawDisJoints;
 
 @end
