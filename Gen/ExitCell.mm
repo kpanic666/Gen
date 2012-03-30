@@ -21,7 +21,7 @@
     
     b2FixtureDef fixtureDef;
     b2CircleShape shape;
-    shape.m_radius = self.contentSize.width * 0.25 / PTM_RATIO;
+    shape.m_radius = [self boundingBox].size.width * 0.5 / PTM_RATIO;
     fixtureDef.shape = &shape;
     fixtureDef.filter.categoryBits = kExitCellFilterCategory;
     fixtureDef.filter.maskBits = kChildCellFilterCategory;
@@ -48,6 +48,19 @@
 - (void)changeState:(CharacterStates)newState
 {
     
+}
+
+- (CGRect)adjustedBoudingBox
+{
+    // Изменяет AABB до размеров прямоугольника умещающегося внутрь клетки. Нужно для движения ChildCell внутри выхода
+    CGRect exitBoundingBox = [self boundingBox];
+    float offset = exitBoundingBox.size.width * 0.22f;
+    float cropAmount = exitBoundingBox.size.width * 0.4f;
+    
+    exitBoundingBox = CGRectMake(exitBoundingBox.origin.x + offset, exitBoundingBox.origin.y + offset, exitBoundingBox.size.width - cropAmount, exitBoundingBox.size.height - cropAmount);
+
+    return exitBoundingBox;
+//    return self.boundingBox;
 }
 
 - (BOOL)mouseJointBegan

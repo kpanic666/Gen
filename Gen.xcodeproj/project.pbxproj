@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E966EAC0151F411A00D76508 /* genbyatlas-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E966EAB8151F411A00D76508 /* genbyatlas-hd.plist */; };
-		E966EAC1151F411A00D76508 /* genbyatlas-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E966EAB9151F411A00D76508 /* genbyatlas-hd.png */; };
-		E966EAC2151F411A00D76508 /* genbyatlas-ipad-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E966EABA151F411A00D76508 /* genbyatlas-ipad-hd.plist */; };
-		E966EAC3151F411A00D76508 /* genbyatlas-ipad-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E966EABB151F411A00D76508 /* genbyatlas-ipad-hd.png */; };
-		E966EAC4151F411A00D76508 /* genbyatlas-ipad.plist in Resources */ = {isa = PBXBuildFile; fileRef = E966EABC151F411A00D76508 /* genbyatlas-ipad.plist */; };
-		E966EAC5151F411A00D76508 /* genbyatlas-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = E966EABD151F411A00D76508 /* genbyatlas-ipad.png */; };
-		E966EAC6151F411A00D76508 /* genbyatlas.plist in Resources */ = {isa = PBXBuildFile; fileRef = E966EABE151F411A00D76508 /* genbyatlas.plist */; };
-		E966EAC7151F411A00D76508 /* genbyatlas.png in Resources */ = {isa = PBXBuildFile; fileRef = E966EABF151F411A00D76508 /* genbyatlas.png */; };
+		E90BB34F15257BE300C8909B /* genbyatlas-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34715257BE300C8909B /* genbyatlas-hd.plist */; };
+		E90BB35015257BE300C8909B /* genbyatlas-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34815257BE300C8909B /* genbyatlas-hd.png */; };
+		E90BB35115257BE300C8909B /* genbyatlas-ipad-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34915257BE300C8909B /* genbyatlas-ipad-hd.plist */; };
+		E90BB35215257BE300C8909B /* genbyatlas-ipad-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34A15257BE300C8909B /* genbyatlas-ipad-hd.png */; };
+		E90BB35315257BE300C8909B /* genbyatlas-ipad.plist in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34B15257BE300C8909B /* genbyatlas-ipad.plist */; };
+		E90BB35415257BE300C8909B /* genbyatlas-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34C15257BE300C8909B /* genbyatlas-ipad.png */; };
+		E90BB35515257BE300C8909B /* genbyatlas.plist in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34D15257BE300C8909B /* genbyatlas.plist */; };
+		E90BB35615257BE300C8909B /* genbyatlas.png in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34E15257BE300C8909B /* genbyatlas.png */; };
 		E98319E4150E0E19006F2E31 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319DE150E0E19006F2E31 /* Icon-72.png */; };
 		E98319E5150E0E19006F2E31 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319DF150E0E19006F2E31 /* Icon-Small-50.png */; };
 		E98319E6150E0E19006F2E31 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319E0150E0E19006F2E31 /* Icon-Small.png */; };
@@ -214,14 +214,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E966EAB8151F411A00D76508 /* genbyatlas-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-hd.plist"; sourceTree = "<group>"; };
-		E966EAB9151F411A00D76508 /* genbyatlas-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-hd.png"; sourceTree = "<group>"; };
-		E966EABA151F411A00D76508 /* genbyatlas-ipad-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad-hd.plist"; sourceTree = "<group>"; };
-		E966EABB151F411A00D76508 /* genbyatlas-ipad-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad-hd.png"; sourceTree = "<group>"; };
-		E966EABC151F411A00D76508 /* genbyatlas-ipad.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad.plist"; sourceTree = "<group>"; };
-		E966EABD151F411A00D76508 /* genbyatlas-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad.png"; sourceTree = "<group>"; };
-		E966EABE151F411A00D76508 /* genbyatlas.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = genbyatlas.plist; sourceTree = "<group>"; };
-		E966EABF151F411A00D76508 /* genbyatlas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = genbyatlas.png; sourceTree = "<group>"; };
+		E90BB34715257BE300C8909B /* genbyatlas-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-hd.plist"; sourceTree = "<group>"; };
+		E90BB34815257BE300C8909B /* genbyatlas-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-hd.png"; sourceTree = "<group>"; };
+		E90BB34915257BE300C8909B /* genbyatlas-ipad-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad-hd.plist"; sourceTree = "<group>"; };
+		E90BB34A15257BE300C8909B /* genbyatlas-ipad-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad-hd.png"; sourceTree = "<group>"; };
+		E90BB34B15257BE300C8909B /* genbyatlas-ipad.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad.plist"; sourceTree = "<group>"; };
+		E90BB34C15257BE300C8909B /* genbyatlas-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad.png"; sourceTree = "<group>"; };
+		E90BB34D15257BE300C8909B /* genbyatlas.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = genbyatlas.plist; sourceTree = "<group>"; };
+		E90BB34E15257BE300C8909B /* genbyatlas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = genbyatlas.png; sourceTree = "<group>"; };
 		E98319DE150E0E19006F2E31 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		E98319DF150E0E19006F2E31 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
 		E98319E0150E0E19006F2E31 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
@@ -1392,14 +1392,14 @@
 		E995893C150B80910006115C /* Atlases */ = {
 			isa = PBXGroup;
 			children = (
-				E966EAB8151F411A00D76508 /* genbyatlas-hd.plist */,
-				E966EAB9151F411A00D76508 /* genbyatlas-hd.png */,
-				E966EABA151F411A00D76508 /* genbyatlas-ipad-hd.plist */,
-				E966EABB151F411A00D76508 /* genbyatlas-ipad-hd.png */,
-				E966EABC151F411A00D76508 /* genbyatlas-ipad.plist */,
-				E966EABD151F411A00D76508 /* genbyatlas-ipad.png */,
-				E966EABE151F411A00D76508 /* genbyatlas.plist */,
-				E966EABF151F411A00D76508 /* genbyatlas.png */,
+				E90BB34715257BE300C8909B /* genbyatlas-hd.plist */,
+				E90BB34815257BE300C8909B /* genbyatlas-hd.png */,
+				E90BB34915257BE300C8909B /* genbyatlas-ipad-hd.plist */,
+				E90BB34A15257BE300C8909B /* genbyatlas-ipad-hd.png */,
+				E90BB34B15257BE300C8909B /* genbyatlas-ipad.plist */,
+				E90BB34C15257BE300C8909B /* genbyatlas-ipad.png */,
+				E90BB34D15257BE300C8909B /* genbyatlas.plist */,
+				E90BB34E15257BE300C8909B /* genbyatlas.png */,
 			);
 			name = Atlases;
 			sourceTree = "<group>";
@@ -1528,14 +1528,14 @@
 				E9831A04150F12C6006F2E31 /* SoundEffects.plist in Resources */,
 				E9831C041510875C006F2E31 /* ChangeLog in Resources */,
 				E9831C051510875C006F2E31 /* CMakeLists.txt in Resources */,
-				E966EAC0151F411A00D76508 /* genbyatlas-hd.plist in Resources */,
-				E966EAC1151F411A00D76508 /* genbyatlas-hd.png in Resources */,
-				E966EAC2151F411A00D76508 /* genbyatlas-ipad-hd.plist in Resources */,
-				E966EAC3151F411A00D76508 /* genbyatlas-ipad-hd.png in Resources */,
-				E966EAC4151F411A00D76508 /* genbyatlas-ipad.plist in Resources */,
-				E966EAC5151F411A00D76508 /* genbyatlas-ipad.png in Resources */,
-				E966EAC6151F411A00D76508 /* genbyatlas.plist in Resources */,
-				E966EAC7151F411A00D76508 /* genbyatlas.png in Resources */,
+				E90BB34F15257BE300C8909B /* genbyatlas-hd.plist in Resources */,
+				E90BB35015257BE300C8909B /* genbyatlas-hd.png in Resources */,
+				E90BB35115257BE300C8909B /* genbyatlas-ipad-hd.plist in Resources */,
+				E90BB35215257BE300C8909B /* genbyatlas-ipad-hd.png in Resources */,
+				E90BB35315257BE300C8909B /* genbyatlas-ipad.plist in Resources */,
+				E90BB35415257BE300C8909B /* genbyatlas-ipad.png in Resources */,
+				E90BB35515257BE300C8909B /* genbyatlas.plist in Resources */,
+				E90BB35615257BE300C8909B /* genbyatlas.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

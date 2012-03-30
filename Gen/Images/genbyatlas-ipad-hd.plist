@@ -20,54 +20,54 @@
             <key>childcell_connected.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{547,1831},{138,138}}</string>
+                <string>{{131,1831},{129,129}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{138,138}}</string>
+                <string>{{0,0},{129,129}}</string>
                 <key>sourceSize</key>
-                <string>{138,138}</string>
+                <string>{129,129}</string>
             </dict>
             <key>childcell_idle.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{407,1831},{138,138}}</string>
+                <string>{{0,1831},{129,130}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{138,138}}</string>
+                <string>{{0,0},{129,130}}</string>
                 <key>sourceSize</key>
-                <string>{138,138}</string>
+                <string>{129,130}</string>
             </dict>
             <key>exitcell_idle.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,1538},{405,405}}</string>
+                <string>{{293,1538},{270,269}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{405,405}}</string>
+                <string>{{0,0},{270,269}}</string>
                 <key>sourceSize</key>
-                <string>{405,405}</string>
+                <string>{270,269}</string>
             </dict>
             <key>parentcell_travelling.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{407,1538},{291,291}}</string>
+                <string>{{0,1538},{291,291}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{291,291}}</string>
+                <string>{{15,15},{291,291}}</string>
                 <key>sourceSize</key>
-                <string>{291,291}</string>
+                <string>{321,321}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -79,7 +79,7 @@
             <key>size</key>
             <string>{2048,2048}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:a94faf7a656849597a0f3ee8812507f8$</string>
+            <string>$TexturePacker:SmartUpdate:fa75efd5ba8d70679f8612745a722c9d$</string>
             <key>textureFileName</key>
             <string>genbyatlas-ipad-hd.png</string>
         </dict>

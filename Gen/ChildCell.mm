@@ -10,6 +10,8 @@
 
 @implementation ChildCell
 
+GameCharacter *exitCellSprite;
+
 - (void)createBodyAtLocation:(CGPoint)location
 {
     b2BodyDef bodyDef;
@@ -23,7 +25,7 @@
     
     b2FixtureDef fixtureDef;
     b2CircleShape shape;
-    shape.m_radius = self.contentSize.width * 0.25f / PTM_RATIO;
+    shape.m_radius = self.contentSize.width * 0.22f / PTM_RATIO;
     fixtureDef.shape = &shape;
     fixtureDef.filter.categoryBits = kChildCellFilterCategory;
     fixtureDef.density = 8.0;
@@ -41,13 +43,38 @@
         return;
     }
     if ([self numberOfRunningActions] == 0) {
-        if (characterHealth <= 0) {
+        if (characterHealth <= 0 && characterState != kStateSoul) {
             [self changeState:kStateDead];
         }
     }
     
+    if (characterState == kStateBeforeSoul) {
+        if (body == nil) {
+            [self changeState:kStateSoul];
+        }
+    }
+    
     if (characterState == kStateSoul) {
-        self.markedForDestruction = YES;
+        if (body == nil && [self numberOfRunningActions] == 0) {
+            
+            // Уменьшает клетку
+            self.scale = 0.7;
+            
+            // Определяем следующую точку для произвольного движения внутри выхода
+            if (!exitCellSprite) {
+                exitCellSprite = (GameCharacter*) [[self parent] getChildByTag:kExitCellSpriteTagValue];
+            }
+            CGRect exitBoundingBox = [exitCellSprite adjustedBoudingBox];
+            int yPositionInExitCell = exitBoundingBox.origin.y + random() % (int)exitBoundingBox.size.height;
+            int xPositionInExitCell = exitBoundingBox.origin.x + random() % (int)exitBoundingBox.size.width;
+            
+            // Рэндомно двигаем клетки внутри выхода
+            id randomMove = [CCSequence actions:
+                              [CCMoveTo actionWithDuration:2.5f position:ccp(xPositionInExitCell, yPositionInExitCell)],
+                              [CCDelayTime actionWithDuration:0.1f],
+                              nil];
+            [self runAction:randomMove];
+        }
     }
 }
 
@@ -117,9 +144,29 @@
             break;
         }
             
-        case kStateSoul:
-            // Клетка ударилась об выход и должна уничтожить физ тело и сменить спрайт и дрыгаться внутри выхода
+        case kStateBeforeSoul:
+            self.markedForDestruction = YES;
             break;
+            
+        case kStateSoul:
+        {
+            // Клетка ударилась об выход и должна уничтожить физ тело и сменить спрайт и дрыгаться внутри выхода
+            [self setCharacterHealth:0];
+            
+            // 1. Меняем цвет у умерших клеток
+//            self.blendFunc = (ccBlendFunc) {GL_ZERO, GL_ONE_MINUS_SRC_ALPHA}; // Т.к. спрайт из batchnode, то применять нужно ко всему батчноду
+            self.color = ccc3(255, 0, 253);
+            self.opacity = 200;
+            
+            
+            // 2. Двигаем мертвые клетки (души) в центр выхода
+            int timeToMove = random() % 3 + 1;   // 1-4 sec
+            exitCellSprite = (GameCharacter*) [[self parent] getChildByTag:kExitCellSpriteTagValue];
+            CCEaseBounceIn *moveInsideElastic = [CCEaseBounceIn actionWithAction:[CCMoveTo actionWithDuration:timeToMove position:exitCellSprite.position]];
+            [self runAction:moveInsideElastic];
+
+            break;
+        }
             
         case kStateDead:
             // Клетка умирает от первого же прикосновения
@@ -128,6 +175,12 @@
         default:
             break;
     }
+}
+
+- (void)dealloc
+{
+    exitCellSprite = nil;
+    [super dealloc];
 }
 
 - (BOOL)mouseJointBegan

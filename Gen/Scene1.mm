@@ -40,20 +40,18 @@
         [background setPosition:screenCenter];
         [self addChild:background z:-2];
         
-        // add ChildCells
-        for (int i = 0; i < kChildCellStartNum; i++) {
-            [self createChildCellAtLocation:ccp(screenCenter.x + i * 5, screenCenter.y + i * 5)];
-        }
-        
         // add ParentCell (main hero will always be under the finger)
         parentCell = [[[ParentCell alloc] initWithWorld:world atLocation:ccp(100, 100)] autorelease];
         [sceneSpriteBatchNode addChild:parentCell z:10 tag:kParentCellSpriteTagValue];
         
         // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
         exitCell = [[[ExitCell alloc] initWithWorld:world atLocation:ccp(screenSize.width*0.9, screenSize.height*0.1)] autorelease];
-        [sceneSpriteBatchNode addChild:exitCell z:-1];
+        [sceneSpriteBatchNode addChild:exitCell z:-1 tag:kExitCellSpriteTagValue];
         
-        
+        // add ChildCells
+        for (int i = 0; i < kChildCellStartNum; i++) {
+            [self createChildCellAtLocation:ccp(screenCenter.x + i * 5, screenCenter.y + i * 5)];
+        }
     }
     return self;
 }

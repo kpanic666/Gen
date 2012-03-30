@@ -89,6 +89,8 @@
         
         // enable events
         self.isTouchEnabled = YES;
+        // seed randomizer
+        srandom(time(NULL));
         
         bodiesToDestroy = [[NSMutableArray alloc] init];
         
@@ -175,13 +177,14 @@
         }
     }
     
+    // Уничтожаем тела клеток попавших в опасность или в выход
+    [self destroyBodies];
+    
     // Force update all objects
     CCArray *listOfGameObjects = [sceneSpriteBatchNode children];
     for (GameCharacter *tempChar in listOfGameObjects) {
         [tempChar updateStateWithDeltaTime:dt andListOfGameObjects:listOfGameObjects];
     }
-    
-    [self destroyBodies];
 }
 
 - (void)markBodyForDestruction:(Box2DSprite *)obj
@@ -196,6 +199,7 @@
         if (obj && obj.body && obj.markedForDestruction) {
             obj.body->SetTransform(b2Vec2(0,0), 0);
             world->DestroyBody(obj.body);
+            obj.body = nil;
         }
     }
     [bodiesToDestroy removeAllObjects];

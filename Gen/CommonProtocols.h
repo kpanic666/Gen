@@ -16,6 +16,7 @@ typedef enum {
     kStateConnecting,       // ChildCell при входе в зону сенсора ParentCell
     kStateConnected,        // ChildCell в зоне действия сенсора, уже с задействованными джойнтами
     kStateDisconnecting,    // ChildCell при выходе из зоны сенсора. Следующее состояние kStateIdle уже без джоинтов
+    kStateBeforeSoul,       // ChildCell при соприкосновении с выходом на мгновение принимает это состояние чтобы отбросить джоинты
     kStateSoul              // ChildCell которые добрались до выхода и плавают в нем, но не выходят
 } CharacterStates;
 

@@ -20,54 +20,54 @@
             <key>childcell_connected.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{77,462},{32,32}}</string>
+                <string>{{37,469},{33,33}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{32,32}}</string>
+                <string>{{0,0},{33,33}}</string>
                 <key>sourceSize</key>
-                <string>{32,32}</string>
+                <string>{33,33}</string>
             </dict>
             <key>childcell_idle.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{77,428},{32,32}}</string>
+                <string>{{2,469},{33,33}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{32,32}}</string>
+                <string>{{0,0},{33,33}}</string>
                 <key>sourceSize</key>
-                <string>{32,32}</string>
+                <string>{33,33}</string>
             </dict>
             <key>exitcell_idle.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,324},{102,102}}</string>
+                <string>{{2,399},{68,68}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{102,102}}</string>
+                <string>{{0,0},{68,68}}</string>
                 <key>sourceSize</key>
-                <string>{102,102}</string>
+                <string>{68,68}</string>
             </dict>
             <key>parentcell_travelling.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,428},{73,73}}</string>
+                <string>{{2,324},{73,73}}</string>
                 <key>offset</key>
-                <string>{0,0}</string>
+                <string>{0,1}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{73,73}}</string>
+                <string>{{4,3},{73,73}}</string>
                 <key>sourceSize</key>
-                <string>{73,73}</string>
+                <string>{81,81}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -79,7 +79,7 @@
             <key>size</key>
             <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:9d2fbbf9699fcbaffec99b225fd9a888$</string>
+            <string>$TexturePacker:SmartUpdate:1fbab1f5f636b6fa608ee441816f0cab$</string>
             <key>textureFileName</key>
             <string>genbyatlas.png</string>
         </dict>
