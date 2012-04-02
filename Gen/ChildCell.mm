@@ -48,14 +48,12 @@ GameCharacter *exitCellSprite;
         }
     }
     
-    if (characterState == kStateBeforeSoul) {
-        if (body == nil) {
+    if (characterState == kStateBeforeSoul && body == nil) {
             [self changeState:kStateSoul];
-        }
     }
     
-    if (characterState == kStateSoul) {
-        if (body == nil && [self numberOfRunningActions] == 0) {
+    if (characterState == kStateSoul && [self numberOfRunningActions] == 0) {
+        if (body == nil) {
             
             // Уменьшает клетку
             self.scale = 0.7;
@@ -146,6 +144,7 @@ GameCharacter *exitCellSprite;
             
         case kStateBeforeSoul:
             self.markedForDestruction = YES;
+            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_idle.png"]];
             break;
             
         case kStateSoul:
@@ -154,10 +153,8 @@ GameCharacter *exitCellSprite;
             [self setCharacterHealth:0];
             
             // 1. Меняем цвет у умерших клеток
-//            self.blendFunc = (ccBlendFunc) {GL_ZERO, GL_ONE_MINUS_SRC_ALPHA}; // Т.к. спрайт из batchnode, то применять нужно ко всему батчноду
             self.color = ccc3(255, 0, 253);
             self.opacity = 200;
-            
             
             // 2. Двигаем мертвые клетки (души) в центр выхода
             int timeToMove = random() % 3 + 1;   // 1-4 sec
