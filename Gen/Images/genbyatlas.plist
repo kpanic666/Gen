@@ -56,6 +56,19 @@
                 <key>sourceSize</key>
                 <string>{68,68}</string>
             </dict>
+            <key>magneticcell_idle.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{72,399},{52,52}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{52,52}}</string>
+                <key>sourceSize</key>
+                <string>{52,52}</string>
+            </dict>
             <key>parentcell_travelling.png</key>
             <dict>
                 <key>frame</key>
@@ -79,7 +92,7 @@
             <key>size</key>
             <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:1fbab1f5f636b6fa608ee441816f0cab$</string>
+            <string>$TexturePacker:SmartUpdate:51fa90492b43f039ce4179522daf369f$</string>
             <key>textureFileName</key>
             <string>genbyatlas.png</string>
         </dict>

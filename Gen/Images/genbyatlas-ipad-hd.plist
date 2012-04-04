@@ -20,7 +20,7 @@
             <key>childcell_connected.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{131,1831},{129,129}}</string>
+                <string>{{339,1810},{129,129}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -33,7 +33,7 @@
             <key>childcell_idle.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,1831},{129,130}}</string>
+                <string>{{208,1831},{129,130}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -55,6 +55,19 @@
                 <string>{{0,0},{270,269}}</string>
                 <key>sourceSize</key>
                 <string>{270,269}</string>
+            </dict>
+            <key>magneticcell_idle.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{0,1831},{206,206}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{206,206}}</string>
+                <key>sourceSize</key>
+                <string>{206,206}</string>
             </dict>
             <key>parentcell_travelling.png</key>
             <dict>
@@ -79,7 +92,7 @@
             <key>size</key>
             <string>{2048,2048}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:fa75efd5ba8d70679f8612745a722c9d$</string>
+            <string>$TexturePacker:SmartUpdate:2cd0ba3f43a6bd840e80c6243a3fe9a6$</string>
             <key>textureFileName</key>
             <string>genbyatlas-ipad-hd.png</string>
         </dict>

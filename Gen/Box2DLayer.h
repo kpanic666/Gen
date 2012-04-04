@@ -21,7 +21,6 @@
     ContactListener *contactListener;
 	GLESDebugDraw *m_debugDraw;
     b2Body *groundBody;
-    b2MouseJoint *mouseJoint;
     CCSpriteBatchNode *sceneSpriteBatchNode;
     b2Body *parentCellBody;
     b2Body *exitCellBody;

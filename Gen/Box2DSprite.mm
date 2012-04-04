@@ -25,11 +25,6 @@
     return self;
 }
 
-- (BOOL)mouseJointBegan
-{
-    return TRUE;
-}
-
 - (void) dealloc
 {
     world = nil;

@@ -18,9 +18,6 @@
 @property (assign) b2Body *body;
 @property (readwrite, assign) BOOL markedForDestruction;
 
-// Return TRUE to accept the mouse joint
-// Return FALSE to reject the mouse joint
-- (BOOL)mouseJointBegan;
 - (id)initWithWorld:(b2World*)theWorld atLocation:(CGPoint)location;
 - (void)createBodyAtLocation:(CGPoint)location;
 

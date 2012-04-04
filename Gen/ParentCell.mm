@@ -152,11 +152,6 @@
     }
 }
 
-- (BOOL)mouseJointBegan
-{
-    return NO;
-}
-
 - (void)dealloc
 {
     [disJointsToDestroy release];

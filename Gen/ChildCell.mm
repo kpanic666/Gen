@@ -23,9 +23,18 @@ GameCharacter *exitCellSprite;
     body = world->CreateBody(&bodyDef);
     body->SetUserData(self);
     
+    // Создаем тела и спрайты с 2мя разными размерами
+    float scale = CCRANDOM_0_1();
+    if (scale <= 0.5f) {
+        scale = 0.8f;
+    } else {
+        scale = 1.0f;
+    }
+    [self setScale:scale];
+    
     b2FixtureDef fixtureDef;
     b2CircleShape shape;
-    shape.m_radius = self.contentSize.width * 0.22f / PTM_RATIO;
+    shape.m_radius = self.contentSize.width * 0.22f * scale / PTM_RATIO;
     fixtureDef.shape = &shape;
     fixtureDef.filter.categoryBits = kChildCellFilterCategory;
     fixtureDef.density = 8.0;
@@ -178,11 +187,6 @@ GameCharacter *exitCellSprite;
 {
     exitCellSprite = nil;
     [super dealloc];
-}
-
-- (BOOL)mouseJointBegan
-{
-    return TRUE;
 }
 
 @end

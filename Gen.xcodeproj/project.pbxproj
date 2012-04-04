@@ -7,14 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E90BB34F15257BE300C8909B /* genbyatlas-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34715257BE300C8909B /* genbyatlas-hd.plist */; };
-		E90BB35015257BE300C8909B /* genbyatlas-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34815257BE300C8909B /* genbyatlas-hd.png */; };
-		E90BB35115257BE300C8909B /* genbyatlas-ipad-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34915257BE300C8909B /* genbyatlas-ipad-hd.plist */; };
-		E90BB35215257BE300C8909B /* genbyatlas-ipad-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34A15257BE300C8909B /* genbyatlas-ipad-hd.png */; };
-		E90BB35315257BE300C8909B /* genbyatlas-ipad.plist in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34B15257BE300C8909B /* genbyatlas-ipad.plist */; };
-		E90BB35415257BE300C8909B /* genbyatlas-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34C15257BE300C8909B /* genbyatlas-ipad.png */; };
-		E90BB35515257BE300C8909B /* genbyatlas.plist in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34D15257BE300C8909B /* genbyatlas.plist */; };
-		E90BB35615257BE300C8909B /* genbyatlas.png in Resources */ = {isa = PBXBuildFile; fileRef = E90BB34E15257BE300C8909B /* genbyatlas.png */; };
+		E90BB35D1529747600C8909B /* RedCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = E90BB35C1529747500C8909B /* RedCell.mm */; };
+		E90BB36015298B1400C8909B /* MagneticCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = E90BB35F15298B1400C8909B /* MagneticCell.mm */; };
+		E90BB3691529A35E00C8909B /* genbyatlas-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E90BB3611529A35E00C8909B /* genbyatlas-hd.plist */; };
+		E90BB36A1529A35E00C8909B /* genbyatlas-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E90BB3621529A35E00C8909B /* genbyatlas-hd.png */; };
+		E90BB36B1529A35E00C8909B /* genbyatlas-ipad-hd.plist in Resources */ = {isa = PBXBuildFile; fileRef = E90BB3631529A35E00C8909B /* genbyatlas-ipad-hd.plist */; };
+		E90BB36C1529A35E00C8909B /* genbyatlas-ipad-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E90BB3641529A35E00C8909B /* genbyatlas-ipad-hd.png */; };
+		E90BB36D1529A35E00C8909B /* genbyatlas-ipad.plist in Resources */ = {isa = PBXBuildFile; fileRef = E90BB3651529A35E00C8909B /* genbyatlas-ipad.plist */; };
+		E90BB36E1529A35E00C8909B /* genbyatlas-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = E90BB3661529A35E00C8909B /* genbyatlas-ipad.png */; };
+		E90BB36F1529A35E00C8909B /* genbyatlas.plist in Resources */ = {isa = PBXBuildFile; fileRef = E90BB3671529A35E00C8909B /* genbyatlas.plist */; };
+		E90BB3701529A35E00C8909B /* genbyatlas.png in Resources */ = {isa = PBXBuildFile; fileRef = E90BB3681529A35E00C8909B /* genbyatlas.png */; };
 		E98319E4150E0E19006F2E31 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319DE150E0E19006F2E31 /* Icon-72.png */; };
 		E98319E5150E0E19006F2E31 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319DF150E0E19006F2E31 /* Icon-Small-50.png */; };
 		E98319E6150E0E19006F2E31 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319E0150E0E19006F2E31 /* Icon-Small.png */; };
@@ -214,14 +216,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E90BB34715257BE300C8909B /* genbyatlas-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-hd.plist"; sourceTree = "<group>"; };
-		E90BB34815257BE300C8909B /* genbyatlas-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-hd.png"; sourceTree = "<group>"; };
-		E90BB34915257BE300C8909B /* genbyatlas-ipad-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad-hd.plist"; sourceTree = "<group>"; };
-		E90BB34A15257BE300C8909B /* genbyatlas-ipad-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad-hd.png"; sourceTree = "<group>"; };
-		E90BB34B15257BE300C8909B /* genbyatlas-ipad.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad.plist"; sourceTree = "<group>"; };
-		E90BB34C15257BE300C8909B /* genbyatlas-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad.png"; sourceTree = "<group>"; };
-		E90BB34D15257BE300C8909B /* genbyatlas.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = genbyatlas.plist; sourceTree = "<group>"; };
-		E90BB34E15257BE300C8909B /* genbyatlas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = genbyatlas.png; sourceTree = "<group>"; };
+		E90BB35B1529747500C8909B /* RedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedCell.h; sourceTree = "<group>"; };
+		E90BB35C1529747500C8909B /* RedCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RedCell.mm; sourceTree = "<group>"; };
+		E90BB35E15298B1400C8909B /* MagneticCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagneticCell.h; sourceTree = "<group>"; };
+		E90BB35F15298B1400C8909B /* MagneticCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MagneticCell.mm; sourceTree = "<group>"; };
+		E90BB3611529A35E00C8909B /* genbyatlas-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-hd.plist"; sourceTree = "<group>"; };
+		E90BB3621529A35E00C8909B /* genbyatlas-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-hd.png"; sourceTree = "<group>"; };
+		E90BB3631529A35E00C8909B /* genbyatlas-ipad-hd.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad-hd.plist"; sourceTree = "<group>"; };
+		E90BB3641529A35E00C8909B /* genbyatlas-ipad-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad-hd.png"; sourceTree = "<group>"; };
+		E90BB3651529A35E00C8909B /* genbyatlas-ipad.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "genbyatlas-ipad.plist"; sourceTree = "<group>"; };
+		E90BB3661529A35E00C8909B /* genbyatlas-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "genbyatlas-ipad.png"; sourceTree = "<group>"; };
+		E90BB3671529A35E00C8909B /* genbyatlas.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = genbyatlas.plist; sourceTree = "<group>"; };
+		E90BB3681529A35E00C8909B /* genbyatlas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = genbyatlas.png; sourceTree = "<group>"; };
 		E98319DE150E0E19006F2E31 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		E98319DF150E0E19006F2E31 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
 		E98319E0150E0E19006F2E31 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
@@ -991,6 +997,10 @@
 		E9831C8E15186E79006F2E31 /* Box2D */ = {
 			isa = PBXGroup;
 			children = (
+				E90BB35B1529747500C8909B /* RedCell.h */,
+				E90BB35C1529747500C8909B /* RedCell.mm */,
+				E90BB35E15298B1400C8909B /* MagneticCell.h */,
+				E90BB35F15298B1400C8909B /* MagneticCell.mm */,
 			);
 			name = Box2D;
 			sourceTree = "<group>";
@@ -1392,14 +1402,14 @@
 		E995893C150B80910006115C /* Atlases */ = {
 			isa = PBXGroup;
 			children = (
-				E90BB34715257BE300C8909B /* genbyatlas-hd.plist */,
-				E90BB34815257BE300C8909B /* genbyatlas-hd.png */,
-				E90BB34915257BE300C8909B /* genbyatlas-ipad-hd.plist */,
-				E90BB34A15257BE300C8909B /* genbyatlas-ipad-hd.png */,
-				E90BB34B15257BE300C8909B /* genbyatlas-ipad.plist */,
-				E90BB34C15257BE300C8909B /* genbyatlas-ipad.png */,
-				E90BB34D15257BE300C8909B /* genbyatlas.plist */,
-				E90BB34E15257BE300C8909B /* genbyatlas.png */,
+				E90BB3611529A35E00C8909B /* genbyatlas-hd.plist */,
+				E90BB3621529A35E00C8909B /* genbyatlas-hd.png */,
+				E90BB3631529A35E00C8909B /* genbyatlas-ipad-hd.plist */,
+				E90BB3641529A35E00C8909B /* genbyatlas-ipad-hd.png */,
+				E90BB3651529A35E00C8909B /* genbyatlas-ipad.plist */,
+				E90BB3661529A35E00C8909B /* genbyatlas-ipad.png */,
+				E90BB3671529A35E00C8909B /* genbyatlas.plist */,
+				E90BB3681529A35E00C8909B /* genbyatlas.png */,
 			);
 			name = Atlases;
 			sourceTree = "<group>";
@@ -1528,14 +1538,14 @@
 				E9831A04150F12C6006F2E31 /* SoundEffects.plist in Resources */,
 				E9831C041510875C006F2E31 /* ChangeLog in Resources */,
 				E9831C051510875C006F2E31 /* CMakeLists.txt in Resources */,
-				E90BB34F15257BE300C8909B /* genbyatlas-hd.plist in Resources */,
-				E90BB35015257BE300C8909B /* genbyatlas-hd.png in Resources */,
-				E90BB35115257BE300C8909B /* genbyatlas-ipad-hd.plist in Resources */,
-				E90BB35215257BE300C8909B /* genbyatlas-ipad-hd.png in Resources */,
-				E90BB35315257BE300C8909B /* genbyatlas-ipad.plist in Resources */,
-				E90BB35415257BE300C8909B /* genbyatlas-ipad.png in Resources */,
-				E90BB35515257BE300C8909B /* genbyatlas.plist in Resources */,
-				E90BB35615257BE300C8909B /* genbyatlas.png in Resources */,
+				E90BB3691529A35E00C8909B /* genbyatlas-hd.plist in Resources */,
+				E90BB36A1529A35E00C8909B /* genbyatlas-hd.png in Resources */,
+				E90BB36B1529A35E00C8909B /* genbyatlas-ipad-hd.plist in Resources */,
+				E90BB36C1529A35E00C8909B /* genbyatlas-ipad-hd.png in Resources */,
+				E90BB36D1529A35E00C8909B /* genbyatlas-ipad.plist in Resources */,
+				E90BB36E1529A35E00C8909B /* genbyatlas-ipad.png in Resources */,
+				E90BB36F1529A35E00C8909B /* genbyatlas.plist in Resources */,
+				E90BB3701529A35E00C8909B /* genbyatlas.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1719,6 +1729,8 @@
 				E9831C481511D9F6006F2E31 /* ParentCell.mm in Sources */,
 				E9831C8915171821006F2E31 /* ContactListener.mm in Sources */,
 				E9835E60151AEC8100836385 /* ExitCell.mm in Sources */,
+				E90BB35D1529747600C8909B /* RedCell.mm in Sources */,
+				E90BB36015298B1400C8909B /* MagneticCell.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

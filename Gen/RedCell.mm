@@ -1,14 +1,14 @@
 //
-//  ExitCell.mm
+//  RedCell.m
 //  Gen
 //
-//  Created by Andrey Korikov on 22.03.12.
-//  Copyright 2012 Atom Games. All rights reserved.
+//  Created by Andrey Korikov on 02.04.12.
+//  Copyright (c) 2012 Atom Games. All rights reserved.
 //
 
-#import "ExitCell.h"
+#import "RedCell.h"
 
-@implementation ExitCell
+@implementation RedCell
 
 - (void)createBodyAtLocation:(CGPoint)location
 {
@@ -37,7 +37,7 @@
     if ((self = [super init])) {
         world = theWorld;
         [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"exitcell_idle.png"]];
-        gameObjectType = kExitCellType;
+        gameObjectType = kEnemyTypeRedCell;
         characterState = kStateIdle;
         [self createBodyAtLocation:location];
     }
@@ -49,16 +49,5 @@
     
 }
 
-- (CGRect)adjustedBoudingBox
-{
-    // Изменяет AABB до размеров прямоугольника умещающегося внутрь клетки. Нужно для движения ChildCell внутри выхода
-    CGRect exitBoundingBox = [self boundingBox];
-    float offset = exitBoundingBox.size.width * 0.22f;
-    float cropAmount = exitBoundingBox.size.width * 0.4f;
-    
-    exitBoundingBox = CGRectMake(exitBoundingBox.origin.x + offset, exitBoundingBox.origin.y + offset, exitBoundingBox.size.width - cropAmount, exitBoundingBox.size.height - cropAmount);
-
-    return exitBoundingBox;
-}
 
 @end

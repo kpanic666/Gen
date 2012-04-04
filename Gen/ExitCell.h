@@ -8,8 +8,6 @@
 
 #import "Box2DSprite.h"
 
-@interface ExitCell : Box2DSprite {
-    
-}
+@interface ExitCell : Box2DSprite
 
 @end

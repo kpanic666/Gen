@@ -11,8 +11,8 @@
 #import "ChildCell.h"
 #import "ParentCell.h"
 #import "Helper.h"
-#import "SimpleQueryCallback.h"
 #import "ExitCell.h"
+#import "MagneticCell.h"
 
 
 @implementation Scene1
@@ -52,6 +52,10 @@
         for (int i = 0; i < kChildCellStartNum; i++) {
             [self createChildCellAtLocation:ccp(screenCenter.x + i * 5, screenCenter.y + i * 5)];
         }
+        
+        // add MagneticCell
+        MagneticCell *magneticCell = [[[MagneticCell alloc] initWithWorld:world atLocation:ccp(screenSize.width*0.3, screenSize.height*0.3)] autorelease];
+        [sceneSpriteBatchNode addChild:magneticCell z:-1];
     }
     return self;
 }
@@ -70,39 +74,10 @@
     touchLocation = [self convertToNodeSpace:touchLocation];
     b2Vec2 locationWorld = b2Vec2(touchLocation.x/PTM_RATIO, touchLocation.y/PTM_RATIO);
     
-    b2AABB aabb;
-    b2Vec2 delta = b2Vec2(1.0/PTM_RATIO, 1.0/PTM_RATIO);
-    aabb.lowerBound = locationWorld - delta;
-    aabb.upperBound = locationWorld + delta;
-    SimpleQueryCallback callback(locationWorld);
-    world->QueryAABB(&callback, aabb);
-    
-    if (callback.fixtureFound) {
-        b2Body *body = callback.fixtureFound->GetBody();
-        Box2DSprite *sprite = (Box2DSprite*) body->GetUserData();
-        if (sprite == NULL) {
-            return FALSE;
-        }
-        if (![sprite mouseJointBegan]) {
-            return FALSE;
-        }
-        b2MouseJointDef mouseJointDef;
-        mouseJointDef.bodyA = groundBody;
-        mouseJointDef.bodyB = body;
-        mouseJointDef.target = locationWorld;
-        mouseJointDef.maxForce = 100 * body->GetMass();
-        mouseJointDef.collideConnected = true;
-        
-        mouseJoint = (b2MouseJoint*) world->CreateJoint(&mouseJointDef);
-        body->SetAwake(true);
-        return YES;
-    } else {
-//        [self createChildCellAtLocation:touchLocation];
-        // Отображаем главную ячейку под пальцем игрока и она начинает притягивать
-        [parentCell changeBodyPosition:locationWorld];
-        [parentCell changeState:kStateTraveling];
-        return TRUE;
-    }
+    // Отображаем главную ячейку под пальцем игрока и она начинает притягивать
+    [parentCell changeBodyPosition:locationWorld];
+    [parentCell changeState:kStateTraveling];
+    return TRUE;
 }
 
 - (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event
@@ -110,9 +85,6 @@
     CGPoint touchLocation = [Helper locationFromTouch:touch];
     touchLocation = [self convertToNodeSpace:touchLocation];
     b2Vec2 locationWorld = b2Vec2(touchLocation.x/PTM_RATIO, touchLocation.y/PTM_RATIO);
-    if (mouseJoint) {
-        mouseJoint->SetTarget(locationWorld);
-    }
     if ([parentCell characterState] == kStateTraveling) {
         [parentCell changeBodyPosition:locationWorld];
     }
@@ -120,12 +92,7 @@
 }
 
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event
-{
-    if (mouseJoint) {
-        world->DestroyJoint(mouseJoint);
-        mouseJoint = NULL;
-    }
-    
+{    
     // Прячем главную клетку и перестаем притягивать
     [parentCell changeState:kStateIdle];
 }
