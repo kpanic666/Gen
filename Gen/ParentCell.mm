@@ -71,7 +71,7 @@
                 disJointDef.localAnchorB.SetZero();
                 disJointDef.frequencyHz = 0.25f;
                 disJointDef.dampingRatio = 0.4f;
-                disJointDef.length = self.contentSize.width * 0.6 / PTM_RATIO;
+                disJointDef.length = self.contentSize.width * 0.35 / PTM_RATIO;
                 disJointDef.collideConnected = TRUE;
                 world->CreateJoint(&disJointDef);
             }

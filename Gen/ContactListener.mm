@@ -32,11 +32,12 @@ void ContactListener::BeginContact(b2Contact* contact)
     }
     
     // Обработка столкновений MagneticCell с ChildCell
+    // isActive=False для ChildCells - если в зоне дейтсвия магнита
     if (spriteA.gameObjectType == kEnemyTypeMagneticCell) {
-        [spriteB changeState:kStateMagnitting];
+        spriteB.magneticCount += 1;
     }
     else if (spriteB.gameObjectType == kEnemyTypeMagneticCell) {
-        [spriteA changeState:kStateMagnitting];
+        spriteA.magneticCount += 1;
     }
 }
 
@@ -54,11 +55,12 @@ void ContactListener::EndContact(b2Contact* contact)
     }
     
     // Обработка столкновений MagneticCell с ChildCell
+    // isActive=True для ChildCells - если выходят из зоны дейтсвия магнита
     if (spriteA.gameObjectType == kEnemyTypeMagneticCell) {
-        [spriteB changeState:kStateDismagnitting];
+        spriteB.magneticCount -= 1;
     }
     else if (spriteB.gameObjectType == kEnemyTypeMagneticCell) {
-        [spriteA changeState:kStateDismagnitting];
+        spriteA.magneticCount -= 1;
     }
 }
 

@@ -9,7 +9,6 @@
 #import "Box2DSprite.h"
 
 @interface ChildCell : Box2DSprite {
-    
 }
 
 @end

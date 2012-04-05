@@ -11,11 +11,14 @@
 @class ChildCell;
 @class ParentCell;
 @class ExitCell;
+@class MagneticCell;
 
 @interface Scene1 : Box2DLayer {
     CCArray *childCellsArray;
     ParentCell *parentCell;
     ExitCell *exitCell;
+    MagneticCell *magneticCell1;
+    MagneticCell *magneticCell2;
 }
 
 @end

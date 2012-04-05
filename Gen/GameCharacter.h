@@ -12,10 +12,12 @@
 @interface GameCharacter : GameObject {
     int characterHealth;
     CharacterStates characterState;
+    int magneticCount;              // Содержит кол-во воздействующих магнитов
 }
 
 @property (readwrite) int characterHealth;
 @property (readwrite) CharacterStates characterState;
+@property (readwrite) int magneticCount;
 
 - (void)checkAndClampSpritePosition;
 - (int)getWeaponDamage;

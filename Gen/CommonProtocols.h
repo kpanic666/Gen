@@ -17,10 +17,7 @@ typedef enum {
     kStateConnected,        // ChildCell в зоне действия сенсора, уже с задействованными джойнтами
     kStateDisconnecting,    // ChildCell при выходе из зоны сенсора. Следующее состояние kStateIdle уже без джоинтов
     kStateBeforeSoul,       // ChildCell при соприкосновении с выходом на мгновение принимает это состояние чтобы отбросить джоинты
-    kStateSoul,             // ChildCell которые добрались до выхода и плавают в нем, но не выходят
-    kStateMagnitting,       // ChildCell которые попали в зону действия MagneticCell и только будут примагниченны  
-    kStateMagnited,         // ChildCell в зоне дейтсвия сенсора магнита, уже с действующими джойнтами
-    kStateDismagnitting     // ChildCell при выходе из зоны сенсора магнита. Разрушаются джоинты с магнитами
+    kStateSoul              // ChildCell которые добрались до выхода и плавают в нем, но не выходят
 } CharacterStates;
 
 typedef enum {

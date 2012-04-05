@@ -17,29 +17,31 @@ GameCharacter *exitCellSprite;
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO);
-    bodyDef.linearDamping = 0.2f;
+    bodyDef.linearDamping = 0.1f;
     bodyDef.fixedRotation = TRUE;
     bodyDef.allowSleep = FALSE;
     body = world->CreateBody(&bodyDef);
     body->SetUserData(self);
     
+    b2FixtureDef fixtureDef;
+    b2CircleShape shape;
     // Создаем тела и спрайты с 2мя разными размерами
     float scale = CCRANDOM_0_1();
     if (scale <= 0.5f) {
         scale = 0.8f;
+        fixtureDef.density = 3.0;
+        fixtureDef.friction = 0.1;
+        fixtureDef.restitution = 0.4;
     } else {
         scale = 1.0f;
+        fixtureDef.density = 5.0;
+        fixtureDef.friction = 0.4;
+        fixtureDef.restitution = 0.1;
     }
     [self setScale:scale];
-    
-    b2FixtureDef fixtureDef;
-    b2CircleShape shape;
     shape.m_radius = self.contentSize.width * 0.22f * scale / PTM_RATIO;
     fixtureDef.shape = &shape;
     fixtureDef.filter.categoryBits = kChildCellFilterCategory;
-    fixtureDef.density = 8.0;
-    fixtureDef.friction = 0.1;
-    fixtureDef.restitution = 0.1;
     body->CreateFixture(&fixtureDef);
 }
 

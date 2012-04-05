@@ -10,9 +10,9 @@
 
 @interface MagneticCell : Box2DSprite
 {
-    NSMutableArray *disJointsToDestroy;
+
 }
 
-- (void)drawDisJoints;
+- (void)drawMagnetForces;
 
 @end

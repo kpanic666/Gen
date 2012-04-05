@@ -9,16 +9,14 @@
 #import "MagneticCell.h"
 #import "Helper.h"
 
-@implementation MagneticCell
-
-- (void)destroyDisJoints
+@interface MagneticCell ()
 {
-    for (NSValue *value in disJointsToDestroy) {
-        b2Joint *disJoint = (b2Joint*)[value pointerValue];
-        world->DestroyJoint(disJoint);
-    }
-    [disJointsToDestroy removeAllObjects];
+    NSMutableArray *cellsPosToDraw;
 }
+
+@end
+
+@implementation MagneticCell
 
 - (void)createBodyAtLocation:(CGPoint)location
 {
@@ -30,16 +28,10 @@
     
     b2FixtureDef fixtureDef;
     b2CircleShape shape;
-    shape.m_radius = self.contentSize.width * 0.25f / PTM_RATIO;
+    shape.m_radius = self.contentSize.width * 1.6f / PTM_RATIO;
     fixtureDef.shape = &shape;
-    // Создаем игровой круг, видимый пользователю
-    body->CreateFixture(&fixtureDef);
-    
-    // Создаем сенсор, который будет определять радиус, в котором будут притягиваться клетки
     fixtureDef.isSensor = TRUE;
-    shape.m_radius = self.contentSize.width * 1.5 / PTM_RATIO;
-    // Активируем коллизии для сенсора
-    fixtureDef.filter.categoryBits = kParentCellFilterCategory;
+    fixtureDef.filter.categoryBits = kMagneticCellFilterCategory;
     fixtureDef.filter.maskBits = kChildCellFilterCategory;
     body->CreateFixture(&fixtureDef);
 }
@@ -47,47 +39,35 @@
 - (void)updateStateWithDeltaTime:(ccTime)deltaTime andListOfGameObjects:(CCArray *)listOfGameObjects
 {
     for (Box2DSprite *spriteObj in listOfGameObjects) {
-        // Притягиваем детей к self
-        if (spriteObj.gameObjectType == kChildCellType && spriteObj.characterState == kStateMagnitting) {
-            
-            [spriteObj changeState:kStateMagnited];
-            
-            // Distance Joint between ChildCell and MagneticCell Creation
-            
-            b2DistanceJointDef disJointDef;
-            disJointDef.bodyA = body;
-            disJointDef.bodyB = spriteObj.body;
-            disJointDef.localAnchorA.SetZero();
-            disJointDef.localAnchorB.SetZero();
-            disJointDef.frequencyHz = 0.25f;
-            disJointDef.dampingRatio = 0.8f;
-            disJointDef.length = self.contentSize.width * 1.8 / PTM_RATIO;
-            disJointDef.collideConnected = TRUE;
-            world->CreateJoint(&disJointDef);
-        }
-        // Отсоединяем детей от магнита
-        else if (spriteObj.gameObjectType == kChildCellType && spriteObj.characterState == kStateDismagnitting) {
-//            [spriteObj changeState:kStateIdle];
-            b2Body *childCellBody = spriteObj.body;
-            for (b2JointEdge *edge = childCellBody->GetJointList(); edge; edge = edge->next)
+        // Притягиваем детей к self если у они в зоне действия магнита. Проверяет счетчик кол-ва действующих магнитов
+        if (spriteObj.gameObjectType == kChildCellType && spriteObj.magneticCount > 0)
+        {
+            b2CircleShape magneticShape = *(b2CircleShape*) body->GetFixtureList()->GetShape();
+            float magneticRadius = magneticShape.m_radius * PTM_RATIO;
+            CGPoint distanceDiff = ccpSub(self.position, spriteObj.position);
+            CGFloat lenght = ccpLength(distanceDiff);
+            if (lenght < magneticRadius)
             {
-                Box2DSprite *otherSprite = (Box2DSprite*)edge->other->GetUserData();
-                if ([otherSprite gameObjectType] == kEnemyTypeMagneticCell) {
-                    [disJointsToDestroy addObject:[NSValue valueWithPointer:edge->joint]];
-                }
+                float atanFromDistance = atan2f(distanceDiff.y, distanceDiff.x);
+                float xForce = (lenght - magneticRadius) * cosf(atanFromDistance) / PTM_RATIO * kMagneticPowerMultiplier;
+                float yForce = (lenght - magneticRadius) * sinf(atanFromDistance) / PTM_RATIO * kMagneticPowerMultiplier;
+                
+                spriteObj.body->ApplyForceToCenter(b2Vec2 (xForce, yForce));
+                
+                // Добавляем координаты дочерней клетки для дальнейшей отрисовки линий
+                [cellsPosToDraw addObject:NSStringFromCGPoint(spriteObj.position)];
             }
         }
     }
-
-    // После того как просканировали все объекты - удаляем джойнты
-    [self destroyDisJoints];
 }
 
 - (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location
 {
     if ((self = [super init])) {
         world = theWorld;
-        disJointsToDestroy = [[NSMutableArray alloc] init];
+        // Инициал. массив для хранения координат ChildCell к которым нужно нарисовать линию притяжения
+        cellsPosToDraw = [[NSMutableArray alloc] init];
+        
         [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"magneticcell_idle.png"]];
         gameObjectType = kEnemyTypeMagneticCell;
         characterState = kStateIdle;
@@ -96,47 +76,28 @@
     return self;
 }
 
-- (void)changeState:(CharacterStates)newState
+- (void)drawMagnetForces
 {
-    
+    // Рисуем линий намагничивания от ChildCell к центру магнита
+    for (NSString *posValue in cellsPosToDraw) 
+    {
+        CGPoint cellPos = CGPointFromString(posValue);
+        
+        CHECK_GL_ERROR_DEBUG();
+        ccDrawColor4B(217, 166, 241, 255);
+        glLineWidth(1.0f);
+        ccDrawLine(self.position, cellPos);
+    }
+    [cellsPosToDraw removeAllObjects];
 }
 
 - (void)dealloc
 {
-    [disJointsToDestroy release];
-    disJointsToDestroy = nil;
+    
+    [cellsPosToDraw release];
+    cellsPosToDraw = nil;
     
     [super dealloc];
-}
-
-- (void)drawDisJoints
-{
-    for (b2Joint *jointList = world->GetJointList(); jointList; jointList = jointList->GetNext())
-    {
-        if (jointList->GetType() == e_distanceJoint)
-        {
-            CHECK_GL_ERROR_DEBUG();
-            
-            // Вычисляем расстояние между клетками и центром притяжение. Чем больше расстояние тем прозрачней линия
-            CGPoint anchorA = [Helper toPoints:jointList->GetAnchorA()];
-            CGPoint anchorB = [Helper toPoints:jointList->GetAnchorB()];
-            //            int16 jointLenght = ccpDistance(anchorA, anchorB);
-            //            
-            //            // Прозрачность линии
-            //            GLubyte lineAlpha = 150;
-            //            if (lineAlpha < 1) {
-            //                lineAlpha = 1; 
-            //            } else if (lineAlpha > 255) {
-            //                lineAlpha = 255;
-            //            }
-            
-            ccDrawColor4B(172, 255, 255, 230);
-            
-            
-            glLineWidth(1.0f);
-            ccDrawLine(anchorA, anchorB);
-        }
-    }
 }
 
 @end

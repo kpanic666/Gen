@@ -53,9 +53,11 @@
             [self createChildCellAtLocation:ccp(screenCenter.x + i * 5, screenCenter.y + i * 5)];
         }
         
-        // add MagneticCell
-        MagneticCell *magneticCell = [[[MagneticCell alloc] initWithWorld:world atLocation:ccp(screenSize.width*0.3, screenSize.height*0.3)] autorelease];
-        [sceneSpriteBatchNode addChild:magneticCell z:-1];
+        // add MagneticCells
+        magneticCell1 = [[[MagneticCell alloc] initWithWorld:world atLocation:ccp(screenSize.width*0.3, screenSize.height*0.3)] autorelease];
+        [sceneSpriteBatchNode addChild:magneticCell1 z:-1];
+        magneticCell2 = [[[MagneticCell alloc] initWithWorld:world atLocation:ccp(screenSize.width*0.3, screenSize.height*0.8)] autorelease];
+        [sceneSpriteBatchNode addChild:magneticCell2 z:-1];
     }
     return self;
 }
@@ -87,8 +89,7 @@
     b2Vec2 locationWorld = b2Vec2(touchLocation.x/PTM_RATIO, touchLocation.y/PTM_RATIO);
     if ([parentCell characterState] == kStateTraveling) {
         [parentCell changeBodyPosition:locationWorld];
-    }
-    
+    }    
 }
 
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event
@@ -111,6 +112,18 @@
     
     // Draw lines for distance joints between ChildCell and ParentCell
     [parentCell drawDisJoints];
+    
+    // Рисуем линии от магнитов к ChildCells
+//    for (MagneticCell *magneticCell in [sceneSpriteBatchNode children])
+//    {
+//        if (magneticCell.gameObjectType == kEnemyTypeMagneticCell)
+//        {
+//            CCLOG(@"Draw lines for magnit");
+//            [magneticCell drawMagnetForces];
+//        }
+//    }
+    [magneticCell1 drawMagnetForces];
+    [magneticCell2 drawMagnetForces];
 }
 
 @end

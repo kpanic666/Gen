@@ -12,6 +12,7 @@
 
 @synthesize characterHealth;
 @synthesize characterState;
+@synthesize magneticCount;
 
 - (int)getWeaponDamage {
     return 0;

@@ -8,16 +8,18 @@
 
 #define kChildCellHealth 100
 #define kChildCellSpriteTagValue 1
-#define kChildCellStartNum 30
+#define kChildCellStartNum 20
 #define kParentCellSpriteTagValue 10
 #define kRedCellDamage 100
 #define kExitCellSpriteTagValue 20
+#define kMagneticPowerMultiplier 9.0
 
 // Collision Filter Categories
 typedef enum {
     kParentCellFilterCategory = 0x0002,
     kChildCellFilterCategory = 0x0003,
-    kExitCellFilterCategory = 0x0004
+    kExitCellFilterCategory = 0x0004,
+    kMagneticCellFilterCategory = 0x0005
 } FilterCategories;
 
 typedef enum {
@@ -50,7 +52,7 @@ typedef enum {
 } GameManagerSoundState;
 
 // Turn ON=1 or OFF=0 DEBUG DRAW
-#define DEBUG_DRAW 1
+#define DEBUG_DRAW 0
 
 // Audio Items
 #define AUDIO_MAX_WAITTIME 150
