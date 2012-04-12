@@ -20,7 +20,7 @@
             <key>childcell_connected.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{339,1810},{129,129}}</string>
+                <string>{{337,1808},{129,129}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -33,7 +33,7 @@
             <key>childcell_idle.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{208,1831},{129,130}}</string>
+                <string>{{207,1829},{129,130}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -46,7 +46,7 @@
             <key>exitcell_idle.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{293,1538},{270,269}}</string>
+                <string>{{292,1537},{270,269}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -59,7 +59,7 @@
             <key>magneticcell_idle.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,1831},{206,206}}</string>
+                <string>{{0,1829},{206,206}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -72,7 +72,7 @@
             <key>parentcell_travelling.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{0,1538},{291,291}}</string>
+                <string>{{0,1537},{291,291}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -88,13 +88,13 @@
             <key>format</key>
             <integer>2</integer>
             <key>realTextureFileName</key>
-            <string>genbyatlas-ipad-hd.png</string>
+            <string>genbyatlas-ipad-hd.pvr.ccz</string>
             <key>size</key>
             <string>{2048,2048}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:2cd0ba3f43a6bd840e80c6243a3fe9a6$</string>
+            <string>$TexturePacker:SmartUpdate:c36ea436fce1151ece15236679c7b5c7$</string>
             <key>textureFileName</key>
-            <string>genbyatlas-ipad-hd.png</string>
+            <string>genbyatlas-ipad-hd.pvr.ccz</string>
         </dict>
     </dict>
 </plist>

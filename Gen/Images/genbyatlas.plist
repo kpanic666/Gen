@@ -88,13 +88,13 @@
             <key>format</key>
             <integer>2</integer>
             <key>realTextureFileName</key>
-            <string>genbyatlas.png</string>
+            <string>genbyatlas.pvr.ccz</string>
             <key>size</key>
             <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:51fa90492b43f039ce4179522daf369f$</string>
+            <string>$TexturePacker:SmartUpdate:62a1ce994b6e0c596d0ac34801b7cd15$</string>
             <key>textureFileName</key>
-            <string>genbyatlas.png</string>
+            <string>genbyatlas.pvr.ccz</string>
         </dict>
     </dict>
 </plist>

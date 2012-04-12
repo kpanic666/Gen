@@ -9,9 +9,6 @@
 #import "Box2DSprite.h"
 
 @interface MagneticCell : Box2DSprite
-{
-
-}
 
 - (void)drawMagnetForces;
 

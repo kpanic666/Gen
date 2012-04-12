@@ -10,6 +10,7 @@
 #import "SimpleAudioEngine.h"
 #import "AppDelegate.h"
 #import "Box2DSprite.h"
+#import "GB2ShapeCache.h"
 
 @implementation Box2DLayer
 
@@ -80,8 +81,6 @@
     groundShape.Set(upperRight, lowerRight);
     groundBody->CreateFixture(&groundShape, 0);
 }
-
-
 
 - (id)init
 {

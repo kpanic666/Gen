@@ -17,8 +17,6 @@
     CCArray *childCellsArray;
     ParentCell *parentCell;
     ExitCell *exitCell;
-    MagneticCell *magneticCell1;
-    MagneticCell *magneticCell2;
 }
 
 @end

@@ -12,8 +12,6 @@
 #import "Constants.h"
 
 @interface Helper : NSObject 
-{
-}
 
 +(b2Vec2) toMeters:(CGPoint)point;
 +(CGPoint) toPoints:(b2Vec2)vec;
