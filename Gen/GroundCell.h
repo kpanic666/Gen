@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Atom Games. All rights reserved.
 //
 
-#import "Box2DSprite.h"
+#import "Block.h"
 
-@interface GroundCell : Box2DSprite
+@interface GroundCell : Block
 
 + (id) groundCellInWorld:(b2World*)theWorld position:(CGPoint)pos name:(NSString*)name;
 

@@ -14,7 +14,8 @@
 #import "ExitCell.h"
 #import "MagneticCell.h"
 #import "GroundCell.h"
-
+#import "RedCell.h"
+#import "GB2ShapeCache.h"
 
 @implementation Scene1
 
@@ -60,14 +61,18 @@
         // add MagneticCells
         MagneticCell *magneticCell1 = [[[MagneticCell alloc] initWithWorld:world atLocation:ccp(screenSize.width*0.3, screenSize.height*0.3)] autorelease];
         [sceneSpriteBatchNode addChild:magneticCell1 z:-1];
-        MagneticCell *magneticCell2 = [[[MagneticCell alloc] initWithWorld:world atLocation:ccp(screenSize.width*0.3, screenSize.height*0.8)] autorelease];
-        [sceneSpriteBatchNode addChild:magneticCell2 z:-1];
+//        MagneticCell *magneticCell2 = [[[MagneticCell alloc] initWithWorld:world atLocation:ccp(screenSize.width*0.3, screenSize.height*0.8)] autorelease];
+//        [sceneSpriteBatchNode addChild:magneticCell2 z:-1];
         
         // add GroundCells
-        GroundCell *groundCell1 = [GroundCell groundCellInWorld:world position:ccp(screenSize.width*0.65, screenSize.height*0.1) name:@"groundCell1"];
-        GroundCell *groundCell2 = [GroundCell groundCellInWorld:world position:ccp(screenSize.width*0.85, screenSize.height*0.8) name:@"groundCell2"];
-        [self addChild:groundCell1 z:1];
-        [self addChild:groundCell2 z:1];
+        GroundCell *groundCell1 = [GroundCell groundCellInWorld:world position:ccp(screenSize.width*0.65, screenSize.height*0.08) name:@"groundCell1"];
+        GroundCell *groundCell2 = [GroundCell groundCellInWorld:world position:ccp(screenSize.width*0.25, screenSize.height*0.7) name:@"groundCell2"];
+        [self addChild:groundCell1 z:-1];
+        [self addChild:groundCell2 z:-1];
+        
+        // add RedCells
+        RedCell *redCell1 = [RedCell redCellInWorld:world position:ccp(screenSize.width*0.87, screenSize.height*0.45) name:@"redCell1"];
+        [self addChild:redCell1 z:-1];
     }
     return self;
 }
@@ -131,6 +136,8 @@
             [magneticCell drawMagnetForces];
         }
     }
+    
+    
 }
 
 @end

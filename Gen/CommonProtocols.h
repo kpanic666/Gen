@@ -28,7 +28,8 @@ typedef enum {
     kParentCellType,
     kChildCellType,
     kGroundType,
-    kExitCellType
+    kExitCellType,
+    kMetalType
 } GameObjectType;
 
 @protocol GameplayLayerDelegate

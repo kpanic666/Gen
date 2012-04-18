@@ -18,6 +18,17 @@
 		E9043C1E1536E2830009BA4F /* GB2ShapeCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9043C1D1536E2790009BA4F /* GB2ShapeCache.mm */; };
 		E9043C241536E6DC0009BA4F /* scene1bodies.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9043C231536E6DC0009BA4F /* scene1bodies.plist */; };
 		E90BB36015298B1400C8909B /* MagneticCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = E90BB35F15298B1400C8909B /* MagneticCell.mm */; };
+		E97E9B78153D55C6008B6B86 /* MaskedSprite.m in Sources */ = {isa = PBXBuildFile; fileRef = E97E9B77153D55C6008B6B86 /* MaskedSprite.m */; };
+		E97E9B7D153D7F55008B6B86 /* groundCell-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E97E9B79153D7F55008B6B86 /* groundCell-hd.png */; };
+		E97E9B7E153D7F55008B6B86 /* groundCell-ipad-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E97E9B7A153D7F55008B6B86 /* groundCell-ipad-hd.png */; };
+		E97E9B7F153D7F55008B6B86 /* groundCell-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = E97E9B7B153D7F55008B6B86 /* groundCell-ipad.png */; };
+		E97E9B80153D7F55008B6B86 /* groundCell.png in Resources */ = {isa = PBXBuildFile; fileRef = E97E9B7C153D7F55008B6B86 /* groundCell.png */; };
+		E97E9B8B153EC4EA008B6B86 /* RedCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = E97E9B8A153EC4E9008B6B86 /* RedCell.mm */; };
+		E97E9B8E153EC5DE008B6B86 /* Block.mm in Sources */ = {isa = PBXBuildFile; fileRef = E97E9B8D153EC5DE008B6B86 /* Block.mm */; };
+		E97E9B93153EDBA2008B6B86 /* redCell-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E97E9B8F153EDBA1008B6B86 /* redCell-hd.png */; };
+		E97E9B94153EDBA2008B6B86 /* redCell-ipad-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E97E9B90153EDBA2008B6B86 /* redCell-ipad-hd.png */; };
+		E97E9B95153EDBA2008B6B86 /* redCell-ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = E97E9B91153EDBA2008B6B86 /* redCell-ipad.png */; };
+		E97E9B96153EDBA2008B6B86 /* redCell.png in Resources */ = {isa = PBXBuildFile; fileRef = E97E9B92153EDBA2008B6B86 /* redCell.png */; };
 		E98319E4150E0E19006F2E31 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319DE150E0E19006F2E31 /* Icon-72.png */; };
 		E98319E5150E0E19006F2E31 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319DF150E0E19006F2E31 /* Icon-Small-50.png */; };
 		E98319E6150E0E19006F2E31 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = E98319E0150E0E19006F2E31 /* Icon-Small.png */; };
@@ -225,6 +236,20 @@
 		E9043C231536E6DC0009BA4F /* scene1bodies.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = scene1bodies.plist; sourceTree = "<group>"; };
 		E90BB35E15298B1400C8909B /* MagneticCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagneticCell.h; sourceTree = "<group>"; };
 		E90BB35F15298B1400C8909B /* MagneticCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MagneticCell.mm; sourceTree = "<group>"; };
+		E97E9B76153D55C5008B6B86 /* MaskedSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaskedSprite.h; sourceTree = "<group>"; };
+		E97E9B77153D55C6008B6B86 /* MaskedSprite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MaskedSprite.m; sourceTree = "<group>"; };
+		E97E9B79153D7F55008B6B86 /* groundCell-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "groundCell-hd.png"; sourceTree = "<group>"; };
+		E97E9B7A153D7F55008B6B86 /* groundCell-ipad-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "groundCell-ipad-hd.png"; sourceTree = "<group>"; };
+		E97E9B7B153D7F55008B6B86 /* groundCell-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "groundCell-ipad.png"; sourceTree = "<group>"; };
+		E97E9B7C153D7F55008B6B86 /* groundCell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = groundCell.png; sourceTree = "<group>"; };
+		E97E9B89153EC4E9008B6B86 /* RedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RedCell.h; sourceTree = "<group>"; };
+		E97E9B8A153EC4E9008B6B86 /* RedCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RedCell.mm; sourceTree = "<group>"; };
+		E97E9B8C153EC5DD008B6B86 /* Block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Block.h; sourceTree = "<group>"; };
+		E97E9B8D153EC5DE008B6B86 /* Block.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Block.mm; sourceTree = "<group>"; };
+		E97E9B8F153EDBA1008B6B86 /* redCell-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redCell-hd.png"; sourceTree = "<group>"; };
+		E97E9B90153EDBA2008B6B86 /* redCell-ipad-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redCell-ipad-hd.png"; sourceTree = "<group>"; };
+		E97E9B91153EDBA2008B6B86 /* redCell-ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "redCell-ipad.png"; sourceTree = "<group>"; };
+		E97E9B92153EDBA2008B6B86 /* redCell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redCell.png; sourceTree = "<group>"; };
 		E98319DE150E0E19006F2E31 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		E98319DF150E0E19006F2E31 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
 		E98319E0150E0E19006F2E31 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
@@ -636,6 +661,21 @@
 			name = Scene;
 			sourceTree = "<group>";
 		};
+		E97E9B71153C2A49008B6B86 /* Textures */ = {
+			isa = PBXGroup;
+			children = (
+				E97E9B8F153EDBA1008B6B86 /* redCell-hd.png */,
+				E97E9B90153EDBA2008B6B86 /* redCell-ipad-hd.png */,
+				E97E9B91153EDBA2008B6B86 /* redCell-ipad.png */,
+				E97E9B92153EDBA2008B6B86 /* redCell.png */,
+				E97E9B79153D7F55008B6B86 /* groundCell-hd.png */,
+				E97E9B7A153D7F55008B6B86 /* groundCell-ipad-hd.png */,
+				E97E9B7B153D7F55008B6B86 /* groundCell-ipad.png */,
+				E97E9B7C153D7F55008B6B86 /* groundCell.png */,
+			);
+			name = Textures;
+			sourceTree = "<group>";
+		};
 		E9831C8E15186E79006F2E31 /* Box2D */ = {
 			isa = PBXGroup;
 			children = (
@@ -773,6 +813,8 @@
 				E9958955150CAF360006115C /* GameObject.m */,
 				E9958957150CB0250006115C /* GameCharacter.h */,
 				E9958958150CB0250006115C /* GameCharacter.m */,
+				E97E9B76153D55C5008B6B86 /* MaskedSprite.h */,
+				E97E9B77153D55C6008B6B86 /* MaskedSprite.m */,
 			);
 			name = "Game Objects";
 			sourceTree = "<group>";
@@ -816,6 +858,7 @@
 		E9958934150B7FFB0006115C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				E97E9B71153C2A49008B6B86 /* Textures */,
 				E995893C150B80910006115C /* Atlases */,
 				E995893B150B806F0006115C /* Menus */,
 				E995893A150B80680006115C /* Intro */,
@@ -947,6 +990,8 @@
 			children = (
 				E995895B150CB5730006115C /* Box2DSprite.h */,
 				E995895C150CB5730006115C /* Box2DSprite.mm */,
+				E97E9B8C153EC5DD008B6B86 /* Block.h */,
+				E97E9B8D153EC5DE008B6B86 /* Block.mm */,
 				E9958961150CB7030006115C /* ChildCell.h */,
 				E9958962150CB7030006115C /* ChildCell.mm */,
 				E9831C461511D9F4006F2E31 /* ParentCell.h */,
@@ -955,6 +1000,8 @@
 				E9835E5F151AEC8100836385 /* ExitCell.mm */,
 				E9C3AE2A1534610100F0A768 /* GroundCell.h */,
 				E9C3AE2B1534610100F0A768 /* GroundCell.mm */,
+				E97E9B89153EC4E9008B6B86 /* RedCell.h */,
+				E97E9B8A153EC4E9008B6B86 /* RedCell.mm */,
 			);
 			name = Box2D;
 			sourceTree = "<group>";
@@ -1523,6 +1570,14 @@
 				E98319EB150E0E43006F2E31 /* Default.png in Resources */,
 				E9831A04150F12C6006F2E31 /* SoundEffects.plist in Resources */,
 				E9043C241536E6DC0009BA4F /* scene1bodies.plist in Resources */,
+				E97E9B7D153D7F55008B6B86 /* groundCell-hd.png in Resources */,
+				E97E9B7E153D7F55008B6B86 /* groundCell-ipad-hd.png in Resources */,
+				E97E9B7F153D7F55008B6B86 /* groundCell-ipad.png in Resources */,
+				E97E9B80153D7F55008B6B86 /* groundCell.png in Resources */,
+				E97E9B93153EDBA2008B6B86 /* redCell-hd.png in Resources */,
+				E97E9B94153EDBA2008B6B86 /* redCell-ipad-hd.png in Resources */,
+				E97E9B95153EDBA2008B6B86 /* redCell-ipad.png in Resources */,
+				E97E9B96153EDBA2008B6B86 /* redCell.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1693,6 +1748,9 @@
 				E9AE707D152D9A4E004E79B3 /* vec4.c in Sources */,
 				E9C3AE2C1534610100F0A768 /* GroundCell.mm in Sources */,
 				E9043C1E1536E2830009BA4F /* GB2ShapeCache.mm in Sources */,
+				E97E9B78153D55C6008B6B86 /* MaskedSprite.m in Sources */,
+				E97E9B8B153EC4EA008B6B86 /* RedCell.mm in Sources */,
+				E97E9B8E153EC5DE008B6B86 /* Block.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1766,7 +1824,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1785,7 +1843,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1801,7 +1859,7 @@
 				GCC_PREFIX_HEADER = Gen/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"Gen/libs/kazmath/include\"";
 				INFOPLIST_FILE = Gen/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1819,7 +1877,7 @@
 				GCC_PREFIX_HEADER = Gen/Prefix.pch;
 				HEADER_SEARCH_PATHS = "\"Gen/libs/kazmath/include\"";
 				INFOPLIST_FILE = Gen/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_LDFLAGS = "-lz";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1839,6 +1897,7 @@
 				E9043C191536C0450009BA4F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E99586F6150B77550006115C /* Build configuration list for PBXProject "Gen" */ = {
 			isa = XCConfigurationList;
