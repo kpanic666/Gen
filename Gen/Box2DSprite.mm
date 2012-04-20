@@ -7,6 +7,7 @@
 //
 
 #import "Box2DSprite.h"
+#import "Helper.h"
 
 @implementation Box2DSprite
 

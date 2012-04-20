@@ -8,7 +8,6 @@
 
 #import "Block.h"
 #import "MaskedSprite.h"
-#import "GB2ShapeCache.h"
 
 @implementation Block
 
@@ -225,9 +224,6 @@
         
         // set the body position
         body->SetTransform([Helper toMeters:pos], 0.0f);
-        
-        // make the body static
-        body->SetType(b2_staticBody);
         
         // Make mainTexture for body before transparent mask (еще не прозрачна)
         CGSize texSize = [self getBodySize];

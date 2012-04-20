@@ -8,7 +8,7 @@
 
 #import "GameCharacter.h"
 #import "Box2D.h"
-#import "Helper.h"
+
 
 @interface Box2DSprite : GameCharacter {
     b2Body *body;

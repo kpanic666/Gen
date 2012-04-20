@@ -15,7 +15,6 @@
 #import "MagneticCell.h"
 #import "GroundCell.h"
 #import "RedCell.h"
-#import "GB2ShapeCache.h"
 
 @implementation Scene1
 
@@ -73,6 +72,9 @@
         // add RedCells
         RedCell *redCell1 = [RedCell redCellInWorld:world position:ccp(screenSize.width*0.87, screenSize.height*0.45) name:@"redCell1"];
         [self addChild:redCell1 z:-1];
+        
+        // Play background Music
+        [[GameManager sharedGameManager] playBackgroundTrack:BACKGROUND_TRACK_1];
     }
     return self;
 }

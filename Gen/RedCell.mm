@@ -14,6 +14,8 @@
 {
     if ((self = [super initWithType:kEnemyTypeRedCell withWorld:theWorld position:pos name:name])) {
         
+        // make the body static
+        body->SetType(b2_staticBody);
         body->SetUserData(self);
     }
     return self;
@@ -22,6 +24,11 @@
 + (id) redCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name
 {
     return [[[self alloc] initWithWorld:theWorld position:pos name:name] autorelease];
+}
+
+- (int) getWeaponDamage {
+    
+    return kRedCellDamage;
 }
 
 @end

@@ -100,16 +100,11 @@ GameCharacter *exitCellSprite;
     return self;
 }
 
-- (void)playHitEffect
+- (void) playHitEffect
 {
-//    int soundToPlay = random() % 2;
-//    if (soundToPlay == 0) {
-//        PLAYSOUNDEFFECT(@"VIKING_HIT_1");
-//    } else {
-//        PLAYSOUNDEFFECT(@"VIKING_HIT_2");
-//    }
-
+    PLAYSOUNDEFFECT(@"CHILDCELL_DYING_1");
 }
+
 
 - (void)changeState:(CharacterStates)newState
 {
@@ -123,10 +118,15 @@ GameCharacter *exitCellSprite;
     switch (newState) {
         case kStateTakingDamage:
         {
+            // Change sprite frame to random RedCell particle
+            int frameNum = random() % 2 + 1;
+            NSString *frameName = [NSString stringWithFormat:@"redcell_particle%d.png", frameNum];
+            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:frameName]];
+            
             [self playHitEffect];
             characterHealth -= kRedCellDamage;
-            CCAction *blink = [CCBlink actionWithDuration:1.0 blinks:3.0];
-            [self runAction:blink];
+            
+            [self runAction:[CCFadeIn actionWithDuration:3]];
             break;
         }
             
@@ -154,9 +154,11 @@ GameCharacter *exitCellSprite;
         }
             
         case kStateBeforeSoul:
+        {
             self.markedForDestruction = YES;
             [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_idle.png"]];
             break;
+        }
             
         case kStateSoul:
         {
@@ -177,8 +179,11 @@ GameCharacter *exitCellSprite;
         }
             
         case kStateDead:
+        {
             // Клетка умирает от первого же прикосновения
+            self.markedForDestruction = YES;
             break;
+        }
             
         default:
             break;

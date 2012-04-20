@@ -11,7 +11,6 @@
 @class ChildCell;
 @class ParentCell;
 @class ExitCell;
-@class MagneticCell;
 
 @interface Scene1 : Box2DLayer {
     CCArray *childCellsArray;

@@ -19,7 +19,8 @@ typedef enum {
     kParentCellFilterCategory = 0x0002,
     kChildCellFilterCategory = 0x0003,
     kExitCellFilterCategory = 0x0004,
-    kMagneticCellFilterCategory = 0x0005
+    kMagneticCellFilterCategory = 0x0005,
+    kRedCellFilterCategory = 0x0006
 } FilterCategories;
 
 typedef enum {
@@ -69,7 +70,7 @@ typedef enum {
 //#define BACKGROUND_TRACK_MAIN_MENU @"VikingPreludeV1.mp3"
 
 // GameLevel1
-//#define BACKGROUND_TRACK_OLE_AWAKES @"SpaceDesertV2.mp3"
+#define BACKGROUND_TRACK_1 @"back_Wallpaper.mp3"
 
 // GameLevel2
 //#define BACKGROUND_TRACK_PUZZLE @"VikingPreludeV1.mp3"

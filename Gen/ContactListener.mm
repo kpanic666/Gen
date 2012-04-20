@@ -39,6 +39,14 @@ void ContactListener::BeginContact(b2Contact* contact)
     else if (spriteB.gameObjectType == kEnemyTypeMagneticCell) {
         spriteA.magneticCount += 1;
     }
+    
+    // Обработка столкновениий RedCell с ChildCell
+    if (spriteA.gameObjectType == kEnemyTypeRedCell && spriteB.characterState != kStateDead) {
+        [spriteB changeState:kStateTakingDamage];
+    }
+    else if (spriteB.gameObjectType == kEnemyTypeRedCell && spriteA.characterState != kStateDead) {
+        [spriteA changeState:kStateTakingDamage];
+    }
 }
 
 void ContactListener::EndContact(b2Contact* contact)
@@ -69,11 +77,19 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
     Box2DSprite *spriteA = (Box2DSprite*)contact->GetFixtureA()->GetBody()->GetUserData();
     Box2DSprite *spriteB = (Box2DSprite*)contact->GetFixtureB()->GetBody()->GetUserData();
     
+    // Обработка столкновениий ExitCell с ChildCell. Позволяет клеткам залетать с размаху в выход
     if (spriteA.gameObjectType == kExitCellType) {
         contact->SetEnabled(false);
     }
     else if (spriteB.gameObjectType == kExitCellType) {
         contact->SetEnabled(false);
     }
-
+    
+    // Обработка столкновениий RedCell с ChildCell. Позволяет клеткам быстро дохнуть, а не толпиться друг за другом
+//    if (spriteA.gameObjectType == kEnemyTypeRedCell) {
+//        contact->SetEnabled(false);
+//    }
+//    else if (spriteB.gameObjectType == kEnemyTypeRedCell) {
+//        contact->SetEnabled(false);
+//    }
 }

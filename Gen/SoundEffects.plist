@@ -17,7 +17,10 @@
 	<key>kLevelCompleteScene</key>
 	<dict/>
 	<key>kGameLevel1</key>
-	<dict/>
+	<dict>
+		<key>CHILDCELL_DYING_1</key>
+		<string>22k_childcell_dyingV1.wav</string>
+	</dict>
 	<key>kGameLevel3</key>
 	<dict/>
 	<key>kGameLevel4</key>

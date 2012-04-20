@@ -10,7 +10,6 @@
 #import "SimpleAudioEngine.h"
 #import "AppDelegate.h"
 #import "Box2DSprite.h"
-#import "GB2ShapeCache.h"
 
 @implementation Box2DLayer
 
