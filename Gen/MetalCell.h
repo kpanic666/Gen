@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Atom Games. All rights reserved.
 //
 
-#import "Block.h"
+#import "BlockCell.h"
 
-@interface MetalCell : Block
+@interface MetalCell : BlockCell
 
 + (id) metalCellInWorld:(b2World*)theWorld position:(CGPoint)pos name:(NSString*)name;
 

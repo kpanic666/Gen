@@ -8,6 +8,7 @@
 
 #import "GameManager.h"
 #import "Scene1.h"
+#import "MainMenuLayer.h"
 
 @implementation GameManager
 
@@ -15,12 +16,14 @@ static GameManager* _sharedGameManager = nil;
 
 @synthesize isMusicON;
 @synthesize isSoundEffectsON;
-@synthesize gameOver;
 @synthesize managerSoundState;
 @synthesize listOfSoundEffectFiles;
 @synthesize soundEffectsState;
 @synthesize curLevel;
 @synthesize lastLevel;
+@synthesize numOfSavedCells = _numOfSavedCells;
+@synthesize numOfTotalCells = _numOfTotalCells;
+@synthesize numOfNeededCells = _numOfNeededCells;
 
 + (GameManager*)sharedGameManager {
     @synchronized([GameManager class])
@@ -43,6 +46,18 @@ static GameManager* _sharedGameManager = nil;
     return nil;
 }
 
+- (void)setMusicState:(BOOL)state
+{
+    [self setIsMusicON:state];
+    if ([soundEngine isBackgroundMusicPlaying]) {
+        [soundEngine pauseBackgroundMusic];
+    }
+    else 
+    {
+        [soundEngine resumeBackgroundMusic];
+    }
+}
+
 - (void)playBackgroundTrack:(NSString*)trackFileName {
     // Wait to make sure soundEngine is initialized
     if ((managerSoundState != kAudioManagerReady) &&
@@ -57,7 +72,7 @@ static GameManager* _sharedGameManager = nil;
             waitCycles = waitCycles + 1;
         }
     }
-    if (managerSoundState == kAudioManagerReady) {
+    if (managerSoundState == kAudioManagerReady && isMusicON) {
         if ([soundEngine isBackgroundMusicPlaying]) {
             [soundEngine stopBackgroundMusic];
         }
@@ -74,7 +89,7 @@ static GameManager* _sharedGameManager = nil;
 
 - (ALuint)playSoundEffect:(NSString *)soundEffectKey {
     ALuint soundID = 0;
-    if (managerSoundState == kAudioManagerReady) {
+    if (managerSoundState == kAudioManagerReady && isSoundEffectsON) {
         NSNumber *isSFXLoaded = [soundEffectsState objectForKey:soundEffectKey];
         if ([isSFXLoaded boolValue] == SFX_LOADED) {
             soundID = [soundEngine playEffect:[listOfSoundEffectFiles objectForKey:soundEffectKey]];
@@ -280,7 +295,6 @@ static GameManager* _sharedGameManager = nil;
         hasAudioBeenInitialized = NO;
         soundEngine = nil;
         managerSoundState = kAudioManagerUninitialized;
-        gameOver = NO;
         currentScene = kNoSceneUninitialized;
     }
     return self;
@@ -294,7 +308,7 @@ static GameManager* _sharedGameManager = nil;
     id sceneToRun = nil;
     switch (sceneID) {
         case kMainMenuScene:
-            //sceneToRun = [MainMenuScene node];
+            sceneToRun = [MainMenuLayer scene];
             break;
             
         case kOptionsScene:
@@ -314,10 +328,12 @@ static GameManager* _sharedGameManager = nil;
             break;
             
         case kGameLevel1:
-            sceneToRun = [Scene1 scene];
+            _numOfNeededCells = kScene1Needed;
+            sceneToRun = [Scene1 node];
             break;
             
         case kGameLevel2:
+            _numOfNeededCells = kScene2Needed;
             //sceneToRun = [GameScene2 node];
             break;
             
@@ -348,21 +364,21 @@ static GameManager* _sharedGameManager = nil;
     [self performSelectorInBackground:@selector(loadAudioForSceneWithID:) withObject:[NSNumber numberWithInt:currentScene]];
     
     // Menu Scenes have a value of < 100
-    if (sceneID < 100) {
-        if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
-            CGSize screenSize = [CCDirector sharedDirector].winSizeInPixels;
-            if (screenSize.width == 960.0f) {
-                // IPhone 4 Retina
-                [sceneToRun setScaleX:0.9375f];
-                [sceneToRun setScaleY:0.8333f];
-                CCLOG(@"GM:Scaling for Iphone 4 (retina)");
-            } else {
-                [sceneToRun setScaleX:0.4688f];
-                [sceneToRun setScaleY:0.4166f];
-                CCLOG(@"GM:Scaling for Iphone 3G (or older)");
-            }
-        }
-    }
+//    if (sceneID < 100) {
+//        if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
+//            CGSize screenSize = [CCDirector sharedDirector].winSizeInPixels;
+//            if (screenSize.width == 960.0f) {
+//                // IPhone 4 Retina
+//                [sceneToRun setScaleX:0.9375f];
+//                [sceneToRun setScaleY:0.8333f];
+//                CCLOG(@"GM:Scaling for Iphone 4 (retina)");
+//            } else {
+//                [sceneToRun setScaleX:0.4688f];
+//                [sceneToRun setScaleY:0.4166f];
+//                CCLOG(@"GM:Scaling for Iphone 3G (or older)");
+//            }
+//        }
+//    }
     
     if ([[CCDirector sharedDirector] runningScene] == nil) {
         [[CCDirector sharedDirector] pushScene:sceneToRun];

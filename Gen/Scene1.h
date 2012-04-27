@@ -6,17 +6,9 @@
 //  Copyright 2012 Atom Games. All rights reserved.
 //
 
-#import "Box2DLayer.h"
+#import "cocos2d.h"
 
-@class ChildCell;
-@class ParentCell;
-@class ExitCell;
-
-@interface Scene1 : Box2DLayer {
-    CCArray *childCellsArray;
-    ParentCell *parentCell;
-    ExitCell *exitCell;
-}
+@interface Scene1 : CCScene
 
 @end
 

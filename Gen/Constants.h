@@ -14,6 +14,12 @@
 #define kExitCellSpriteTagValue 20
 #define kMagneticPowerMultiplier 9.0
 
+// Кол-во спасенных ячеек для окончания уровня
+typedef enum {
+    kScene1Needed = 20,
+    kScene2Needed = 20
+} NumOfCellsNeeded;
+
 // Collision Filter Categories
 typedef enum {
     kParentCellFilterCategory = 0x0002,

@@ -7,22 +7,12 @@
 //
 
 #import "Box2DLayer.h"
-#import "SimpleAudioEngine.h"
-#import "AppDelegate.h"
 #import "Box2DSprite.h"
+#import "GameManager.h"
+#import "Box2DUILayer.h"
+#import "ChildCell.h"
 
 @implementation Box2DLayer
-
-+ (CCScene *)scene
-{
-    CCScene *scene = [CCScene node];
-    
-    // add Gameplay layer for Maincharacter, enemies, background. 
-    Box2DLayer *layer = [self node];
-    [scene addChild:layer z:0];
-    
-    return scene;
-}
 
 - (void)setupWorld
 {
@@ -63,7 +53,7 @@
     b2BodyDef groundBodyDef;
     groundBodyDef.type = b2_staticBody;
     groundBodyDef.position.Set(0, 0);
-    groundBody = world->CreateBody(&groundBodyDef);
+    b2Body *groundBody = world->CreateBody(&groundBodyDef);
     
     b2EdgeShape groundShape;
     
@@ -84,13 +74,17 @@
 - (id)init
 {
     if ((self = [super init])) {
-        
         // enable events
         self.isTouchEnabled = YES;
         // seed randomizer
         srandom(time(NULL));
         
         bodiesToDestroy = [[NSMutableArray alloc] init];
+        
+        // Обнуляем счетчик кол-ва клеток доведенных до выхода
+        GameManager *gameManager = [GameManager sharedGameManager];
+        gameManager.numOfSavedCells = -1;
+        gameManager.numOfTotalCells = -1;
         
         [self setupWorld];
         [self createGround];
@@ -145,7 +139,7 @@
 
 - (void)update:(ccTime)dt
 {
-	// Fixed Time Step
+	// Update Box2D World: Fixed Time Step
     static double UPDATE_INTERVAL = 1.0f/60.0f;
     static double MAX_CYCLES_PER_FRAME = 5;
     static double timeAccumulator = 0;
@@ -178,10 +172,27 @@
     // Уничтожаем тела клеток попавших в опасность или в выход
     [self destroyBodies];
     
-    // Force update all objects
+    // Force update all objects и
     CCArray *listOfGameObjects = [sceneSpriteBatchNode children];
+    int i = 0;
     for (GameCharacter *tempChar in listOfGameObjects) {
         [tempChar updateStateWithDeltaTime:dt andListOfGameObjects:listOfGameObjects];
+        CharacterStates cellState = [tempChar characterState];
+        if (cellState == kStateSoul || cellState == kStateBeforeSoul) {
+            i++;
+        }
+    }
+    
+    // Подсчитываем кол-во клеток. Сколько из них спасено, сколько их всего и обновляем счетчик
+    GameManager *gameManager = [GameManager sharedGameManager];
+    if (gameManager.numOfSavedCells != i) {
+        gameManager.numOfSavedCells = i;
+        [uiLayer updateScore:i need:gameManager.numOfNeededCells];
+    }
+    
+    // Проверяем выигрыш или проигрыш
+    if (gameManager.numOfSavedCells == gameManager.numOfNeededCells) {
+        [gameManager runSceneWithID:kMainMenuScene];
     }
 }
 
@@ -201,6 +212,11 @@
         }
     }
     [bodiesToDestroy removeAllObjects];
+}
+
+- (id)initWithBox2DUILayer:(Box2DUILayer *)box2DUILayer
+{
+    return self;
 }
 
 @end

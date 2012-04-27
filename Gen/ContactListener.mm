@@ -84,12 +84,4 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
     else if (spriteB.gameObjectType == kExitCellType) {
         contact->SetEnabled(false);
     }
-    
-    // Обработка столкновениий RedCell с ChildCell. Позволяет клеткам быстро дохнуть, а не толпиться друг за другом
-//    if (spriteA.gameObjectType == kEnemyTypeRedCell) {
-//        contact->SetEnabled(false);
-//    }
-//    else if (spriteB.gameObjectType == kEnemyTypeRedCell) {
-//        contact->SetEnabled(false);
-//    }
 }

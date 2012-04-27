@@ -7,6 +7,7 @@
 //
 
 #import "GameCharacter.h"
+#import "GameManager.h"
 
 @implementation GameCharacter
 

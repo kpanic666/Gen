@@ -13,10 +13,12 @@
 @interface GameManager : NSObject {
     BOOL isMusicON;
     BOOL isSoundEffectsON;
-    BOOL gameOver;
     SceneTypes currentScene;
     SceneTypes curLevel;
     SceneTypes lastLevel;
+    int _numOfSavedCells;
+    int _numOfTotalCells;
+    int _numOfNeededCells;
     
     // Added for audio
     BOOL hasAudioBeenInitialized;
@@ -29,12 +31,14 @@
 
 @property (readwrite) BOOL isMusicON;
 @property (readwrite) BOOL isSoundEffectsON;
-@property (readwrite) BOOL gameOver;
 @property (readwrite) GameManagerSoundState managerSoundState;
 @property (nonatomic, retain) NSMutableDictionary *listOfSoundEffectFiles;
 @property (nonatomic, retain) NSMutableDictionary *soundEffectsState;
 @property (assign) SceneTypes curLevel;
 @property (assign) SceneTypes lastLevel;
+@property (readwrite) int numOfSavedCells;
+@property (readwrite) int numOfTotalCells;
+@property (readwrite) int numOfNeededCells;
 
 + (GameManager*)sharedGameManager;
 - (void)runSceneWithID:(SceneTypes)sceneID;
@@ -44,5 +48,6 @@
 - (void)stopSoundEffect:(ALuint)soundEffectID;
 - (void)playBackgroundTrack:(NSString*)trackFileName;
 - (CGSize)getDimensionsOfCurrentScene;
+- (void)setMusicState:(BOOL)state;
 
 @end

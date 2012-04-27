@@ -14,22 +14,19 @@
 #import "ContactListener.h"
 
 @class Box2DSprite;
+@class Box2DUILayer;
 
 @interface Box2DLayer : CCLayer
 {
     b2World *world;
+    Box2DUILayer *uiLayer;
     ContactListener *contactListener;
 	GLESDebugDraw *m_debugDraw;
-    b2Body *groundBody;
     CCSpriteBatchNode *sceneSpriteBatchNode;
-    b2Body *parentCellBody;
-    b2Body *exitCellBody;
-    BOOL hasWon;
-    
     NSMutableArray *bodiesToDestroy;
 }
 
-+ (CCScene *)scene;
+- (id)initWithBox2DUILayer:(Box2DUILayer*)box2DUILayer;
 - (void)markBodyForDestruction:(Box2DSprite*)obj;
 - (void)destroyBodies;
 

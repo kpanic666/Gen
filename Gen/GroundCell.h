@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Atom Games. All rights reserved.
 //
 
-#import "Block.h"
+#import "BlockCell.h"
 
-@interface GroundCell : Block
+@interface GroundCell : BlockCell
 
 + (id) groundCellInWorld:(b2World*)theWorld position:(CGPoint)pos name:(NSString*)name;
 

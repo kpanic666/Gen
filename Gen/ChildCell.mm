@@ -105,6 +105,23 @@ GameCharacter *exitCellSprite;
     PLAYSOUNDEFFECT(@"CHILDCELL_DYING_1");
 }
 
+- (void) removeCellSprite {
+    
+    [self setIsActive:FALSE];
+    [self removeFromParentAndCleanup:NO];
+}
+
+- (CGRect)adjustedBoudingBox {
+    
+    // Увеличиваем AABB клетки до больших размеров. Нужно для разброса клеток после их смерти при сооударении с красной клеткой
+    CGRect exitBoundingBox = [self boundingBox];
+    float offset = exitBoundingBox.size.width * 6;
+    float addAmount = offset * 2;
+    
+    exitBoundingBox = CGRectMake(exitBoundingBox.origin.x - offset, exitBoundingBox.origin.y - offset, addAmount, addAmount);
+    
+    return exitBoundingBox;
+}
 
 - (void)changeState:(CharacterStates)newState
 {
@@ -118,15 +135,12 @@ GameCharacter *exitCellSprite;
     switch (newState) {
         case kStateTakingDamage:
         {
-            // Change sprite frame to random RedCell particle
-            int frameNum = random() % 2 + 1;
-            NSString *frameName = [NSString stringWithFormat:@"redcell_particle%d.png", frameNum];
-            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:frameName]];
-            
-            [self playHitEffect];
             characterHealth -= kRedCellDamage;
             
-            [self runAction:[CCFadeIn actionWithDuration:3]];
+            // Destroy Physics body
+            self.markedForDestruction = YES;
+        
+            [self playHitEffect];
             break;
         }
             
@@ -180,8 +194,34 @@ GameCharacter *exitCellSprite;
             
         case kStateDead:
         {
-            // Клетка умирает от первого же прикосновения
-            self.markedForDestruction = YES;
+            int frameNum = random() % 2 + 1;
+            float travelTime = CCRANDOM_0_1() + 1;
+            float rotateTime = CCRANDOM_0_1() * 2;
+            float rotateAngle = 360;
+            if (CCRANDOM_0_1() <= 0.5f) rotateAngle *= -1;
+            CGRect cellBB = [self adjustedBoudingBox];
+            int yRandPosAtSceen = cellBB.origin.y + random() % (int)cellBB.size.height;
+            int xRandPosAtSceen = cellBB.origin.x + random() % (int)cellBB.size.width;
+            
+            // Change sprite frame to random RedCell particle. Уменьшаем клетку в размере
+            NSString *frameName = [NSString stringWithFormat:@"redcell_particle%d.png", frameNum];
+            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:frameName]];
+            [self setScale:self.scale * 0.9];
+            
+            
+            // Move to random position at random speed, rotate and fade after target position
+            CCMoveTo *dyingMove = [CCMoveTo actionWithDuration:travelTime position:ccp(xRandPosAtSceen, yRandPosAtSceen)];
+            CCSequence *dyingFade = [CCSequence actions:
+                                     [CCDelayTime actionWithDuration:travelTime - 0.4f],
+                                     [CCFadeOut actionWithDuration:0.4f],
+                                     [CCCallFunc actionWithTarget:self selector:@selector(removeCellSprite)],
+                                     nil];
+            CCRepeatForever *dyingRotate = [CCRepeatForever actionWithAction:[CCRotateBy actionWithDuration:rotateTime angle:rotateAngle]];
+            
+            [self runAction:dyingRotate];
+            [self runAction:dyingMove];
+            [self runAction:dyingFade];
+
             break;
         }
             

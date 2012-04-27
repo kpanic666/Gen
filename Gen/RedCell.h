@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Atom Games. All rights reserved.
 //
 
-#import "Block.h"
+#import "BlockCell.h"
 
-@interface RedCell : Block
+@interface RedCell : BlockCell
 
 + (id) redCellInWorld:(b2World*)theWorld position:(CGPoint)pos name:(NSString*)name;
 
