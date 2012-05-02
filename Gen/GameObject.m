@@ -11,7 +11,6 @@
 @implementation GameObject
 
 @synthesize reactsToScreenBoundaries;
-@synthesize screenSize;
 @synthesize isActive;
 @synthesize gameObjectType;
 
@@ -19,7 +18,6 @@
 {
     if ((self = [super init])) 
     {
-        screenSize = [CCDirector sharedDirector].winSize;
         isActive = TRUE;
         gameObjectType = kObjectTypeNone;
     }

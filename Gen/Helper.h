@@ -20,5 +20,6 @@
 +(CGPoint) locationFromTouches:(NSSet*)touches;
 
 +(CGPoint) screenCenter;
++(CGPoint) convertPosition:(CGPoint)point;
 
 @end

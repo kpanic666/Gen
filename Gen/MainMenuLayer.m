@@ -15,15 +15,19 @@
 #define kOptionsSpriteTag 11
 #define kMusicToggleTag 12
 #define kSfxToggleTag 13
+#define kPlayGameButtonTag 14
+#define kMagnitSpriteTag 15
 
 @interface MainMenuLayer()
 {
     CCSpriteBatchNode *sceneSpriteBatchNode;
-    CCMenu *mainMenu;
     CCMenu *optionsMenu;
+    CCMenu *mainMenu;
+    CCMenu *levelMenu;
 }
 - (void)displayMainMenuButtons;
 - (void)displayOptionsMenuButtons;
+- (void)displayLevelSelectMenuButtons;
 @end
 
 @implementation MainMenuLayer
@@ -35,29 +39,34 @@
     return scene;
 }
 
-- (void)playPressed {
-    [[GameManager sharedGameManager] runSceneWithID:kGameLevel1];
+- (void)playPressed
+{
+    [self displayLevelSelectMenuButtons];
 }
 
-- (void)optionsPressed:(id)sender
+- (void)optionsPressed
 {
     [self displayOptionsMenuButtons];
 }
 
-- (void)leaderboardPressed {
+- (void)leaderboardPressed
+{
     
 }
 
-- (void)achievementPressed {
+- (void)achievementPressed
+{
     
 }
 
-- (void)showCredits {
+- (void)showCredits
+{
     CCLOG(@"OptionsMenu->Info Button Pressed!");
 //	[[GameManager sharedGameManager] runSceneWithID:kCreditsScene];
 }
 
-- (void)musicTogglePressed {
+- (void)musicTogglePressed
+{
 	if ([[GameManager sharedGameManager] isMusicON]) {
 		CCLOG(@"OptionsLayer-> Turning Game Music OFF");
 		[[GameManager sharedGameManager] setMusicState:NO];
@@ -67,7 +76,8 @@
 	}
 }
 
-- (void)SFXTogglePressed {
+- (void)SFXTogglePressed
+{
     CCLOG(@"OptionsMenu->SFX Button Pressed!");
 	if ([[GameManager sharedGameManager] isSoundEffectsON]) {
 		CCLOG(@"OptionsLayer-> Turning Sound Effects OFF");
@@ -86,6 +96,79 @@
     [panelSprite removeFromParentAndCleanup:YES];
     [optionsMenu removeFromParentAndCleanup:YES];
     optionsMenu = nil;
+}
+
+- (void)playScene:(CCMenuItemFont*)itemPassedIn
+{
+    if ([itemPassedIn tag] == 1) {
+        [[GameManager sharedGameManager] runSceneWithID:kGameLevel1];
+    } else if ([itemPassedIn tag] == 2) {
+        [[GameManager sharedGameManager] runSceneWithID:kGameLevel2];
+    } else if ([itemPassedIn tag] == 3) {
+        [[GameManager sharedGameManager] runSceneWithID:kGameLevel3];
+    } else if ([itemPassedIn tag] == 4) {
+        [[GameManager sharedGameManager] runSceneWithID:kGameLevel4];
+    } else if ([itemPassedIn tag] == 5) {
+        [[GameManager sharedGameManager] runSceneWithID:kGameLevel5];
+    } else {
+        CCLOG(@"Unexpected item.  Tag was: %d", [itemPassedIn tag]);
+    }
+}
+
+- (void)displayLevelSelectMenuButtons
+{
+    CGSize screenSize = [[CCDirector sharedDirector] winSize];
+    
+    // Hide Big play game button and disable element of main menu at center of the screen. Don't delete.
+    CCSprite *magnitSprite = (CCSprite*)[self getChildByTag:kMagnitSpriteTag];
+    CCMenuItemSpriteIndependent *playGameButton = (CCMenuItemSpriteIndependent*) [mainMenu getChildByTag:kPlayGameButtonTag];
+    [playGameButton setIsEnabled:NO];
+    [playGameButton.normalImage setVisible:NO];
+    [magnitSprite pauseSchedulerAndActions];
+    [magnitSprite setVisible:NO];
+    
+    // Make Level Select menu
+    NSString *menuFontName = @"Helvetica";
+    float menuFontSize = 28;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        menuFontSize = 14;
+    }
+    
+    CCLabelTTF *playScene1Label = [CCLabelTTF labelWithString:@"Level 1" fontName:menuFontName fontSize:menuFontSize];
+    CCMenuItemLabel *playScene1 = [CCMenuItemLabel itemWithLabel:playScene1Label target:self selector:@selector(playScene:)];
+    [playScene1 setTag:1];
+    
+    CCLabelTTF *playScene2Label = [CCLabelTTF labelWithString:@"Level 2" fontName:menuFontName fontSize:menuFontSize];
+    CCMenuItemLabel *playScene2 = [CCMenuItemLabel itemWithLabel:playScene2Label target:self selector:@selector(playScene:)];
+    [playScene2 setTag:2];
+    
+    CCLabelTTF *playScene3Label = [CCLabelTTF labelWithString:@"Level 3" fontName:menuFontName fontSize:menuFontSize];
+    CCMenuItemLabel *playScene3 = [CCMenuItemLabel itemWithLabel:playScene3Label target:self selector:@selector(playScene:)];
+    [playScene3 setTag:3];
+    
+    CCLabelTTF *playScene4Label = [CCLabelTTF labelWithString:@"Level 4" fontName:menuFontName fontSize:menuFontSize];
+    CCMenuItemLabel *playScene4 = [CCMenuItemLabel itemWithLabel:playScene4Label target:self selector:@selector(playScene:)];
+    [playScene4 setTag:4];
+    
+    CCLabelTTF *playScene5Label = [CCLabelTTF labelWithString:@"Level 5" fontName:menuFontName fontSize:menuFontSize];
+    CCMenuItemLabel *playScene5 = [CCMenuItemLabel itemWithLabel:playScene5Label target:self selector:@selector(playScene:)];
+    [playScene5 setTag:5];
+    
+    CCLabelTTF *backButtonLabel = [CCLabelTTF labelWithString:@"Back" fontName:menuFontName fontSize:menuFontSize];
+    CCMenuItemLabel *backButton = [CCMenuItemLabel itemWithLabel:backButtonLabel target:self selector:@selector(displayMainMenuButtons)];
+    levelMenu = [CCMenu menuWithItems:playScene1,playScene2,playScene3,playScene4,playScene5,backButton,nil];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [levelMenu alignItemsVerticallyWithPadding:screenSize.height*0.049f];
+    }
+    else {
+        [levelMenu alignItemsVerticallyWithPadding:screenSize.height*0.029f];
+    }
+    [levelMenu setPosition:ccp(screenSize.width*2, screenSize.height/2)];
+    id moveAction = [CCMoveTo actionWithDuration:0.5f position:ccp(screenSize.width*0.5f, screenSize.height*0.5f)];
+    id moveEffect = [CCEaseIn actionWithAction:moveAction rate:1.0f];
+    [levelMenu runAction:moveEffect];
+    [self addChild:levelMenu z:3];
 }
 
 - (void)displayOptionsMenuButtons
@@ -182,42 +265,68 @@
 - (void)displayMainMenuButtons 
 {
     CGSize screenSize = [CCDirector sharedDirector].winSize;
-    
-    // Make Sprites for Menu
-    CCSprite *playGameSprite = [CCSprite spriteWithFile:@"button_big_play.png"];
-    CCSprite *optionsSprite = [CCSprite spriteWithSpriteFrameName:@"button_options.png"];
-    CCSprite *leaderboardSprite = [CCSprite spriteWithSpriteFrameName:@"button_leaderboard.png"];
-    CCSprite *achievmentsSprite = [CCSprite spriteWithSpriteFrameName:@"button_achievments.png"];
-    
-    // Positioning sprites
-    float padding = [optionsSprite contentSize].width*0.5 * 0.2; // отступ от края экрана c учетом спец эффекта меню
-    float xButtonPos = 0;
-    float yButtonPos = 0;
-    [playGameSprite setPosition:ccp(screenSize.width*0.5, screenSize.height*0.5)];
-    xButtonPos = 0+[optionsSprite contentSize].width*0.5 + padding;
-    yButtonPos = 0+[optionsSprite contentSize].height*0.5 + padding;
-    [optionsSprite setPosition:ccp(xButtonPos, yButtonPos)];
-    xButtonPos = screenSize.width*0.5-([leaderboardSprite contentSize].width + padding);
-    yButtonPos = 0+[leaderboardSprite contentSize].height*0.5 + padding;
-    [leaderboardSprite setPosition:ccp(xButtonPos, yButtonPos)];
-    xButtonPos = screenSize.width*0.5+([achievmentsSprite contentSize].width + padding);
-    yButtonPos = 0+[achievmentsSprite contentSize].height*0.5 + padding;
-    [achievmentsSprite setPosition:ccp(xButtonPos, yButtonPos)];
+    if (mainMenu != nil)
+    {
+        if (levelMenu != nil) {
+            [levelMenu removeFromParentAndCleanup:YES];
+            levelMenu = nil;
+        }
+        // Show hiden main menu elements
+        CCSprite *magnitSprite = (CCSprite*)[self getChildByTag:kMagnitSpriteTag];
+        CCMenuItemSpriteIndependent *playGameButton = (CCMenuItemSpriteIndependent*) [mainMenu getChildByTag:kPlayGameButtonTag];
+        [playGameButton setIsEnabled:YES];
+        [playGameButton.normalImage setVisible:YES];
+        [magnitSprite setVisible:YES];
+        [magnitSprite resumeSchedulerAndActions];
+    }
+    else
+    {
+        // Center Magnit
+        CCSprite *magnit = [CCSprite spriteWithFile:@"playButtonUnder.png"];
+        [magnit setPosition:ccp(screenSize.width*0.5, screenSize.height*0.5)];
+        [self addChild:magnit z:0 tag:kMagnitSpriteTag];
+        id scaleUp = [CCScaleTo actionWithDuration:0.1f scale:1.2f];
+        id scaleDown = [CCScaleTo actionWithDuration:2.0f scale:1.0f];
+        [magnit runAction:[CCRepeatForever actionWithAction:[CCSequence actions:scaleUp, scaleDown, nil]]];
+        [magnit runAction:[CCRepeatForever actionWithAction:[CCRotateBy actionWithDuration:20.0f angle:360]]];
+        
+        // Make Sprites for Menu
+        CCSprite *playGameSprite = [CCSprite spriteWithFile:@"button_big_play.png"];
+        CCSprite *optionsSprite = [CCSprite spriteWithSpriteFrameName:@"button_options.png"];
+        CCSprite *leaderboardSprite = [CCSprite spriteWithSpriteFrameName:@"button_leaderboard.png"];
+        CCSprite *achievmentsSprite = [CCSprite spriteWithSpriteFrameName:@"button_achievments.png"];
+        
+        // Positioning sprites
+        float padding = [optionsSprite contentSize].width*0.5 * 0.2; // отступ от края экрана c учетом спец эффекта меню
+        float xButtonPos = 0;
+        float yButtonPos = 0;
+        [playGameSprite setPosition:ccp(screenSize.width*0.5, screenSize.height*0.5)];
+        xButtonPos = screenSize.width-[optionsSprite contentSize].width*0.5 - padding;
+        yButtonPos = 0+[optionsSprite contentSize].height*0.5 + padding;
+        [optionsSprite setPosition:ccp(xButtonPos, yButtonPos)];
+        xButtonPos = screenSize.width*0.5-([leaderboardSprite contentSize].width + padding);
+        yButtonPos = 0+[leaderboardSprite contentSize].height*0.5 + padding;
+        [leaderboardSprite setPosition:ccp(xButtonPos, yButtonPos)];
+        xButtonPos = screenSize.width*0.5+([achievmentsSprite contentSize].width + padding);
+        yButtonPos = 0+[achievmentsSprite contentSize].height*0.5 + padding;
+        [achievmentsSprite setPosition:ccp(xButtonPos, yButtonPos)];
 
-    // Adding sprites to Batchnode
-    [self addChild:playGameSprite z:3];
-    [sceneSpriteBatchNode addChild:optionsSprite z:3 tag:kOptionsSpriteTag];
-    [sceneSpriteBatchNode addChild:leaderboardSprite z:3];
-    [sceneSpriteBatchNode addChild:achievmentsSprite z:3];
-    
-    // Main Menu Items
-    CCMenuItemSpriteIndependent *playGameButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:playGameSprite selectedSprite:nil target:self selector:@selector(playPressed)];
-    CCMenuItemSpriteIndependent *optionsButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:optionsSprite selectedSprite:nil target:self selector:@selector(optionsPressed:)];
-    CCMenuItemSpriteIndependent *leaderboardButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:leaderboardSprite selectedSprite:nil target:self selector:@selector(leaderboardPressed)];
-    CCMenuItemSpriteIndependent *achievementButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:achievmentsSprite selectedSprite:nil target:self selector:@selector(achievementPressed)];
+        // Adding sprites to Batchnode
+        [self addChild:playGameSprite z:3];
+        [sceneSpriteBatchNode addChild:optionsSprite z:3 tag:kOptionsSpriteTag];
+        [sceneSpriteBatchNode addChild:leaderboardSprite z:3];
+        [sceneSpriteBatchNode addChild:achievmentsSprite z:3];
+        
+        // Main Menu Items
+        CCMenuItemSpriteIndependent *playGameButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:playGameSprite selectedSprite:nil target:self selector:@selector(playPressed)];
+        playGameButton.tag = kPlayGameButtonTag;
+        CCMenuItemSpriteIndependent *optionsButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:optionsSprite selectedSprite:nil target:self selector:@selector(optionsPressed)];
+        CCMenuItemSpriteIndependent *leaderboardButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:leaderboardSprite selectedSprite:nil target:self selector:@selector(leaderboardPressed)];
+        CCMenuItemSpriteIndependent *achievementButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:achievmentsSprite selectedSprite:nil target:self selector:@selector(achievementPressed)];
 
-    mainMenu = [CCMenu menuWithItems:playGameButton, optionsButton, leaderboardButton, achievementButton,nil];
-    [self addChild:mainMenu z:5];
+        mainMenu = [CCMenu menuWithItems:playGameButton, optionsButton, leaderboardButton, achievementButton,nil];
+        [self addChild:mainMenu z:5];
+    }
 }
 
 - (id)init {
@@ -240,22 +349,13 @@
         [logo setPosition:ccp(screenSize.width*0.5, screenSize.height*0.85)];
         [self addChild:logo];
         
-        // Center Magnit
-        CCSprite *magnit = [CCSprite spriteWithFile:@"playButtonUnder.png"];
-        [magnit setPosition:ccp(screenSize.width*0.5, screenSize.height*0.5)];
-        [self addChild:magnit z:0];
-        id scaleUp = [CCScaleTo actionWithDuration:0.1f scale:1.2f];
-        id scaleDown = [CCScaleTo actionWithDuration:2.0f scale:1.0f];
-        [magnit runAction:[CCRepeatForever actionWithAction:[CCSequence actions:scaleUp, scaleDown, nil]]];
-        [magnit runAction:[CCRepeatForever actionWithAction:[CCRotateBy actionWithDuration:20.0f angle:360]]];
-        
         // Cells for Beautify
         
         // Display Main Menu Buttons
         [self displayMainMenuButtons];
         
         
-        [[GameManager sharedGameManager] playBackgroundTrack:BACKGROUND_TRACK_1];
+//        [[GameManager sharedGameManager] playBackgroundTrack:BACKGROUND_TRACK_1];
     }
     return self;
 }

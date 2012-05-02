@@ -28,7 +28,6 @@
 
 - (void) dealloc
 {
-    body->GetWorld()->DestroyBody(body);
     world = nil;
     body = nil;
     [super dealloc];

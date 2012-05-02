@@ -181,7 +181,7 @@
                     theta += k_increment;
                 }
                 
-                ccDrawFilledPoly(vertices, k_segments, ccc4f(0, 0, 0, 1));
+                ccDrawSolidPoly(vertices, k_segments, ccc4f(0, 0, 0, 1));
             }
                 break;
                 
@@ -199,7 +199,7 @@
                     vertices[i] = ccp(xPoint, yPoint);
                 }
                 
-                ccDrawFilledPoly(vertices, vertexCount, ccc4f(0, 0, 0, 1));
+                ccDrawSolidPoly(vertices, vertexCount, ccc4f(0, 0, 0, 1));
             }
                 break;
                 

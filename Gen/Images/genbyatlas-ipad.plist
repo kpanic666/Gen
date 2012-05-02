@@ -277,6 +277,19 @@
                 <key>sourceSize</key>
                 <string>{103,103}</string>
             </dict>
+            <key>metalcellpin.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{962,871},{50,50}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{3,3},{50,50}}</string>
+                <key>sourceSize</key>
+                <string>{56,56}</string>
+            </dict>
             <key>optionsButtonUnder.png</key>
             <dict>
                 <key>frame</key>
@@ -339,7 +352,7 @@
             <key>size</key>
             <string>{1024,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:4802659e920220ba01159522f6bb1a21$</string>
+            <string>$TexturePacker:SmartUpdate:32f9525dd27882301cdf3afe9f37637f$</string>
             <key>textureFileName</key>
             <string>genbyatlas-ipad.pvr.ccz</string>
         </dict>

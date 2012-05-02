@@ -68,10 +68,11 @@
         _maskTexture = maskTexture;
         
         // 2
+        CCFileUtils *fileUtils = [CCFileUtils sharedFileUtils];
         const GLchar *fragmentSource = (GLchar*) [[NSString stringWithContentsOfFile:
-                                                   [CCFileUtils fullPathFromRelativePath:@"Mask.fsh"] 
-                                                                            encoding:NSUTF8StringEncoding 
-                                                                               error:nil] 
+                                                   [fileUtils fullPathFromRelativePath:@"Mask.fsh"] 
+                                                    encoding:NSUTF8StringEncoding 
+                                                    error:nil] 
                                                   UTF8String];
         
         self.shaderProgram = [[[CCGLProgram alloc] initWithVertexShaderByteArray:ccPositionTextureColor_vert fragmentShaderByteArray:fragmentSource] autorelease];

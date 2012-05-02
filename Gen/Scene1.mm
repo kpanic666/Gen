@@ -8,7 +8,6 @@
 
 #import "Scene1.h"
 #import "Scene1ActionLayer.h"
-#import "Box2DUILayer.h"
 
 @implementation Scene1
 

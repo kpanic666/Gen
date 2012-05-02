@@ -73,6 +73,7 @@
                 disJointDef.dampingRatio = 0.4f;
                 disJointDef.length = self.contentSize.width * 0.35 / PTM_RATIO;
                 disJointDef.collideConnected = TRUE;
+                disJointDef.userData = self;
                 world->CreateJoint(&disJointDef);
             }
             // Отсоединяем детей от главного героя
@@ -81,7 +82,9 @@
                 b2Body *childCellBody = spriteObj.body;
                 for (b2JointEdge *edge = childCellBody->GetJointList(); edge; edge = edge->next)
                 {
-                    [disJointsToDestroy addObject:[NSValue valueWithPointer:edge->joint]];
+                    if (edge->joint->GetUserData() == self) {
+                        [disJointsToDestroy addObject:[NSValue valueWithPointer:edge->joint]];
+                    }
                 }
             }
         }
@@ -95,7 +98,9 @@
                 b2Body *childCellBody = spriteObj.body;
                 for (b2JointEdge *edge = childCellBody->GetJointList(); edge; edge = edge->next)
                 {
-                    [disJointsToDestroy addObject:[NSValue valueWithPointer:edge->joint]];
+                    if (edge->joint->GetUserData() == self) {
+                        [disJointsToDestroy addObject:[NSValue valueWithPointer:edge->joint]];
+                    }
                 }
             }
         }

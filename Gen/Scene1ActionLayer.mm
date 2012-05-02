@@ -7,30 +7,16 @@
 //
 
 #import "Scene1ActionLayer.h"
-#import "ChildCell.h"
-#import "ParentCell.h"
-#import "Helper.h"
-#import "ExitCell.h"
 #import "MagneticCell.h"
-#import "GroundCell.h"
-#import "RedCell.h"
-#import "GB2ShapeCache.h"
 
 @implementation Scene1ActionLayer
-
-- (void)createChildCellAtLocation:(CGPoint)location
-{
-    ChildCell *childCell = [[[ChildCell alloc] initWithWorld:world atLocation:location] autorelease];
-    [sceneSpriteBatchNode addChild:childCell z:1 tag:kChildCellSpriteTagValue];
-    [GameManager sharedGameManager].numOfTotalCells++;
-}
 
 - (id)initWithBox2DUILayer:(Box2DUILayer *)box2DUILayer
 {
     if ((self = [super init])) {
         uiLayer = box2DUILayer;
         CGSize screenSize = [[CCDirector sharedDirector] winSize];
-        CGPoint screenCenter = ccp(screenSize.width * 0.5, screenSize.height * 0.5);
+        CGPoint screenCenter = [Helper screenCenter];
         
         // pre load the sprite frames from the texture atlas
         sceneSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"genbyatlas.pvr.ccz"];
@@ -71,62 +57,13 @@
         // add RedCells
         RedCell *redCell1 = [RedCell redCellInWorld:world position:ccp(screenSize.width*0.87, screenSize.height*0.45) name:@"redCell1"];
         [self addChild:redCell1 z:-1];
-        
-        // Play background Music
-//        [[GameManager sharedGameManager] playBackgroundTrack:BACKGROUND_TRACK_1];
     }
     return self;
-}
-
-#pragma mark Touch Events
-
-- (void)registerWithTouchDispatcher
-{
-    [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
-}
-
-- (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event
-{
-    //Add a new body/atlas sprite at the touched location
-    CGPoint touchLocation = [Helper locationFromTouch:touch];
-    touchLocation = [self convertToNodeSpace:touchLocation];
-    b2Vec2 locationWorld = b2Vec2(touchLocation.x/PTM_RATIO, touchLocation.y/PTM_RATIO);
-    
-    // Отображаем главную ячейку под пальцем игрока и она начинает притягивать
-    [parentCell changeBodyPosition:locationWorld];
-    [parentCell changeState:kStateTraveling];
-    return TRUE;
-}
-
-- (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event
-{
-    CGPoint touchLocation = [Helper locationFromTouch:touch];
-    touchLocation = [self convertToNodeSpace:touchLocation];
-    b2Vec2 locationWorld = b2Vec2(touchLocation.x/PTM_RATIO, touchLocation.y/PTM_RATIO);
-    if ([parentCell characterState] == kStateTraveling) {
-        [parentCell changeBodyPosition:locationWorld];
-    }    
-}
-
-- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event
-{    
-    // Прячем главную клетку и перестаем притягивать
-    [parentCell changeState:kStateIdle];
-}
-
-- (void)dealloc
-{
-    exitCell = nil;
-    parentCell = nil;
-    [super dealloc];
 }
 
 - (void)draw
 {
     [super draw];
-    
-    // Draw lines for distance joints between ChildCell and ParentCell
-    [parentCell drawDisJoints];
     
     // Рисуем линии от магнитов к ChildCells
     for (MagneticCell *magneticCell in [sceneSpriteBatchNode children])

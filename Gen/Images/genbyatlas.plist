@@ -241,7 +241,7 @@
             <key>groundcell_particle1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{484,2},{20,15}}</string>
+                <string>{{484,28},{20,15}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -254,7 +254,7 @@
             <key>groundcell_particle2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{484,52},{17,17}}</string>
+                <string>{{484,78},{17,17}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -276,6 +276,19 @@
                 <string>{{0,0},{52,52}}</string>
                 <key>sourceSize</key>
                 <string>{52,52}</string>
+            </dict>
+            <key>metalcellpin.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{484,2},{24,24}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{2,2},{24,24}}</string>
+                <key>sourceSize</key>
+                <string>{28,28}</string>
             </dict>
             <key>optionsButtonUnder.png</key>
             <dict>
@@ -306,7 +319,7 @@
             <key>redcell_particle1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{484,35},{18,15}}</string>
+                <string>{{484,61},{18,15}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -319,7 +332,7 @@
             <key>redcell_particle2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{484,19},{20,14}}</string>
+                <string>{{484,45},{20,14}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -339,7 +352,7 @@
             <key>size</key>
             <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:c46fc3fb09f54757d0c5b2429fae78cb$</string>
+            <string>$TexturePacker:SmartUpdate:227cec5749cc4b414c28a2b5767a3139$</string>
             <key>textureFileName</key>
             <string>genbyatlas.pvr.ccz</string>
         </dict>

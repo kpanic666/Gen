@@ -7,6 +7,8 @@
 //
 
 #import "Box2DUILayer.h"
+#import "CCMenuItemSpriteIndependent.h"
+#import "GameManager.h"
 
 @interface Box2DUILayer()
 {
@@ -17,6 +19,12 @@
 
 @implementation Box2DUILayer
 
+- (void)pausePressed
+{
+    GameManager *gameManager = [GameManager sharedGameManager];
+    [gameManager runSceneWithID:gameManager.curLevel];
+}
+
 - (id) init {
     
     if ((self = [super init])) {
@@ -26,6 +34,18 @@
         scoreLabel.anchorPoint = ccp(0, 1);
         scoreLabel.position = ccp(0, screenSize.height);
         [self addChild:scoreLabel];
+        
+        // Place pause menu button
+        CCSprite *pauseGameSprite = [CCSprite spriteWithSpriteFrameName:@"button_pause.png"];
+        float padding = [pauseGameSprite contentSize].width*0.5 * 0.2; // отступ от края экрана c учетом спец эффекта меню
+        [pauseGameSprite setAnchorPoint:ccp(1, 1)];
+        [pauseGameSprite setPosition:ccp(screenSize.width-padding, screenSize.height-padding)];
+        [pauseGameSprite setOpacity:200];
+        [pauseGameSprite setScale:0.8];
+        [self addChild:pauseGameSprite];
+        CCMenuItemSpriteIndependent *pauseGameButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:pauseGameSprite selectedSprite:nil target:self selector:@selector(pausePressed)];
+        CCMenu *pauseMenu = [CCMenu menuWithItems:pauseGameButton, nil];
+        [self addChild:pauseMenu z:5];
     }
     return self;
 }

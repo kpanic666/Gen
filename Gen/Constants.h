@@ -7,7 +7,6 @@
 //
 
 #define kChildCellHealth 100
-#define kChildCellSpriteTagValue 1
 #define kChildCellStartNum 20
 #define kParentCellSpriteTagValue 10
 #define kRedCellDamage 100
@@ -17,7 +16,10 @@
 // Кол-во спасенных ячеек для окончания уровня
 typedef enum {
     kScene1Needed = 20,
-    kScene2Needed = 20
+    kScene2Needed = 11,
+    kScene3Needed = 6,
+    kScene4Needed = 10,
+    kScene5Needed = 14
 } NumOfCellsNeeded;
 
 // Collision Filter Categories
@@ -32,10 +34,9 @@ typedef enum {
 typedef enum {
     kNoSceneUninitialized=0,
     kMainMenuScene=1,
-    kOptionsScene=2,
-    kCreditsScene=3,
-    kIntroScene=4,
-    kLevelCompleteScene=5,
+    kInfoScene=2,
+    kLoadingScene=3,
+    kLevelCompleteScene=4,
     kGameLevel1=101,
     kGameLevel2=102,
     kGameLevel3=103,

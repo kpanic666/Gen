@@ -3,16 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>kGameLevel2</key>
-	<dict/>
+	<dict>
+		<key>CHILDCELL_DYING_1</key>
+		<string>22k_childcell_dyingV1.wav</string>
+	</dict>
 	<key>kNoSceneUninitialized</key>
 	<dict/>
 	<key>kMainMenuScene</key>
 	<dict/>
-	<key>kOptionsScene</key>
+	<key>kInfoScene</key>
 	<dict/>
-	<key>kCreditsScene</key>
-	<dict/>
-	<key>kIntroScene</key>
+	<key>kLoadingScene</key>
 	<dict/>
 	<key>kLevelCompleteScene</key>
 	<dict/>
@@ -22,10 +23,19 @@
 		<string>22k_childcell_dyingV1.wav</string>
 	</dict>
 	<key>kGameLevel3</key>
-	<dict/>
+	<dict>
+		<key>CHILDCELL_DYING_1</key>
+		<string>22k_childcell_dyingV1.wav</string>
+	</dict>
 	<key>kGameLevel4</key>
-	<dict/>
+	<dict>
+		<key>CHILDCELL_DYING_1</key>
+		<string>22k_childcell_dyingV1.wav</string>
+	</dict>
 	<key>kGameLevel5</key>
-	<dict/>
+	<dict>
+		<key>CHILDCELL_DYING_1</key>
+		<string>22k_childcell_dyingV1.wav</string>
+	</dict>
 </dict>
 </plist>

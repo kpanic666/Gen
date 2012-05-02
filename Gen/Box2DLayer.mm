@@ -9,8 +9,6 @@
 #import "Box2DLayer.h"
 #import "Box2DSprite.h"
 #import "GameManager.h"
-#import "Box2DUILayer.h"
-#import "ChildCell.h"
 
 @implementation Box2DLayer
 
@@ -44,11 +42,11 @@
 
 - (void)createGround
 {
-    CGSize screenSize = [[CCDirector sharedDirector] winSize];
+    CGSize levelSize = [[GameManager sharedGameManager] getDimensionsOfCurrentScene];
     b2Vec2 lowerLeft = b2Vec2(0, 0);
-    b2Vec2 lowerRight = b2Vec2(screenSize.width/PTM_RATIO, 0);
-    b2Vec2 upperRight = b2Vec2(screenSize.width/PTM_RATIO, screenSize.height/PTM_RATIO);
-    b2Vec2 upperLeft = b2Vec2(0, screenSize.height/PTM_RATIO);
+    b2Vec2 lowerRight = b2Vec2(levelSize.width/PTM_RATIO, 0);
+    b2Vec2 upperRight = b2Vec2(levelSize.width/PTM_RATIO, levelSize.height/PTM_RATIO);
+    b2Vec2 upperLeft = b2Vec2(0, levelSize.height/PTM_RATIO);
     
     b2BodyDef groundBodyDef;
     groundBodyDef.type = b2_staticBody;
@@ -69,6 +67,13 @@
     // Right
     groundShape.Set(upperRight, lowerRight);
     groundBody->CreateFixture(&groundShape, 0);
+}
+
+- (void)createChildCellAtLocation:(CGPoint)location
+{
+    ChildCell *childCell = [[[ChildCell alloc] initWithWorld:world atLocation:location] autorelease];
+    [sceneSpriteBatchNode addChild:childCell z:1];
+    [GameManager sharedGameManager].numOfTotalCells++;
 }
 
 - (id)init
@@ -100,15 +105,14 @@
 {
     delete contactListener;
     contactListener = NULL;
-    
     [bodiesToDestroy release];
     bodiesToDestroy = nil;
-    
+    exitCell = nil;
+    parentCell = nil;
     if (world) {
         delete world;
         world = NULL;
     }
-    
     if (m_debugDraw) {
         delete m_debugDraw;
         m_debugDraw = nil;
@@ -125,6 +129,9 @@
 	// It is recommend to disable it
     //
 	[super draw];
+    
+    // Draw lines for distance joints between ChildCell and ParentCell
+    [parentCell drawDisJoints];
     
 #if DEBUG_DRAW	
 	ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position );
@@ -178,12 +185,13 @@
     for (GameCharacter *tempChar in listOfGameObjects) {
         [tempChar updateStateWithDeltaTime:dt andListOfGameObjects:listOfGameObjects];
         CharacterStates cellState = [tempChar characterState];
-        if (cellState == kStateSoul || cellState == kStateBeforeSoul) {
+        if (cellState == kStateSoul) {
             i++;
         }
     }
     
     // Подсчитываем кол-во клеток. Сколько из них спасено, сколько их всего и обновляем счетчик
+    // i - кол-во ячеек попавших в выход
     GameManager *gameManager = [GameManager sharedGameManager];
     if (gameManager.numOfSavedCells != i) {
         gameManager.numOfSavedCells = i;
@@ -213,6 +221,42 @@
     }
     [bodiesToDestroy removeAllObjects];
 }
+
+#pragma mark Touch Events
+
+- (void)registerWithTouchDispatcher
+{
+    [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
+}
+
+- (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    CGPoint touchLocation = [Helper locationFromTouch:touch];
+    touchLocation = [self convertToNodeSpace:touchLocation];
+    b2Vec2 locationWorld = b2Vec2(touchLocation.x/PTM_RATIO, touchLocation.y/PTM_RATIO);
+    
+    // Отображаем главную ячейку под пальцем игрока и она начинает притягивать
+    [parentCell changeBodyPosition:locationWorld];
+    [parentCell changeState:kStateTraveling];
+    return TRUE;
+}
+
+- (void)ccTouchMoved:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    CGPoint touchLocation = [Helper locationFromTouch:touch];
+    touchLocation = [self convertToNodeSpace:touchLocation];
+    b2Vec2 locationWorld = b2Vec2(touchLocation.x/PTM_RATIO, touchLocation.y/PTM_RATIO);
+    if ([parentCell characterState] == kStateTraveling) {
+        [parentCell changeBodyPosition:locationWorld];
+    }    
+}
+
+- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event
+{    
+    // Прячем главную клетку и перестаем притягивать
+    [parentCell changeState:kStateIdle];
+}
+
 
 - (id)initWithBox2DUILayer:(Box2DUILayer *)box2DUILayer
 {

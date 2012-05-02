@@ -6,7 +6,7 @@
 //  Copyright 2012 Atom Games. All rights reserved.
 //
 
-#import "cocos2d.h"
+#import "CCScene.h"
 
 @interface Scene1 : CCScene
 

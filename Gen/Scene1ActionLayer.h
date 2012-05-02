@@ -8,12 +8,6 @@
 
 #import "Box2DLayer.h"
 
-@class ParentCell;
-@class ExitCell;
-
-@interface Scene1ActionLayer : Box2DLayer {
-    ParentCell *parentCell;
-    ExitCell *exitCell;
-}
+@interface Scene1ActionLayer : Box2DLayer
 
 @end

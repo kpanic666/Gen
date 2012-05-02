@@ -8,6 +8,10 @@
 
 #import "GameManager.h"
 #import "Scene1.h"
+#import "Scene2.h"
+#import "Scene3.h"
+#import "Scene4.h"
+#import "Scene5.h"
 #import "MainMenuLayer.h"
 
 @implementation GameManager
@@ -111,14 +115,11 @@ static GameManager* _sharedGameManager = nil;
         case kMainMenuScene:
             result = @"kMainMenuScene";
             break;
-        case kOptionsScene:
-            result = @"kOptionsScene";
+        case kInfoScene:
+            result = @"kInfoScene";
             break;
-        case kCreditsScene:
-            result = @"kCreditsScene";
-            break;
-        case kIntroScene:
-            result = @"kIntroScene";
+        case kLoadingScene:
+            result = @"kLoadingScene";
             break;
         case kLevelCompleteScene:
             result = @"kLevelCompleteScene";
@@ -311,15 +312,11 @@ static GameManager* _sharedGameManager = nil;
             sceneToRun = [MainMenuLayer scene];
             break;
             
-        case kOptionsScene:
-            //sceneToRun = [OptionsScene node];
-            break;
-            
-        case kCreditsScene:
+        case kInfoScene:
             //sceneToRun = [CreditsScene node];
             break;
             
-        case kIntroScene:
+        case kLoadingScene:
             //sceneToRun = [IntroScene node];
             break;
             
@@ -334,19 +331,22 @@ static GameManager* _sharedGameManager = nil;
             
         case kGameLevel2:
             _numOfNeededCells = kScene2Needed;
-            //sceneToRun = [GameScene2 node];
+            sceneToRun = [Scene2 node];
             break;
             
         case kGameLevel3:
-            //sceneToRun = [PuzzleLayer scene];
+            _numOfNeededCells = kScene3Needed;
+            sceneToRun = [Scene3 node];
             break;
             
         case kGameLevel4:
-            //sceneToRun = [Scene4 node];
+            _numOfNeededCells = kScene4Needed;
+            sceneToRun = [Scene4 node];
             break;
             
         case kGameLevel5:
-            // Placeholder for Level 5
+            _numOfNeededCells = kScene5Needed;
+            sceneToRun = [Scene5 node];
             break;
             
         default:
@@ -377,6 +377,13 @@ static GameManager* _sharedGameManager = nil;
 //                [sceneToRun setScaleY:0.4166f];
 //                CCLOG(@"GM:Scaling for Iphone 3G (or older)");
 //            }
+//        }
+//    }
+    // Game Scenes have a value of > 100
+//    if (sceneID > 100) {
+//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+//            [sceneToRun setScaleX:1.06];
+//            [sceneToRun setScaleY:1.2];
 //        }
 //    }
     
@@ -425,7 +432,7 @@ static GameManager* _sharedGameManager = nil;
         case kGameLevel1:
             levelSize = screenSize;
             break;
-//        case kGameLevel2:
+//        case kGameLevel4:
 //            levelSize = CGSizeMake(screenSize.width * 4.0f, screenSize.height);
 //            break;
         default:

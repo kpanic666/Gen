@@ -42,4 +42,19 @@
 	return CGPointMake(screenSize.width * 0.5f, screenSize.height * 0.5f);
 }
 
+// Конвертирует точку из координат iPhoneRetina в любые другие в зависимости от устройства на котором вызывается
++(CGPoint) convertPosition:(CGPoint)point
+{
+    point = ccp(point.x, 640-point.y);
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        return ccpMult(point, 0.5);
+    }
+    else
+    {
+        return ccpCompMult(point, ccp(1.06f, 1.2f));
+//        return point;
+    }
+}
+
 @end
