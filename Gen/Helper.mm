@@ -52,8 +52,18 @@
     }
     else
     {
-        return ccpCompMult(point, ccp(1.06f, 1.2f));
-//        return point;
+        // Центрируем все объекты на экране iPad, используя координаты для iPhone.
+        return ccpAdd(point, ccp(32, 64));
+    }
+}
+
++(float) convertFontSize:(float)fontSize
+{
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        return fontSize * 2;
+    } else {
+        return fontSize;
     }
 }
 

@@ -49,8 +49,14 @@
             if (lenght < magneticRadius)
             {
                 float atanFromDistance = atan2f(distanceDiff.y, distanceDiff.x);
-                float xForce = (lenght - magneticRadius) * cosf(atanFromDistance) / PTM_RATIO * kMagneticPowerMultiplier;
-                float yForce = (lenght - magneticRadius) * sinf(atanFromDistance) / PTM_RATIO * kMagneticPowerMultiplier;
+//                float xForce = (lenght - magneticRadius) * cosf(atanFromDistance) / PTM_RATIO * kMagneticPowerMultiplier;
+//                float yForce = (lenght - magneticRadius) * sinf(atanFromDistance) / PTM_RATIO * kMagneticPowerMultiplier;
+                float xForce = (lenght - magneticRadius) * cosf(atanFromDistance) * kMagneticPowerMultiplier;
+                float yForce = (lenght - magneticRadius) * sinf(atanFromDistance) * kMagneticPowerMultiplier;
+//                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+//                    xForce *= 0.5;
+//                    yForce *= 0.5;
+//                }
                 
                 spriteObj.body->ApplyForceToCenter(b2Vec2 (xForce, yForce));
                 

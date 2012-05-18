@@ -2,11 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>kGameLevel2</key>
-	<dict>
-		<key>CHILDCELL_DYING_1</key>
-		<string>22k_childcell_dyingV1.wav</string>
-	</dict>
 	<key>kNoSceneUninitialized</key>
 	<dict/>
 	<key>kMainMenuScene</key>
@@ -17,25 +12,20 @@
 	<dict/>
 	<key>kLevelCompleteScene</key>
 	<dict/>
-	<key>kGameLevel1</key>
-	<dict>
-		<key>CHILDCELL_DYING_1</key>
-		<string>22k_childcell_dyingV1.wav</string>
-	</dict>
-	<key>kGameLevel3</key>
-	<dict>
-		<key>CHILDCELL_DYING_1</key>
-		<string>22k_childcell_dyingV1.wav</string>
-	</dict>
 	<key>kGameLevel4</key>
+	<dict/>
+	<key>kGeneralSounds</key>
 	<dict>
 		<key>CHILDCELL_DYING_1</key>
 		<string>22k_childcell_dyingV1.wav</string>
 	</dict>
 	<key>kGameLevel5</key>
-	<dict>
-		<key>CHILDCELL_DYING_1</key>
-		<string>22k_childcell_dyingV1.wav</string>
-	</dict>
+	<dict/>
+	<key>kGameLevel6</key>
+	<dict/>
+	<key>kGameLevel8</key>
+	<dict/>
+	<key>kGameLevel13</key>
+	<dict/>
 </dict>
 </plist>

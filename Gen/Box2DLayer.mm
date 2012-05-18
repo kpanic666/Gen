@@ -69,11 +69,12 @@
     groundBody->CreateFixture(&groundShape, 0);
 }
 
-- (void)createChildCellAtLocation:(CGPoint)location
+- (ChildCell*)createChildCellAtLocation:(CGPoint)location
 {
     ChildCell *childCell = [[[ChildCell alloc] initWithWorld:world atLocation:location] autorelease];
     [sceneSpriteBatchNode addChild:childCell z:1];
     [GameManager sharedGameManager].numOfTotalCells++;
+    return childCell;
 }
 
 - (id)init
@@ -81,6 +82,7 @@
     if ((self = [super init])) {
         // enable events
         self.isTouchEnabled = YES;
+        self.tag = kBox2DLayer;
         // seed randomizer
         srandom(time(NULL));
         
@@ -133,6 +135,15 @@
     // Draw lines for distance joints between ChildCell and ParentCell
     [parentCell drawDisJoints];
     
+    // Рисуем линии от магнитов к ChildCells
+    for (MagneticCell *magneticCell in [sceneSpriteBatchNode children])
+    {
+        if (magneticCell.gameObjectType == kEnemyTypeMagneticCell)
+        {
+            [magneticCell drawMagnetForces];
+        }
+    }
+
 #if DEBUG_DRAW	
 	ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position );
 	
@@ -200,7 +211,7 @@
     
     // Проверяем выигрыш или проигрыш
     if (gameManager.numOfSavedCells == gameManager.numOfNeededCells) {
-        [gameManager runSceneWithID:kMainMenuScene];
+        [gameManager runSceneWithID:kLevelSelectScene];
     }
 }
 

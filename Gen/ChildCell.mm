@@ -35,7 +35,7 @@ GameCharacter *exitCellSprite;
     } else {
         scale = 1.0f;
         fixtureDef.density = 5.0;
-        fixtureDef.friction = 0.4;
+        fixtureDef.friction = 0.3;
         fixtureDef.restitution = 0.1;
     }
     [self setScale:scale];

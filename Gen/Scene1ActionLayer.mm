@@ -7,7 +7,6 @@
 //
 
 #import "Scene1ActionLayer.h"
-#import "MagneticCell.h"
 
 @implementation Scene1ActionLayer
 
@@ -40,13 +39,9 @@
         [sceneSpriteBatchNode addChild:exitCell z:-1 tag:kExitCellSpriteTagValue];
         
         // add ChildCells
-        for (int i = 0; i < kChildCellStartNum; i++) {
+        for (int i = 0; i < kScene1Total; i++) {
             [self createChildCellAtLocation:ccp(screenCenter.x + i * 5, screenCenter.y + i * 5)];
         }
-        
-        // add MagneticCells
-        MagneticCell *magneticCell1 = [[[MagneticCell alloc] initWithWorld:world atLocation:ccp(screenSize.width*0.3, screenSize.height*0.3)] autorelease];
-        [sceneSpriteBatchNode addChild:magneticCell1 z:-1];
         
         // add GroundCells
         GroundCell *groundCell1 = [GroundCell groundCellInWorld:world position:ccp(screenSize.width*0.65, screenSize.height*0.08) name:@"groundCell1"];
@@ -59,22 +54,6 @@
         [self addChild:redCell1 z:-1];
     }
     return self;
-}
-
-- (void)draw
-{
-    [super draw];
-    
-    // Рисуем линии от магнитов к ChildCells
-    for (MagneticCell *magneticCell in [sceneSpriteBatchNode children])
-    {
-        if (magneticCell.gameObjectType == kEnemyTypeMagneticCell)
-        {
-            [magneticCell drawMagnetForces];
-        }
-    }
-    
-    
 }
 
 @end

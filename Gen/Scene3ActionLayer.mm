@@ -46,7 +46,7 @@
             offsetX *= 2;
             offsetY *= 2;
         }
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < kScene3Total; i++) {
             [self createChildCellAtLocation:ccp(screenSize.width*0.1 + i * offsetX, screenSize.height*0.3 + i * offsetY)];
         }
         NSMutableArray *childCellsArray = [[NSMutableArray alloc] init];

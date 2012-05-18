@@ -18,11 +18,11 @@
 #import "ParentCell.h"
 #import "Helper.h"
 #import "ExitCell.h"
+#import "MagneticCell.h"
 #import "GB2ShapeCache.h"
 #import "Box2DUILayer.h"
 
 @class Box2DSprite;
-@class Box2DUILayer;
 
 @interface Box2DLayer : CCLayer
 {
@@ -39,6 +39,6 @@
 - (id)initWithBox2DUILayer:(Box2DUILayer*)box2DUILayer;
 - (void)markBodyForDestruction:(Box2DSprite*)obj;
 - (void)destroyBodies;
-- (void)createChildCellAtLocation:(CGPoint)location;
+- (ChildCell*)createChildCellAtLocation:(CGPoint)location;
 
 @end

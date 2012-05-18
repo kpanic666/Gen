@@ -21,5 +21,6 @@
 
 +(CGPoint) screenCenter;
 +(CGPoint) convertPosition:(CGPoint)point;
++(float) convertFontSize:(float)fontSize;
 
 @end

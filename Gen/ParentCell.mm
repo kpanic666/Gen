@@ -45,7 +45,7 @@
     
     // Создаем сенсор, который будет определять радиус, в котором будут притягиваться клетки
     fixtureDef.isSensor = TRUE;
-    shape.m_radius = self.contentSize.width * 2 / PTM_RATIO;
+    shape.m_radius = self.contentSize.width * 1.7 / PTM_RATIO;
     // Активируем коллизии для сенсора
     fixtureDef.filter.categoryBits = kParentCellFilterCategory;
     fixtureDef.filter.maskBits = kChildCellFilterCategory;
@@ -71,7 +71,7 @@
                 disJointDef.localAnchorB.SetZero();
                 disJointDef.frequencyHz = 0.25f;
                 disJointDef.dampingRatio = 0.4f;
-                disJointDef.length = self.contentSize.width * 0.35 / PTM_RATIO;
+                disJointDef.length = self.contentSize.width * 0.1 / PTM_RATIO;
                 disJointDef.collideConnected = TRUE;
                 disJointDef.userData = self;
                 world->CreateJoint(&disJointDef);

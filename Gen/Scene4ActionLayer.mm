@@ -16,7 +16,6 @@
     if ((self = [super init])) {
         uiLayer = box2DUILayer;
         CGPoint cellPos;
-        CGSize screenSize = [[CCDirector sharedDirector] winSize];
         CGPoint screenCenter = [Helper screenCenter];
         
         // pre load the sprite frames from the texture atlas
@@ -47,7 +46,7 @@
         [self addChild:metalCell1 z:0];
         
         // add ChildCells and joint the last with Metal Cell
-        CGPoint childCellsPos[] = 
+        CGPoint childCellsPos[kScene4Total] = 
         {
             [Helper convertPosition:ccp(151, 202)],
             [Helper convertPosition:ccp(231, 99)],
@@ -60,7 +59,7 @@
             [Helper convertPosition:ccp(749, 233)],
             [Helper convertPosition:ccp(459, 579)]
         };
-        for (int i=0; i<9; i++) {
+        for (int i=0; i<kScene4Total-1; i++) {
             [self createChildCellAtLocation:childCellsPos[i]];
         }
         ChildCell *childCell = [[[ChildCell alloc] initWithWorld:world atLocation:childCellsPos[9]] autorelease];

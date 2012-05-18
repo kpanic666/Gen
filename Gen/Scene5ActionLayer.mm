@@ -49,7 +49,7 @@
         [metalCell1 setMotorSpeed:2];
         
         // add ChildCells and joint the last with Metal Cell
-        CGPoint childCellsPos[] = 
+        CGPoint childCellsPos[kScene5Total] = 
         {
             [Helper convertPosition:ccp(480, 200)],
             [Helper convertPosition:ccp(508, 207)],
@@ -66,7 +66,7 @@
             [Helper convertPosition:ccp(430, 225)],
             [Helper convertPosition:ccp(449, 207)]
         };
-        for (int i=0; i<14; i++) {
+        for (int i=0; i<kScene5Total; i++) {
             [self createChildCellAtLocation:childCellsPos[i]];
         }
  
@@ -78,7 +78,7 @@
         }
         // Make distance joint connections between metalCell and all ChildCells
         b2DistanceJointDef disJointDef;
-        disJointDef.length = exitCell.contentSize.width * 1.2 / PTM_RATIO;
+        disJointDef.length = exitCell.contentSize.width * 1.17 / PTM_RATIO;
         disJointDef.bodyA = metalCell1.body;
         disJointDef.localAnchorB.SetZero();
         for (int i=0; i < childCellsArray.count; i++) {

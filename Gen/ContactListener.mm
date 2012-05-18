@@ -16,10 +16,10 @@ void ContactListener::BeginContact(b2Contact* contact)
     Box2DSprite *spriteB = (Box2DSprite*)contact->GetFixtureB()->GetBody()->GetUserData();
     
     // Обработка столкновениий сенсора ParentCell с ChildCell
-    if (spriteA.gameObjectType == kParentCellType) {
+    if (spriteA.gameObjectType == kParentCellType && spriteA.characterState == kStateTraveling) {
         [spriteB changeState:kStateConnecting];
     }
-    else if (spriteB.gameObjectType == kParentCellType) {
+    else if (spriteB.gameObjectType == kParentCellType && spriteA.characterState == kStateTraveling) {
         [spriteA changeState:kStateConnecting];
     }
     

@@ -12,7 +12,23 @@
 #import "Scene3.h"
 #import "Scene4.h"
 #import "Scene5.h"
+#import "Scene6.h"
+#import "Scene7.h"
+#import "Scene8.h"
+#import "Scene9.h"
+#import "Scene10.h"
+#import "Scene11.h"
+#import "Scene12.h"
+#import "Scene13.h"
+#import "Scene14.h"
+#import "Scene15.h"
+#import "Scene16.h"
+#import "Scene17.h"
+#import "Scene18.h"
+#import "Scene19.h"
+#import "Scene20.h"
 #import "MainMenuLayer.h"
+#import "LevelSelectLayer.h"
 
 @implementation GameManager
 
@@ -124,14 +140,8 @@ static GameManager* _sharedGameManager = nil;
         case kLevelCompleteScene:
             result = @"kLevelCompleteScene";
             break;
-        case kGameLevel1:
-            result = @"kGameLevel1";
-            break;
-        case kGameLevel2:
-            result = @"kGameLevel2";
-            break;
-        case kGameLevel3:
-            result = @"kGameLevel3";
+        case kLevelSelectScene:
+            result = @"kLevelSelectScene";
             break;
         case kGameLevel4:
             result = @"kGameLevel4";
@@ -139,8 +149,19 @@ static GameManager* _sharedGameManager = nil;
         case kGameLevel5:
             result = @"kGameLevel5";
             break;
+        case kGameLevel6:
+            result = @"kGameLevel6";
+            break;
+        case kGameLevel8:
+            result = @"kGameLevel8";
+            break;
+        case kGameLevel13:
+            result = @"kGameLevel13";
+            break;
         default:
-            [NSException raise:NSGenericException format:@"Unexpected SceneType"];
+//            [NSException raise:NSGenericException format:@"Unexpected SceneType"];
+            // Если здесь не обраб. конкретная сцена, значит звуки для сцены загружаются из общей секции SoundEffects.plist
+            result = @"kGeneralSounds";
     }
     return result;
 }
@@ -189,8 +210,6 @@ static GameManager* _sharedGameManager = nil;
 }
 
 - (void)loadAudioForSceneWithID:(NSNumber*)sceneIDNumber {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
     SceneTypes sceneID = (SceneTypes)[sceneIDNumber intValue];
     if (managerSoundState == kAudioManagerInitializing) {
         int waitCycles = 0;
@@ -203,15 +222,20 @@ static GameManager* _sharedGameManager = nil;
         }
     }
     
+    if (sceneID == lastLevel) {
+        return;
+    }
+    
     if (managerSoundState == kAudioManagerFailed) {
         return;
     }
     NSDictionary *soundEffectsToLoad = [self getSoundEffectsListForSceneWithID:sceneID];
     if (soundEffectsToLoad == nil) {
-        CCLOG(@"Error reading SoundEffects.plist");
+        CCLOG(@"There are no SFX to load for this scene");
         return;
     }
     // Получить список файлов и предзагрузить их
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     for (NSString *keyString in soundEffectsToLoad) {
         CCLOG(@"\nLoading Audio Key:%@ File:%@", keyString, [soundEffectsToLoad objectForKey:keyString]);
         [soundEngine preloadEffect:[soundEffectsToLoad objectForKey:keyString]];
@@ -221,16 +245,16 @@ static GameManager* _sharedGameManager = nil;
 }
 
 - (void)unloadAudioForSceneWithID:(NSNumber*)sceneIDNumber {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     SceneTypes sceneID = (SceneTypes)[sceneIDNumber intValue];
-    if (sceneID == kNoSceneUninitialized) {
+    if (sceneID == kNoSceneUninitialized || sceneID == curLevel) {
         return; // Nothing to unload
     }
     NSDictionary *soundEffectsToUnload = [self getSoundEffectsListForSceneWithID:sceneID];
     if (soundEffectsToUnload == nil) {
-        CCLOG(@"Error reading SoundEffects.plist");
+        CCLOG(@"There are no SFX to unload for this scene");
         return; 
     }
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     if (managerSoundState == kAudioManagerReady) {
         // Get all of the entries and unload
         for(NSString *keyString in soundEffectsToUnload) {
@@ -324,29 +348,89 @@ static GameManager* _sharedGameManager = nil;
             //sceneToRun = [LevelCompleteScene node];
             break;
             
+        case kLevelSelectScene:
+            sceneToRun = [LevelSelectLayer scene];
+            break;    
+            
         case kGameLevel1:
             _numOfNeededCells = kScene1Needed;
             sceneToRun = [Scene1 node];
             break;
-            
         case kGameLevel2:
             _numOfNeededCells = kScene2Needed;
             sceneToRun = [Scene2 node];
             break;
-            
         case kGameLevel3:
             _numOfNeededCells = kScene3Needed;
             sceneToRun = [Scene3 node];
             break;
-            
         case kGameLevel4:
             _numOfNeededCells = kScene4Needed;
             sceneToRun = [Scene4 node];
             break;
-            
         case kGameLevel5:
             _numOfNeededCells = kScene5Needed;
             sceneToRun = [Scene5 node];
+            break;
+        case kGameLevel6:
+            _numOfNeededCells = kScene6Needed;
+            sceneToRun = [Scene6 node];
+            break;
+        case kGameLevel7:
+            _numOfNeededCells = kScene7Needed;
+            sceneToRun = [Scene7 node];
+            break;
+        case kGameLevel8:
+            _numOfNeededCells = kScene8Needed;
+            sceneToRun = [Scene8 node];
+            break;
+        case kGameLevel9:
+            _numOfNeededCells = kScene9Needed;
+            sceneToRun = [Scene9 node];
+            break;
+        case kGameLevel10:
+            _numOfNeededCells = kScene10Needed;
+            sceneToRun = [Scene10 node];
+            break;    
+        case kGameLevel11:
+            _numOfNeededCells = kScene11Needed;
+            sceneToRun = [Scene11 node];
+            break;
+        case kGameLevel12:
+            _numOfNeededCells = kScene12Needed;
+            sceneToRun = [Scene12 node];
+            break;
+        case kGameLevel13:
+            _numOfNeededCells = kScene13Needed;
+            sceneToRun = [Scene13 node];
+            break;
+        case kGameLevel14:
+            _numOfNeededCells = kScene14Needed;
+            sceneToRun = [Scene14 node];
+            break;
+        case kGameLevel15:
+            _numOfNeededCells = kScene15Needed;
+            sceneToRun = [Scene15 node];
+            break;
+        case kGameLevel16:
+            _numOfNeededCells = kScene16Needed;
+            sceneToRun = [Scene16 node];
+            break;
+        case kGameLevel17:
+            _numOfNeededCells = kScene17Needed;
+            sceneToRun = [Scene17 node];
+            break;
+        case kGameLevel18:
+            _numOfNeededCells = kScene18Needed;
+            sceneToRun = [Scene18 node];
+            break;
+        case kGameLevel19:
+            _numOfNeededCells = kScene19Needed;
+            sceneToRun = [Scene19 node];
+            break;
+        case kGameLevel20:
+            _numOfNeededCells = kScene20Needed;
+            sceneToRun = [Scene20 node];
             break;
             
         default:

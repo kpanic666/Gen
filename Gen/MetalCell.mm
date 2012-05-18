@@ -26,7 +26,7 @@
         b2RevoluteJointDef revJointDef;
         revJointDef.bodyA = body;
         revJointDef.bodyB = pin.body;
-        revJointDef.localAnchorA.SetZero();
+        revJointDef.localAnchorA = body->GetLocalPoint(pin.body->GetPosition());
         revJointDef.localAnchorB.SetZero();
         pinJoint = (b2RevoluteJoint*) world->CreateJoint(&revJointDef);
     }

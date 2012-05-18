@@ -36,7 +36,7 @@
         [sceneSpriteBatchNode addChild:parentCell z:10 tag:kParentCellSpriteTagValue];
         
         // add ChildCells
-        for (int i = 0; i < kScene2Needed; i++) {
+        for (int i = 0; i < kScene2Total; i++) {
             [self createChildCellAtLocation:ccp(screenSize.width*0.1 + i * 5, screenSize.height*0.3 + i * 5)];
         }
         
