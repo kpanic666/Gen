@@ -21,11 +21,13 @@
 #import "MagneticCell.h"
 #import "GB2ShapeCache.h"
 #import "Box2DUILayer.h"
+#import "CompleteLevelLayer.h"
 
 @class Box2DSprite;
 
 @interface Box2DLayer : CCLayer
 {
+    CGSize screenSize;
     b2World *world;
     Box2DUILayer *uiLayer;
     ContactListener *contactListener;
@@ -34,6 +36,7 @@
     NSMutableArray *bodiesToDestroy;
     ParentCell *parentCell;
     ExitCell *exitCell;
+    bool gameOver;
 }
 
 - (id)initWithBox2DUILayer:(Box2DUILayer*)box2DUILayer;

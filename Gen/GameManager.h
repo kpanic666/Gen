@@ -13,6 +13,7 @@
 @interface GameManager : NSObject {
     BOOL isMusicON;
     BOOL isSoundEffectsON;
+    BOOL hasLevelWin;
     SceneTypes currentScene;
     SceneTypes curLevel;
     SceneTypes lastLevel;
@@ -31,6 +32,7 @@
 
 @property (readwrite) BOOL isMusicON;
 @property (readwrite) BOOL isSoundEffectsON;
+@property (readwrite) BOOL hasLevelWin;
 @property (readwrite) GameManagerSoundState managerSoundState;
 @property (nonatomic, retain) NSMutableDictionary *listOfSoundEffectFiles;
 @property (nonatomic, retain) NSMutableDictionary *soundEffectsState;
@@ -42,6 +44,8 @@
 
 + (GameManager*)sharedGameManager;
 - (void)runSceneWithID:(SceneTypes)sceneID;
+- (void)runNextScene;
+- (void)reloadCurrentScene;
 - (void)openSiteWithLinkType:(LinkTypes)linkTypeToOpen;
 - (void)setupAudioEngine;
 - (ALuint)playSoundEffect:(NSString*)soundEffectKey;

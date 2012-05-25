@@ -1,6 +1,7 @@
 {\rtf1\ansi\ansicpg1251\cocoartf1138\cocoasubrtf470
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Regular;}
 {\colortbl;\red255\green255\blue255;\red170\green13\blue145;\red28\green0\blue207;\red0\green116\blue0;
+\red63\green110\blue116;\red38\green71\blue75;\red100\green56\blue32;\red92\green38\blue153;\red46\green13\blue110;
 }
 {\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid1\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listname ;}\listid1}}
 {\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
@@ -109,6 +110,124 @@
 			DrawJoint(j);\
 		\}\
 	\}\
+\
+-----\
+\
+	\cf4 //\cf0 \
+	\cf4 // sprite 2 (To)\cf0 \
+	\cf4 //\cf0 \
+	\cf4 // The startPosition is not important here, because it uses a "To" action.\cf0 \
+	\cf4 // The initial position will be the 1st point of the Catmull Rom path\cf0 \
+	\cf4 //\cf0 \
+\
+	\cf5 CCPointArray\cf0  *array2 = [\cf5 CCPointArray\cf0  \cf6 arrayWithCapacity\cf0 :\cf3 20\cf0 ];\
+	\
+	[array2 \cf6 addControlPoint\cf0 :\cf7 ccp\cf0 (s.\cf8 width\cf0 /\cf3 2\cf0 , \cf3 30\cf0 )];\
+	[array2 \cf6 addControlPoint\cf0 :\cf7 ccp\cf0 (s.\cf8 width\cf0 -\cf3 80\cf0 ,\cf3 30\cf0 )];\
+	[array2 \cf6 addControlPoint\cf0 :\cf7 ccp\cf0 (s.\cf8 width\cf0 -\cf3 80\cf0 ,s.\cf8 height\cf0 -\cf3 80\cf0 )];\
+	[array2 \cf6 addControlPoint\cf0 :\cf7 ccp\cf0 (s.\cf8 width\cf0 /\cf3 2\cf0 ,s.\cf8 height\cf0 -\cf3 80\cf0 )];\
+	[array2 \cf6 addControlPoint\cf0 :\cf7 ccp\cf0 (s.\cf8 width\cf0 /\cf3 2\cf0 , \cf3 30\cf0 )];\
+	\
+	\
+	\cf5 CCCatmullRomTo\cf0  *action2 = [\cf5 CCCatmullRomTo\cf0  \cf6 actionWithDuration\cf0 :\cf3 3\cf0  \cf6 points\cf0 :array2];\
+	\cf2 id\cf0  reverse2 = [action2 \cf6 reverse\cf0 ];\
+	\
+	\cf5 CCSequence\cf0  *seq2 = [\cf5 CCSequence\cf0  \cf6 actions\cf0 :action2, reverse2, \cf2 nil\cf0 ];\
+	\
+	[\cf5 kathia\cf0  \cf6 runAction\cf0 : seq2];\
+	\
+	\cf5 array1_\cf0  = [array \cf9 retain\cf0 ];\
+	\cf5 array2_\cf0  = [array2 \cf9 retain\cf0 ];\
+\}\
+\
+-(\cf2 void\cf0 ) dealloc\
+\{\
+	[\cf5 array1_\cf0  \cf9 release\cf0 ];\
+	[\cf5 array2_\cf0  \cf9 release\cf0 ];\
+	\
+	[\cf2 super\cf0  \cf9 dealloc\cf0 ];\
+\}\
+\
+-(\cf2 void\cf0 ) draw\
+\{\
+	[\cf2 super\cf0  \cf6 draw\cf0 ];\
+\
+	\cf4 // move to 50,50 since the "by" path will start at 50,50\cf0 \
+	\cf6 kmGLPushMatrix\cf0 ();\
+	\cf6 kmGLTranslatef\cf0 (\cf3 50\cf0 , \cf3 50\cf0 , \cf3 0\cf0 );\
+	\cf6 ccDrawCatmullRom\cf0 (\cf5 array1_\cf0 ,\cf3 50\cf0 );\
+	\cf6 kmGLPopMatrix\cf0 ();\
+\
+	\cf6 ccDrawCatmullRom\cf0 (\cf5 array2_\cf0 ,\cf3 50\cf0 );\
+\}\
+\
+	\cf5 CCPointArray\cf0  *array = [\cf5 CCPointArray\cf0  \cf6 arrayWithCapacity\cf0 :\cf3 20\cf0 ];\
+	\
+	[array \cf6 addControlPoint\cf0 :\cf7 ccp\cf0 (\cf3 0\cf0 , \cf3 0\cf0 )];\
+	[array \cf6 addControlPoint\cf0 :\cf7 ccp\cf0 (s.\cf8 width\cf0 /\cf3 2\cf0 -\cf3 30\cf0 ,\cf3 0\cf0 )];\
+	[array \cf6 addControlPoint\cf0 :\cf7 ccp\cf0 (s.\cf8 width\cf0 /\cf3 2\cf0 -\cf3 30\cf0 ,s.\cf8 height\cf0 -\cf3 80\cf0 )];\
+	[array \cf6 addControlPoint\cf0 :\cf7 ccp\cf0 (\cf3 0\cf0 , s.\cf8 height\cf0 -\cf3 80\cf0 )];\
+	[array \cf6 addControlPoint\cf0 :\cf7 ccp\cf0 (\cf3 0\cf0 , \cf3 0\cf0 )];\
+	\
+\
+	\cf4 //\cf0 \
+	\cf4 // sprite 1 (By)\cf0 \
+	\cf4 //\cf0 \
+	\cf4 // Spline with no tension (tension==0)\cf0 \
+	\cf4 //\cf0 \
+	\
+	\
+	\cf5 CCCatmullRomBy\cf0  *action = [\cf5 CCCardinalSplineBy\cf0  \cf6 actionWithDuration\cf0 :\cf3 3\cf0  \cf6 points\cf0 :array \cf6 tension\cf0 :\cf3 0\cf0 ];\
+	\cf2 id\cf0  reverse = [action \cf6 reverse\cf0 ];\
+	\
+	\cf5 CCSequence\cf0  *seq = [\cf5 CCSequence\cf0  \cf6 actions\cf0 :action, reverse, \cf2 nil\cf0 ];\
+	\
+	\cf5 tamara\cf0 .\cf5 position\cf0  = \cf7 ccp\cf0 (\cf3 50\cf0 ,\cf3 50\cf0 );\
+	[\cf5 tamara\cf0  \cf6 runAction\cf0 : seq];\
+	\
+	\
+	\cf4 //\cf0 \
+	\cf4 // sprite 2 (By)\cf0 \
+	\cf4 //\cf0 \
+	\cf4 // Spline with high tension (tension==1)\cf0 \
+	\cf4 //\cf0 \
+		\
+	\cf5 CCCatmullRomBy\cf0  *action2 = [\cf5 CCCardinalSplineBy\cf0  \cf6 actionWithDuration\cf0 :\cf3 3\cf0  \cf6 points\cf0 :array \cf6 tension\cf0 :\cf3 1\cf0 ];\
+	\cf2 id\cf0  reverse2 = [action2 \cf6 reverse\cf0 ];\
+	\
+	\cf5 CCSequence\cf0  *seq2 = [\cf5 CCSequence\cf0  \cf6 actions\cf0 :action2, reverse2, \cf2 nil\cf0 ];\
+	\
+	\cf5 kathia\cf0 .\cf5 position\cf0  = \cf7 ccp\cf0 (s.\cf8 width\cf0 /\cf3 2\cf0 ,\cf3 50\cf0 );\
+\
+	[\cf5 kathia\cf0  \cf6 runAction\cf0 : seq2];\
+	\
+	\cf5 array_\cf0  = [array \cf9 retain\cf0 ];\
+\}\
+\
+-(\cf2 void\cf0 ) dealloc\
+\{\
+	[\cf5 array_\cf0  \cf9 release\cf0 ];\
+	\
+	[\cf2 super\cf0  \cf9 dealloc\cf0 ];\
+\}\
+\
+-(\cf2 void\cf0 ) draw\
+\{\
+	[\cf2 super\cf0  \cf6 draw\cf0 ];\
+	\
+	\cf4 // move to 50,50 since the "by" path will start at 50,50\cf0 \
+	\cf6 kmGLPushMatrix\cf0 ();\
+	\cf6 kmGLTranslatef\cf0 (\cf3 50\cf0 , \cf3 50\cf0 , \cf3 0\cf0 );\
+	\cf6 ccDrawCardinalSpline\cf0 (\cf5 array_\cf0 , \cf3 0\cf0 , \cf3 100\cf0 );\
+	\cf6 kmGLPopMatrix\cf0 ();\
+\
+	\cf8 CGSize\cf0  s = [[\cf5 CCDirector\cf0  \cf6 sharedDirector\cf0 ] \cf6 winSize\cf0 ];\
+\
+	\cf6 kmGLPushMatrix\cf0 ();\
+	\cf6 kmGLTranslatef\cf0 (s.\cf8 width\cf0 /\cf3 2\cf0 , \cf3 50\cf0 , \cf3 0\cf0 );\
+	\cf6 ccDrawCardinalSpline\cf0 (\cf5 array_\cf0 , \cf3 1\cf0 , \cf3 100\cf0 );\
+	\cf6 kmGLPopMatrix\cf0 ();\
+\}\
 \
 
 \f0\fs24 \CocoaLigature1 \

@@ -77,12 +77,71 @@
     return childCell;
 }
 
+- (void)resetBubbleWithNode:(id)node
+{
+    CCSprite *bubble = (CCSprite*)node;
+    [bubble stopAllActions];
+    bubble.scale = 1;
+    
+    // Set Random Position
+    float yOffset = [bubble boundingBox].size.height * 0.5;
+    float offScreenYPosition = screenSize.height + 1 + yOffset;
+    int yPosition =  (yOffset * -1) - 1;
+    int xPosition = random() % (int)screenSize.width;
+    [bubble setPosition:ccp(xPosition, yPosition)];
+    
+    // Set Random Move Duration 
+    int moveDuration = random() % kMaxBubbleMoveDuration;
+    if (moveDuration < kMinBubbleMoveDuration) {
+        moveDuration = kMinBubbleMoveDuration;
+    }
+    
+    // Set Horizontal Reflection (flipX)
+    if ([bubble flipX]) {
+        [bubble setFlipX:NO];
+    }
+    else {
+        [bubble setFlipX:YES];
+    }
+    
+    
+    // Set Random texture
+    int bubbleToDraw = random() % 3 + 1; // 1 to 3
+    NSString *bubbleFileName = [NSString stringWithFormat:@"bubble%d.png",bubbleToDraw];
+    [bubble setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:bubbleFileName]];
+    
+    // Actions
+    id scaleAction = [CCScaleBy actionWithDuration:1 scaleX:1.3 scaleY:0.6];
+    id scaleSeqAction = [CCSequence actions:scaleAction, [scaleAction reverse], nil];
+    id moveAction = [CCMoveTo actionWithDuration:moveDuration position:ccp([bubble position].x, offScreenYPosition)];
+    id resetAction = [CCCallFuncN actionWithTarget:self selector:@selector(resetBubbleWithNode:)];
+    id sequenceAction = [CCSequence actions:moveAction, resetAction, nil];
+    
+    [bubble runAction:sequenceAction];
+    [bubble runAction:[CCRepeatForever actionWithAction:scaleSeqAction]];
+    int newZOrder = kMaxBubbleMoveDuration - moveDuration;
+    [sceneSpriteBatchNode reorderChild:bubble z:newZOrder];
+}
+
+- (void)createBubble
+{
+    int bubbleToDraw = random() % 3 + 1; // 1 to 3
+    NSString *bubbleFileName = [NSString stringWithFormat:@"bubble%d.png",bubbleToDraw];
+    CCSprite *bubbleSprite = [CCSprite spriteWithSpriteFrameName:bubbleFileName];
+    [sceneSpriteBatchNode addChild:bubbleSprite];
+    [self resetBubbleWithNode:bubbleSprite];
+}
+
 - (id)init
 {
     if ((self = [super init])) {
+        screenSize = [[CCDirector sharedDirector] winSize];
+        
         // enable events
         self.isTouchEnabled = YES;
         self.tag = kBox2DLayer;
+        gameOver = false;
+        
         // seed randomizer
         srandom(time(NULL));
         
@@ -91,7 +150,7 @@
         // Обнуляем счетчик кол-ва клеток доведенных до выхода
         GameManager *gameManager = [GameManager sharedGameManager];
         gameManager.numOfSavedCells = -1;
-        gameManager.numOfTotalCells = -1;
+        gameManager.numOfTotalCells = 0;
         
         [self setupWorld];
         [self createGround];
@@ -99,6 +158,20 @@
         [self setupDebugDraw];
 #endif
         [self scheduleUpdate];
+        
+        // pre load the sprite frames from the texture atlas
+        sceneSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"genbyatlas.pvr.ccz"];
+        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"genbyatlas.plist"];
+        [self addChild:sceneSpriteBatchNode z:1 tag:kMainSpriteBatchNode];
+        
+        // add ParentCell (main hero will always be under the finger)
+        parentCell = [[[ParentCell alloc] initWithWorld:world atLocation:ccp(100, 100)] autorelease];
+        [sceneSpriteBatchNode addChild:parentCell z:10 tag:kParentCellSpriteTagValue];
+        
+        // Create water bubbles
+        for (int x = 0; x < kMaxNumOfBubbleOnScene; x++) {
+            [self createBubble];
+        }
     }
     return self;
 }
@@ -136,10 +209,11 @@
     [parentCell drawDisJoints];
     
     // Рисуем линии от магнитов к ChildCells
-    for (MagneticCell *magneticCell in [sceneSpriteBatchNode children])
+    for (CCSprite *tempSprite in [sceneSpriteBatchNode children])
     {
-        if (magneticCell.gameObjectType == kEnemyTypeMagneticCell)
+        if ([tempSprite isKindOfClass:[MagneticCell class]])
         {
+            MagneticCell *magneticCell = (MagneticCell*)tempSprite;
             [magneticCell drawMagnetForces];
         }
     }
@@ -153,6 +227,15 @@
 	
 	kmGLPopMatrix();
 #endif
+}
+
+- (void)displayGameOverLayer
+{
+    [uiLayer setVisible:FALSE];
+    ccColor4B c = ccc4(255, 255, 255, 0); // Black transparent background
+    CompleteLevelLayer *gameOverLayer = [[[CompleteLevelLayer alloc] initWithColor:c] autorelease];
+    [self addChild:gameOverLayer z:10 tag:kGameOverLayer];
+    [self pauseSchedulerAndActions];
 }
 
 - (void)update:(ccTime)dt
@@ -193,11 +276,17 @@
     // Force update all objects и
     CCArray *listOfGameObjects = [sceneSpriteBatchNode children];
     int i = 0;
-    for (GameCharacter *tempChar in listOfGameObjects) {
-        [tempChar updateStateWithDeltaTime:dt andListOfGameObjects:listOfGameObjects];
-        CharacterStates cellState = [tempChar characterState];
-        if (cellState == kStateSoul) {
-            i++;
+    for (CCSprite *tempSprite in listOfGameObjects)
+    {
+        if ([tempSprite isKindOfClass:[GameCharacter class]])
+        {
+            GameCharacter *tempChar = (GameCharacter*)tempSprite;
+            [tempChar updateStateWithDeltaTime:dt andListOfGameObjects:listOfGameObjects];
+            if ([tempChar characterState] == kStateSoul)
+            {
+                i++;
+            }
+
         }
     }
     
@@ -210,8 +299,20 @@
     }
     
     // Проверяем выигрыш или проигрыш
-    if (gameManager.numOfSavedCells == gameManager.numOfNeededCells) {
-        [gameManager runSceneWithID:kLevelSelectScene];
+    if (!gameOver)
+    {
+        // Если не осталось свободноплавающих ячеек и спасено нужно количество то ВЫИГРЫШ
+        if (gameManager.numOfTotalCells == 0 && gameManager.numOfSavedCells >= gameManager.numOfNeededCells)
+        {
+            gameOver = true;
+            [gameManager setHasLevelWin:YES];
+            [self scheduleOnce:@selector(displayGameOverLayer) delay:1.5];
+        }
+        else if (gameManager.numOfTotalCells == 0 && gameManager.numOfSavedCells < gameManager.numOfNeededCells)
+        {
+            gameOver = true;
+            [self scheduleOnce:@selector(displayGameOverLayer) delay:1.5];
+        }
     }
 }
 

@@ -36,6 +36,7 @@ static GameManager* _sharedGameManager = nil;
 
 @synthesize isMusicON;
 @synthesize isSoundEffectsON;
+@synthesize hasLevelWin;
 @synthesize managerSoundState;
 @synthesize listOfSoundEffectFiles;
 @synthesize soundEffectsState;
@@ -136,9 +137,6 @@ static GameManager* _sharedGameManager = nil;
             break;
         case kLoadingScene:
             result = @"kLoadingScene";
-            break;
-        case kLevelCompleteScene:
-            result = @"kLevelCompleteScene";
             break;
         case kLevelSelectScene:
             result = @"kLevelSelectScene";
@@ -321,8 +319,17 @@ static GameManager* _sharedGameManager = nil;
         soundEngine = nil;
         managerSoundState = kAudioManagerUninitialized;
         currentScene = kNoSceneUninitialized;
+        hasLevelWin = NO;
     }
     return self;
+}
+
+- (void)reloadCurrentScene {
+    [self runSceneWithID:curLevel];
+}
+
+- (void)runNextScene {
+    [self runSceneWithID:(SceneTypes) (curLevel + 1)];
 }
 
 - (void)runSceneWithID:(SceneTypes)sceneID {
@@ -342,10 +349,6 @@ static GameManager* _sharedGameManager = nil;
             
         case kLoadingScene:
             //sceneToRun = [IntroScene node];
-            break;
-            
-        case kLevelCompleteScene:
-            //sceneToRun = [LevelCompleteScene node];
             break;
             
         case kLevelSelectScene:
@@ -474,7 +477,7 @@ static GameManager* _sharedGameManager = nil;
     if ([[CCDirector sharedDirector] runningScene] == nil) {
         [[CCDirector sharedDirector] pushScene:sceneToRun];
     } else {
-        [[CCDirector sharedDirector] replaceScene:[CCTransitionFlipAngular transitionWithDuration:0.5f scene:sceneToRun]];
+        [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:0.1f scene:sceneToRun]];
     }
     
     [self performSelectorInBackground:@selector(unloadAudioForSceneWithID:) withObject:[NSNumber numberWithInt:oldScene]];

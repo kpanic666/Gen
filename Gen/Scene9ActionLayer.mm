@@ -16,23 +16,16 @@
     if ((self = [super init])) {
         uiLayer = box2DUILayer;
         CGPoint cellPos;
-        
-        // pre load the sprite frames from the texture atlas
-        sceneSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"genbyatlas.pvr.ccz"];
-        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"genbyatlas.plist"];
-        [self addChild:sceneSpriteBatchNode];
-        
+
         // load physics definitions
         [[GB2ShapeCache sharedShapeCache] addShapesWithFile:@"scene9bodies.plist"];
         
         // add background
-        CCSprite *background = [CCSprite spriteWithSpriteFrameName:@"background1.png"];
+        [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
+        CCSprite *background = [CCSprite spriteWithFile:@"background1.png"];
         [background setPosition:[Helper screenCenter]];
         [self addChild:background z:-2];
-        
-        // add ParentCell (main hero will always be under the finger)
-        parentCell = [[[ParentCell alloc] initWithWorld:world atLocation:ccp(100, 100)] autorelease];
-        [sceneSpriteBatchNode addChild:parentCell z:10 tag:kParentCellSpriteTagValue];
+        [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
         // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
         cellPos = [Helper convertPosition:ccp(405, 555)];
@@ -63,9 +56,13 @@
             [self createChildCellAtLocation:childCellsPos[i]];
         }
         NSMutableArray *childCellsArray = [[NSMutableArray alloc] init];
-        for (Box2DSprite *tempObj in [sceneSpriteBatchNode children]) {
-            if ([tempObj gameObjectType] == kChildCellType) {
-                [childCellsArray addObject:(ChildCell*)tempObj];
+        for (CCSprite *tempSprite in [sceneSpriteBatchNode children]) {
+            if ([tempSprite isKindOfClass:[Box2DSprite class]])
+            {
+                Box2DSprite *tempObj = (Box2DSprite*)tempSprite;
+                if ([tempObj gameObjectType] == kChildCellType) {
+                    [childCellsArray addObject:(ChildCell*)tempObj];
+                }
             }
         }
         // Make distance joint connections between metalCell and all ChildCells

@@ -126,7 +126,7 @@
             break;
             
         default:
-            break;
+            return NULL;
     }
     
     CCSprite *noise = [CCSprite spriteWithTexture:noiseTex rect:rect];

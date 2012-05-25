@@ -15,6 +15,7 @@
 @interface Box2DUILayer()
 {
     CCLabelTTF *scoreLabel;
+    CCLabelTTF *centerLabel;
 }
 @end
 
@@ -26,7 +27,12 @@
     PauseLayer *pauseLayer = [[[PauseLayer alloc] initWithColor:c] autorelease];
     [self.parent addChild:pauseLayer z:10 tag:kPauseLayer];
     CCLayer *gl = (CCLayer*) [self.parent getChildByTag:kBox2DLayer];
+    CCSpriteBatchNode *bn = (CCSpriteBatchNode*)[gl getChildByTag:kMainSpriteBatchNode];
     [gl pauseSchedulerAndActions];
+    // Ставим на паузу всех детей основного batchnode. так просто поставить слой на паузу не достаточно
+    for (CCNode *tempNode in [bn children]) {
+        [tempNode pauseSchedulerAndActions];
+    }
 }
 
 - (id) init {
@@ -34,12 +40,19 @@
     if ((self = [super init])) {
         CGSize screenSize = [CCDirector sharedDirector].winSize;
         
-        // Init Score Label
+        // Init Needed Count Label
         scoreLabel = [CCLabelTTF labelWithString:@"" fontName:@"Zapfino" fontSize:[Helper convertFontSize:14]];
         scoreLabel.color = ccc3(0, 0, 0);
         scoreLabel.anchorPoint = ccp(0, 1);
         scoreLabel.position = ccp(0, screenSize.height);
         [self addChild:scoreLabel];
+        
+        // Init Center information label for name of level and other info
+        centerLabel = [CCLabelTTF labelWithString:@"" fontName:@"Helvetica" fontSize:[Helper convertFontSize:30]];
+        centerLabel.position = ccp(screenSize.width*0.5, screenSize.height*0.5);
+        centerLabel.color = ccc3(255, 255, 0);
+        centerLabel.visible = NO;
+        [self addChild:centerLabel];
         
         // Place pause menu button
         CCSprite *pauseGameSprite = [CCSprite spriteWithSpriteFrameName:@"button_pause.png"];
@@ -66,6 +79,23 @@
     CCScaleTo *scaleBack = [CCScaleTo actionWithDuration:0.1 scale:1.0];
     CCSequence *sequence = [CCSequence actions:scaleUp, scaleBack, nil];
     [scoreLabel runAction:sequence];
+}
+
+- (BOOL)displayText:(NSString *)text
+{
+    [centerLabel stopAllActions];
+    [centerLabel setString:text];
+    centerLabel.visible = YES;
+    centerLabel.opacity = 255;
+    
+    CCScaleTo *scaleUp = [CCScaleTo actionWithDuration:0.5 scale:1.2];
+    CCScaleTo *scaleBack = [CCScaleTo actionWithDuration:0.1 scale:1.0];
+    CCDelayTime *delay = [CCDelayTime actionWithDuration:2.0];
+    CCFadeOut *fade = [CCFadeOut actionWithDuration:0.5];
+    CCHide *hide = [CCHide action];
+    CCSequence *sequence = [CCSequence actions:scaleUp, scaleBack, delay, fade, hide, nil];
+    [centerLabel runAction:sequence];
+    return TRUE;
 }
 
 @end

@@ -30,7 +30,7 @@
         
         // Background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB5A1];
-        CCSprite *background = [CCSprite spriteWithFile:@"pauseMenuBack.jpg"];
+        CCSprite *background = [CCSprite spriteWithFile:@"pauseMenuBack.png"];
         background.anchorPoint = ccp(1, 1);
         background.position = ccp(screenSize.width + background.contentSize.width, screenSize.height);
         [self addChild:background z:0 tag:kBackgroundSpriteTag];
@@ -55,8 +55,12 @@
 
 - (void)resetPressed
 {
-    GameManager *gameManager = [GameManager sharedGameManager];
-    [gameManager runSceneWithID:gameManager.curLevel];
+    [[GameManager sharedGameManager] reloadCurrentScene];
+}
+
+- (void)nextPressed
+{
+    [[GameManager sharedGameManager] runNextScene];
 }
 
 - (void)resumePressed
@@ -64,7 +68,11 @@
     CGSize screenSize = [[CCDirector sharedDirector] winSize];
     CCSprite *background = (CCSprite*)[self getChildByTag:kBackgroundSpriteTag];
     CCLayer *gl = (CCLayer*) [self.parent getChildByTag:kBox2DLayer];
+    CCSpriteBatchNode *bn = (CCSpriteBatchNode*)[gl getChildByTag:kMainSpriteBatchNode];
     [gl resumeSchedulerAndActions];
+    for (CCNode *tempNode in [bn children]) {
+        [tempNode resumeSchedulerAndActions];
+    }
     CCMoveTo *moveAction = [CCMoveTo actionWithDuration:0.2 position:ccp(screenSize.width + background.contentSize.width, screenSize.height)];
     CCCallFunc *callAction = [CCCallFunc actionWithTarget:self selector:@selector(removeFromParentAndCleanup:)];
     [background runAction:[CCSequence actions:moveAction, callAction, nil]];
@@ -122,7 +130,7 @@
     CCMenuItemSpriteIndependent *resumeButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:resumeSprite selectedSprite:nil target:self selector:@selector(resumePressed)];
     CCMenuItemSpriteIndependent *resetButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:resetSprite selectedSprite:nil target:self selector:@selector(resetPressed)];
     CCMenuItemSpriteIndependent *levelSelectButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:levelSelectSprite selectedSprite:nil target:self selector:@selector(levelSelectPressed)];
-    CCMenuItemSpriteIndependent *skipButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:skipSprite selectedSprite:nil target:self selector:@selector(resumePressed)];
+    CCMenuItemSpriteIndependent *skipButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:skipSprite selectedSprite:nil target:self selector:@selector(nextPressed)];
     CCMenuItemToggle *musicToggle = [CCMenuItemToggle itemWithTarget:self selector:@selector(musicTogglePressed) items:musicOnButton, musicOffButton, nil];
     CCMenuItemToggle *sfxToggle = [CCMenuItemToggle itemWithTarget:self selector:@selector(SFXTogglePressed) items:sfxOnButton, sfxOffButton, nil];
     

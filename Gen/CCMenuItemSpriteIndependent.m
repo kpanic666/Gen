@@ -126,7 +126,7 @@ const NSInteger	kCCZoomActTag = 0xc0c05022;
     else
         originalScale_ = imageT_.scale;
     
-    CCAction *zoomAction = [CCScaleTo actionWithDuration:0.1f scale:originalScale_ * 1.2f];
+    CCAction *zoomAction = [CCScaleTo actionWithDuration:0.01f scale:originalScale_ * 1.2f];
     zoomAction.tag = kCCZoomActTag;
     [imageT_ runAction:zoomAction];
 }

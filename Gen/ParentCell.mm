@@ -56,34 +56,38 @@
 {
     // Если пользователь жмет на экран
     if (characterState == kStateTraveling) {
-        for (Box2DSprite *spriteObj in listOfGameObjects) {
+        for (CCSprite *tempSprite in listOfGameObjects) {
             // Притягиваем детей к главному герою
-            if (spriteObj.gameObjectType == kChildCellType && spriteObj.characterState == kStateConnecting) {
-                
-                [spriteObj changeState:kStateConnected];
-                
-                // Distance Joint between ChildCell and ParentCell Creation
-                
-                b2DistanceJointDef disJointDef;
-                disJointDef.bodyA = body;
-                disJointDef.bodyB = spriteObj.body;
-                disJointDef.localAnchorA.SetZero();
-                disJointDef.localAnchorB.SetZero();
-                disJointDef.frequencyHz = 0.25f;
-                disJointDef.dampingRatio = 0.4f;
-                disJointDef.length = self.contentSize.width * 0.1 / PTM_RATIO;
-                disJointDef.collideConnected = TRUE;
-                disJointDef.userData = self;
-                world->CreateJoint(&disJointDef);
-            }
-            // Отсоединяем детей от главного героя
-            else if (spriteObj.gameObjectType == kChildCellType && spriteObj.characterState == kStateDisconnecting) {
-                [spriteObj changeState:kStateIdle];
-                b2Body *childCellBody = spriteObj.body;
-                for (b2JointEdge *edge = childCellBody->GetJointList(); edge; edge = edge->next)
-                {
-                    if (edge->joint->GetUserData() == self) {
-                        [disJointsToDestroy addObject:[NSValue valueWithPointer:edge->joint]];
+            if ([tempSprite isKindOfClass:[Box2DSprite class]])
+            {
+                Box2DSprite *spriteObj = (Box2DSprite*)tempSprite;
+                if (spriteObj.gameObjectType == kChildCellType && spriteObj.characterState == kStateConnecting) {
+                    
+                    [spriteObj changeState:kStateConnected];
+                    
+                    // Distance Joint between ChildCell and ParentCell Creation
+                    
+                    b2DistanceJointDef disJointDef;
+                    disJointDef.bodyA = body;
+                    disJointDef.bodyB = spriteObj.body;
+                    disJointDef.localAnchorA.SetZero();
+                    disJointDef.localAnchorB.SetZero();
+                    disJointDef.frequencyHz = 0.25f;
+                    disJointDef.dampingRatio = 0.4f;
+                    disJointDef.length = self.contentSize.width * 0.1 / PTM_RATIO;
+                    disJointDef.collideConnected = TRUE;
+                    disJointDef.userData = self;
+                    world->CreateJoint(&disJointDef);
+                }
+                // Отсоединяем детей от главного героя
+                else if (spriteObj.gameObjectType == kChildCellType && spriteObj.characterState == kStateDisconnecting) {
+                    [spriteObj changeState:kStateIdle];
+                    b2Body *childCellBody = spriteObj.body;
+                    for (b2JointEdge *edge = childCellBody->GetJointList(); edge; edge = edge->next)
+                    {
+                        if (edge->joint->GetUserData() == self) {
+                            [disJointsToDestroy addObject:[NSValue valueWithPointer:edge->joint]];
+                        }
                     }
                 }
             }
@@ -91,15 +95,21 @@
     }
     
     // Если пользователь НЕ жмет на экран
-    if (characterState == kStateIdle) {
-        for (Box2DSprite *spriteObj in listOfGameObjects) {
-            if (spriteObj.gameObjectType == kChildCellType && spriteObj.characterState == kStateConnected) {
-                [spriteObj changeState:kStateIdle];
-                b2Body *childCellBody = spriteObj.body;
-                for (b2JointEdge *edge = childCellBody->GetJointList(); edge; edge = edge->next)
-                {
-                    if (edge->joint->GetUserData() == self) {
-                        [disJointsToDestroy addObject:[NSValue valueWithPointer:edge->joint]];
+    if (characterState == kStateIdle)
+    {
+        for (CCSprite *tempSprite in listOfGameObjects)
+        {
+            if ([tempSprite isKindOfClass:[Box2DSprite class]])
+            {
+                Box2DSprite *spriteObj = (Box2DSprite*)tempSprite;
+                if (spriteObj.gameObjectType == kChildCellType && spriteObj.characterState == kStateConnected) {
+                    [spriteObj changeState:kStateIdle];
+                    b2Body *childCellBody = spriteObj.body;
+                    for (b2JointEdge *edge = childCellBody->GetJointList(); edge; edge = edge->next)
+                    {
+                        if (edge->joint->GetUserData() == self) {
+                            [disJointsToDestroy addObject:[NSValue valueWithPointer:edge->joint]];
+                        }
                     }
                 }
             }
@@ -187,8 +197,6 @@
 //            }
             
             ccDrawColor4B(172, 255, 255, 230);
-            
-
             glLineWidth(1.0f);
             ccDrawLine(anchorA, anchorB);
         }

@@ -38,30 +38,28 @@
 
 - (void)updateStateWithDeltaTime:(ccTime)deltaTime andListOfGameObjects:(CCArray *)listOfGameObjects
 {
-    for (Box2DSprite *spriteObj in listOfGameObjects) {
-        // Притягиваем детей к self если у они в зоне действия магнита. Проверяет счетчик кол-ва действующих магнитов
-        if (spriteObj.gameObjectType == kChildCellType && spriteObj.magneticCount > 0)
+    for (CCSprite *tempSprite in listOfGameObjects)
+    {
+        if ([tempSprite isKindOfClass:[Box2DSprite class]])
         {
-            b2CircleShape magneticShape = *(b2CircleShape*) body->GetFixtureList()->GetShape();
-            float magneticRadius = magneticShape.m_radius * PTM_RATIO;
-            CGPoint distanceDiff = ccpSub(self.position, spriteObj.position);
-            CGFloat lenght = ccpLength(distanceDiff);
-            if (lenght < magneticRadius)
+            Box2DSprite *spriteObj = (Box2DSprite*)tempSprite;
+            // Притягиваем детей к self если у они в зоне действия магнита. Проверяет счетчик кол-ва действующих магнитов
+            if (spriteObj.gameObjectType == kChildCellType && spriteObj.magneticCount > 0)
             {
-                float atanFromDistance = atan2f(distanceDiff.y, distanceDiff.x);
-//                float xForce = (lenght - magneticRadius) * cosf(atanFromDistance) / PTM_RATIO * kMagneticPowerMultiplier;
-//                float yForce = (lenght - magneticRadius) * sinf(atanFromDistance) / PTM_RATIO * kMagneticPowerMultiplier;
-                float xForce = (lenght - magneticRadius) * cosf(atanFromDistance) * kMagneticPowerMultiplier;
-                float yForce = (lenght - magneticRadius) * sinf(atanFromDistance) * kMagneticPowerMultiplier;
-//                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-//                    xForce *= 0.5;
-//                    yForce *= 0.5;
-//                }
-                
-                spriteObj.body->ApplyForceToCenter(b2Vec2 (xForce, yForce));
-                
-                // Добавляем координаты дочерней клетки для дальнейшей отрисовки линий
-                [cellsPosToDraw addObject:NSStringFromCGPoint(spriteObj.position)];
+                b2CircleShape magneticShape = *(b2CircleShape*) body->GetFixtureList()->GetShape();
+                float magneticRadius = magneticShape.m_radius * PTM_RATIO;
+                CGPoint distanceDiff = ccpSub(self.position, spriteObj.position);
+                CGFloat lenght = ccpLength(distanceDiff);
+                if (lenght < magneticRadius)
+                {
+                    float atanFromDistance = atan2f(distanceDiff.y, distanceDiff.x);
+                    float xForce = (lenght - magneticRadius) * cosf(atanFromDistance) * kMagneticPowerMultiplier;
+                    float yForce = (lenght - magneticRadius) * sinf(atanFromDistance) * kMagneticPowerMultiplier;
+                    spriteObj.body->ApplyForceToCenter(b2Vec2 (xForce, yForce));
+                    
+                    // Добавляем координаты дочерней клетки для дальнейшей отрисовки линий
+                    [cellsPosToDraw addObject:NSStringFromCGPoint(spriteObj.position)];
+                }
             }
         }
     }

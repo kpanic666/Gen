@@ -18,22 +18,15 @@
         CGPoint cellPos;
         CGPoint screenCenter = [Helper screenCenter];
         
-        // pre load the sprite frames from the texture atlas
-        sceneSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"genbyatlas.pvr.ccz"];
-        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"genbyatlas.plist"];
-        [self addChild:sceneSpriteBatchNode];
-        
         // load physics definitions
         [[GB2ShapeCache sharedShapeCache] addShapesWithFile:@"scene4bodies.plist"];
         
         // add background
-        CCSprite *background = [CCSprite spriteWithSpriteFrameName:@"background1.png"];
+        [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
+        CCSprite *background = [CCSprite spriteWithFile:@"background1.png"];
         [background setPosition:screenCenter];
         [self addChild:background z:-2];
-        
-        // add ParentCell (main hero will always be under the finger)
-        parentCell = [[[ParentCell alloc] initWithWorld:world atLocation:ccp(100, 100)] autorelease];
-        [sceneSpriteBatchNode addChild:parentCell z:10 tag:kParentCellSpriteTagValue];
+        [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
         // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
         cellPos = [Helper convertPosition:ccp(476, 195)];

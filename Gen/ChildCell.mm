@@ -7,6 +7,7 @@
 //
 
 #import "ChildCell.h"
+#import "GameManager.h"
 
 @implementation ChildCell
 
@@ -139,6 +140,7 @@ GameCharacter *exitCellSprite;
             
             // Destroy Physics body
             self.markedForDestruction = YES;
+            [GameManager sharedGameManager].numOfTotalCells--;
         
             [self playHitEffect];
             break;
@@ -171,6 +173,7 @@ GameCharacter *exitCellSprite;
         {
             self.markedForDestruction = YES;
             [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_idle.png"]];
+            [GameManager sharedGameManager].numOfTotalCells--;
             break;
         }
             

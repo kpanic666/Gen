@@ -8,16 +8,21 @@
 
 #define kBox2DLayer 15
 #define kPauseLayer 16
+#define kGameOverLayer 17
+#define kMainSpriteBatchNode 18
 #define kChildCellHealth 100
 #define kParentCellSpriteTagValue 10
 #define kRedCellDamage 100
 #define kExitCellSpriteTagValue 20
 #define kMagneticPowerMultiplier 0.1
 #define kLevelCount 20
+#define kMaxBubbleMoveDuration 15
+#define kMinBubbleMoveDuration 5
+#define kMaxNumOfBubbleOnScene 4
 
 // Всего ячеек на уровне
 typedef enum {
-    kScene1Total = 20,
+    kScene1Total = 25,
     kScene2Total = 11,
     kScene3Total = 7,
     kScene4Total = 10,
@@ -35,7 +40,7 @@ typedef enum {
     kScene16Total = 14,
     kScene17Total = 26,
     kScene18Total = 9,
-    kScene19Total = 14,
+    kScene19Total = 9,
     kScene20Total = 14
 } NumOfCellsTotal;
 
@@ -59,7 +64,7 @@ typedef enum {
     kScene16Needed = 14,
     kScene17Needed = 26,
     kScene18Needed = 9,
-    kScene19Needed = 14,
+    kScene19Needed = 9,
     kScene20Needed = 14
 } NumOfCellsNeeded;
 
@@ -77,8 +82,7 @@ typedef enum {
     kMainMenuScene=1,
     kInfoScene=2,
     kLoadingScene=3,
-    kLevelCompleteScene=4,
-    kLevelSelectScene=5,
+    kLevelSelectScene=4,
     kGameLevel1=101,
     kGameLevel2=102,
     kGameLevel3=103,
