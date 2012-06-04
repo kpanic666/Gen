@@ -10,7 +10,19 @@
 #import "Box2DSprite.h"
 #import "GameManager.h"
 
+@interface Box2DLayer()
+{
+    // Added for game stat and scores
+    double levelStartTime;
+    double levelRemainingTime;
+}
+
+@end
+
 @implementation Box2DLayer
+
+////время в сек. на прохождение уровня. После этого времени очки не начисляются
+//static double LEVEL_MAX_TIME = 120;
 
 - (void)setupWorld
 {
@@ -147,10 +159,9 @@
         
         bodiesToDestroy = [[NSMutableArray alloc] init];
         
-        // Обнуляем счетчик кол-ва клеток доведенных до выхода
-        GameManager *gameManager = [GameManager sharedGameManager];
-        gameManager.numOfSavedCells = -1;
-        gameManager.numOfTotalCells = 0;
+        // Обнуляем переменные для статистики и счета
+        levelStartTime = CACurrentMediaTime();
+        levelRemainingTime = 0;
         
         [self setupWorld];
         [self createGround];
@@ -172,6 +183,11 @@
         for (int x = 0; x < kMaxNumOfBubbleOnScene; x++) {
             [self createBubble];
         }
+        
+        // Create plankton particles
+        psPlankton = [CCParticleSystemQuad particleWithFile:@"ps_plankton.plist"];
+        [self addChild:psPlankton z:-1];
+//        psPlankton.position = ccp(screenSize.width * 0.5, screenSize.height);
     }
     return self;
 }
@@ -236,6 +252,37 @@
     CompleteLevelLayer *gameOverLayer = [[[CompleteLevelLayer alloc] initWithColor:c] autorelease];
     [self addChild:gameOverLayer z:10 tag:kGameOverLayer];
     [self pauseSchedulerAndActions];
+}
+
+- (void)calcScore
+{
+    GameManager *gameManager = [GameManager sharedGameManager];
+    gameManager.levelElapsedTime = CACurrentMediaTime() - levelStartTime;
+    levelRemainingTime = kLevelMaxTime - gameManager.levelElapsedTime;
+    
+    // Проверяем оставшееся время. может быть отрицательным если игрок сильно замешкался, то ставим в 0
+    levelRemainingTime = MAX(0, levelRemainingTime);
+    // Насчитываем очки за оставшееся время
+    gameManager.levelTotalScore += levelRemainingTime * kRemainingTimeMulti;
+    // Насчитываем очки за кол-во спасенных ячеек
+    gameManager.levelTotalScore += gameManager.numOfNeededCells * kGoalCellsMulti;
+    gameManager.levelTotalScore += (gameManager.numOfSavedCells - gameManager.numOfNeededCells) * kExtraCellsMulti;
+    // Насчитываем очки за набранные звезды. 1 звезда - Collected == Needed, 2 - Collected > Needed < Max, 3 - Coll=Max
+    if (gameManager.numOfSavedCells == gameManager.numOfNeededCells) {
+        gameManager.levelStarsNum = 1;
+    }
+    else if (gameManager.numOfSavedCells > gameManager.numOfNeededCells && gameManager.numOfSavedCells < gameManager.numOfMaxCells)
+    {
+        gameManager.levelStarsNum = 2;
+    }
+    else if (gameManager.numOfSavedCells == gameManager.numOfMaxCells) {
+        gameManager.levelStarsNum = 3;
+    }
+    gameManager.levelTotalScore += gameManager.levelStarsNum * kStarAchievedMulti;
+    // Насчитываем очки за кол-во нажатий на игровое поле при прохождении уровня. За каждое нажатие вычитаем очки
+    gameManager.levelTotalScore += gameManager.levelTappedNum * kTapMulti;
+    // Проверяем на положительность
+    gameManager.levelTotalScore = MAX(0, gameManager.levelTotalScore);
 }
 
 - (void)update:(ccTime)dt
@@ -306,6 +353,7 @@
         {
             gameOver = true;
             [gameManager setHasLevelWin:YES];
+            [self calcScore];
             [self scheduleOnce:@selector(displayGameOverLayer) delay:1.5];
         }
         else if (gameManager.numOfTotalCells == 0 && gameManager.numOfSavedCells < gameManager.numOfNeededCells)
@@ -350,6 +398,10 @@
     // Отображаем главную ячейку под пальцем игрока и она начинает притягивать
     [parentCell changeBodyPosition:locationWorld];
     [parentCell changeState:kStateTraveling];
+    
+    // Увеличиваем счетчик нажатий на экран
+    [GameManager sharedGameManager].levelTappedNum++;
+    
     return TRUE;
 }
 

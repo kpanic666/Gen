@@ -44,7 +44,12 @@ static GameManager* _sharedGameManager = nil;
 @synthesize lastLevel;
 @synthesize numOfSavedCells = _numOfSavedCells;
 @synthesize numOfTotalCells = _numOfTotalCells;
+@synthesize numOfMaxCells = _numOfMaxCells;
 @synthesize numOfNeededCells = _numOfNeededCells;
+@synthesize levelTotalScore = _levelTotalScore;
+@synthesize levelElapsedTime = _levelElapsedTime;
+@synthesize levelStarsNum = _levelStarsNum;
+@synthesize levelTappedNum = _levelTappedNum;
 
 + (GameManager*)sharedGameManager {
     @synchronized([GameManager class])
@@ -98,6 +103,7 @@ static GameManager* _sharedGameManager = nil;
             [soundEngine stopBackgroundMusic];
         }
         [soundEngine preloadBackgroundMusic:trackFileName];
+        [soundEngine setBackgroundMusicVolume:0.5];
         [soundEngine playBackgroundMusic:trackFileName loop:YES];
     }
 }
@@ -140,21 +146,6 @@ static GameManager* _sharedGameManager = nil;
             break;
         case kLevelSelectScene:
             result = @"kLevelSelectScene";
-            break;
-        case kGameLevel4:
-            result = @"kGameLevel4";
-            break;
-        case kGameLevel5:
-            result = @"kGameLevel5";
-            break;
-        case kGameLevel6:
-            result = @"kGameLevel6";
-            break;
-        case kGameLevel8:
-            result = @"kGameLevel8";
-            break;
-        case kGameLevel13:
-            result = @"kGameLevel13";
             break;
         default:
 //            [NSException raise:NSGenericException format:@"Unexpected SceneType"];
@@ -319,7 +310,6 @@ static GameManager* _sharedGameManager = nil;
         soundEngine = nil;
         managerSoundState = kAudioManagerUninitialized;
         currentScene = kNoSceneUninitialized;
-        hasLevelWin = NO;
     }
     return self;
 }
@@ -333,6 +323,15 @@ static GameManager* _sharedGameManager = nil;
 }
 
 - (void)runSceneWithID:(SceneTypes)sceneID {
+    // reset all stats and score variable for new level
+    [self setHasLevelWin:NO];
+    [self setNumOfSavedCells:-1];
+    [self setNumOfTotalCells:0];
+    [self setLevelElapsedTime:0];
+    [self setLevelTotalScore:0];
+    [self setLevelStarsNum:0];
+    [self setLevelTappedNum:0];
+    
     SceneTypes oldScene = currentScene;
     currentScene = sceneID;
     lastLevel = curLevel;
@@ -357,82 +356,102 @@ static GameManager* _sharedGameManager = nil;
             
         case kGameLevel1:
             _numOfNeededCells = kScene1Needed;
+            _numOfMaxCells = kScene1Total;
             sceneToRun = [Scene1 node];
             break;
         case kGameLevel2:
             _numOfNeededCells = kScene2Needed;
+            _numOfMaxCells = kScene2Total;
             sceneToRun = [Scene2 node];
             break;
         case kGameLevel3:
             _numOfNeededCells = kScene3Needed;
+            _numOfMaxCells = kScene3Total;
             sceneToRun = [Scene3 node];
             break;
         case kGameLevel4:
             _numOfNeededCells = kScene4Needed;
+            _numOfMaxCells = kScene4Total;
             sceneToRun = [Scene4 node];
             break;
         case kGameLevel5:
             _numOfNeededCells = kScene5Needed;
+            _numOfMaxCells = kScene5Total;
             sceneToRun = [Scene5 node];
             break;
         case kGameLevel6:
             _numOfNeededCells = kScene6Needed;
+            _numOfMaxCells = kScene6Total;
             sceneToRun = [Scene6 node];
             break;
         case kGameLevel7:
             _numOfNeededCells = kScene7Needed;
+            _numOfMaxCells = kScene7Total;
             sceneToRun = [Scene7 node];
             break;
         case kGameLevel8:
             _numOfNeededCells = kScene8Needed;
+            _numOfMaxCells = kScene8Total;
             sceneToRun = [Scene8 node];
             break;
         case kGameLevel9:
             _numOfNeededCells = kScene9Needed;
+            _numOfMaxCells = kScene9Total;
             sceneToRun = [Scene9 node];
             break;
         case kGameLevel10:
             _numOfNeededCells = kScene10Needed;
+            _numOfMaxCells = kScene10Total;
             sceneToRun = [Scene10 node];
             break;    
         case kGameLevel11:
             _numOfNeededCells = kScene11Needed;
+            _numOfMaxCells = kScene11Total;
             sceneToRun = [Scene11 node];
             break;
         case kGameLevel12:
             _numOfNeededCells = kScene12Needed;
+            _numOfMaxCells = kScene12Total;
             sceneToRun = [Scene12 node];
             break;
         case kGameLevel13:
             _numOfNeededCells = kScene13Needed;
+            _numOfMaxCells = kScene13Total;
             sceneToRun = [Scene13 node];
             break;
         case kGameLevel14:
             _numOfNeededCells = kScene14Needed;
+            _numOfMaxCells = kScene14Total;
             sceneToRun = [Scene14 node];
             break;
         case kGameLevel15:
             _numOfNeededCells = kScene15Needed;
+            _numOfMaxCells = kScene15Total;
             sceneToRun = [Scene15 node];
             break;
         case kGameLevel16:
             _numOfNeededCells = kScene16Needed;
+            _numOfMaxCells = kScene16Total;
             sceneToRun = [Scene16 node];
             break;
         case kGameLevel17:
             _numOfNeededCells = kScene17Needed;
+            _numOfMaxCells = kScene17Total;
             sceneToRun = [Scene17 node];
             break;
         case kGameLevel18:
             _numOfNeededCells = kScene18Needed;
+            _numOfMaxCells = kScene18Total;
             sceneToRun = [Scene18 node];
             break;
         case kGameLevel19:
             _numOfNeededCells = kScene19Needed;
+            _numOfMaxCells = kScene19Total;
             sceneToRun = [Scene19 node];
             break;
         case kGameLevel20:
             _numOfNeededCells = kScene20Needed;
+            _numOfMaxCells = kScene20Total;
             sceneToRun = [Scene20 node];
             break;
             
@@ -447,8 +466,7 @@ static GameManager* _sharedGameManager = nil;
         return;
     }
     
-    // Load Audio for new scene based on sceneID
-    [self performSelectorInBackground:@selector(loadAudioForSceneWithID:) withObject:[NSNumber numberWithInt:currentScene]];
+    [self performSelectorInBackground:@selector(unloadAudioForSceneWithID:) withObject:[NSNumber numberWithInt:oldScene]];  
     
     // Menu Scenes have a value of < 100
 //    if (sceneID < 100) {
@@ -480,7 +498,8 @@ static GameManager* _sharedGameManager = nil;
         [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:0.1f scene:sceneToRun]];
     }
     
-    [self performSelectorInBackground:@selector(unloadAudioForSceneWithID:) withObject:[NSNumber numberWithInt:oldScene]];
+    // Load Audio for new scene based on sceneID
+    [self performSelectorInBackground:@selector(loadAudioForSceneWithID:) withObject:[NSNumber numberWithInt:currentScene]];
 }
 
 - (void)openSiteWithLinkType:(LinkTypes)linkTypeToOpen {

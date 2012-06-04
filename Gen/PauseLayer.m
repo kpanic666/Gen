@@ -39,6 +39,8 @@
         pauseBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"genbyatlas.pvr.ccz"];
         [background addChild:pauseBatchNode];
         
+        PLAYSOUNDEFFECT(@"PAUSEMENU_OPENING");
+        
         // Move background undercover to it's work position
         [background runAction:[CCMoveTo actionWithDuration:0.2 position:ccp(screenSize.width, screenSize.height)]];
         
@@ -50,16 +52,19 @@
 
 - (void)levelSelectPressed
 {
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
     [[GameManager sharedGameManager] runSceneWithID:kLevelSelectScene];
 }
 
 - (void)resetPressed
 {
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
     [[GameManager sharedGameManager] reloadCurrentScene];
 }
 
 - (void)nextPressed
 {
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
     [[GameManager sharedGameManager] runNextScene];
 }
 
@@ -73,6 +78,7 @@
     for (CCNode *tempNode in [bn children]) {
         [tempNode resumeSchedulerAndActions];
     }
+    PLAYSOUNDEFFECT(@"PAUSEMENU_CLOSING");
     CCMoveTo *moveAction = [CCMoveTo actionWithDuration:0.2 position:ccp(screenSize.width + background.contentSize.width, screenSize.height)];
     CCCallFunc *callAction = [CCCallFunc actionWithTarget:self selector:@selector(removeFromParentAndCleanup:)];
     [background runAction:[CCSequence actions:moveAction, callAction, nil]];
@@ -80,6 +86,7 @@
 
 - (void)musicTogglePressed
 {
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
 	if ([[GameManager sharedGameManager] isMusicON]) {
 		CCLOG(@"OptionsLayer-> Turning Game Music OFF");
 		[[GameManager sharedGameManager] setMusicState:NO];
@@ -91,6 +98,7 @@
 
 - (void)SFXTogglePressed
 {
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
     CCLOG(@"OptionsMenu->SFX Button Pressed!");
 	if ([[GameManager sharedGameManager] isSoundEffectsON]) {
 		CCLOG(@"OptionsLayer-> Turning Sound Effects OFF");
@@ -140,10 +148,6 @@
     
     // Hide and scale down sprites for Options Menu
     float padding = 0.8;
-//    [musicToggle setScale:padding];
-//    [sfxToggle setScale:padding];
-//    [musicToggle setTag:kMusicToggleTag];
-//    [sfxToggle setTag:kSfxToggleTag];
     
     // Positioning sprites
     padding = [resumeSprite contentSize].width*0.5 * 0.2; // отступ от края экрана c учетом спец эффекта меню
@@ -177,16 +181,6 @@
     if ([[GameManager sharedGameManager] isSoundEffectsON] == NO) {
         [sfxToggle setSelectedIndex:1]; // SFX are OFF
     }
-    
-    // Animating open menu
-//    CCShow *showAction = [CCShow action];
-//    CCDelayTime *delay1Action = [CCDelayTime actionWithDuration:0.1];
-//    CCDelayTime *delay2Action = [CCDelayTime actionWithDuration:0.2];
-//    CCDelayTime *delay3Action = [CCDelayTime actionWithDuration:0.3];
-//    [panelSprite runAction:[CCScaleTo actionWithDuration:0.2 scaleX:1 scaleY:5]];
-//    [sfxToggle runAction:[CCSequence actions:hideAction, delay1Action ,showAction, nil]];
-//    [musicToggle runAction:[CCSequence actions:hideAction, delay2Action, showAction, nil]];
-//    [infoSprite runAction:[CCSequence actions:hideAction, delay3Action, showAction, nil]];  
 }
 
 @end

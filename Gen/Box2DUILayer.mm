@@ -23,13 +23,19 @@
 
 - (void)pausePressed
 {
+    // Проверяем не создан ли уже слой с паузой
+    if ([self.parent getChildByTag:kPauseLayer]) {
+        return;
+    }
+    // Затеняем фон
     ccColor4B c = ccc4(0, 0, 0, 100); // Black transparent background
     PauseLayer *pauseLayer = [[[PauseLayer alloc] initWithColor:c] autorelease];
     [self.parent addChild:pauseLayer z:10 tag:kPauseLayer];
+    
+    // Ставим на паузу всех детей основного batchnode. так просто поставить слой на паузу не достаточно
     CCLayer *gl = (CCLayer*) [self.parent getChildByTag:kBox2DLayer];
     CCSpriteBatchNode *bn = (CCSpriteBatchNode*)[gl getChildByTag:kMainSpriteBatchNode];
     [gl pauseSchedulerAndActions];
-    // Ставим на паузу всех детей основного batchnode. так просто поставить слой на паузу не достаточно
     for (CCNode *tempNode in [bn children]) {
         [tempNode pauseSchedulerAndActions];
     }

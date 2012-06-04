@@ -37,32 +37,36 @@
 
 - (void)playPressed
 {
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
     [[GameManager sharedGameManager] runSceneWithID:kLevelSelectScene];
 }
 
 - (void)optionsPressed
 {
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
     [self displayOptionsMenuButtons];
 }
 
 - (void)leaderboardPressed
 {
-    
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
 }
 
 - (void)achievementPressed
 {
-    
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
 }
 
 - (void)showCredits
 {
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
     CCLOG(@"OptionsMenu->Info Button Pressed!");
 //	[[GameManager sharedGameManager] runSceneWithID:kCreditsScene];
 }
 
 - (void)musicTogglePressed
 {
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
 	if ([[GameManager sharedGameManager] isMusicON]) {
 		CCLOG(@"OptionsLayer-> Turning Game Music OFF");
 		[[GameManager sharedGameManager] setMusicState:NO];
@@ -74,6 +78,7 @@
 
 - (void)SFXTogglePressed
 {
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
     CCLOG(@"OptionsMenu->SFX Button Pressed!");
 	if ([[GameManager sharedGameManager] isSoundEffectsON]) {
 		CCLOG(@"OptionsLayer-> Turning Sound Effects OFF");
@@ -255,12 +260,14 @@
         [logo setPosition:ccp(screenSize.width*0.5, screenSize.height*0.85)];
         [self addChild:logo];
         
-        // Cells for Beautify
+        // Liquid Effect for layer
+        CCLiquid *liquidEffect = [CCLiquid actionWithWaves:10 amplitude:15 grid:ccg(16, 16) duration:10];
+        [background runAction:[CCRepeatForever actionWithAction:liquidEffect]];
         
         // Display Main Menu Buttons
         [self displayMainMenuButtons];
         
-//        [[GameManager sharedGameManager] playBackgroundTrack:BACKGROUND_TRACK_1];
+//        [[GameManager sharedGameManager] playB ackgroundTrack:BACKGROUND_TRACK_1];
     }
     return self;
 }

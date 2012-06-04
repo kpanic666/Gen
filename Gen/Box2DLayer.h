@@ -37,6 +37,7 @@
     ParentCell *parentCell;
     ExitCell *exitCell;
     bool gameOver;
+    CCParticleSystemQuad *psPlankton;
 }
 
 - (id)initWithBox2DUILayer:(Box2DUILayer*)box2DUILayer;

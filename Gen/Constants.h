@@ -19,6 +19,13 @@
 #define kMaxBubbleMoveDuration 15
 #define kMinBubbleMoveDuration 5
 #define kMaxNumOfBubbleOnScene 4
+// Score multiplicators
+#define kLevelMaxTime 30
+#define kRemainingTimeMulti 50
+#define kExtraCellsMulti 200
+#define kGoalCellsMulti 100
+#define kStarAchievedMulti 1000
+#define kTapMulti -50
 
 // Всего ячеек на уровне
 typedef enum {

@@ -33,6 +33,8 @@
 
 - (void)playScene:(id)itemPassedIn
 {
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
+    
     if ([itemPassedIn tag] == 1) {
         [[GameManager sharedGameManager] runSceneWithID:kGameLevel1];
     } else if ([itemPassedIn tag] == 2) {
@@ -80,6 +82,7 @@
 
 - (void)backButtonPressed
 {
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
     [[GameManager sharedGameManager] runSceneWithID:kMainMenuScene];
 }
 
