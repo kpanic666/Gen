@@ -144,6 +144,11 @@
     [self resetBubbleWithNode:bubbleSprite];
 }
 
+- (void)displayLevelName
+{
+    [uiLayer displayText:[GameManager sharedGameManager].levelName];
+}
+
 - (id)init
 {
     if ((self = [super init])) {
@@ -188,6 +193,9 @@
         psPlankton = [CCParticleSystemQuad particleWithFile:@"ps_plankton.plist"];
         [self addChild:psPlankton z:-1];
 //        psPlankton.position = ccp(screenSize.width * 0.5, screenSize.height);
+        
+        // Display level name with delay
+        [self scheduleOnce:@selector(displayLevelName) delay:0.5];
     }
     return self;
 }

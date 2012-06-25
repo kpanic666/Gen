@@ -11,6 +11,7 @@
 @interface ParentCell : Box2DSprite
 {
     NSMutableArray *disJointsToDestroy;
+    float radius;
 }
 
 - (void)changeBodyPosition:(b2Vec2)position;

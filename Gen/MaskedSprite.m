@@ -10,21 +10,53 @@
 
 @implementation MaskedSprite
 
-- (CCTexture2D*)genTextureWithSize:(CGSize)textureSize {
-    
-    CCRenderTexture *rt = [CCRenderTexture renderTextureWithWidth:textureSize.width height:textureSize.height pixelFormat:kCCTexture2DPixelFormat_RGB5A1];
-    
-    // 2: Call CCRenderTexture:begin
-    [rt begin];
-    
-    // 3:
+-(id) initWithTexture:(CCTexture2D *)texture rect:(CGRect)rect maskTexture:(CCTexture2D*)maskTexture
+{    
+    if ((self = [super initWithTexture:texture rect:rect]))
+    {
+        _maskTexture = maskTexture;
+        
+        CCFileUtils *fileUtils = [CCFileUtils sharedFileUtils];
+        const GLchar *fragmentSource = (GLchar*) [[NSString stringWithContentsOfFile:
+                                                   [fileUtils fullPathFromRelativePath:@"Mask.fsh"] 
+                                                    encoding:NSUTF8StringEncoding 
+                                                    error:nil] 
+                                                  UTF8String];
+        
+        self.shaderProgram = [[[CCGLProgram alloc] initWithVertexShaderByteArray:ccPositionTextureColor_vert fragmentShaderByteArray:fragmentSource] autorelease];
+        
+        CHECK_GL_ERROR_DEBUG();
+        
+        [shaderProgram_ addAttribute:kCCAttributeNamePosition index:kCCVertexAttrib_Position];
+        [shaderProgram_ addAttribute:kCCAttributeNameColor index:kCCVertexAttrib_Color];
+        [shaderProgram_ addAttribute:kCCAttributeNameTexCoord index:kCCVertexAttrib_TexCoords];
+        
+        CHECK_GL_ERROR_DEBUG();
+        
+        [shaderProgram_ link];
+        
+        CHECK_GL_ERROR_DEBUG();
+        
+        [shaderProgram_ updateUniforms];
+        
+        CHECK_GL_ERROR_DEBUG();
+
+        _textureLocation = glGetUniformLocation(shaderProgram_->program_, "u_texture");
+        _maskLocation = glGetUniformLocation(shaderProgram_->program_, "u_mask");
+        
+        CHECK_GL_ERROR_DEBUG();
+    }
+    return self;
+}
+
+-(void) draw
+{
     ccGLEnableVertexAttribs(kCCVertexAttribFlag_PosColorTex);
-    // 1
     ccGLBlendFunc(blendFunc_.src, blendFunc_.dst);
+
     ccGLUseProgram(shaderProgram_->program_);
     [shaderProgram_ setUniformForModelViewProjectionMatrix];
     
-    // 2
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, [texture_ name]);
     glUniform1i(_textureLocation, 0);
@@ -33,7 +65,6 @@
     glBindTexture(GL_TEXTURE_2D, [_maskTexture name]);
     glUniform1i(_maskLocation, 1);
     
-    // 3
 #define kQuadSize sizeof(quad_.bl)
     long offset = (long)&quad_;
     
@@ -53,59 +84,7 @@
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);    
     glActiveTexture(GL_TEXTURE0);
     
-    // 4
-    [rt end];
-    
-    return rt.sprite.texture;
-}
-
-- (id)initWithTexture:(CCTexture2D *)texture rect:(CGRect)rect maskTexture:(CCTexture2D*)maskTexture {
-    
-    self = [super initWithTexture:texture rect:rect];
-    if (self) {
-        
-        // 1
-        _maskTexture = maskTexture;
-        
-        // 2
-        CCFileUtils *fileUtils = [CCFileUtils sharedFileUtils];
-        const GLchar *fragmentSource = (GLchar*) [[NSString stringWithContentsOfFile:
-                                                   [fileUtils fullPathFromRelativePath:@"Mask.fsh"] 
-                                                    encoding:NSUTF8StringEncoding 
-                                                    error:nil] 
-                                                  UTF8String];
-        
-        self.shaderProgram = [[[CCGLProgram alloc] initWithVertexShaderByteArray:ccPositionTextureColor_vert fragmentShaderByteArray:fragmentSource] autorelease];
-        
-        CHECK_GL_ERROR_DEBUG();
-        
-        // 3
-        [shaderProgram_ addAttribute:kCCAttributeNamePosition index:kCCVertexAttrib_Position];
-        [shaderProgram_ addAttribute:kCCAttributeNameColor index:kCCVertexAttrib_Color];
-        [shaderProgram_ addAttribute:kCCAttributeNameTexCoord index:kCCVertexAttrib_TexCoords];
-        
-        CHECK_GL_ERROR_DEBUG();
-        
-        // 4
-        [shaderProgram_ link];
-        
-        CHECK_GL_ERROR_DEBUG();
-        
-        // 5
-        [shaderProgram_ updateUniforms];
-        
-        CHECK_GL_ERROR_DEBUG();
-        
-        // 6
-        _textureLocation = glGetUniformLocation(shaderProgram_->program_, "u_texture");
-        _maskLocation = glGetUniformLocation(shaderProgram_->program_, "u_mask");
-        
-        CHECK_GL_ERROR_DEBUG();
-        
-        [self setTexture:[self genTextureWithSize:rect.size]];
-        [self setTextureRect:rect rotated:NO untrimmedSize:rect.size];
-    }
-    return self;
+    CC_INCREMENT_GL_DRAWS(1);
 }
 
 @end

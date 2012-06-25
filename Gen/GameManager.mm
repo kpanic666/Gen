@@ -50,6 +50,7 @@ static GameManager* _sharedGameManager = nil;
 @synthesize levelElapsedTime = _levelElapsedTime;
 @synthesize levelStarsNum = _levelStarsNum;
 @synthesize levelTappedNum = _levelTappedNum;
+@synthesize levelName = _levelName;
 
 + (GameManager*)sharedGameManager {
     @synchronized([GameManager class])
@@ -331,6 +332,10 @@ static GameManager* _sharedGameManager = nil;
     [self setLevelTotalScore:0];
     [self setLevelStarsNum:0];
     [self setLevelTappedNum:0];
+    
+    if (sceneID > 100) {
+        [self setLevelName:[NSString stringWithFormat:@"Level 1-%i", (int)sceneID-100]];
+    }
     
     SceneTypes oldScene = currentScene;
     currentScene = sceneID;

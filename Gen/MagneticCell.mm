@@ -8,6 +8,7 @@
 
 #import "MagneticCell.h"
 #import "Helper.h"
+#import "DrawingSmoothPrimitives.h"
 
 @interface MagneticCell ()
 {
@@ -82,15 +83,17 @@
 
 - (void)drawMagnetForces
 {
+    float lineWidth = 1;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        lineWidth *= 2;
+    }
     // Рисуем линий намагничивания от ChildCell к центру магнита
     for (NSString *posValue in cellsPosToDraw) 
     {
         CGPoint cellPos = CGPointFromString(posValue);
-        
         CHECK_GL_ERROR_DEBUG();
-        ccDrawColor4B(217, 166, 241, 255);
-        glLineWidth(1.0f);
-        ccDrawLine(self.position, cellPos);
+        drawColor4B(ccc4(217, 166, 241, 255));
+        drawSmoothLine(self.position, cellPos, lineWidth);
     }
     [cellsPosToDraw removeAllObjects];
 }

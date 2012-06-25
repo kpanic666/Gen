@@ -9,5 +9,10 @@
 #import "Box2DSprite.h"
 
 @interface ExitCell : Box2DSprite
+{
+    CCSprite *glowUndercover;
+}
+
+@property (nonatomic, readwrite, retain) CCSprite *glowUndercover;
 
 @end

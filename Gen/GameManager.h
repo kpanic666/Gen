@@ -27,6 +27,7 @@
     double _levelElapsedTime;
     Byte _levelStarsNum;
     uint _levelTappedNum;
+    NSString *_levelName;
     
     // Added for audio
     BOOL hasAudioBeenInitialized;
@@ -53,6 +54,7 @@
 @property (readwrite) double levelElapsedTime; // Время затраченное на уровень
 @property (readwrite) Byte levelStarsNum; // Колво полученных звезда за уровень
 @property (readwrite) uint levelTappedNum; // Колво раз, которое игрок нажал на игровое поле
+@property (nonatomic, retain) NSString *levelName;
 
 + (GameManager*)sharedGameManager;
 - (void)runSceneWithID:(SceneTypes)sceneID;

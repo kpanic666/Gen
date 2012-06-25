@@ -14,8 +14,10 @@
 
 @interface Box2DUILayer()
 {
-    CCLabelTTF *scoreLabel;
-    CCLabelTTF *centerLabel;
+    CCLabelBMFont *scoreLabel;
+    CCLabelBMFont *centerLabel;
+    CCSprite *centerLabelSFX;
+    float originalScale; 
 }
 @end
 
@@ -46,20 +48,6 @@
     if ((self = [super init])) {
         CGSize screenSize = [CCDirector sharedDirector].winSize;
         
-        // Init Needed Count Label
-        scoreLabel = [CCLabelTTF labelWithString:@"" fontName:@"Zapfino" fontSize:[Helper convertFontSize:14]];
-        scoreLabel.color = ccc3(0, 0, 0);
-        scoreLabel.anchorPoint = ccp(0, 1);
-        scoreLabel.position = ccp(0, screenSize.height);
-        [self addChild:scoreLabel];
-        
-        // Init Center information label for name of level and other info
-        centerLabel = [CCLabelTTF labelWithString:@"" fontName:@"Helvetica" fontSize:[Helper convertFontSize:30]];
-        centerLabel.position = ccp(screenSize.width*0.5, screenSize.height*0.5);
-        centerLabel.color = ccc3(255, 255, 0);
-        centerLabel.visible = NO;
-        [self addChild:centerLabel];
-        
         // Place pause menu button
         CCSprite *pauseGameSprite = [CCSprite spriteWithSpriteFrameName:@"button_pause.png"];
         float padding = [pauseGameSprite contentSize].width*0.5 * 0.2; // отступ от края экрана c учетом спец эффекта меню
@@ -71,6 +59,26 @@
         CCMenuItemSpriteIndependent *pauseGameButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:pauseGameSprite selectedSprite:nil target:self selector:@selector(pausePressed)];
         CCMenu *pauseMenu = [CCMenu menuWithItems:pauseGameButton, nil];
         [self addChild:pauseMenu z:5];
+        
+        // Init Score Label
+        scoreLabel = [CCLabelBMFont labelWithString:@"                  " fntFile:@"levelNameText.fnt"];
+        scoreLabel.anchorPoint = ccp(0, 1);
+        scoreLabel.position = ccp(padding, screenSize.height - padding);
+        originalScale = 0.7;
+        scoreLabel.scale = originalScale;
+        [self addChild:scoreLabel];
+        
+        // Init Center information label for name of level and other info
+        centerLabel = [CCLabelBMFont labelWithString:@"          " fntFile:@"levelNameText.fnt"];
+        centerLabel.position = ccp(screenSize.width*0.5, screenSize.height*0.5);
+        centerLabel.visible = NO;
+        [self addChild:centerLabel z:2];
+        
+        // Add Cover for center text, which would be sfx when text appear 
+        centerLabelSFX = [CCSprite spriteWithSpriteFrameName:@"level_name_sfx.png"];
+        centerLabelSFX.position = ccp(centerLabel.position.x - centerLabel.contentSize.width/2, centerLabel.position.y);
+        centerLabelSFX.visible = NO;
+        [self addChild:centerLabelSFX z:1];
     }
     return self;
 }
@@ -81,8 +89,8 @@
     [scoreLabel setString:[NSString stringWithFormat:@"%i of %i collected", collected, need]];
     
     // Pop up the score
-    CCScaleTo *scaleUp = [CCScaleTo actionWithDuration:0.1 scale:1.1];
-    CCScaleTo *scaleBack = [CCScaleTo actionWithDuration:0.1 scale:1.0];
+    CCScaleTo *scaleUp = [CCScaleTo actionWithDuration:0.1 scale:originalScale * 1.1];
+    CCScaleTo *scaleBack = [CCScaleTo actionWithDuration:0.1 scale:originalScale];
     CCSequence *sequence = [CCSequence actions:scaleUp, scaleBack, nil];
     [scoreLabel runAction:sequence];
 }
@@ -91,16 +99,29 @@
 {
     [centerLabel stopAllActions];
     [centerLabel setString:text];
+    centerLabel.opacity = 0;
     centerLabel.visible = YES;
-    centerLabel.opacity = 255;
     
-    CCScaleTo *scaleUp = [CCScaleTo actionWithDuration:0.5 scale:1.2];
-    CCScaleTo *scaleBack = [CCScaleTo actionWithDuration:0.1 scale:1.0];
-    CCDelayTime *delay = [CCDelayTime actionWithDuration:2.0];
-    CCFadeOut *fade = [CCFadeOut actionWithDuration:0.5];
-    CCHide *hide = [CCHide action];
-    CCSequence *sequence = [CCSequence actions:scaleUp, scaleBack, delay, fade, hide, nil];
-    [centerLabel runAction:sequence];
+    [centerLabelSFX stopAllActions];
+    centerLabelSFX.position = ccp(centerLabel.position.x - centerLabel.contentSize.width/2, centerLabel.position.y);
+    centerLabelSFX.opacity = 0;
+    centerLabelSFX.visible = YES;
+    
+    id move = [CCMoveTo actionWithDuration:1.5 position:ccp(centerLabel.position.x + centerLabel.contentSize.width, centerLabel.position.y)];
+    id fadeIn = [CCFadeIn actionWithDuration:0.4];
+    id fadeInText = [CCFadeIn actionWithDuration:0.7];
+    id fadeBackText = [fadeInText reverse];
+    id pauseBetweenFading = [CCDelayTime actionWithDuration:0.4];
+    id fadeBack = [fadeIn reverse];
+    id hide = [CCHide action];
+    id delayBefore = [CCDelayTime actionWithDuration:0.5];
+    id delay = [CCDelayTime actionWithDuration:1.0];
+    id sfxLabelFadingSeq = [CCSequence actions:fadeIn, pauseBetweenFading, fadeBack, hide, nil];
+    id sfxLabelAction = [CCSpawn actions:sfxLabelFadingSeq, move, nil];
+    id textAction = [CCSequence actions:delayBefore, fadeInText, delay, fadeBackText, hide, nil];
+    
+    [centerLabelSFX runAction:sfxLabelAction];
+    [centerLabel runAction:textAction];
     return TRUE;
 }
 

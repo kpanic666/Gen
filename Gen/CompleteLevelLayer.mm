@@ -232,7 +232,7 @@
         scoreValue.position = ccp(xButtonPos, yButtonPos);
         // Goal
         xButtonPos = undercoverSize.width * 0.35;
-        yButtonPos = scoreValue.position.y - scoreValue.contentSize.height*1.3;
+        yButtonPos = scoreValue.position.y - scoreValue.contentSize.height*1.2;
         goalLabel.position = ccp(xButtonPos, yButtonPos);
         goalValue.position = ccp(xButtonPos, yButtonPos);
         // Collected
@@ -241,7 +241,7 @@
         collectedValue.position = ccp(xButtonPos, yButtonPos);
         // Touches
         xButtonPos = undercoverSize.width * 0.75;
-        yButtonPos = scoreValue.position.y - scoreValue.contentSize.height*1.3;
+        yButtonPos = scoreValue.position.y - scoreValue.contentSize.height*1.2;
         touchesLabel.position = ccp(xButtonPos, yButtonPos);
         touchesValue.position = ccp(xButtonPos, yButtonPos);
         // Time

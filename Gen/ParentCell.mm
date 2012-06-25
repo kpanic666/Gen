@@ -8,6 +8,7 @@
 
 #import "ParentCell.h"
 #import "Helper.h"
+#import "DrawingSmoothPrimitives.h"
 
 @implementation ParentCell
 
@@ -45,7 +46,8 @@
     
     // Создаем сенсор, который будет определять радиус, в котором будут притягиваться клетки
     fixtureDef.isSensor = TRUE;
-    shape.m_radius = self.contentSize.width * 1.7 / PTM_RATIO;
+    radius = self.contentSize.width * 1.7;
+    shape.m_radius =  radius / PTM_RATIO;
     // Активируем коллизии для сенсора
     fixtureDef.filter.categoryBits = kParentCellFilterCategory;
     fixtureDef.filter.maskBits = kChildCellFilterCategory;
@@ -182,23 +184,44 @@
         if (jointList->GetType() == e_distanceJoint)
         {
             CHECK_GL_ERROR_DEBUG();
-            
-            // Вычисляем расстояние между клетками и центром притяжение. Чем больше расстояние тем прозрачней линия
             CGPoint anchorA = [Helper toPoints:jointList->GetAnchorA()];
             CGPoint anchorB = [Helper toPoints:jointList->GetAnchorB()];
-//            int16 jointLenght = ccpDistance(anchorA, anchorB);
-//            
-//            // Прозрачность линии
-//            GLubyte lineAlpha = 150;
-//            if (lineAlpha < 1) {
-//                lineAlpha = 1; 
-//            } else if (lineAlpha > 255) {
-//                lineAlpha = 255;
-//            }
+            ccColor4B lineColor;
+            float lineWidth = 0;
             
-            ccDrawColor4B(172, 255, 255, 230);
-            glLineWidth(1.0f);
-            ccDrawLine(anchorA, anchorB);
+            if (jointList->GetUserData() == self)
+            {
+                // Настройки линий для Связей между дочерними клетками и parent
+                // Вычисляем расстояние между клетками и центром притяжение. Чем больше расстояние тем прозрачней линия
+                float lenght = ccpDistance(anchorA, anchorB);
+                // Длина не должна быть больше радиуса сенсора родительской клетки. Если больш, то приравниваем к радиусу
+                lenght = MIN(lenght, radius);
+                GLuint lineAlpha = (radius - lenght) / radius * 255 * 2;
+                // Проверяем прозрачность линии на допустимые пределы
+                if (lineAlpha > 255) {
+                    lineAlpha = 255;
+                }
+                else if (lineAlpha < 40) {
+                    lineAlpha = 40;
+                }
+                lineColor = ccc4(110, 235, 52, lineAlpha); // light green
+                lineWidth = 1;
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                    lineWidth *= 2;
+                }
+            }
+            else
+            {
+                // Для всех остальных distance joints
+                lineColor = ccc4(172, 255, 255, 255); // white
+                lineWidth = 0.75;
+                if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                    lineWidth *= 2;
+                }
+            }
+            
+            drawColor4B(lineColor);
+            drawSmoothLine(anchorA, anchorB, lineWidth);
         }
     }
 }

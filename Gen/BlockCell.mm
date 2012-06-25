@@ -8,8 +8,11 @@
 
 #import "BlockCell.h"
 #import "MaskedSprite.h"
+#import "BluredSprite.h"
 #import "GB2ShapeCache.h"
 #import "Helper.h"
+
+#define kGlowOffset 10.0
 
 @implementation BlockCell
 
@@ -94,7 +97,8 @@
     CGPoint lowerBound = [Helper toPoints:minVertex];
     CGPoint upperBound = [Helper toPoints:maxVertex];
     CGPoint thirdBound = ccp(upperBound.x, lowerBound.y);
-    CGSize retValue = CGSizeMake(ccpDistance(lowerBound, thirdBound), ccpDistance(thirdBound, upperBound));
+    float addPixelsForGlow = kGlowOffset * 2;
+    CGSize retValue = CGSizeMake(ccpDistance(lowerBound, thirdBound) + addPixelsForGlow, ccpDistance(thirdBound, upperBound) + addPixelsForGlow);
     return retValue;
 }
 
@@ -146,7 +150,7 @@
     
     // Функция рисует точную копию физического тела на прозрачном листе. В месте где прозрачность останется - на результирующем спрайте будет прозрачно.
     // 1: Create new CCRenderTexture
-    CCRenderTexture *rt = [CCRenderTexture renderTextureWithWidth:textureSize.width height:textureSize.height pixelFormat:kCCTexture2DPixelFormat_RGB5A1];
+    CCRenderTexture *rt = [CCRenderTexture renderTextureWithWidth:textureSize.width height:textureSize.height pixelFormat:kCCTexture2DPixelFormat_RGBA4444];
     
     // 2: Call CCRenderTexture:begin
     [rt beginWithClear:1 g:1 b:1 a:0];
@@ -215,6 +219,28 @@
     return rt.sprite.texture;
 }
 
+-(CCTexture2D*) addGlowToSprite:(MaskedSprite*)targetSprite with:(CCTexture2D*)texForGlow
+{
+    CGSize texSize = targetSprite.textureRect.size;
+    
+    BluredSprite *blurSprite = [BluredSprite spriteWithTexture:texForGlow];
+    [blurSprite setBlurSize:2];
+    [blurSprite setOpacity:150];
+    [blurSprite setPosition:ccp(texSize.width/2 + kGlowOffset, texSize.height/2 + kGlowOffset)];
+    [targetSprite setPosition:ccp(texSize.width/2, texSize.height/2)];
+    
+    // 1: Create new CCRenderTexture
+    CCRenderTexture *rt = [CCRenderTexture renderTextureWithWidth:texSize.width height:texSize.height pixelFormat:kCCTexture2DPixelFormat_RGBA4444];
+    
+    // 2: Call CCRenderTexture:begin
+    [rt begin];
+    [blurSprite visit];
+    [targetSprite visit];
+    [rt end];
+    
+    return rt.sprite.texture;
+}
+
 - (id) initWithType:(GameObjectType)objectType withWorld:(b2World*)theWorld position:(CGPoint)pos name:(NSString*)name
 {
     if ((self = [super init])) {
@@ -227,20 +253,37 @@
         // set the body position
         body->SetTransform([Helper toMeters:pos], 0.0f);
         
-        // Make mainTexture for body before transparent mask (еще не прозрачна)
+        // Вычисляем размер будущей текстуры по размеру тела
         CGSize texSize = [self getBodySize];
         CGRect texRect = CGRectZero;
         texRect.size = texSize;
-        [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCTexture2D *mainTexture = [self genTextureWithSize:texSize];
-        [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB5A1];
-        CCTexture2D *maskTexture = [self genMaskTextureWithSize:texSize];
         
-        [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB5A1];
+        // Создаем основную (заливочную текстуру)
+        CCTexture2D *mainTexture = [self genTextureWithSize:texSize];
+        // Создаем непрозрачную маску, повторяющую в точности контур тела
+        CCTexture2D *maskTexture = [self genMaskTextureWithSize:texSize];
+        // Создаем спрайт из основной текстуры и маски. Получаем один спрайт с прозрачностью в нужном месте.
         MaskedSprite *resultSprite = [[[MaskedSprite alloc] initWithTexture:mainTexture rect:texRect maskTexture:maskTexture] autorelease];
-        [self setTexture:resultSprite.texture];
-        [self setTextureRect:texRect rotated:NO untrimmedSize:texSize];
-        [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
+        
+        // Добавляем к спрайту фигуры эффект тени (слева сверху источник света).
+        if (gameObjectType != kMetalType)
+        {
+            CCTexture2D *glowTexture = [self addGlowToSprite:resultSprite with:maskTexture];
+            [self setTexture:glowTexture];
+            [self setTextureRect:texRect rotated:NO untrimmedSize:texSize];
+        }
+        else
+        {
+            CCRenderTexture *rt = [CCRenderTexture renderTextureWithWidth:texSize.width height:texSize.height pixelFormat:kCCTexture2DPixelFormat_RGBA4444];
+            [rt begin];
+            [resultSprite setPosition:ccp(texSize.width/2, texSize.height/2)];
+            [resultSprite visit];
+            [rt end];
+            
+            [self setTexture:rt.sprite.texture];
+            [self setTextureRect:texRect rotated:NO untrimmedSize:texSize];
+        }
+        [[CCTextureCache sharedTextureCache] removeUnusedTextures];
     }
     return self;
 }

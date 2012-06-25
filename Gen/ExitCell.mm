@@ -10,6 +10,8 @@
 
 @implementation ExitCell
 
+@synthesize glowUndercover;
+
 - (void)createBodyAtLocation:(CGPoint)location
 {
     b2BodyDef bodyDef;
@@ -29,7 +31,9 @@
 
 - (void)updateStateWithDeltaTime:(ccTime)deltaTime andListOfGameObjects:(CCArray *)listOfGameObjects
 {
-    
+    if (!glowUndercover.parent) {
+        [self.parent addChild:glowUndercover z:-2];
+    }
 }
 
 - (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location
@@ -37,6 +41,12 @@
     if ((self = [super init])) {
         world = theWorld;
         [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"exitcell_idle.png"]];
+        // Add glowing undercover, that will scale up and down endless.
+        glowUndercover = [CCSprite spriteWithSpriteFrameName:@"exitcell_glow.png"];
+        [glowUndercover setPosition:location];
+        id scaleUp = [CCScaleBy actionWithDuration:1 scale:1.4f];
+        [glowUndercover runAction:[CCRepeatForever actionWithAction:
+                                   [CCSequence actions:scaleUp, [scaleUp reverse], nil]]];
         gameObjectType = kExitCellType;
         characterState = kStateIdle;
         [self createBodyAtLocation:location];
