@@ -20,6 +20,8 @@
 	<dict/>
 	<key>kGeneralSounds</key>
 	<dict>
+		<key>CHILDCELL_SOUL_1</key>
+		<string>22k_childcell_soulV1.caf</string>
 		<key>CHILDCELL_DYING_1</key>
 		<string>22k_childcell_dyingV1.caf</string>
 		<key>PAUSEMENU_OPENING</key>

@@ -83,7 +83,7 @@
         childCellsArray = nil;
         
         // add RedCells
-        cellPos = [Helper convertPosition:ccp(723, 523)];
+        cellPos = [Helper convertPosition:ccp(723, 550)];
         RedCell *redCell1 = [RedCell redCellInWorld:world position:cellPos name:@"redCell1"];
         [self addChild:redCell1 z:-1];
         cellPos = [Helper convertPosition:ccp(118, 550)];

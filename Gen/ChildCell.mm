@@ -101,11 +101,6 @@ GameCharacter *exitCellSprite;
     return self;
 }
 
-- (void) playHitEffect
-{
-    PLAYSOUNDEFFECT(@"CHILDCELL_DYING_1");
-}
-
 - (void) removeCellSprite {
     
     [self setIsActive:FALSE];
@@ -142,7 +137,7 @@ GameCharacter *exitCellSprite;
             self.markedForDestruction = YES;
             [GameManager sharedGameManager].numOfTotalCells--;
         
-            [self playHitEffect];
+            PLAYSOUNDEFFECT(@"CHILDCELL_DYING_1");
             break;
         }
             
@@ -181,6 +176,8 @@ GameCharacter *exitCellSprite;
         {
             // Клетка ударилась об выход и должна уничтожить физ тело и сменить спрайт и дрыгаться внутри выхода
             [self setCharacterHealth:0];
+            
+            PLAYSOUNDEFFECT(@"CHILDCELL_SOUL_1");
             
             // 1. Меняем цвет у умерших клеток
             self.color = ccc3(255, 0, 253);
