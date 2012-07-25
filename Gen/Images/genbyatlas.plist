@@ -4,6 +4,19 @@
     <dict>
         <key>frames</key>
         <dict>
+            <key>bombcell_activated.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{238,206},{15,15}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{15,15}}</string>
+                <key>sourceSize</key>
+                <string>{15,15}</string>
+            </dict>
             <key>bubble1.png</key>
             <dict>
                 <key>frame</key>
@@ -20,7 +33,7 @@
             <key>bubble2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{238,211},{13,10}}</string>
+                <string>{{137,92},{13,10}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -280,28 +293,28 @@
             <key>groundcell_particle1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{218,189},{20,15}}</string>
+                <string>{{238,189},{16,15}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{20,15}}</string>
+                <string>{{0,0},{16,15}}</string>
                 <key>sourceSize</key>
-                <string>{20,15}</string>
+                <string>{16,15}</string>
             </dict>
             <key>groundcell_particle2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{218,223},{17,17}}</string>
+                <string>{{137,77},{13,14}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{17,17}}</string>
+                <string>{{0,0},{13,14}}</string>
                 <key>sourceSize</key>
-                <string>{17,17}</string>
+                <string>{13,14}</string>
             </dict>
             <key>level_name_sfx.png</key>
             <dict>
@@ -384,15 +397,15 @@
             <key>redcell_particle2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{240,189},{20,14}}</string>
+                <string>{{218,189},{18,15}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{20,14}}</string>
+                <string>{{0,0},{18,15}}</string>
                 <key>sourceSize</key>
-                <string>{20,14}</string>
+                <string>{18,15}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -404,7 +417,7 @@
             <key>size</key>
             <string>{256,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:532cbc472639d3a163927a2d95a76347$</string>
+            <string>$TexturePacker:SmartUpdate:f798756cddcb610bac1592511d43fa64$</string>
             <key>textureFileName</key>
             <string>genbyatlas.pvr.ccz</string>
         </dict>

@@ -9,6 +9,8 @@
 #import "MainMenuLayer.h"
 #import "GameManager.h"
 #import "CCMenuItemSpriteIndependent.h"
+// Needed to obtain the Navigation Controller
+#import "AppDelegate.h"
 
 #define kInfoSpriteTag 9
 #define kPanelSpriteTag 10
@@ -50,11 +52,29 @@
 - (void)leaderboardPressed
 {
     PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
+    
+    GKLeaderboardViewController *leaderboardViewController = [[GKLeaderboardViewController alloc] init];
+    if (leaderboardViewController != NULL) {
+        leaderboardViewController.leaderboardDelegate = self;
+        AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
+        [[app navController] presentModalViewController:leaderboardViewController animated:YES];
+    }
+    
+    [leaderboardViewController release];
 }
 
 - (void)achievementPressed
 {
     PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
+    
+    GKAchievementViewController *achievementViewController = [[GKAchievementViewController alloc] init];
+    if (achievementViewController != NULL) {
+        achievementViewController.achievementDelegate = self;
+        AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
+        [[app navController] presentModalViewController:achievementViewController animated:YES];
+    }
+    
+    [achievementViewController release];
 }
 
 - (void)showCredits
@@ -97,6 +117,18 @@
     [panelSprite removeFromParentAndCleanup:YES];
     [optionsMenu removeFromParentAndCleanup:YES];
     optionsMenu = nil;
+}
+
+- (void)achievementViewControllerDidFinish:(GKAchievementViewController*)viewController
+{
+    AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
+	[[app navController] dismissModalViewControllerAnimated:YES];
+}
+
+- (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)viewController
+{
+    AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
+	[[app navController] dismissModalViewControllerAnimated:YES];
 }
 
 - (void)displayOptionsMenuButtons
@@ -267,7 +299,7 @@
         // Display Main Menu Buttons
         [self displayMainMenuButtons];
         
-//        [[GameManager sharedGameManager] playB ackgroundTrack:BACKGROUND_TRACK_1];
+//        [[GameManager sharedGameManager] playBackgroundTrack:BACKGROUND_TRACK_1];
     }
     return self;
 }

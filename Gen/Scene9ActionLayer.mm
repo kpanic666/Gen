@@ -41,8 +41,7 @@
         
         // add GroundCells
         cellPos = [Helper convertPosition:ccp(94, 92)];
-        GroundCell *groundCell1 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell1"];
-        [self addChild:groundCell1 z:-1];
+        [self createGroundCellInWorld:world position:cellPos name:@"groundCell1"];
         
         // add ChildCells
         CGPoint childCellsPos[kScene9Total] = 
@@ -84,23 +83,17 @@
         
         // add RedCells
         cellPos = [Helper convertPosition:ccp(723, 550)];
-        RedCell *redCell1 = [RedCell redCellInWorld:world position:cellPos name:@"redCell1"];
-        [self addChild:redCell1 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell1"];
         cellPos = [Helper convertPosition:ccp(118, 550)];
-        RedCell *redCell2 = [RedCell redCellInWorld:world position:cellPos name:@"redCell2"];
-        [self addChild:redCell2 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell2"];
         cellPos = [Helper convertPosition:ccp(328, 491)];
-        RedCell *redCell3 = [RedCell redCellInWorld:world position:cellPos name:@"redCell3"];
-        [self addChild:redCell3 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell3"];
         cellPos = [Helper convertPosition:ccp(487, -26)];
-        RedCell *redCell4 = [RedCell redCellInWorld:world position:cellPos name:@"redCell4"];
-        [self addChild:redCell4 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell4"];
         cellPos = [Helper convertPosition:ccp(68, 74)];
-        RedCell *redCell5 = [RedCell redCellInWorld:world position:cellPos name:@"redCell5"];
-        [self addChild:redCell5 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell5"];
         cellPos = [Helper convertPosition:ccp(112, 74)];
-        RedCell *redCell6 = [RedCell redCellInWorld:world position:cellPos name:@"redCell6"];
-        [self addChild:redCell6 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell6"];
     }
     return self;
 }

@@ -8,7 +8,9 @@
 
 #import "Box2DSprite.h"
 
-@interface ChildCell : Box2DSprite {
+@interface ChildCell : Box2DSprite
+{
+    GameCharacter *exitCellSprite;
 }
 
 @end

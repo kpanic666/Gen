@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "GameManager.h"
+#import "GCHelper.h"
 
 @implementation AppController
 
@@ -81,6 +82,9 @@
 	[sharedFileUtils setiPadRetinaDisplaySuffix:@"-ipad-hd"];	// Default on iPad RetinaDisplay is "-ipadhd"	
 	// Assume that PVR images have premultiplied alpha
 	[CCTexture2D PVRImagesHavePremultipliedAlpha:YES];
+    
+    // Авторизируем игрока в Game Center
+    [[GCHelper sharedInstance] authenticateLocalUser];
 	
 	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.
 	[[GameManager sharedGameManager] setupAudioEngine];

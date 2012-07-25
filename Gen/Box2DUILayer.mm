@@ -43,6 +43,29 @@
     }
 }
 
+- (void)makeBorderFrames
+{
+    CGSize screenSize = [CCDirector sharedDirector].winSize;
+    [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
+    CCSprite *borderTop = [CCSprite spriteWithFile:@"border_horizontal.png"];
+    CCSprite *borderBottom = [CCSprite spriteWithTexture:[borderTop texture]];
+    CCSprite *borderLeft = [CCSprite spriteWithFile:@"border_vertical.png"];
+    CCSprite *borderRight = [CCSprite spriteWithTexture:[borderLeft texture]];
+    [borderTop setAnchorPoint:ccp(0.5, 1)];
+    [borderBottom setAnchorPoint:ccp(0.5, 0)];
+    [borderLeft setAnchorPoint:ccp(0, 0.5)];
+    [borderRight setAnchorPoint:ccp(1, 0.5)];
+    [borderTop setPosition:ccp(screenSize.width * 0.5, screenSize.height)];
+    [borderBottom setPosition:ccp(screenSize.width * 0.5, 0)];
+    [borderLeft setPosition:ccp(0, screenSize.height * 0.5)];
+    [borderRight setPosition:ccp(screenSize.width, screenSize.height * 0.5)];
+    [self addChild:borderTop z:0];
+    [self addChild:borderBottom z:0];
+    [self addChild:borderLeft z:0];
+    [self addChild:borderRight z:0];
+    [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
+}
+
 - (id) init {
     
     if ((self = [super init])) {
@@ -55,7 +78,7 @@
         [pauseGameSprite setPosition:ccp(screenSize.width-padding, screenSize.height-padding)];
         [pauseGameSprite setOpacity:200];
         [pauseGameSprite setScale:0.8];
-        [self addChild:pauseGameSprite];
+        [self addChild:pauseGameSprite z:1];
         CCMenuItemSpriteIndependent *pauseGameButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:pauseGameSprite selectedSprite:nil target:self selector:@selector(pausePressed)];
         CCMenu *pauseMenu = [CCMenu menuWithItems:pauseGameButton, nil];
         [self addChild:pauseMenu z:5];
@@ -66,7 +89,7 @@
         scoreLabel.position = ccp(padding, screenSize.height - padding);
         originalScale = 0.7;
         scoreLabel.scale = originalScale;
-        [self addChild:scoreLabel];
+        [self addChild:scoreLabel z:1];
         
         // Init Center information label for name of level and other info
         centerLabel = [CCLabelBMFont labelWithString:@"          " fntFile:@"levelNameText.fnt"];
@@ -79,6 +102,11 @@
         centerLabelSFX.position = ccp(centerLabel.position.x - centerLabel.contentSize.width/2, centerLabel.position.y);
         centerLabelSFX.visible = NO;
         [self addChild:centerLabelSFX z:1];
+        
+        // Add frame borders if game is running on iPad
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            [self makeBorderFrames];
+        }
     }
     return self;
 }
@@ -115,7 +143,7 @@
     id fadeBack = [fadeIn reverse];
     id hide = [CCHide action];
     id delayBefore = [CCDelayTime actionWithDuration:0.5];
-    id delay = [CCDelayTime actionWithDuration:1.0];
+    id delay = [CCDelayTime actionWithDuration:0.3];
     id sfxLabelFadingSeq = [CCSequence actions:fadeIn, pauseBetweenFading, fadeBack, hide, nil];
     id sfxLabelAction = [CCSpawn actions:sfxLabelFadingSeq, move, nil];
     id textAction = [CCSequence actions:delayBefore, fadeInText, delay, fadeBackText, hide, nil];

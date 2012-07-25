@@ -33,17 +33,13 @@
         
         // add GroundCells
         cellPos = [Helper convertPosition:ccp(813, 179)];
-        GroundCell *groundCell1 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell1"];
-        [self addChild:groundCell1 z:-1];
+        [self createGroundCellInWorld:world position:cellPos name:@"groundCell1"];
         cellPos = [Helper convertPosition:ccp(893, 595)];
-        GroundCell *groundCell2 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell2"];
-        [self addChild:groundCell2 z:-1];
+        [self createGroundCellInWorld:world position:cellPos name:@"groundCell2"];
         cellPos = [Helper convertPosition:ccp(263, 397)];
-        GroundCell *groundCell3 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell3"];
-        [self addChild:groundCell3 z:-1];
+        [self createGroundCellInWorld:world position:cellPos name:@"groundCell3"];
         cellPos = [Helper convertPosition:ccp(561, 430)];
-        GroundCell *groundCell4 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell4"];
-        [self addChild:groundCell4 z:-1];
+        [self createGroundCellInWorld:world position:cellPos name:@"groundCell4"];
         
         // add ChildCells
         CGPoint childCellsPos[kScene6Total] = 

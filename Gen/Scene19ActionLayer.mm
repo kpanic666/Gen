@@ -33,11 +33,9 @@
         
         // add GroundCells
         cellPos = [Helper convertPosition:ccp(613, 38)];
-        GroundCell *groundCell1 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell1"];
-        [self addChild:groundCell1 z:-1];
+        [self createGroundCellInWorld:world position:cellPos name:@"groundCell1"];
         cellPos = [Helper convertPosition:ccp(821, 311)];
-        GroundCell *groundCell2 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell2"];
-        [self addChild:groundCell2 z:-1];
+        [self createGroundCellInWorld:world position:cellPos name:@"groundCell2"];
         
         // add ChildCells
         CGPoint childCellsPos[kScene19Total] = 
@@ -69,17 +67,13 @@
         
         // add RedCells
         cellPos = [Helper convertPosition:ccp(547, 475)];
-        RedCell *redCell1 = [RedCell redCellInWorld:world position:cellPos name:@"redCell1"];
-        [self addChild:redCell1 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell1"];
         cellPos = [Helper convertPosition:ccp(869, 80)];
-        RedCell *redCell2 = [RedCell redCellInWorld:world position:cellPos name:@"redCell2"];
-        [self addChild:redCell2 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell2"];
         cellPos = [Helper convertPosition:ccp(287, 268)];
-        RedCell *redCell3 = [RedCell redCellInWorld:world position:cellPos name:@"redCell3"];
-        [self addChild:redCell3 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell3"];
         cellPos = [Helper convertPosition:ccp(59, 290)];
-        RedCell *redCell4 = [RedCell redCellInWorld:world position:cellPos name:@"redCell4"];
-        [self addChild:redCell4 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell4"];
     }
     return self;
 }

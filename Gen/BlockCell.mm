@@ -11,6 +11,7 @@
 #import "BluredSprite.h"
 #import "GB2ShapeCache.h"
 #import "Helper.h"
+#import "SimpleQueryCallback.h"
 
 #define kGlowOffset 10.0
 
@@ -286,6 +287,78 @@
         [[CCTextureCache sharedTextureCache] removeUnusedTextures];
     }
     return self;
+}
+
+- (NSString *)getRandomParticleName
+{
+    return nil;
+}
+
+- (void) createParticles
+{
+    CCSprite *tempParticle = [CCSprite spriteWithSpriteFrameName:[self getRandomParticleName]];
+    const float plotnost = 2.0; // чем выше значение тем меньше частичек
+    CGSize sizeOfGridCell = CGSizeMake(tempParticle.textureRect.size.width * plotnost, tempParticle.textureRect.size.height * plotnost);
+    int xGridNumMax = self.textureRect.size.width / sizeOfGridCell.width;
+    int yGridNumMax = self.textureRect.size.height / sizeOfGridCell.height;
+    CCSpriteBatchNode *sceneSpriteBatchNode = (CCSpriteBatchNode*) [self.parent getChildByTag:kMainSpriteBatchNode];
+    initPosition = ccp(initPosition.x + sizeOfGridCell.width/2, initPosition.y + sizeOfGridCell.height/2);
+    CGPoint particlePos;
+    b2Vec2 particleB2Pos;
+    
+    // B2Query Settings
+    b2AABB aabb;
+    b2Vec2 delta = b2Vec2(1/PTM_RATIO, 1/PTM_RATIO);
+    
+    // Начинаем заполнять прямоугольник спрайта по сетке с размерами ячейки = размеру телец + промежутки между ними
+    // Сначала заполняем по х, затем по y. Заполняем пока не кончатся тельца или сетка.
+    
+    for (int xGridNum = 0; xGridNum < xGridNumMax; xGridNum++)
+    {
+        for (int yGridNum = 0; yGridNum < yGridNumMax; yGridNum++)
+        {
+            particlePos = ccp(initPosition.x + xGridNum * sizeOfGridCell.width, initPosition.y + yGridNum * sizeOfGridCell.height);
+            particleB2Pos = b2Vec2(particlePos.x / PTM_RATIO, particlePos.y / PTM_RATIO);
+            aabb.lowerBound = particleB2Pos - delta;
+            aabb.upperBound = particleB2Pos + delta;
+            SimpleQueryCallback callback(particleB2Pos, body);
+            world->QueryAABB(&callback, aabb);
+            
+            // Если тело в проверяемой точке найдено, то добавляем частицу, иначе считаем дальше
+            if (callback.fixtureFound)
+            {
+                // Добавляем спрайт
+                CCSprite *particleSprite = [CCSprite spriteWithSpriteFrameName:[self getRandomParticleName]];
+                particleSprite.position = particlePos;
+                [sceneSpriteBatchNode addChild:particleSprite z:2];
+                
+                // Рэндомизируем положение, размер
+                [particleSprite setRotation:random() % 360 + 1];
+                [particleSprite setOpacity:150];
+                float randomTime = CCRANDOM_0_1() + 1; // 1-2
+                if (CCRANDOM_0_1() <= 0.5f) [particleSprite setScale:0.9];
+                
+                // Задаем движение
+                // Генерируем произвольные ключевые точки для движения
+                CGPoint movePos[4];
+                for (int n=0; n<4; n++)
+                {
+                    float xoffset = CCRANDOM_MINUS1_1() * particleSprite.contentSize.width * 0.35;
+                    float yoffset = CCRANDOM_MINUS1_1() * particleSprite.contentSize.height * 0.35;
+                    
+                    movePos[n] = ccp(particlePos.x + xoffset, particlePos.y + yoffset);
+                }
+                id move1 = [CCMoveTo actionWithDuration:randomTime position:movePos[0]];
+                id move2 = [CCMoveTo actionWithDuration:randomTime position:movePos[1]];
+                id move3 = [CCMoveTo actionWithDuration:randomTime position:movePos[2]];
+                id move4 = [CCMoveTo actionWithDuration:randomTime position:movePos[3]];
+                id moveToBegin = [CCMoveTo actionWithDuration:randomTime position:particlePos]; 
+                id seq = [CCEaseInOut actionWithAction:[CCSequence actions:move1, move2, move3, move4, moveToBegin, nil] rate:2];
+                [particleSprite runAction:[CCRepeatForever actionWithAction:seq]];
+            }
+            
+        }
+    }
 }
 
 @end

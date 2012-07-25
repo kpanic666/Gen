@@ -12,18 +12,21 @@ class SimpleQueryCallback : public b2QueryCallback
 {    
 public:
     b2Vec2 pointToTest;
+    b2Body *bodyToTest;
     b2Fixture *fixtureFound;
     
-    SimpleQueryCallback(const b2Vec2& point)
+    SimpleQueryCallback(const b2Vec2& point, b2Body *queryBody)
     {
         pointToTest = point;
+        bodyToTest = queryBody;
         fixtureFound = NULL;
     }
     
     bool ReportFixture(b2Fixture* fixture)
     {
         b2Body *body = fixture->GetBody();
-        if (body->GetType() == b2_dynamicBody) {
+        if (body == bodyToTest)
+        {
             if (fixture->TestPoint(pointToTest)) {
                 fixtureFound = fixture;
                 return false;

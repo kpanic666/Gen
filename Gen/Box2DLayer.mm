@@ -45,7 +45,7 @@
     world->SetDebugDraw(m_debugDraw);
     uint32 flags = 0;
 	flags += b2Draw::e_shapeBit;
-	flags += b2Draw::e_jointBit;
+//	flags += b2Draw::e_jointBit;
 //    flags += b2Draw::e_aabbBit;
 	//		flags += b2Draw::e_pairBit;
 	//		flags += b2Draw::e_centerOfMassBit;
@@ -56,9 +56,13 @@
 {
     CGSize levelSize = [[GameManager sharedGameManager] getDimensionsOfCurrentScene];
     b2Vec2 lowerLeft = b2Vec2(0, 0);
-    b2Vec2 lowerRight = b2Vec2(levelSize.width/PTM_RATIO, 0);
-    b2Vec2 upperRight = b2Vec2(levelSize.width/PTM_RATIO, levelSize.height/PTM_RATIO);
-    b2Vec2 upperLeft = b2Vec2(0, levelSize.height/PTM_RATIO);
+    // Сдвигаем рамку земли в центр экрана если игра запущена на iPad
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        lowerLeft += b2Vec2(kiPadScreenOffsetX / PTM_RATIO, kiPadScreenOffsetY / PTM_RATIO);
+    }
+    b2Vec2 lowerRight = lowerLeft + b2Vec2(levelSize.width/PTM_RATIO, 0);
+    b2Vec2 upperRight = lowerRight + b2Vec2(0, levelSize.height/PTM_RATIO);
+    b2Vec2 upperLeft = lowerLeft + b2Vec2(0, levelSize.height/PTM_RATIO);
     
     b2BodyDef groundBodyDef;
     groundBodyDef.type = b2_staticBody;
@@ -87,6 +91,30 @@
     [sceneSpriteBatchNode addChild:childCell z:1];
     [GameManager sharedGameManager].numOfTotalCells++;
     return childCell;
+}
+
+- (BombCell*)createBombCellAtLocation:(CGPoint)location
+{
+    BombCell *bombCell = [[[BombCell alloc] initWithWorld:world atLocation:location] autorelease];
+    [sceneSpriteBatchNode addChild:bombCell z:1];
+    [GameManager sharedGameManager].numOfTotalCells++;
+    return bombCell;
+}
+
+- (GroundCell*)createGroundCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name
+{
+    GroundCell *groundCell = [GroundCell groundCellInWorld:theWorld position:pos name:name];
+    [self addChild:groundCell z:-1];
+    [groundCell createParticles];
+    return groundCell;
+}
+
+- (RedCell*)createRedCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name
+{
+    RedCell *redCell = [RedCell redCellInWorld:theWorld position:pos name:name];
+    [self addChild:redCell z:-1];
+    [redCell createParticles];
+    return redCell;
 }
 
 - (void)resetBubbleWithNode:(id)node
@@ -262,6 +290,11 @@
     [self pauseSchedulerAndActions];
 }
 
+- (void)showTipsElement:(CCNode*)element delay:(float)delay
+{
+    [element runAction:[CCSequence actions:[CCDelayTime actionWithDuration:delay], [CCFadeIn actionWithDuration:1], nil]];
+}
+
 - (void)calcScore
 {
     GameManager *gameManager = [GameManager sharedGameManager];
@@ -279,11 +312,11 @@
     if (gameManager.numOfSavedCells == gameManager.numOfNeededCells) {
         gameManager.levelStarsNum = 1;
     }
-    else if (gameManager.numOfSavedCells > gameManager.numOfNeededCells && gameManager.numOfSavedCells < gameManager.numOfMaxCells)
+    if (gameManager.numOfSavedCells > gameManager.numOfNeededCells && gameManager.numOfSavedCells < gameManager.numOfMaxCells)
     {
         gameManager.levelStarsNum = 2;
     }
-    else if (gameManager.numOfSavedCells == gameManager.numOfMaxCells) {
+    if (gameManager.numOfSavedCells == gameManager.numOfMaxCells) {
         gameManager.levelStarsNum = 3;
     }
     gameManager.levelTotalScore += gameManager.levelStarsNum * kStarAchievedMulti;
@@ -328,7 +361,7 @@
     // Уничтожаем тела клеток попавших в опасность или в выход
     [self destroyBodies];
     
-    // Force update all objects и
+    // Force update all objects и подсчет детей загнаных в выход
     CCArray *listOfGameObjects = [sceneSpriteBatchNode children];
     int i = 0;
     for (CCSprite *tempSprite in listOfGameObjects)

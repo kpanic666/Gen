@@ -17,13 +17,20 @@
         // make the body static
         body->SetType(b2_staticBody);
         body->SetUserData(self);
+        initPosition = ccp(pos.x - self.textureRect.size.width/2, pos.y - self.textureRect.size.height/2);
     }
     return self;
 }
 
-+ (id) groundCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name
++ (id)groundCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name
 {
     return [[[self alloc] initWithWorld:theWorld position:pos name:name] autorelease];
+}
+
+- (NSString *)getRandomParticleName
+{
+    // Set Random texture
+    return [NSString stringWithFormat:@"groundcell_particle%d.png", random() % 2 + 1];
 }
 
 @end

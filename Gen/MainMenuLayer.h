@@ -8,8 +8,9 @@
 
 #import "cocos2d.h"
 #import "Constants.h"
+#import <GameKit/GameKit.h>
 
-@interface MainMenuLayer : CCLayer
+@interface MainMenuLayer : CCLayer <GKAchievementViewControllerDelegate, GKLeaderboardViewControllerDelegate>
 
 + (id)scene;
 

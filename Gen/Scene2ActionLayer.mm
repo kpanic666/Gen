@@ -29,16 +29,14 @@
         
         // add ChildCells
         for (int i = 0; i < kScene2Total; i++) {
-            [self createChildCellAtLocation:ccp(screenSize.width*0.1 + i * 5, screenSize.height*0.3 + i * 5)];
+            [self createChildCellAtLocation:ccp(screenSize.width*0.1 + i * 5, screenSize.height*0.25 + i * 5)];
         }
         
         // add RedCells
-        cellPos = [Helper convertPosition:ccp(445, 541)];
-        RedCell *redCell1 = [RedCell redCellInWorld:world position:cellPos name:@"redCell1"];
-        [self addChild:redCell1 z:-1];
+        cellPos = [Helper convertPosition:ccp(442, 544)];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell1"];
         cellPos = [Helper convertPosition:ccp(445, 167)];
-        RedCell *redCell2 = [RedCell redCellInWorld:world position:cellPos name:@"redCell2"];
-        [self addChild:redCell2 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell2"];
         
         // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
         cellPos = [Helper convertPosition:ccp(834, 354)];

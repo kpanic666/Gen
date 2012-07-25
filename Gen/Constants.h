@@ -14,11 +14,13 @@
 #define kParentCellSpriteTagValue 10
 #define kRedCellDamage 100
 #define kExitCellSpriteTagValue 20
-#define kMagneticPowerMultiplier 0.1
+#define kMagneticPowerMultiplier 0.15
 #define kLevelCount 20
 #define kMaxBubbleMoveDuration 15
 #define kMinBubbleMoveDuration 5
 #define kMaxNumOfBubbleOnScene 4
+#define kiPadScreenOffsetX 32
+#define kiPadScreenOffsetY 64
 // Score multiplicators
 #define kLevelMaxTime 30
 #define kRemainingTimeMulti 50
@@ -30,7 +32,7 @@
 // Всего ячеек на уровне
 typedef enum {
     kScene1Total = 25,
-    kScene2Total = 11,
+    kScene2Total = 17,
     kScene3Total = 7,
     kScene4Total = 10,
     kScene5Total = 14,
@@ -54,16 +56,16 @@ typedef enum {
 // Кол-во спасенных ячеек для окончания уровня
 typedef enum {
     kScene1Needed = 20,
-    kScene2Needed = 11,
+    kScene2Needed = 14,
     kScene3Needed = 6,
-    kScene4Needed = 10,
+    kScene4Needed = 9,
     kScene5Needed = 14,
     kScene6Needed = 40,
     kScene7Needed = 10,
     kScene8Needed = 10,
     kScene9Needed = 4,
     kScene10Needed = 12,
-    kScene11Needed = 13,
+    kScene11Needed = 12,
     kScene12Needed = 7,
     kScene13Needed = 8,
     kScene14Needed = 15,

@@ -28,8 +28,7 @@
         
         // add GroundCells
         cellPos = [Helper convertPosition:ccp(32, 605)];
-        GroundCell *groundCell1 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell1"];
-        [self addChild:groundCell1 z:-1];
+        GroundCell *groundCell1 = [self createGroundCellInWorld:world position:cellPos name:@"groundCell1"];
         
         // add ChildCells
         float offsetX = 5;
@@ -76,16 +75,39 @@
         
         // add RedCells
         cellPos = [Helper convertPosition:ccp(142, 629)];
-        RedCell *redCell1 = [RedCell redCellInWorld:world position:cellPos name:@"redCell1"];
-        [self addChild:redCell1 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell1"];
         cellPos = [Helper convertPosition:ccp(677, 369)];
-        RedCell *redCell2 = [RedCell redCellInWorld:world position:cellPos name:@"redCell2"];
-        [self addChild:redCell2 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell2"];
         
         // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
         cellPos = [Helper convertPosition:ccp(488, 182)];
         exitCell = [[[ExitCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
         [sceneSpriteBatchNode addChild:exitCell z:-1 tag:kExitCellSpriteTagValue];
+        
+        // Add Tutorial text and arrows
+        float fontSize = [Helper convertFontSize:14];
+        NSString *fontName = @"Verdana";
+        NSString *myText = @"Collect necessary amount of cells";
+        CGSize maxSize = CGSizeMake(screenSize.width/3, 400);
+        // ----Score Tip----
+        CCSprite *toScoreArrow = [CCSprite spriteWithFile:@"tut_arrow2.png"];
+        toScoreArrow.rotation = 260;
+        toScoreArrow.opacity = 0;
+        toScoreArrow.position = ccp(screenSize.width*0.28, screenSize.height*0.82);
+        [self addChild:toScoreArrow z:-2];
+        CGSize actualSize = [myText sizeWithFont:[UIFont fontWithName:fontName size:fontSize]
+                              constrainedToSize:maxSize
+                                  lineBreakMode:UILineBreakModeWordWrap];
+        CCLabelTTF *toScoreText = [CCLabelTTF labelWithString:myText dimensions:actualSize hAlignment:kCCTextAlignmentCenter lineBreakMode:kCCLineBreakModeWordWrap fontName:fontName fontSize:fontSize];
+        toScoreText.position = ccp(screenSize.width*0.30, screenSize.height*0.67);
+        toScoreText.color = ccBLACK;
+        toScoreText.opacity = 0;
+        [self addChild:toScoreText z:-2];
+        
+        // Fading out tips
+        float delay = 3;
+        [self showTipsElement:toScoreArrow delay:delay];
+        [self showTipsElement:toScoreText delay:delay];
     }
     return self;
 }

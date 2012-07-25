@@ -63,7 +63,7 @@
             if ([tempSprite isKindOfClass:[Box2DSprite class]])
             {
                 Box2DSprite *spriteObj = (Box2DSprite*)tempSprite;
-                if (spriteObj.gameObjectType == kChildCellType && spriteObj.characterState == kStateConnecting) {
+                if ((spriteObj.gameObjectType == kChildCellType || spriteObj.gameObjectType == kEnemyTypeBomb) && spriteObj.characterState == kStateConnecting) {
                     
                     [spriteObj changeState:kStateConnected];
                     
@@ -82,7 +82,7 @@
                     world->CreateJoint(&disJointDef);
                 }
                 // Отсоединяем детей от главного героя
-                else if (spriteObj.gameObjectType == kChildCellType && spriteObj.characterState == kStateDisconnecting) {
+                else if ((spriteObj.gameObjectType == kChildCellType || spriteObj.gameObjectType == kEnemyTypeBomb) && spriteObj.characterState == kStateDisconnecting) {
                     [spriteObj changeState:kStateIdle];
                     b2Body *childCellBody = spriteObj.body;
                     for (b2JointEdge *edge = childCellBody->GetJointList(); edge; edge = edge->next)
@@ -104,7 +104,7 @@
             if ([tempSprite isKindOfClass:[Box2DSprite class]])
             {
                 Box2DSprite *spriteObj = (Box2DSprite*)tempSprite;
-                if (spriteObj.gameObjectType == kChildCellType && spriteObj.characterState == kStateConnected) {
+                if ((spriteObj.gameObjectType == kChildCellType || spriteObj.gameObjectType == kEnemyTypeBomb) && spriteObj.characterState == kStateConnected) {
                     [spriteObj changeState:kStateIdle];
                     b2Body *childCellBody = spriteObj.body;
                     for (b2JointEdge *edge = childCellBody->GetJointList(); edge; edge = edge->next)

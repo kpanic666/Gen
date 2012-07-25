@@ -11,8 +11,6 @@
 
 @implementation ChildCell
 
-GameCharacter *exitCellSprite;
-
 - (void)createBodyAtLocation:(CGPoint)location
 {
     b2BodyDef bodyDef;
@@ -206,7 +204,6 @@ GameCharacter *exitCellSprite;
             // Change sprite frame to random RedCell particle. Уменьшаем клетку в размере
             NSString *frameName = [NSString stringWithFormat:@"redcell_particle%d.png", frameNum];
             [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:frameName]];
-            [self setScale:self.scale * 0.9];
             
             
             // Move to random position at random speed, rotate and fade after target position

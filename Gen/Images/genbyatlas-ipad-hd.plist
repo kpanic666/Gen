@@ -4,6 +4,19 @@
     <dict>
         <key>frames</key>
         <dict>
+            <key>bombcell_activated.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{815,560},{58,58}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{58,58}}</string>
+                <key>sourceSize</key>
+                <string>{58,58}</string>
+            </dict>
             <key>bubble1.png</key>
             <dict>
                 <key>frame</key>
@@ -20,7 +33,7 @@
             <key>bubble2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{815,570},{49,40}}</string>
+                <string>{{273,652},{49,40}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -85,7 +98,7 @@
             <key>button_leaderboard.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{688,1031},{202,203}}</string>
+                <string>{{681,1031},{202,203}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -111,7 +124,7 @@
             <key>button_music_off.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{280,729},{203,202}}</string>
+                <string>{{273,729},{203,202}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -215,7 +228,7 @@
             <key>button_skip.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{484,914},{202,203}}</string>
+                <string>{{477,914},{202,203}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -280,28 +293,28 @@
             <key>groundcell_particle1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{204,705},{75,57}}</string>
+                <string>{{815,503},{61,56}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{1,1},{75,57}}</string>
+                <string>{{1,1},{61,56}}</string>
                 <key>sourceSize</key>
-                <string>{77,59}</string>
+                <string>{63,58}</string>
             </dict>
             <key>groundcell_particle2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{815,503},{62,66}}</string>
+                <string>{{204,766},{48,51}}</string>
                 <key>offset</key>
-                <string>{-1,0}</string>
+                <string>{0,1}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{1,1},{62,66}}</string>
+                <string>{{1,0},{48,51}}</string>
                 <key>sourceSize</key>
-                <string>{66,68}</string>
+                <string>{50,53}</string>
             </dict>
             <key>level_name_sfx.png</key>
             <dict>
@@ -371,28 +384,28 @@
             <key>redcell_particle1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{204,763},{68,55}}</string>
-                <key>offset</key>
-                <string>{0,1}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{1,0},{68,55}}</string>
-                <key>sourceSize</key>
-                <string>{70,57}</string>
-            </dict>
-            <key>redcell_particle2.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{204,652},{76,52}}</string>
+                <string>{{204,709},{68,56}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{1,2},{76,52}}</string>
+                <string>{{1,2},{68,56}}</string>
                 <key>sourceSize</key>
-                <string>{78,56}</string>
+                <string>{70,60}</string>
+            </dict>
+            <key>redcell_particle2.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{204,652},{68,56}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{1,2},{68,56}}</string>
+                <key>sourceSize</key>
+                <string>{70,60}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -404,7 +417,7 @@
             <key>size</key>
             <string>{1024,2048}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:3153602406ae2d2588407da64b4a9c2c$</string>
+            <string>$TexturePacker:SmartUpdate:7d09f792143c2460a1803399145ac829$</string>
             <key>textureFileName</key>
             <string>genbyatlas-ipad-hd.pvr.ccz</string>
         </dict>

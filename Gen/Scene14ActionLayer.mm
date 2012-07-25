@@ -90,14 +90,11 @@
         
         // add GroundCells
         cellPos = [Helper convertPosition:ccp(740, 147)];
-        GroundCell *groundCell1 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell1"];
-        [self addChild:groundCell1 z:-1];
+        [self createGroundCellInWorld:world position:cellPos name:@"groundCell1"];
         cellPos = [Helper convertPosition:ccp(453, 66)];
-        GroundCell *groundCell2 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell2"];
-        [self addChild:groundCell2 z:-1];
+        [self createGroundCellInWorld:world position:cellPos name:@"groundCell2"];
         cellPos = [Helper convertPosition:ccp(611, 554)];
-        GroundCell *groundCell3 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell3"];
-        [self addChild:groundCell3 z:-1];
+        [self createGroundCellInWorld:world position:cellPos name:@"groundCell3"];
         
         // add ChildCells
         float offset = 15; // Расстояние между элементами куба (между ячейками)
@@ -111,11 +108,9 @@
         
         // add RedCells
         cellPos = [Helper convertPosition:ccp(585, 192)];
-        RedCell *redCell1 = [RedCell redCellInWorld:world position:cellPos name:@"redCell1"];
-        [self addChild:redCell1 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell1"];
         cellPos = [Helper convertPosition:ccp(585, 425)];
-        RedCell *redCell2 = [RedCell redCellInWorld:world position:cellPos name:@"redCell1"];
-        [self addChild:redCell2 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell1"];
         
         // add MagneticCells
         cellPos = [Helper convertPosition:ccp(770, 256)];

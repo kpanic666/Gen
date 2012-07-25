@@ -551,6 +551,13 @@ static GameManager* _sharedGameManager = nil;
             levelSize = screenSize;
             break;
     }
+    
+    // Делаем рамку уровня если игра запускается на iPad, чтобы не менять графику и физ объекты, мы просто все поменщаем в центр экрана
+    // Слева и справа по 32 поинта, сверхи и снизу по 64
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        levelSize = CGSizeMake(levelSize.width - kiPadScreenOffsetX * 2, levelSize.height - kiPadScreenOffsetY * 2);
+    }
+
     return levelSize;
 }
 

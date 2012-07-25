@@ -33,11 +33,9 @@
         
         // add GroundCells
         cellPos = [Helper convertPosition:ccp(390, 616)];
-        GroundCell *groundCell1 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell1"];
-        [self addChild:groundCell1 z:-1];
+        [self createGroundCellInWorld:world position:cellPos name:@"groundCell1"];
         cellPos = [Helper convertPosition:ccp(807, 107)];
-        GroundCell *groundCell2 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell2"];
-        [self addChild:groundCell2 z:-1];
+        [self createGroundCellInWorld:world position:cellPos name:@"groundCell2"];
         
         // add ChildCells
         CGPoint childCellsPos[kScene11Total] = 
@@ -62,23 +60,17 @@
         
         // add RedCells
         cellPos = [Helper convertPosition:ccp(738, 501)];
-        RedCell *redCell1 = [RedCell redCellInWorld:world position:cellPos name:@"redCell1"];
-        [self addChild:redCell1 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell1"];
         cellPos = [Helper convertPosition:ccp(173, 350)];
-        RedCell *redCell2 = [RedCell redCellInWorld:world position:cellPos name:@"redCell2"];
-        [self addChild:redCell2 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell2"];
         cellPos = [Helper convertPosition:ccp(804, 291)];
-        RedCell *redCell3 = [RedCell redCellInWorld:world position:cellPos name:@"redCell3"];
-        [self addChild:redCell3 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell3"];
         cellPos = [Helper convertPosition:ccp(285, 134)];
-        RedCell *redCell4 = [RedCell redCellInWorld:world position:cellPos name:@"redCell4"];
-        [self addChild:redCell4 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell4"];
         cellPos = [Helper convertPosition:ccp(480, 357)];
-        RedCell *redCell5 = [RedCell redCellInWorld:world position:cellPos name:@"redCell5"];
-        [self addChild:redCell5 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell5"];
         cellPos = [Helper convertPosition:ccp(903, 614)];
-        RedCell *redCell6 = [RedCell redCellInWorld:world position:cellPos name:@"redCell5"];
-        [self addChild:redCell6 z:-1];
+        [self createRedCellInWorld:world position:cellPos name:@"redCell5"];
     }
     return self;
 }

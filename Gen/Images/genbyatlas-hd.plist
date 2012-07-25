@@ -4,6 +4,19 @@
     <dict>
         <key>frames</key>
         <dict>
+            <key>bombcell_activated.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{267,242},{29,29}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{29,29}}</string>
+                <key>sourceSize</key>
+                <string>{29,29}</string>
+            </dict>
             <key>bubble1.png</key>
             <dict>
                 <key>frame</key>
@@ -20,7 +33,7 @@
             <key>bubble2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{463,401},{25,20}}</string>
+                <string>{{458,344},{25,20}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -280,28 +293,28 @@
             <key>groundcell_particle1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{429,344},{37,28}}</string>
+                <string>{{267,211},{30,29}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{1,1},{37,28}}</string>
+                <string>{{1,0},{30,29}}</string>
                 <key>sourceSize</key>
-                <string>{39,30}</string>
+                <string>{32,29}</string>
             </dict>
             <key>groundcell_particle2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{429,374},{31,32}}</string>
+                <string>{{429,344},{25,27}}</string>
                 <key>offset</key>
-                <string>{-1,0}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{0,1},{31,32}}</string>
+                <string>{{0,0},{25,27}}</string>
                 <key>sourceSize</key>
-                <string>{33,34}</string>
+                <string>{25,27}</string>
             </dict>
             <key>level_name_sfx.png</key>
             <dict>
@@ -371,28 +384,28 @@
             <key>redcell_particle1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{468,372},{35,27}}</string>
+                <string>{{267,181},{33,28}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,1},{35,27}}</string>
+                <string>{{1,1},{33,28}}</string>
                 <key>sourceSize</key>
-                <string>{35,29}</string>
+                <string>{35,30}</string>
             </dict>
             <key>redcell_particle2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{468,344},{37,26}}</string>
+                <string>{{267,151},{33,28}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{1,1},{37,26}}</string>
+                <string>{{1,1},{33,28}}</string>
                 <key>sourceSize</key>
-                <string>{39,28}</string>
+                <string>{35,30}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -404,7 +417,7 @@
             <key>size</key>
             <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:53a7fa2b557c30b73ef0cfae0018f660$</string>
+            <string>$TexturePacker:SmartUpdate:32ce16032f57dac382628a72392a19ba$</string>
             <key>textureFileName</key>
             <string>genbyatlas-hd.pvr.ccz</string>
         </dict>

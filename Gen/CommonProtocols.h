@@ -25,6 +25,7 @@ typedef enum {
     kEnemyTypeRedCell,
     kEnemyTypeMagneticCell,
     kEnemyTypeRepulsiveCell,
+    kEnemyTypeBomb,
     kParentCellType,
     kChildCellType,
     kGroundType,

@@ -17,6 +17,7 @@
         // make the body static
         body->SetType(b2_staticBody);
         body->SetUserData(self);
+        initPosition = ccp(pos.x - self.textureRect.size.width/2, pos.y - self.textureRect.size.height/2);
     }
     return self;
 }
@@ -29,6 +30,12 @@
 - (int) getWeaponDamage {
     
     return kRedCellDamage;
+}
+
+- (NSString *)getRandomParticleName
+{
+    // Set Random texture
+    return [NSString stringWithFormat:@"redcell_particle%d.png", random() % 2 + 1];
 }
 
 @end
