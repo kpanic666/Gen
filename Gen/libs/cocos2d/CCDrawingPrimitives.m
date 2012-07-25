@@ -36,6 +36,7 @@
 #import "CCActionCatmullRom.h"
 #import "Support/OpenGL_Internal.h"
 
+
 static BOOL initialized = NO;
 static CCGLProgram *shader_ = nil;
 static int colorLocation_ = -1;
