@@ -9,5 +9,8 @@
 #import "ChildCell.h"
 
 @interface BombCell : ChildCell
+{
+    BOOL activated;
+}
 
 @end

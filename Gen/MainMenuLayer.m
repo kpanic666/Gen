@@ -8,6 +8,8 @@
 
 #import "MainMenuLayer.h"
 #import "GameManager.h"
+#import "GCHelper.h"
+#import "GameState.h"
 #import "CCMenuItemSpriteIndependent.h"
 // Needed to obtain the Navigation Controller
 #import "AppDelegate.h"
@@ -80,7 +82,11 @@
 - (void)showCredits
 {
     PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
-    CCLOG(@"OptionsMenu->Info Button Pressed!");
+    // Delete on RELEASE
+    [[GCHelper sharedInstance] resetAchievements];
+    [[GameState sharedInstance] resetState];
+    
+//    CCLOG(@"OptionsMenu->Info Button Pressed!");
 //	[[GameManager sharedGameManager] runSceneWithID:kCreditsScene];
 }
 

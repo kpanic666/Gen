@@ -30,7 +30,7 @@
 - (NSString *)getRandomParticleName
 {
     // Set Random texture
-    return [NSString stringWithFormat:@"groundcell_particle%d.png", random() % 2 + 1];
+    return [NSString stringWithFormat:@"groundcell_particle%i.png", (int)random() % 2 + 1];
 }
 
 @end

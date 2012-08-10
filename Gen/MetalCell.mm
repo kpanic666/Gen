@@ -16,7 +16,6 @@
 {
     if ((self = [super initWithType:kMetalType withWorld:theWorld position:pos name:name])) {
         
-        // make the body static
         body->SetType(b2_dynamicBody);
         body->SetUserData(self);
         
@@ -37,7 +36,6 @@
 {
     if ((self = [super initWithType:kMetalType withWorld:theWorld position:pos name:name])) {
         
-        // make the body static
         body->SetType(b2_dynamicBody);
         body->SetUserData(self);
     }

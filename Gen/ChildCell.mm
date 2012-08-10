@@ -8,6 +8,7 @@
 
 #import "ChildCell.h"
 #import "GameManager.h"
+#import "GameState.h"
 
 @implementation ChildCell
 
@@ -38,7 +39,7 @@
         fixtureDef.restitution = 0.1;
     }
     [self setScale:scale];
-    shape.m_radius = self.contentSize.width * 0.22f * scale / PTM_RATIO;
+    shape.m_radius = self.contentSize.width * scale / 4 / PTM_RATIO;     // Делим на 4 ( на 2 чтоб получить радиус и еще на 2, чтобы компенсировать графику с подстветкой по краям
     fixtureDef.shape = &shape;
     fixtureDef.filter.categoryBits = kChildCellFilterCategory;
     body->CreateFixture(&fixtureDef);
@@ -134,6 +135,11 @@
             // Destroy Physics body
             self.markedForDestruction = YES;
             [GameManager sharedGameManager].numOfTotalCells--;
+            
+            // Count number of destroyed cells for all time for achievement
+            if ([GameState sharedInstance].cellsKilled < kAchievementCellDestroyerNum) {
+                [GameState sharedInstance].cellsKilled++;
+            }
         
             PLAYSOUNDEFFECT(@"CHILDCELL_DYING_1");
             break;

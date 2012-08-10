@@ -85,6 +85,7 @@
         }
         [childCellsArray release];
         childCellsArray = nil;
+        
     }
     return self;
 }

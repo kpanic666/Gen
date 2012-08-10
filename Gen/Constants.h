@@ -21,6 +21,10 @@
 #define kMaxNumOfBubbleOnScene 4
 #define kiPadScreenOffsetX 32
 #define kiPadScreenOffsetY 64
+// BombCell Parameters
+#define kBombTimer 3.0  //secs
+#define kBombRadius 4   //meters. размер childcell около 0.35м
+#define kBombPower 1.3    //Multiplicator
 // Score multiplicators
 #define kLevelMaxTime 30
 #define kRemainingTimeMulti 50
@@ -28,15 +32,23 @@
 #define kGoalCellsMulti 100
 #define kStarAchievedMulti 1000
 #define kTapMulti -50
+// Testflight
+#define kTestFlightTeamToken @"544c9348f13c1963799af034d50d7e9c_MTA5NDMzMjAxMi0wNy0xMiAxMjoxMjo1OC42NzUwMjY"
+// Achievements
+#define kAchievementLevel10 @"com.atomgames.genby.achievement.level10"
+#define kAchievementCellDestroyer @"com.atomgames.genby.achievement.celldestroyer" // Destroy 100 cells
+#define kAchievementCellDestroyerNum 100
+// Leaderboards
+#define kLeaderboardChapter1 @"com.atomgames.genby.leaderboard.chapter1"
 
 // Всего ячеек на уровне
 typedef enum {
-    kScene1Total = 25,
+    kScene1Total = 24,
     kScene2Total = 17,
     kScene3Total = 7,
     kScene4Total = 10,
     kScene5Total = 14,
-    kScene6Total = 40,
+    kScene6Total = 41,
     kScene7Total = 10,
     kScene8Total = 10,
     kScene9Total = 4,
@@ -83,7 +95,8 @@ typedef enum {
     kChildCellFilterCategory = 0x0003,
     kExitCellFilterCategory = 0x0004,
     kMagneticCellFilterCategory = 0x0005,
-    kRedCellFilterCategory = 0x0006
+    kRedCellFilterCategory = 0x0006,
+    kMovingWallFilterCategory = 0x0007
 } FilterCategories;
 
 typedef enum {

@@ -42,7 +42,7 @@
         [self createGroundCellInWorld:world position:cellPos name:@"groundCell4"];
         
         // add ChildCells
-        CGPoint childCellsPos[kScene6Total] = 
+        CGPoint childCellsPos[kScene6Total-1] =
         {
             [Helper convertPosition:ccp(116, 192)],
             [Helper convertPosition:ccp(190, 206)],
@@ -85,9 +85,12 @@
             [Helper convertPosition:ccp(921, 265)],
             [Helper convertPosition:ccp(631, 220)]
         };
-        for (int i=0; i<kScene6Total; i++) {
+        for (int i=0; i<kScene6Total-1; i++) {
             [self createChildCellAtLocation:childCellsPos[i]];
         }
+        
+        // add BombCell
+        [self createBombCellAtLocation:ccp([Helper screenCenter].x + kScene6Total * 5, [Helper screenCenter].y + kScene6Total * 5)];
     }
     return self;
 }

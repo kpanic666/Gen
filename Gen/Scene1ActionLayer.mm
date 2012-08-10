@@ -31,12 +31,9 @@
         [sceneSpriteBatchNode addChild:exitCell z:-1 tag:kExitCellSpriteTagValue];
         
         // add ChildCells
-        for (int i = 0; i < kScene1Total-1; i++) {
+        for (int i = 0; i < kScene1Total; i++) {
             [self createChildCellAtLocation:ccp(screenCenter.x + i * 5, screenCenter.y + i * 5)];
         }
-        
-        // add BombCell
-        [self createBombCellAtLocation:ccp(screenCenter.x + kScene1Total * 5, screenCenter.y + kScene1Total * 5)];
         
         // add GroundCells
         [self createGroundCellInWorld:world position:ccp(screenSize.width*0.65, screenSize.height*0.08) name:@"groundCell1"];

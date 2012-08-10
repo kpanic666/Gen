@@ -76,6 +76,21 @@ static GCHelper *sharedHelper = nil;
     return self;
 }
 
+- (void)sendScore:(GKScore *)score
+{
+    [score reportScoreWithCompletionHandler:^(NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^(void)
+                       {
+                           if (error == NULL) {
+                               NSLog(@"Successfully sent score!");
+                               [scoresToReport removeObject:score];
+                           } else {
+                               NSLog(@"Score failed to send... will try again later. Reason: %@", error.localizedDescription);
+                           }
+                       });
+    }];
+}
+
 - (void)sendAchievement:(GKAchievement *)achievement
 {
     [achievement reportAchievementWithCompletionHandler:^(NSError *error) {
@@ -95,6 +110,9 @@ static GCHelper *sharedHelper = nil;
 {
     for (GKAchievement *achievement in achievementsToReport) {
         [self sendAchievement:achievement];
+    }
+    for (GKScore *score in scoresToReport) {
+        [self sendScore:score];
     }
 }
 
@@ -129,18 +147,41 @@ static GCHelper *sharedHelper = nil;
 
 - (void)reportScore:(NSString *)identifier score:(int)rawScore
 {
-    // todo...
+    GKScore *score = [[[GKScore alloc] initWithCategory:identifier] autorelease];
+    score.value = rawScore;
+    [scoresToReport addObject:score];
+    [self save];
+    
+    if (!gameCenterAvailable || !userAuthenticated) return;
+    [self sendScore:score];
 }
 
 - (void)reportAchievement:(NSString *)identifier percentComplete:(double)percentComplete
 {
     GKAchievement *achievement = [[[GKAchievement alloc] initWithIdentifier:identifier] autorelease];
+    achievement.showsCompletionBanner = YES;
     achievement.percentComplete = percentComplete;
     [achievementsToReport addObject:achievement];
     [self save];
     
     if (!gameCenterAvailable || !userAuthenticated) return;
     [self sendAchievement:achievement];
+}
+
+- (void)resetAchievements
+{
+    [GKAchievement resetAchievementsWithCompletionHandler:^(NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^(void)
+                       {
+                           if (error == NULL) {
+                               NSLog(@"Achievement reset succesfull");
+                               [achievementsToReport removeAllObjects];
+                               [self save];
+                           } else {
+                               NSLog(@"Achievement failed to send... will try again later. Reason: %@", error.localizedDescription);
+                           }
+                       });
+    }];
 }
 
 #pragma mark NSCoding

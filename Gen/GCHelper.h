@@ -8,9 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <GameKit/GameKit.h>
-
-#define kAchievementLevel10 @"com.atomgames.genby.achievement.level10"
-#define kAchievementCellDestroyer @"com.atomgames.genby.achievement.celldestroyer"
+#import "Constants.h"
 
 @interface GCHelper : NSObject <NSCoding> {
     BOOL gameCenterAvailable;
@@ -29,5 +27,6 @@
 - (id)initWithScoresToReport:(NSMutableArray*)theScoresToReport achievementsToReport:(NSMutableArray*)theAchievementsToReport;
 - (void)reportAchievement:(NSString*)identifier percentComplete:(double)percentComplete;
 - (void)reportScore:(NSString*)identifier score:(int)rawScore;
+- (void)resetAchievements;
 
 @end

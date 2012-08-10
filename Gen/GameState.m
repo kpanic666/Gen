@@ -10,8 +10,6 @@
 #import "GCDatabase.h"
 
 @implementation GameState
-@synthesize completedLevel10;
-@synthesize cellsKilled;
 
 static GameState *sharedInstance = nil;
 
@@ -49,17 +47,64 @@ static GameState *sharedInstance = nil;
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeBool:completedLevel10 forKey:@"CompletedLevel10"];
-    [aCoder encodeInt:cellsKilled forKey:@"CellsKilled"];
+    [aCoder encodeBool:_completedLevel10 forKey:@"CompletedLevel10"];
+    [aCoder encodeInt:_cellsKilled forKey:@"CellsKilled"];
+    [aCoder encodeInt:_highestOpenedLevel forKey:@"HighestOpenedLevel"];
+    [aCoder encodeObject:_levelHighestScoreArray forKey:@"LevelHighestScoreArray"];
+    [aCoder encodeObject:_levelHighestStarsNumArray forKey:@"LevelHighestStarsNumArray"];
+}
+
+- (id)init {
+    if ((self = [super init])) {
+        _highestOpenedLevel = 1;
+        _levelHighestScoreArray = [[NSMutableArray alloc] initWithCapacity:kLevelCount];
+        _levelHighestStarsNumArray = [[NSMutableArray alloc] initWithCapacity:kLevelCount];
+        for (int i = 0 ; i < kLevelCount ; i++)
+        {
+            [_levelHighestScoreArray insertObject:[NSNumber numberWithInt:0] atIndex:i];
+            [_levelHighestStarsNumArray insertObject:[NSNumber numberWithInt:0] atIndex:i];
+        }
+    }
+    return self;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if ((self = [super init])) {
-        completedLevel10 = [aDecoder decodeBoolForKey:@"CompletedLevel10"];
-        cellsKilled = [aDecoder decodeIntForKey:@"CellsKilled"];
+        [self setCompletedLevel10:[aDecoder decodeBoolForKey:@"CompletedLevel10"]];
+        [self setCellsKilled:[aDecoder decodeIntForKey:@"CellsKilled"]];
+        [self setHighestOpenedLevel:[aDecoder decodeIntForKey:@"HighestOpenedLevel"]];
+        _levelHighestScoreArray = [[aDecoder decodeObjectForKey:@"LevelHighestScoreArray"] retain];
+        _levelHighestStarsNumArray = [[aDecoder decodeObjectForKey:@"LevelHighestStarsNumArray"] retain];
     }
     return self;
+}
+
+- (void)resetState
+{
+    [self setCompletedLevel10:NO];
+    [self setCellsKilled:0];
+    [self setHighestOpenedLevel:1];
+    [_levelHighestScoreArray removeAllObjects];
+    [_levelHighestStarsNumArray removeAllObjects];
+    
+    for (int i = 0 ; i < kLevelCount ; i++)
+    {
+        [_levelHighestScoreArray insertObject:[NSNumber numberWithInt:0] atIndex:i];
+        [_levelHighestStarsNumArray insertObject:[NSNumber numberWithInt:0] atIndex:i];
+    }
+    
+    [self save];
+}
+
+- (void)dealloc
+{
+    [_levelHighestScoreArray release];
+    _levelHighestScoreArray = nil;
+    [_levelHighestStarsNumArray release];
+    _levelHighestStarsNumArray = nil;
+    
+    [super dealloc];
 }
 
 @end

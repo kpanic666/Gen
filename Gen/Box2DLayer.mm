@@ -9,6 +9,9 @@
 #import "Box2DLayer.h"
 #import "Box2DSprite.h"
 #import "GameManager.h"
+#import "TestFlight.h"
+#import "GameState.h"
+#import "GCHelper.h"
 
 @interface Box2DLayer()
 {
@@ -20,9 +23,6 @@
 @end
 
 @implementation Box2DLayer
-
-////время в сек. на прохождение уровня. После этого времени очки не начисляются
-//static double LEVEL_MAX_TIME = 120;
 
 - (void)setupWorld
 {
@@ -67,7 +67,7 @@
     b2BodyDef groundBodyDef;
     groundBodyDef.type = b2_staticBody;
     groundBodyDef.position.Set(0, 0);
-    b2Body *groundBody = world->CreateBody(&groundBodyDef);
+    groundBody = world->CreateBody(&groundBodyDef);
     
     b2EdgeShape groundShape;
     
@@ -99,6 +99,13 @@
     [sceneSpriteBatchNode addChild:bombCell z:1];
     [GameManager sharedGameManager].numOfTotalCells++;
     return bombCell;
+}
+
+- (MovingWall*)createMovingWallAtLocation:(CGPoint)location vertical:(BOOL)vertical
+{
+    MovingWall *movingWall = [[[MovingWall alloc] initWithWorld:world atLocation:location vertical:vertical withGroundBody:groundBody] autorelease];
+    [sceneSpriteBatchNode addChild:movingWall z:1];
+    return movingWall;
 }
 
 - (GroundCell*)createGroundCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name
@@ -287,6 +294,10 @@
     ccColor4B c = ccc4(255, 255, 255, 0); // Black transparent background
     CompleteLevelLayer *gameOverLayer = [[[CompleteLevelLayer alloc] initWithColor:c] autorelease];
     [self addChild:gameOverLayer z:10 tag:kGameOverLayer];
+    
+    // TestFlight Checkpoint чтобы проверить сколько уровней проходят тестеры
+    [TestFlight passCheckpoint:[GameManager sharedGameManager].levelName];
+    
     [self pauseSchedulerAndActions];
 }
 
@@ -326,6 +337,68 @@
     gameManager.levelTotalScore = MAX(0, gameManager.levelTotalScore);
 }
 
+#pragma mark -
+#pragma mark Achievements checking
+
+- (void)checkAchievements
+{
+    GameManager *gameManager = [GameManager sharedGameManager];
+    GameState *gameState = [GameState sharedInstance];
+    
+    // Check Complete level 10
+    if (!gameState.completedLevel10) {
+        if (gameManager.curLevel == kGameLevel10 && gameManager.hasLevelWin) {
+            CCLOG(@"Achievement Complete! Finished level 10");
+            gameState.completedLevel10 = true;
+            [[GCHelper sharedInstance] reportAchievement:kAchievementLevel10 percentComplete:100.0];
+        }
+    }
+    
+    // Check Kill 100 cells
+    if (gameState.cellsKilled <= kAchievementCellDestroyerNum)
+    {
+        float pctComplete = ( (float)gameState.cellsKilled / (int)kAchievementCellDestroyerNum ) * 100.0;
+        [[GCHelper sharedInstance] reportAchievement:kAchievementCellDestroyer percentComplete:pctComplete];
+        if (gameState.cellsKilled >= kAchievementCellDestroyerNum) {
+            gameState.cellsKilled++;
+        }
+    }
+    
+    [gameState save];
+}
+
+- (void)updateGameStatsAndProgress
+{
+    GameManager *gameManager = [GameManager sharedGameManager];
+    GameState *gameState = [GameState sharedInstance];
+    int levelNum = (int)gameManager.curLevel - 100;
+    
+    // Фиксируем прогресс пройденных уровней. Пройдя уровень сравниваем со значением макс доступного и если меньше то увеличиваем на один
+    if (gameState.highestOpenedLevel-1 < levelNum) gameState.highestOpenedLevel++;
+    
+    // Запоминаем кол-во набранных звезд если их больше чем было
+    if (gameManager.levelStarsNum > [[gameState.levelHighestStarsNumArray objectAtIndex:levelNum-1] integerValue]) {
+        [[gameState levelHighestStarsNumArray] replaceObjectAtIndex:levelNum-1 withObject:[NSNumber numberWithInt:gameManager.levelStarsNum]];
+    }
+    
+    // Запоминаем High Score для уровня и докладываем в GameCenter если значение изменилось
+    if (gameManager.levelTotalScore > [[gameState.levelHighestScoreArray objectAtIndex:levelNum-1] integerValue])
+    {
+        [[gameState levelHighestScoreArray] replaceObjectAtIndex:levelNum-1 withObject:[NSNumber numberWithInt:gameManager.levelTotalScore]];
+        
+        // Доложить Score в GameCenter
+        unsigned int summaryScore = 0;
+        for (int i=0; i < [gameState.levelHighestScoreArray count]; i++) {
+            summaryScore += [[gameState.levelHighestScoreArray objectAtIndex:i] integerValue];
+        }
+        [[GCHelper sharedInstance] reportScore:kLeaderboardChapter1 score:summaryScore];
+    }
+    
+    [gameState save];
+}
+
+#pragma mark Update
+
 - (void)update:(ccTime)dt
 {
 	// Update Box2D World: Fixed Time Step
@@ -361,7 +434,7 @@
     // Уничтожаем тела клеток попавших в опасность или в выход
     [self destroyBodies];
     
-    // Force update all objects и подсчет детей загнаных в выход
+    // Обновляем состояние всех членов spritebatchnode и подсчет кол-ва детей загнаных в выход
     CCArray *listOfGameObjects = [sceneSpriteBatchNode children];
     int i = 0;
     for (CCSprite *tempSprite in listOfGameObjects)
@@ -395,11 +468,14 @@
             gameOver = true;
             [gameManager setHasLevelWin:YES];
             [self calcScore];
+            [self checkAchievements];
+            [self updateGameStatsAndProgress];
             [self scheduleOnce:@selector(displayGameOverLayer) delay:1.5];
         }
         else if (gameManager.numOfTotalCells == 0 && gameManager.numOfSavedCells < gameManager.numOfNeededCells)
         {
             gameOver = true;
+            [self checkAchievements];
             [self scheduleOnce:@selector(displayGameOverLayer) delay:1.5];
         }
     }

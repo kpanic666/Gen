@@ -8,6 +8,7 @@
 
 #import "LevelSelectLayer.h"
 #import "GameManager.h"
+#import "GameState.h"
 #import "SlidingMenuGrid.h"
 #import "CCMenuItemSpriteIndependent.h"
 #import "Helper.h"
@@ -34,50 +35,7 @@
 - (void)playScene:(id)itemPassedIn
 {
     PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
-    
-    if ([itemPassedIn tag] == 1) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel1];
-    } else if ([itemPassedIn tag] == 2) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel2];
-    } else if ([itemPassedIn tag] == 3) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel3];
-    } else if ([itemPassedIn tag] == 4) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel4];
-    } else if ([itemPassedIn tag] == 5) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel5];
-    } else if ([itemPassedIn tag] == 6) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel6];
-    } else if ([itemPassedIn tag] == 7) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel7];
-    } else if ([itemPassedIn tag] == 8) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel8];
-    } else if ([itemPassedIn tag] == 9) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel9];
-    } else if ([itemPassedIn tag] == 10) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel10];
-    } else if ([itemPassedIn tag] == 11) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel11];
-    } else if ([itemPassedIn tag] == 12) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel12];
-    } else if ([itemPassedIn tag] == 13) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel13];
-    } else if ([itemPassedIn tag] == 14) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel14];
-    } else if ([itemPassedIn tag] == 15) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel15];
-    } else if ([itemPassedIn tag] == 16) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel16];
-    } else if ([itemPassedIn tag] == 17) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel17];
-    } else if ([itemPassedIn tag] == 18) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel18];
-    } else if ([itemPassedIn tag] == 19) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel19];
-    } else if ([itemPassedIn tag] == 20) {
-        [[GameManager sharedGameManager] runSceneWithID:kGameLevel20];
-    } else {
-        CCLOG(@"Unexpected item.  Tag was: %d", [itemPassedIn tag]);
-    }
+    [[GameManager sharedGameManager] runSceneWithID:(SceneTypes)(kGameLevel1 - 1 + [itemPassedIn tag])];
 }
 
 - (void)backButtonPressed
@@ -98,14 +56,44 @@
     // Create CCMenuItemSprite objects with tags, callback methods
 	for (int i = 1; i <= kLevelCount; ++i)
     {
-        CCSprite *normalSprite = [CCSprite spriteWithFile:@"button_level.png"];
-        CCSprite *selectedSprite = [CCSprite spriteWithFile:@"button_level.png"];
-        CCLabelTTF *levelNumber = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"%i", i] fontName:@"Helvetica" fontSize:menuFontSize];
-        levelNumber.position = ccp(normalSprite.contentSize.width*0.5, normalSprite.contentSize.height*0.5);
-        [normalSprite addChild:levelNumber];
+        CCSprite *normalSprite = [CCSprite spriteWithSpriteFrameName:@"button_level.png"];
+        CCSprite *selectedSprite = [CCSprite spriteWithSpriteFrameName:@"button_level.png"];
 		
 		CCMenuItemSprite* item = [CCMenuItemSprite itemWithNormalSprite:normalSprite selectedSprite:selectedSprite target:self selector:@selector(playScene:)];
 		item.tag = i;
+        
+        // Disable level button if it locked (progress)
+        if (i > [GameState sharedInstance].highestOpenedLevel) {
+            [item setColor:ccc3(150, 150, 150)];
+            [item setOpacity:190];
+            [item setIsEnabled:NO];
+            
+            CCSprite *lock = [CCSprite spriteWithSpriteFrameName:@"icon_locked.png"];
+            lock.position = ccp(item.contentSize.width*0.5, item.contentSize.height*0.5);
+            [item addChild:lock];
+        }
+        else
+        {
+            // Лепим звезды на пройденных уровнях
+            int starsReceivedNum = [[[GameState sharedInstance].levelHighestStarsNumArray objectAtIndex:i-1] integerValue];
+            ccBlendFunc blendInactiveStar = (ccBlendFunc){GL_ONE_MINUS_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA};
+            float xPosition, yPosition;
+            
+            for (int counter = 1; counter <= 3; counter++)
+            {
+                CCSprite *star = [CCSprite spriteWithSpriteFrameName:@"childcell_idle.png"];
+                star.scale = 0.8;
+                star.position = ccp(item.contentSize.width/4 * counter, star.contentSize.height/2.5);
+                [item addChild:star];
+                
+                if (counter > starsReceivedNum) [star setBlendFunc:blendInactiveStar];
+            }
+            
+            // Пишем номер уровня на уже пройденных уровнях
+            CCLabelTTF *levelNumber = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"%i", i] fontName:@"Helvetica" fontSize:menuFontSize];
+            levelNumber.position = ccp(item.contentSize.width*0.5, item.contentSize.height*0.5);
+            [item addChild:levelNumber];
+        }
 		
 		//Add each item to array
 		[allItems addObject:item];

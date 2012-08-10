@@ -14,6 +14,7 @@
 #import "ContactListener.h"
 #import "ChildCell.h"
 #import "BombCell.h"
+#import "MovingWall.h"
 #import "GroundCell.h"
 #import "RedCell.h"
 #import "ParentCell.h"
@@ -30,6 +31,7 @@
 {
     CGSize screenSize;
     b2World *world;
+    b2Body *groundBody;
     Box2DUILayer *uiLayer;
     ContactListener *contactListener;
 	GLESDebugDraw *m_debugDraw;
@@ -46,6 +48,7 @@
 - (void)destroyBodies;
 - (ChildCell*)createChildCellAtLocation:(CGPoint)location;
 - (BombCell*)createBombCellAtLocation:(CGPoint)location;
+- (MovingWall*)createMovingWallAtLocation:(CGPoint)location vertical:(BOOL)vertical;
 - (GroundCell*)createGroundCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name;
 - (RedCell*)createRedCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name;
 - (void)showTipsElement:(CCNode*)element delay:(float)delay;

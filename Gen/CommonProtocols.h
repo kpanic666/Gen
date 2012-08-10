@@ -31,6 +31,7 @@ typedef enum {
     kGroundType,
     kExitCellType,
     kMetalType,
-    kMetalPinType
+    kMetalPinType,
+    kMovingWallType
 } GameObjectType;
  

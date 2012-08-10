@@ -9,10 +9,6 @@
 #import "BombCell.h"
 #import "SimpleQueryCallback.h"
 
-#define kBombTimer 3.0
-#define kBombRadius 4
-#define kBombPower 3
-
 @implementation BombCell
 
 - (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location
@@ -25,6 +21,9 @@
 
 - (void)boom
 {
+    
+    // Использовать для вычисления только узкого круга тел, попадающих в радиус взрыва бомбы. чтобы не пробегаться по всем телам
+    
 //    // B2Query Settings
 //    b2AABB aabb;
 //    b2Vec2 delta = b2Vec2([self contentSize].width * kBombRadius / PTM_RATIO, [self contentSize].height * kBombRadius / PTM_RATIO);
@@ -39,6 +38,7 @@
 //    {
 //    }
     
+    // Вычисляем через b2Distance точки воздействия взрыва на телах childCells и кратчайшее расстояние до них для силы воздействия
     // Prepare input for distance query.
 	b2SimplexCache cache;
 	cache.count = 0;
@@ -52,23 +52,27 @@
     
     for (b2Body *b = world->GetBodyList(); b != NULL; b = b->GetNext())
     {
-        if (b->GetUserData() != NULL && b->GetType() == b2_dynamicBody)
+        if (b->GetUserData() != self && b->GetType() == b2_dynamicBody)
         {
             b2DistanceProxy targetProxy;
             targetProxy.Set(b->GetFixtureList()->GetShape(), 0);
             distanceInput.proxyB = targetProxy;
             distanceInput.transformB = b->GetTransform();
             
-            // Get the distance between shapes. We can also use the results
-            // to get a separating axis.
+            // Get the distance between shapes.
             b2Distance(&distanceOutput, &cache, &distanceInput);
             
-            if (distanceOutput.distance <= 300) {
-                b2Vec2 detonationVector = b2Vec2(1,33);
-                b->ApplyLinearImpulse(detonationVector, distanceOutput.pointB);
+            if (distanceOutput.distance < kBombRadius) {
+                b2Vec2 distanceDiff = distanceOutput.pointA - distanceOutput.pointB;
+                float atanFromDistance = atan2f(distanceDiff.y, distanceDiff.x);
+                float xForce = (distanceOutput.distance - kBombRadius) * cosf(atanFromDistance) * kBombPower;
+                float yForce = (distanceOutput.distance - kBombRadius) * sinf(atanFromDistance) * kBombPower;
+                b->ApplyLinearImpulse(b2Vec2(xForce, yForce), distanceOutput.pointB);
             }
         }
     }
+    
+    [self changeState:kStateTakingDamage];
 }
 
 - (void)changeState:(CharacterStates)newState
@@ -85,6 +89,7 @@
             characterHealth -= kRedCellDamage;
             
             // Destroy Physics body
+            [self stopAllActions];
             self.markedForDestruction = YES;
             [GameManager sharedGameManager].numOfTotalCells--;
             
@@ -100,7 +105,14 @@
         {
             // Нужно менять вид клетки. Это состояние принимается клеткой когда был создан джойнт
             [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"bombcell_activated.png"]];
-            [self scheduleOnce:@selector(boom) delay:kBombTimer];
+            if (!activated)
+            {
+                activated = YES;
+                [self runAction:[CCSequence actions:
+                                 [CCBlink actionWithDuration:kBombTimer blinks:(int)kBombTimer],
+                                 [CCCallFunc actionWithTarget:self selector:@selector(boom)],
+                                 nil]];
+            }
             break;
         }
             
@@ -117,6 +129,7 @@
             
         case kStateBeforeSoul:
         {
+            [self stopAllActions];
             self.markedForDestruction = YES;
             [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_idle.png"]];
             [GameManager sharedGameManager].numOfTotalCells--;
@@ -179,6 +192,5 @@
             break;
     }
 }
-
 
 @end

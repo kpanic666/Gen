@@ -68,6 +68,13 @@
         world->CreateJoint(&disJointDef);
         disJointDef.localAnchorB.Set(-1, 0);
         world->CreateJoint(&disJointDef);
+        
+        
+        // Add moving walls
+        cellPos = [Helper convertPosition:ccp(152, 413)];
+        [self createMovingWallAtLocation:cellPos vertical:NO];
+        cellPos = [Helper convertPosition:ccp(696, 261)];
+        [self createMovingWallAtLocation:cellPos vertical:YES];
     }
     return self;
 }

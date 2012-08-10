@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "GameManager.h"
 #import "GCHelper.h"
+#import "TestFlight.h"
 
 @implementation AppController
 
@@ -85,7 +86,10 @@
     
     // Авторизируем игрока в Game Center
     [[GCHelper sharedInstance] authenticateLocalUser];
-	
+    
+    // Запускаем SDK TestFlight для аналитики бета теста и аналитики реального использования
+    [TestFlight takeOff:kTestFlightTeamToken];
+    
 	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.
 	[[GameManager sharedGameManager] setupAudioEngine];
     [[GameManager sharedGameManager] runSceneWithID:kMainMenuScene];
