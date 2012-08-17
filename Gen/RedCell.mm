@@ -17,6 +17,16 @@
         // make the body static
         body->SetType(b2_staticBody);
         body->SetUserData(self);
+        
+        // Set filter properties
+        b2Filter filter;
+        for (b2Fixture *f = body->GetFixtureList(); f; f = f->GetNext())
+        {
+            filter = f->GetFilterData();
+            filter.categoryBits = kRedCellFilterCategory;
+            f->SetFilterData(filter);
+        }
+        
         initPosition = ccp(pos.x - self.textureRect.size.width/2, pos.y - self.textureRect.size.height/2);
     }
     return self;

@@ -15,6 +15,7 @@
 #import "ChildCell.h"
 #import "BombCell.h"
 #import "MovingWall.h"
+#import "BubbleCell.h"
 #import "GroundCell.h"
 #import "RedCell.h"
 #import "ParentCell.h"
@@ -48,6 +49,7 @@
 - (void)destroyBodies;
 - (ChildCell*)createChildCellAtLocation:(CGPoint)location;
 - (BombCell*)createBombCellAtLocation:(CGPoint)location;
+- (BubbleCell*)createBubbleCellAtLocation:(CGPoint)location;
 - (MovingWall*)createMovingWallAtLocation:(CGPoint)location vertical:(BOOL)vertical;
 - (GroundCell*)createGroundCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name;
 - (RedCell*)createRedCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name;

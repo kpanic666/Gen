@@ -42,6 +42,7 @@
     shape.m_radius = self.contentSize.width * scale / 4 / PTM_RATIO;     // Делим на 4 ( на 2 чтоб получить радиус и еще на 2, чтобы компенсировать графику с подстветкой по краям
     fixtureDef.shape = &shape;
     fixtureDef.filter.categoryBits = kChildCellFilterCategory;
+    fixtureDef.filter.maskBits = 0xFFFF ^ kBubbledChildCellFilterCategory;
     body->CreateFixture(&fixtureDef);
 }
 
@@ -85,6 +86,18 @@
             [self runAction:randomMove];
         }
     }
+    
+    if (characterState == kStateBubbling) {
+        // Уничтожаем все джойнты кроме RopeJoint
+        for (b2JointEdge *edge = body->GetJointList(); edge; edge = edge->next)
+        {
+            if (edge->joint->GetType() != e_ropeJoint) {
+                world->DestroyJoint(edge->joint);
+            }
+        }
+        
+        [self changeState:kStateBubbled];
+    }
 }
 
 - (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location
@@ -103,7 +116,7 @@
 - (void) removeCellSprite {
     
     [self setIsActive:FALSE];
-    [self removeFromParentAndCleanup:NO];
+    [self removeFromParentAndCleanup:YES];
 }
 
 - (CGRect)adjustedBoudingBox {
@@ -165,6 +178,20 @@
             // Меняется внешний вид клетки на обычный. В этом состояний объект может продолжать двигаться по инерции,
             // но на нее уже не влияет игрок.
             [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_idle.png"]];
+            
+            // Если настройки фильтрации коллизий остались после пузыря, то меняем их на исходные и останавливаем ячейку
+            b2Fixture *childFixture = body->GetFixtureList();
+            b2Filter childFilter = childFixture->GetFilterData();
+            if (childFilter.categoryBits == kBubbledChildCellFilterCategory)
+            {
+                childFilter.categoryBits = kChildCellFilterCategory;
+                childFilter.maskBits = 0xFFFF ^ kBubbledChildCellFilterCategory;
+                childFixture->SetFilterData(childFilter);
+                
+                // Останавливаем ускорение ячейки
+                body->SetLinearVelocity(b2Vec2_zero);
+                body->SetAngularVelocity(0);
+            }
             break;
         }
             
@@ -225,6 +252,26 @@
             [self runAction:dyingMove];
             [self runAction:dyingFade];
 
+            break;
+        }
+            
+        case kStateBubbling:
+        {
+            // Останавливаем ускорение ячейки
+            body->SetLinearVelocity(b2Vec2_zero);
+            body->SetAngularVelocity(0);
+            
+            b2Fixture *childFixture = body->GetFixtureList();
+            b2Filter childFilter = childFixture->GetFilterData();
+            childFilter.categoryBits = kBubbledChildCellFilterCategory;
+            childFilter.maskBits = kRedCellFilterCategory;
+            childFixture->SetFilterData(childFilter);
+            break;
+        }
+            
+        case kStateBubbled:
+        {
+            
             break;
         }
             

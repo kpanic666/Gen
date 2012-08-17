@@ -21,6 +21,7 @@
 @property (nonatomic) float32 negativeOffset;
 @property (nonatomic) float32 positiveOffset;
 
-- (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location vertical:(BOOL)vertical withGroundBody:(b2Body*)groundBody;
++(id) wallWithWorld:(b2World*)theWorld location:(CGPoint)location isVertical:(BOOL)vertical withGroundBody:(b2Body*)groundBody;
+-(id) initWithWorld:(b2World*)theWorld location:(CGPoint)location isVertical:(BOOL)vertical withGroundBody:(b2Body*)groundBody;
 
 @end

@@ -90,7 +90,7 @@
         }
         
         // add BombCell
-        [self createBombCellAtLocation:ccp([Helper screenCenter].x + kScene6Total * 5, [Helper screenCenter].y + kScene6Total * 5)];
+        [self createBombCellAtLocation:ccp([Helper screenCenter].x, [Helper screenCenter].y)];
     }
     return self;
 }

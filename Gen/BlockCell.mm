@@ -321,7 +321,7 @@
             particleB2Pos = b2Vec2(particlePos.x / PTM_RATIO, particlePos.y / PTM_RATIO);
             aabb.lowerBound = particleB2Pos - delta;
             aabb.upperBound = particleB2Pos + delta;
-            SimpleQueryCallback callback(particleB2Pos, body);
+            SimpleQueryCallback callback(particleB2Pos, body, kObjectTypeNone);
             world->QueryAABB(&callback, aabb);
             
             // Если тело в проверяемой точке найдено, то добавляем частицу, иначе считаем дальше

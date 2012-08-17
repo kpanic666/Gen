@@ -12,6 +12,7 @@
 #import "TestFlight.h"
 #import "GameState.h"
 #import "GCHelper.h"
+#import "SimpleQueryCallback.h"
 
 @interface Box2DLayer()
 {
@@ -101,9 +102,16 @@
     return bombCell;
 }
 
+- (BubbleCell*)createBubbleCellAtLocation:(CGPoint)location
+{
+    BubbleCell *bubbleCell = [[[BubbleCell alloc] initWithWorld:world atLocation:location] autorelease];
+    [sceneSpriteBatchNode addChild:bubbleCell z:2 tag:kBubbleCellTagValue];
+    return bubbleCell;
+}
+
 - (MovingWall*)createMovingWallAtLocation:(CGPoint)location vertical:(BOOL)vertical
 {
-    MovingWall *movingWall = [[[MovingWall alloc] initWithWorld:world atLocation:location vertical:vertical withGroundBody:groundBody] autorelease];
+    MovingWall *movingWall = (MovingWall*)[MovingWall wallWithWorld:world location:location isVertical:vertical withGroundBody:groundBody];
     [sceneSpriteBatchNode addChild:movingWall z:1];
     return movingWall;
 }
@@ -228,6 +236,14 @@
         psPlankton = [CCParticleSystemQuad particleWithFile:@"ps_plankton.plist"];
         [self addChild:psPlankton z:-1];
 //        psPlankton.position = ccp(screenSize.width * 0.5, screenSize.height);
+    
+        // Фиксируем прогресс пройденных уровней. Пройдя уровень сравниваем со значением макс доступного и если меньше то увеличиваем на один
+        int levelNum = (int)[GameManager sharedGameManager].curLevel - 100;
+        if ([GameState sharedInstance].highestOpenedLevel < levelNum)
+        {
+            [GameState sharedInstance].highestOpenedLevel++;
+            [[GameState sharedInstance] save];
+        }
         
         // Display level name with delay
         [self scheduleOnce:@selector(displayLevelName) delay:0.5];
@@ -266,7 +282,7 @@
     
     // Draw lines for distance joints between ChildCell and ParentCell
     [parentCell drawDisJoints];
-    
+
     // Рисуем линии от магнитов к ChildCells
     for (CCSprite *tempSprite in [sceneSpriteBatchNode children])
     {
@@ -338,8 +354,31 @@
 }
 
 #pragma mark -
-#pragma mark Achievements checking
+#pragma mark Bubble Tap Check
+- (void)bubbleTapCheckAtLoc:(b2Vec2)locationWorld
+{
+    b2AABB aabb;
+    b2Vec2 delta = b2Vec2(1.0/PTM_RATIO, 1.0/PTM_RATIO);
+    aabb.lowerBound = locationWorld - delta;
+    aabb.upperBound = locationWorld + delta;
+    SimpleQueryCallback callback(locationWorld, nil, kEnemyTypeBubble);
+    world->QueryAABB(&callback, aabb);
+    
+    if (callback.fixtureFound)
+    {
+        b2Body *foundBody = callback.fixtureFound->GetBody();
+        Box2DSprite *foundSprite = (Box2DSprite*) foundBody->GetUserData();
+        if (foundSprite.characterState != kStateTraveling || foundSprite == NULL) {
+            return;
+        }
+        
+        [foundSprite changeState:kStateTakingDamage];
+    }
 
+}
+
+#pragma mark -
+#pragma mark Achievements checking
 - (void)checkAchievements
 {
     GameManager *gameManager = [GameManager sharedGameManager];
@@ -374,7 +413,7 @@
     int levelNum = (int)gameManager.curLevel - 100;
     
     // Фиксируем прогресс пройденных уровней. Пройдя уровень сравниваем со значением макс доступного и если меньше то увеличиваем на один
-    if (gameState.highestOpenedLevel-1 < levelNum) gameState.highestOpenedLevel++;
+    if ([GameState sharedInstance].highestOpenedLevel == levelNum) [GameState sharedInstance].highestOpenedLevel++;
     
     // Запоминаем кол-во набранных звезд если их больше чем было
     if (gameManager.levelStarsNum > [[gameState.levelHighestStarsNumArray objectAtIndex:levelNum-1] integerValue]) {
@@ -447,7 +486,6 @@
             {
                 i++;
             }
-
         }
     }
     
@@ -512,12 +550,18 @@
     touchLocation = [self convertToNodeSpace:touchLocation];
     b2Vec2 locationWorld = b2Vec2(touchLocation.x/PTM_RATIO, touchLocation.y/PTM_RATIO);
     
+    // Проверяем попали мы по пузырю или нет. Если да, то лопаем его и освобождаем ячейку
+    if ([sceneSpriteBatchNode getChildByTag:kBubbleCellTagValue]) {
+        [self bubbleTapCheckAtLoc:locationWorld];
+    }
+    
     // Отображаем главную ячейку под пальцем игрока и она начинает притягивать
     [parentCell changeBodyPosition:locationWorld];
     [parentCell changeState:kStateTraveling];
     
     // Увеличиваем счетчик нажатий на экран
     [GameManager sharedGameManager].levelTappedNum++;
+
     
     return TRUE;
 }

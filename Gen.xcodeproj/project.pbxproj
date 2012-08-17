@@ -36,6 +36,8 @@
 		E9428EA415A44F2A006E941C /* tut_fingerprint-ipad-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E9428EA215A44F29006E941C /* tut_fingerprint-ipad-hd.png */; };
 		E9428EA615A46033006E941C /* tut_fingerprint.png in Resources */ = {isa = PBXBuildFile; fileRef = E9428EA515A46032006E941C /* tut_fingerprint.png */; };
 		E95A928D158B600D00235B4A /* DrawingSmoothPrimitives.m in Sources */ = {isa = PBXBuildFile; fileRef = E95A928C158B600D00235B4A /* DrawingSmoothPrimitives.m */; };
+		E963EA9715DA354F00E85692 /* BubbleCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = E963EA9615DA354F00E85692 /* BubbleCell.mm */; };
+		E963EAD215DCF5DA00E85692 /* ps_popUpBubble.plist in Resources */ = {isa = PBXBuildFile; fileRef = E963EAD115DCF5DA00E85692 /* ps_popUpBubble.plist */; };
 		E96D191B15D3C55800356176 /* MovingWall.mm in Sources */ = {isa = PBXBuildFile; fileRef = E96D191A15D3C55800356176 /* MovingWall.mm */; };
 		E97A0A5F154D421E003D52E8 /* Scene2.mm in Sources */ = {isa = PBXBuildFile; fileRef = E97A0A5E154D421E003D52E8 /* Scene2.mm */; };
 		E97A0A62154D423B003D52E8 /* Scene2ActionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = E97A0A61154D423B003D52E8 /* Scene2ActionLayer.mm */; };
@@ -384,6 +386,9 @@
 		E9428EA515A46032006E941C /* tut_fingerprint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tut_fingerprint.png; sourceTree = "<group>"; };
 		E95A928A158B5E3100235B4A /* DrawingSmoothPrimitives.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingSmoothPrimitives.h; sourceTree = "<group>"; };
 		E95A928C158B600D00235B4A /* DrawingSmoothPrimitives.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawingSmoothPrimitives.m; sourceTree = "<group>"; };
+		E963EA9515DA354F00E85692 /* BubbleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BubbleCell.h; sourceTree = "<group>"; };
+		E963EA9615DA354F00E85692 /* BubbleCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BubbleCell.mm; sourceTree = "<group>"; };
+		E963EAD115DCF5DA00E85692 /* ps_popUpBubble.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ps_popUpBubble.plist; sourceTree = "<group>"; };
 		E96D191915D3C55800356176 /* MovingWall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovingWall.h; sourceTree = "<group>"; };
 		E96D191A15D3C55800356176 /* MovingWall.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MovingWall.mm; sourceTree = "<group>"; };
 		E97A0A5D154D421E003D52E8 /* Scene2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene2.h; sourceTree = "<group>"; };
@@ -1683,19 +1688,6 @@
 			path = Rope;
 			sourceTree = "<group>";
 		};
-		E9831C8E15186E79006F2E31 /* Box2D */ = {
-			isa = PBXGroup;
-			children = (
-				E97E9B89153EC4E9008B6B86 /* RedCell.h */,
-				E97E9B8A153EC4E9008B6B86 /* RedCell.mm */,
-				E90BB35E15298B1400C8909B /* MagneticCell.h */,
-				E90BB35F15298B1400C8909B /* MagneticCell.mm */,
-				E97C0AD715B9660000725EBD /* BombCell.h */,
-				E97C0AD815B9660000725EBD /* BombCell.mm */,
-			);
-			name = Box2D;
-			sourceTree = "<group>";
-		};
 		E98D031A155B937800AD2308 /* Scene06 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1779,7 +1771,6 @@
 			children = (
 				E9958933150B7FD80006115C /* Box2D */,
 				E9958932150B7FBB0006115C /* Constants */,
-				E9958931150B7FAC0006115C /* Enemy Objects */,
 				E9958930150B7F7F0006115C /* Game Objects */,
 				E9958744150B77550006115C /* libs */,
 				E995892A150B7D9E0006115C /* Plists */,
@@ -1866,6 +1857,7 @@
 		E995892A150B7D9E0006115C /* Plists */ = {
 			isa = PBXGroup;
 			children = (
+				E963EAD115DCF5DA00E85692 /* ps_popUpBubble.plist */,
 				E981BB06157794F7003050E5 /* ps_popUpStar.plist */,
 				E981BB0415778834003050E5 /* ps_plankton.plist */,
 				E97D37D015667CF200173CEF /* scene19bodies.plist */,
@@ -1918,14 +1910,6 @@
 				E9958958150CB0250006115C /* GameCharacter.m */,
 			);
 			name = "Game Objects";
-			sourceTree = "<group>";
-		};
-		E9958931150B7FAC0006115C /* Enemy Objects */ = {
-			isa = PBXGroup;
-			children = (
-				E9831C8E15186E79006F2E31 /* Box2D */,
-			);
-			name = "Enemy Objects";
 			sourceTree = "<group>";
 		};
 		E9958932150B7FBB0006115C /* Constants */ = {
@@ -2130,6 +2114,14 @@
 				E97A0A87154E8AE0003D52E8 /* MetalCellPin.mm */,
 				E96D191915D3C55800356176 /* MovingWall.h */,
 				E96D191A15D3C55800356176 /* MovingWall.mm */,
+				E97E9B89153EC4E9008B6B86 /* RedCell.h */,
+				E97E9B8A153EC4E9008B6B86 /* RedCell.mm */,
+				E90BB35E15298B1400C8909B /* MagneticCell.h */,
+				E90BB35F15298B1400C8909B /* MagneticCell.mm */,
+				E97C0AD715B9660000725EBD /* BombCell.h */,
+				E97C0AD815B9660000725EBD /* BombCell.mm */,
+				E963EA9515DA354F00E85692 /* BubbleCell.h */,
+				E963EA9615DA354F00E85692 /* BubbleCell.mm */,
 			);
 			name = Box2D;
 			sourceTree = "<group>";
@@ -2316,6 +2308,7 @@
 				E9ADC5CD15B5291F0073C0A4 /* border_horizontal-ipad.png in Resources */,
 				E9ADC5CE15B5291F0073C0A4 /* border_vertical-ipad-hd.png in Resources */,
 				E9ADC5CF15B5291F0073C0A4 /* border_vertical-ipad.png in Resources */,
+				E963EAD215DCF5DA00E85692 /* ps_popUpBubble.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2547,6 +2540,7 @@
 				E97C0C3815C02F0C00725EBD /* vec3.c in Sources */,
 				E97C0C3915C02F0C00725EBD /* vec4.c in Sources */,
 				E96D191B15D3C55800356176 /* MovingWall.mm in Sources */,
+				E963EA9715DA354F00E85692 /* BubbleCell.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

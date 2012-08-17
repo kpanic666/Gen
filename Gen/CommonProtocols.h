@@ -17,7 +17,9 @@ typedef enum {
     kStateConnected,        // ChildCell в зоне действия сенсора, уже с задействованными джойнтами
     kStateDisconnecting,    // ChildCell при выходе из зоны сенсора. Следующее состояние kStateIdle уже без джоинтов
     kStateBeforeSoul,       // ChildCell при соприкосновении с выходом на мгновение принимает это состояние чтобы отбросить джоинты
-    kStateSoul              // ChildCell которые добрались до выхода и плавают в нем, но не выходят
+    kStateSoul,              // ChildCell которые добрались до выхода и плавают в нем, но не выходят
+    kStateBubbling,          // ChildCell который попал в пузырь и поднимается вверх, на него не влияет Parent Cell
+    kStateBubbled           // Пойманый в пузырь ChildCell с ropejoint'ом
 } CharacterStates;
 
 typedef enum {
@@ -26,6 +28,7 @@ typedef enum {
     kEnemyTypeMagneticCell,
     kEnemyTypeRepulsiveCell,
     kEnemyTypeBomb,
+    kEnemyTypeBubble,
     kParentCellType,
     kChildCellType,
     kGroundType,

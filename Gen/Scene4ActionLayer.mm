@@ -72,7 +72,9 @@
         
         // Add moving walls
         cellPos = [Helper convertPosition:ccp(152, 413)];
-        [self createMovingWallAtLocation:cellPos vertical:NO];
+        MovingWall *test1 = [self createMovingWallAtLocation:cellPos vertical:NO];
+        [test1 setMovingSpeed:6];
+        [test1 setNegativeOffset:-5];
         cellPos = [Helper convertPosition:ccp(696, 261)];
         [self createMovingWallAtLocation:cellPos vertical:YES];
     }

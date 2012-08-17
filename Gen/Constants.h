@@ -10,6 +10,7 @@
 #define kPauseLayer 16
 #define kGameOverLayer 17
 #define kMainSpriteBatchNode 18
+#define kBubbleCellTagValue 19
 #define kChildCellHealth 100
 #define kParentCellSpriteTagValue 10
 #define kRedCellDamage 100
@@ -89,14 +90,19 @@ typedef enum {
     kScene20Needed = 14
 } NumOfCellsNeeded;
 
-// Collision Filter Categories
+// Collision Filter Categories. 0×1, 0×2, 0×4, 0×8, 0×10, 0×20, 0×40, 0×80.. From 0×0001 to 0×8000 and only power of 2!
+// You can use ^ to exclude category from maskbit or use | to sum category in mask bits. maskbits = 0xFFFF ^ 0x0002
+// maskbits = 0xFFFF ^ (0x0002 | 0x0003)
 typedef enum {
     kParentCellFilterCategory = 0x0002,
-    kChildCellFilterCategory = 0x0003,
-    kExitCellFilterCategory = 0x0004,
-    kMagneticCellFilterCategory = 0x0005,
-    kRedCellFilterCategory = 0x0006,
-    kMovingWallFilterCategory = 0x0007
+    kChildCellFilterCategory = 0x0004,
+    kExitCellFilterCategory = 0x0008,
+    kMagneticCellFilterCategory = 0x0016,
+    kRedCellFilterCategory = 0x0020,
+    kMovingWallFilterCategory = 0x0040,
+    kBubbledChildCellFilterCategory = 0x0080,
+    kBubbleCellFilterCategory = 0x0100,
+    kGroundCellFilterCategory = 0x0200
 } FilterCategories;
 
 typedef enum {

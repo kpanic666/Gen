@@ -41,11 +41,21 @@ void ContactListener::BeginContact(b2Contact* contact)
     }
     
     // Обработка столкновениий RedCell с ChildCell
-    if (spriteA.gameObjectType == kEnemyTypeRedCell && spriteB.characterState != kStateDead) {
+    if (spriteA.gameObjectType == kEnemyTypeRedCell && (spriteB.gameObjectType == kChildCellType || spriteB.gameObjectType == kEnemyTypeBomb)) {
         [spriteB changeState:kStateTakingDamage];
     }
-    else if (spriteB.gameObjectType == kEnemyTypeRedCell && spriteA.characterState != kStateDead) {
+    else if (spriteB.gameObjectType == kEnemyTypeRedCell && (spriteA.gameObjectType == kChildCellType || spriteA.gameObjectType == kEnemyTypeBomb)) {
         [spriteA changeState:kStateTakingDamage];
+    }
+    
+    // Обработка столкновений BubbleCell с ChildCell
+    if (spriteA.gameObjectType == kEnemyTypeBubble && spriteA.characterState == kStateIdle) {
+        [spriteB changeState:kStateBubbling];
+        [spriteA changeState:kStateTraveling];
+    }
+    else if (spriteB.gameObjectType == kEnemyTypeBubble && spriteB.characterState == kStateIdle) {
+        [spriteA changeState:kStateBubbling];
+        [spriteB changeState:kStateTraveling];
     }
 }
 

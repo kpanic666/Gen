@@ -7,7 +7,7 @@
 //
 
 #import "BombCell.h"
-#import "SimpleQueryCallback.h"
+//#import "SimpleQueryCallback.h"
 
 @implementation BombCell
 

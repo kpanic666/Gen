@@ -10,6 +10,27 @@
 
 @implementation MovingWall
 
++(id) wallWithWorld:(b2World *)theWorld location:(CGPoint)location isVertical:(BOOL)vertical withGroundBody:(b2Body *)groundBody
+{
+    return [[[self alloc] initWithWorld:theWorld location:location isVertical:vertical withGroundBody:groundBody] autorelease];
+}
+
+- (id)initWithWorld:(b2World *)theWorld location:(CGPoint)location isVertical:(BOOL)vertical withGroundBody:(b2Body *)groundBody
+{
+    if ((self = [super init]))
+    {
+        world = theWorld;
+        [self setIsVertical:vertical];
+        [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"movingwall_idle.png"]];
+        gameObjectType = kMovingWallType;
+        characterState = kStateTraveling;
+        _negativeOffset = -2.0f;
+        _positiveOffset = 2.0f;
+        [self createBodyAtLocation:location withGroundBody:groundBody];
+    }
+    return self;
+}
+
 - (void)createBodyAtLocation:(CGPoint)location withGroundBody:(b2Body*)groundBody
 {
     // make wall Body
@@ -23,6 +44,7 @@
     b2PolygonShape shape;
     shape.SetAsBox(self.contentSize.width / 2 / PTM_RATIO, self.contentSize.height / 2 / PTM_RATIO);
     fixtureDef.shape = &shape;
+    fixtureDef.density = 2.0f;
     fixtureDef.filter.categoryBits = kMovingWallFilterCategory;
     fixtureDef.filter.maskBits = kChildCellFilterCategory;
     body->CreateFixture(&fixtureDef);
@@ -41,45 +63,61 @@
     wallJointDef.lowerTranslation = _negativeOffset;
     wallJointDef.upperTranslation = _positiveOffset;
     wallJointDef.enableLimit = true;
-    wallJointDef.maxMotorForce = 50.0f;
+    wallJointDef.maxMotorForce = 100.0f;
     wallJointDef.motorSpeed = 1;
     wallJointDef.enableMotor = true;
     wallJoint = (b2PrismaticJoint*) world->CreateJoint(&wallJointDef);
 }
 
-- (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location vertical:(BOOL)vertical withGroundBody:(b2Body *)groundBody
-{
-    if ((self = [super init]))
-    {
-        world = theWorld;
-        [self setIsVertical:vertical];
-        [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"movingwall_idle.png"]];
-        gameObjectType = kMovingWallType;
-        characterState = kStateIdle;
-        self.negativeOffset = -2.0f;
-        self.positiveOffset = 2.0f;
-        [self createBodyAtLocation:location withGroundBody:groundBody];
-    }
-    return self;
-}
-
 - (void)setMovingSpeed:(float32)movingSpeed
 {
+    _movingSpeed = movingSpeed;
+    
     if (wallJoint->IsMotorEnabled()) {
         wallJoint->SetMotorSpeed(movingSpeed);
     }
     else {
-        wallJoint->SetMaxMotorForce(1000);
+        wallJoint->SetMaxMotorForce(100);
         wallJoint->SetMotorSpeed(movingSpeed);
         wallJoint->EnableMotor(YES);
     }
 }
 
+-(void) setNegativeOffset:(float32)negativeOffset
+{
+    _negativeOffset = negativeOffset;
+    wallJoint->SetLimits(negativeOffset, wallJoint->GetUpperLimit());
+}
+
+-(void) setPositiveOffset:(float32)positiveOffset
+{
+    _positiveOffset = positiveOffset;
+    wallJoint->SetLimits(wallJoint->GetLowerLimit(), positiveOffset);
+}
+
+- (void)reversMovingDirection
+{
+    [self setMovingSpeed:wallJoint->GetMotorSpeed() * -1];
+}
+
 - (void)updateStateWithDeltaTime:(ccTime)deltaTime andListOfGameObjects:(CCArray *)listOfGameObjects
 {
     float32 jTrans = wallJoint->GetJointTranslation();
+    static double timeAccum = 0;
+
+    // Если MovingWall достигла конца пути, то двигаем в обратную сторону
     if (jTrans >= self.positiveOffset || jTrans <= self.negativeOffset) {
-        [self setMovingSpeed:wallJoint->GetMotorSpeed() * -1];
+        [self reversMovingDirection];
+        timeAccum = 0;
+    }
+    else
+    {
+        // Если MovingWall зажала какой то предмет и находится на перепутье больше 5 сек - освобождаем
+        timeAccum += deltaTime;
+        if (timeAccum > 5.0) {
+            [self reversMovingDirection];
+            timeAccum = 0;
+        }
     }
 }
 
