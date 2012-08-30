@@ -12,6 +12,7 @@
 #import "GB2ShapeCache.h"
 #import "Helper.h"
 #import "SimpleQueryCallback.h"
+#import "HMVectorNode.h"
 
 #define kGlowOffset 10.0
 
@@ -163,6 +164,9 @@
     float xPoint;
     float yPoint;
     
+    // Node declaration for anti-aliasing drawing of mask
+    HMVectorNode *hmNode = [[HMVectorNode alloc] init];
+    
     for (b2Fixture *f = body->GetFixtureList(); f; f = f->GetNext())
     {
         switch (f->GetType())
@@ -172,27 +176,16 @@
                 b2CircleShape *circle = (b2CircleShape*)f->GetShape();
                 b2Vec2 center = circle->m_p;
                 float32 radius = circle->m_radius;
-                const float32 k_segments = 32.0f;
-                const float32 k_increment = 2.0f * b2_pi / k_segments;
-                float32 theta = 0.0f;
+                xPoint = center.x * PTM_RATIO + textureSize.width * 0.5;
+                yPoint = center.y * PTM_RATIO + textureSize.height * 0.5;
                 
-                CGPoint vertices[int(k_segments)];
-                for (int32 i = 0; i < k_segments; ++i)
-                {
-                    b2Vec2 v = center + radius * b2Vec2(cosf(theta), sinf(theta));
-                    xPoint = v.x * PTM_RATIO + textureSize.width * 0.5;
-                    yPoint = v.y * PTM_RATIO + textureSize.height * 0.5;
-                    vertices[i]=ccp(xPoint, yPoint);
-                    theta += k_increment;
-                }
-                
-                ccDrawSolidPoly(vertices, k_segments, ccc4f(0, 0, 0, 1));
+                [hmNode drawDot:ccp(xPoint, yPoint) radius:radius*PTM_RATIO color:ccc4f(0, 0, 0, 1)];
             }
                 break;
                 
             case b2Shape::e_polygon:
             {
-                b2PolygonShape *poly = (b2PolygonShape*)f->GetShape();
+                b2PolygonShape *poly = (b2PolygonShape*)f->GetShape(); 
                 int32 vertexCount = poly->m_vertexCount;
                 b2Assert(vertexCount <= b2_maxPolygonVertices);
                 CGPoint vertices[b2_maxPolygonVertices];
@@ -204,7 +197,7 @@
                     vertices[i] = ccp(xPoint, yPoint);
                 }
                 
-                ccDrawSolidPoly(vertices, vertexCount, ccc4f(0, 0, 0, 1));
+                [hmNode drawPolyWithVerts:vertices count:vertexCount width:1/CC_CONTENT_SCALE_FACTOR() fill:ccc4f(0, 0, 0, 1) line:ccc4f(0, 0, 0, 1)];
             }
                 break;
                 
@@ -212,9 +205,12 @@
                 break;
         }
     }
+    [hmNode visit];
     
     // 4: Call CCRenderTexture:end
     [rt end];
+    
+    [hmNode release];
     
     // 5: Create a new Sprite from texture
     return rt.sprite.texture;

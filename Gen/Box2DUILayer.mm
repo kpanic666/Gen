@@ -15,6 +15,7 @@
 @interface Box2DUILayer()
 {
     CCLabelBMFont *scoreLabel;
+    CCLabelBMFont *leftScoreLabel;
     CCLabelBMFont *centerLabel;
     CCSprite *centerLabelSFX;
     float originalScale; 
@@ -36,6 +37,7 @@
     
     // Ставим на паузу всех детей основного batchnode. так просто поставить слой на паузу не достаточно
     CCLayer *gl = (CCLayer*) [self.parent getChildByTag:kBox2DLayer];
+    [gl setIsTouchEnabled:NO];
     CCSpriteBatchNode *bn = (CCSpriteBatchNode*)[gl getChildByTag:kMainSpriteBatchNode];
     [gl pauseSchedulerAndActions];
     for (CCNode *tempNode in [bn children]) {
@@ -84,12 +86,19 @@
         [self addChild:pauseMenu z:5];
         
         // Init Score Label
-        scoreLabel = [CCLabelBMFont labelWithString:@"                  " fntFile:@"levelNameText.fnt"];
+        scoreLabel = [CCLabelBMFont labelWithString:@"               " fntFile:@"levelNameText.fnt"];
         scoreLabel.anchorPoint = ccp(0, 1);
         scoreLabel.position = ccp(padding, screenSize.height - padding);
-        originalScale = 0.7;
+        originalScale = 0.6;
         scoreLabel.scale = originalScale;
         [self addChild:scoreLabel z:1];
+        
+        // Init Left Score label, который показывает сколько осталось не использованных детей и если их меньше чем нужно для завершения уровня становится красным.
+        leftScoreLabel = [CCLabelBMFont labelWithString:@"        " fntFile:@"levelNameText.fnt"];
+        leftScoreLabel.anchorPoint = ccp(0, 1);
+        leftScoreLabel.position = ccp(scoreLabel.position.x + scoreLabel.contentSize.width, scoreLabel.position.y);
+        leftScoreLabel.scale = originalScale;
+        [self addChild:leftScoreLabel z:1];
         
         // Init Center information label for name of level and other info
         centerLabel = [CCLabelBMFont labelWithString:@"          " fntFile:@"levelNameText.fnt"];
@@ -111,10 +120,18 @@
     return self;
 }
 
-- (void) updateScore:(int)collected need:(int)need {
+- (void) updateScore {
     
     [scoreLabel stopAllActions];
-    [scoreLabel setString:[NSString stringWithFormat:@"%i of %i collected", collected, need]];
+    GameManager *gameManager = [GameManager sharedGameManager];
+    [gameManager setNeedToUpdateScore:FALSE];
+    [scoreLabel setString:[NSString stringWithFormat:@"Eaten: %i of %i", gameManager.numOfSavedCells, gameManager.numOfNeededCells]];
+    [leftScoreLabel setString:[NSString stringWithFormat:@"Left: %i", gameManager.numOfTotalCells]];
+    
+    // Turn Left Score to Red color when мало ячеек для окончания уровня.
+    if ((gameManager.numOfTotalCells < (gameManager.numOfNeededCells - gameManager.numOfSavedCells)) && gameManager.numOfSavedCells < gameManager.numOfNeededCells) {
+        leftScoreLabel.color = ccc3(255, 50, 50);
+    }
     
     // Pop up the score
     CCScaleTo *scaleUp = [CCScaleTo actionWithDuration:0.1 scale:originalScale * 1.1];

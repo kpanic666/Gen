@@ -249,6 +249,15 @@
         timeLabel.position = ccp(xButtonPos, yButtonPos);
         timeValue.position = ccp(xButtonPos, yButtonPos);
         
+        // Display Highscore Warning when we update score for this lvl
+        if (gm.levelHighScoreAchieved) {
+            CCSprite *highscore = [CCSprite spriteWithSpriteFrameName:@"highscore_bubble.png"];
+            highscore.opacity = 0;
+            highscore.scale = beginScale;
+            highscore.position = ccp(undercoverSize.width, undercoverSize.height * 0.5);
+            [undercover addChild:highscore];
+        }
+        
         // Анимируем появление элементов меню
         float delayToPopingUpStars = [self showMenuNodes];
         [self scheduleOnce:@selector(popUpStars) delay:delayToPopingUpStars];

@@ -75,11 +75,6 @@
         cellPos = [Helper convertPosition:ccp(645, 203)];
         MagneticCell *magneticCell1 = [[[MagneticCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
         [sceneSpriteBatchNode addChild:magneticCell1 z:-1];
-        
-        
-        // Add bubble
-        cellPos = [Helper convertPosition:ccp(760, 513)];
-        [self createBubbleCellAtLocation:cellPos];
     }
     return self;
 }

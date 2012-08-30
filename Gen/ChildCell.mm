@@ -200,6 +200,7 @@
             self.markedForDestruction = YES;
             [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_idle.png"]];
             [GameManager sharedGameManager].numOfTotalCells--;
+            [GameManager sharedGameManager].numOfSavedCells++;
             break;
         }
             

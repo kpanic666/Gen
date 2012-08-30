@@ -134,7 +134,15 @@
             {
                 Box2DSprite *childCell = (Box2DSprite*) edge->joint->GetBodyB()->GetUserData();
                 if ([childCell gameObjectType] == kChildCellType) {
-                    [childCell changeState:kStateIdle];
+                    if (body->GetPosition().y < topBorder)
+                    {
+                        [childCell changeState:kStateIdle];
+                    }
+                    else
+                    {
+                        [childCell changeState:kStateTakingDamage];
+                    }
+                    
                 }
             }
             
@@ -151,6 +159,8 @@
             
         case kStateDead:
         {
+            PLAYSOUNDEFFECT(@"BUBBLECELL_PRESSED");
+            
             // Create particles when Bubble pop ups
             CCParticleSystemQuad *psPopUpBubble = [CCParticleSystemQuad particleWithFile:@"ps_popUpBubble.plist"];
             psPopUpBubble.position = self.position;

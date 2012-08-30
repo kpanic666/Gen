@@ -34,7 +34,7 @@
 
 - (void)playScene:(id)itemPassedIn
 {
-    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
+    PLAYSOUNDEFFECT(@"LEVEL_BUTTON_PRESSED");
     [[GameManager sharedGameManager] runSceneWithID:(SceneTypes)(kGameLevel1 - 1 + [itemPassedIn tag])];
 }
 
@@ -56,42 +56,37 @@
     // Create CCMenuItemSprite objects with tags, callback methods
 	for (int i = 1; i <= kLevelCount; ++i)
     {
-        CCSprite *normalSprite = [CCSprite spriteWithSpriteFrameName:@"button_level.png"];
-        CCSprite *selectedSprite = [CCSprite spriteWithSpriteFrameName:@"button_level.png"];
+        CCSprite *normalSprite = [CCSprite spriteWithSpriteFrameName:@"choose_level_button.png"];
+        CCSprite *selectedSprite = [CCSprite spriteWithSpriteFrameName:@"choose_level_buttonPressed.png"];
+        CCSprite *disabledSprite = [CCSprite spriteWithSpriteFrameName:@"choose_level_buttonDisabled.png"];
 		
-		CCMenuItemSprite* item = [CCMenuItemSprite itemWithNormalSprite:normalSprite selectedSprite:selectedSprite target:self selector:@selector(playScene:)];
+		CCMenuItemSprite* item = [CCMenuItemSprite itemWithNormalSprite:normalSprite selectedSprite:selectedSprite disabledSprite:disabledSprite target:self selector:@selector(playScene:)];
 		item.tag = i;
         
         // Disable level button if it locked (progress)
         if (i > [GameState sharedInstance].highestOpenedLevel) {
-            [item setColor:ccc3(150, 150, 150)];
-            [item setOpacity:190];
-            [item setIsEnabled:NO];
-            
-            CCSprite *lock = [CCSprite spriteWithSpriteFrameName:@"icon_locked.png"];
-            lock.position = ccp(item.contentSize.width*0.5, item.contentSize.height*0.5);
-            [item addChild:lock];
+            item.isEnabled = NO;
         }
         else
         {
             // Лепим звезды на пройденных уровнях
             int starsReceivedNum = [[[GameState sharedInstance].levelHighestStarsNumArray objectAtIndex:i-1] integerValue];
             ccBlendFunc blendInactiveStar = (ccBlendFunc){GL_ONE_MINUS_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA};
-            float xPosition, yPosition;
             
             for (int counter = 1; counter <= 3; counter++)
             {
                 CCSprite *star = [CCSprite spriteWithSpriteFrameName:@"childcell_idle.png"];
                 star.scale = 0.8;
-                star.position = ccp(item.contentSize.width/4 * counter, star.contentSize.height/2.5);
+                star.position = ccp(item.contentSize.width * 0.25 * counter, 0);
                 [item addChild:star];
                 
                 if (counter > starsReceivedNum) [star setBlendFunc:blendInactiveStar];
             }
             
             // Пишем номер уровня на уже пройденных уровнях
-            CCLabelTTF *levelNumber = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"%i", i] fontName:@"Helvetica" fontSize:menuFontSize];
-            levelNumber.position = ccp(item.contentSize.width*0.5, item.contentSize.height*0.5);
+            CCLabelBMFont *levelNumber = [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%i", i] fntFile:@"levelselectNumbers.fnt"];
+            levelNumber.position = ccp(item.contentSize.width*0.5, item.contentSize.height*0.45);
+            levelNumber.alignment = kCCTextAlignmentCenter;
             [item addChild:levelNumber];
         }
 		
@@ -100,10 +95,10 @@
 	}
 	
 	//Init SlidingMenuGrid object with array and some other information
-    CCSprite *normalSprite = [CCSprite spriteWithFile:@"button_level.png"]; // Only for size of texture
-    SlidingMenuGrid *menuGrid = [SlidingMenuGrid menuWithArray:allItems cols:5 rows:4 
-                                                      position:ccp(screenSize.width*0.28, screenSize.height*0.75) 
-                                                      padding:ccp(normalSprite.contentSize.width * 1.1, normalSprite.contentSize.height) 
+    CCSprite *normalSprite = [CCSprite spriteWithSpriteFrameName:@"choose_level_button.png"];; // Only for size of texture
+    SlidingMenuGrid *menuGrid = [SlidingMenuGrid menuWithArray:allItems cols:4 rows:5
+                                                      position:ccp(screenSize.width*0.15, screenSize.height*0.89)
+                                                      padding:ccp(normalSprite.contentSize.width*1.18, normalSprite.contentSize.height * 1.26)
                                                       verticalPages:false];
 	 
 	[self addChild:menuGrid z:1];
@@ -127,10 +122,15 @@
         
         // Background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.png"];
+        CCSprite *background = [CCSprite spriteWithFile:@"levelselect_back.png"];
         [background setPosition:ccp(screenSize.width*0.5, screenSize.height*0.5)];
         [self addChild:background z:-1];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
+        
+        // Choose level Label
+        CCSprite *chooseLevelLabel = [CCSprite spriteWithSpriteFrameName:@"choose_level_label.png"];
+        [chooseLevelLabel setPosition:ccp(screenSize.width*0.78, screenSize.height*0.14)];
+        [self addChild:chooseLevelLabel];
         
         // Display Main Menu Buttons
         [self displayLevelSelectMenuButtons];

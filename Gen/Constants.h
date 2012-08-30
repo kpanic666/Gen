@@ -11,17 +11,22 @@
 #define kGameOverLayer 17
 #define kMainSpriteBatchNode 18
 #define kBubbleCellTagValue 19
+#define kExitCellSpriteTagValue 20
+#define kDrawNodeTagValue 21
 #define kChildCellHealth 100
 #define kParentCellSpriteTagValue 10
 #define kRedCellDamage 100
-#define kExitCellSpriteTagValue 20
 #define kMagneticPowerMultiplier 0.15
 #define kLevelCount 20
 #define kMaxBubbleMoveDuration 15
 #define kMinBubbleMoveDuration 5
-#define kMaxNumOfBubbleOnScene 4
+#define kMaxNumOfBubbleOnScene 5
 #define kiPadScreenOffsetX 32
 #define kiPadScreenOffsetY 64
+// Parent Cell Radius drawing
+#define kParentCellRadiusWidthMax 2
+#define kParentCellRadiusWidthMin 1
+#define kParentCellRadiusWidthChangeSpeed 0.1
 // BombCell Parameters
 #define kBombTimer 3.0  //secs
 #define kBombRadius 4   //meters. размер childcell около 0.35м

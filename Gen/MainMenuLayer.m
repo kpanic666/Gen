@@ -231,18 +231,9 @@
 - (void)displayMainMenuButtons 
 {
     CGSize screenSize = [CCDirector sharedDirector].winSize;
-
-    // Center Magnit
-    CCSprite *magnit = [CCSprite spriteWithFile:@"playButtonUnder.png"];
-    [magnit setPosition:ccp(screenSize.width*0.5, screenSize.height*0.5)];
-    [self addChild:magnit z:0];
-    id scaleUp = [CCScaleTo actionWithDuration:0.1f scale:1.2f];
-    id scaleDown = [CCScaleTo actionWithDuration:2.0f scale:1.0f];
-    [magnit runAction:[CCRepeatForever actionWithAction:[CCSequence actions:scaleUp, scaleDown, nil]]];
-    [magnit runAction:[CCRepeatForever actionWithAction:[CCRotateBy actionWithDuration:20.0f angle:360]]];
     
     // Make Sprites for Menu
-    CCSprite *playGameSprite = [CCSprite spriteWithFile:@"button_big_play.png"];
+    CCSprite *playGameSprite = [CCSprite spriteWithSpriteFrameName:@"button_big_play.png"];
     CCSprite *optionsSprite = [CCSprite spriteWithSpriteFrameName:@"button_options.png"];
     CCSprite *leaderboardSprite = [CCSprite spriteWithSpriteFrameName:@"button_leaderboard.png"];
     CCSprite *achievmentsSprite = [CCSprite spriteWithSpriteFrameName:@"button_achievments.png"];
@@ -251,7 +242,7 @@
     float padding = [optionsSprite contentSize].width*0.5 * 0.2; // отступ от края экрана c учетом спец эффекта меню
     float xButtonPos = 0;
     float yButtonPos = 0;
-    [playGameSprite setPosition:ccp(screenSize.width*0.5, screenSize.height*0.5)];
+    [playGameSprite setPosition:ccp(screenSize.width*0.78, screenSize.height*0.47)];
     xButtonPos = screenSize.width-[optionsSprite contentSize].width*0.5 - padding;
     yButtonPos = [optionsSprite contentSize].height*0.5 + padding;
     [optionsSprite setPosition:ccp(xButtonPos, yButtonPos)];
@@ -263,7 +254,7 @@
     [achievmentsSprite setPosition:ccp(xButtonPos, yButtonPos)];
 
     // Adding sprites to Batchnode
-    [self addChild:playGameSprite z:3];
+    [sceneSpriteBatchNode addChild:playGameSprite z:3];
     [sceneSpriteBatchNode addChild:optionsSprite z:3 tag:kOptionsSpriteTag];
     [sceneSpriteBatchNode addChild:leaderboardSprite z:3];
     [sceneSpriteBatchNode addChild:achievmentsSprite z:3];
@@ -288,24 +279,24 @@
         
         // Background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.png"];
+        CCSprite *background = [CCSprite spriteWithFile:@"mainmenu_back.png"];
         [background setPosition:ccp(screenSize.width*0.5, screenSize.height*0.5)];
         [self addChild:background z:-1];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
         // Logo
-        CCSprite *logo = [CCSprite spriteWithFile:@"logo.png"];
-        [logo setPosition:ccp(screenSize.width*0.5, screenSize.height*0.85)];
-        [self addChild:logo];
+        CCSprite *genbyLogo = [CCSprite spriteWithSpriteFrameName:@"genby_logo.png"];
+        genbyLogo.position = ccp(screenSize.width*0.46, screenSize.height*0.52);
+        [self addChild:genbyLogo];
         
         // Liquid Effect for layer
-        CCLiquid *liquidEffect = [CCLiquid actionWithWaves:10 amplitude:15 grid:ccg(16, 16) duration:10];
-        [background runAction:[CCRepeatForever actionWithAction:liquidEffect]];
+//        CCLiquid *liquidEffect = [CCLiquid actionWithWaves:7 amplitude:2 grid:ccg(16, 16) duration:10];
+//        [background runAction:[CCRepeatForever actionWithAction:liquidEffect]];
         
         // Display Main Menu Buttons
         [self displayMainMenuButtons];
         
-//        [[GameManager sharedGameManager] playBackgroundTrack:BACKGROUND_TRACK_1];
+        [[GameManager sharedGameManager] playBackgroundTrack:BACKGROUND_TRACK_1];
     }
     return self;
 }

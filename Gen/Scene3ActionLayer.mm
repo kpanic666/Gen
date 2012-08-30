@@ -108,6 +108,10 @@
         float delay = 3;
         [self showTipsElement:toScoreArrow delay:delay];
         [self showTipsElement:toScoreText delay:delay];
+        
+        // Add bubble
+        cellPos = [Helper convertPosition:ccp(300, 513)];
+        [self createBubbleCellAtLocation:cellPos];
     }
     return self;
 }

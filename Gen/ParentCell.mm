@@ -8,9 +8,16 @@
 
 #import "ParentCell.h"
 #import "Helper.h"
-#import "DrawingSmoothPrimitives.h"
+#import "HMVectorNode.h"
 
 @implementation ParentCell
+{
+    float radiusLineWidth;
+    BOOL radiusLineWidthGrowing;
+    float RADIUS_LINE_WIDTH_INCREMENT;
+    float RADIUS_LINE_WIDTH_MAX;
+    float RADIUS_LINE_WIDTH_MIN;
+}
 
 - (void)destroyDisJoints
 {
@@ -57,7 +64,8 @@
 - (void)updateStateWithDeltaTime:(ccTime)deltaTime andListOfGameObjects:(CCArray *)listOfGameObjects
 {
     // Если пользователь жмет на экран
-    if (characterState == kStateTraveling) {
+    if (characterState == kStateTraveling)
+    {
         for (CCSprite *tempSprite in listOfGameObjects) {
             // Притягиваем детей к главному герою
             if ([tempSprite isKindOfClass:[Box2DSprite class]])
@@ -130,6 +138,21 @@
         [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"parentcell_travelling.png"]];
         // При запуске уровня спрайт не видет (visible = false), становится видимым только при нажатии на экран
         self.visible = FALSE;
+        radiusLineWidthGrowing = NO;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+            radiusLineWidth = kParentCellRadiusWidthMax;
+            RADIUS_LINE_WIDTH_INCREMENT = kParentCellRadiusWidthChangeSpeed;
+            RADIUS_LINE_WIDTH_MAX = kParentCellRadiusWidthMax;
+            RADIUS_LINE_WIDTH_MIN = kParentCellRadiusWidthMin;
+        }
+        else
+        {
+            radiusLineWidth = kParentCellRadiusWidthMax * 2;
+            RADIUS_LINE_WIDTH_INCREMENT = kParentCellRadiusWidthChangeSpeed  * 2;
+            RADIUS_LINE_WIDTH_MAX = kParentCellRadiusWidthMax * 2;
+            RADIUS_LINE_WIDTH_MIN = kParentCellRadiusWidthMin * 2;
+        }
+        radiusLineWidthGrowing = false;
         gameObjectType = kParentCellType;
         characterState = kStateIdle;
         
@@ -179,11 +202,13 @@
 
 - (void)drawDisJoints
 {
+    // New realisation with Batched Anti-aliased drawing
+    HMVectorNode *drawNode = (HMVectorNode*)[[[self parent] parent] getChildByTag:kDrawNodeTagValue];
+    
     for (b2Joint *jointList = world->GetJointList(); jointList; jointList = jointList->GetNext())
     {
         if (jointList->GetType() == e_distanceJoint)
         {
-            CHECK_GL_ERROR_DEBUG();
             CGPoint anchorA = [Helper toPoints:jointList->GetAnchorA()];
             CGPoint anchorB = [Helper toPoints:jointList->GetAnchorB()];
             ccColor4B lineColor;
@@ -220,8 +245,62 @@
                 }
             }
             
-            drawColor4B(lineColor);
-            drawSmoothLine(anchorA, anchorB, lineWidth);
+            [drawNode drawSegmentFrom:anchorA to:anchorB radius:lineWidth color:ccc4FFromccc4B(lineColor)];
+        }
+    }
+}
+
+- (void)drawSensorField
+{
+    if ([self characterState] == kStateTraveling) {
+        HMVectorNode *drawNode = (HMVectorNode*)[[[self parent] parent] getChildByTag:kDrawNodeTagValue];
+        
+        for (b2Fixture *f = body->GetFixtureList(); f; f = f->GetNext())
+        {
+            if (f->IsSensor()) {
+                b2CircleShape *circle = (b2CircleShape*)f->GetShape();
+                b2Vec2 center = body->GetPosition();
+                float32 body_radius = circle->m_radius;
+                const float32 k_segments = 64.0f;
+                const float32 k_increment = 2.0f * b2_pi / k_segments;
+                float32 theta = 0.0f;
+                float xPoint, yPoint;
+                
+                // Строим круг и рисуем его
+                CGPoint vertices[int(k_segments+1)];
+                for (int32 i = 0; i < k_segments+1; ++i)
+                {
+                    b2Vec2 v = center + body_radius * b2Vec2(cosf(theta), sinf(theta));
+                    xPoint = v.x * PTM_RATIO;
+                    yPoint = v.y * PTM_RATIO;
+                    vertices[i]=ccp(xPoint, yPoint);
+                    theta += k_increment;
+                    // Копируем первый элемент массива вершин в последний слот, чтобы замкнуть круг
+                    if (i == k_segments) {
+                        vertices[i] = vertices[0];
+                    }
+                    
+                    if (i > 0) {
+                        [drawNode drawSegmentFrom:vertices[i-1] to:vertices[i] radius:radiusLineWidth color:ccc4f(0.5, 1, 1, 1)];
+                    }
+                }
+                
+                // Pulsing radius line. Rising UP and Down line width
+                if (!radiusLineWidthGrowing) {
+                    radiusLineWidth -= RADIUS_LINE_WIDTH_INCREMENT;
+                    if (radiusLineWidth < RADIUS_LINE_WIDTH_MIN) {
+                        radiusLineWidth = RADIUS_LINE_WIDTH_MIN;
+                        radiusLineWidthGrowing = YES;
+                    }
+                }
+                else {
+                    radiusLineWidth += RADIUS_LINE_WIDTH_INCREMENT;
+                    if (radiusLineWidth > RADIUS_LINE_WIDTH_MAX) {
+                        radiusLineWidth = RADIUS_LINE_WIDTH_MAX;
+                        radiusLineWidthGrowing = NO;
+                    }
+                }
+            }
         }
     }
 }

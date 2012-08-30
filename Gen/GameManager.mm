@@ -261,7 +261,7 @@ static GameManager* _sharedGameManager = nil;
     // Initializes the audio engine asynchronously
     managerSoundState = kAudioManagerInitializing;
     // Indicate that we are trying to start up the Audio Manager
-    [CDSoundEngine setMixerSampleRate:CD_SAMPLE_RATE_MID];
+    [CDSoundEngine setMixerSampleRate:CD_SAMPLE_RATE_LOW];
     
     //Init audio manager asynchronously as it can take a few seconds
     //The FXPlusMusicIfNoOtherAudio mode will check if the user is
@@ -326,12 +326,14 @@ static GameManager* _sharedGameManager = nil;
 - (void)runSceneWithID:(SceneTypes)sceneID {
     // reset all stats and score variable for new level
     [self setHasLevelWin:NO];
-    [self setNumOfSavedCells:-1];
+    [self setNumOfSavedCells:0];
     [self setNumOfTotalCells:0];
     [self setLevelElapsedTime:0];
     [self setLevelTotalScore:0];
+    [self setLevelHighScoreAchieved:NO];
     [self setLevelStarsNum:0];
     [self setLevelTappedNum:0];
+    [self setNeedToUpdateScore:NO];
     
     if (sceneID > 100) {
         [self setLevelName:[NSString stringWithFormat:@"Level 1-%i", (int)sceneID-100]];
@@ -471,31 +473,7 @@ static GameManager* _sharedGameManager = nil;
         return;
     }
     
-    [self performSelectorInBackground:@selector(unloadAudioForSceneWithID:) withObject:[NSNumber numberWithInt:oldScene]];  
-    
-    // Menu Scenes have a value of < 100
-//    if (sceneID < 100) {
-//        if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
-//            CGSize screenSize = [CCDirector sharedDirector].winSizeInPixels;
-//            if (screenSize.width == 960.0f) {
-//                // IPhone 4 Retina
-//                [sceneToRun setScaleX:0.9375f];
-//                [sceneToRun setScaleY:0.8333f];
-//                CCLOG(@"GM:Scaling for Iphone 4 (retina)");
-//            } else {
-//                [sceneToRun setScaleX:0.4688f];
-//                [sceneToRun setScaleY:0.4166f];
-//                CCLOG(@"GM:Scaling for Iphone 3G (or older)");
-//            }
-//        }
-//    }
-    // Game Scenes have a value of > 100
-//    if (sceneID > 100) {
-//        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-//            [sceneToRun setScaleX:1.06];
-//            [sceneToRun setScaleY:1.2];
-//        }
-//    }
+    [self performSelectorInBackground:@selector(unloadAudioForSceneWithID:) withObject:[NSNumber numberWithInt:oldScene]];
     
     if ([[CCDirector sharedDirector] runningScene] == nil) {
         [[CCDirector sharedDirector] pushScene:sceneToRun];
@@ -559,6 +537,28 @@ static GameManager* _sharedGameManager = nil;
     }
 
     return levelSize;
+}
+
+#pragma mark -
+#pragma mark Stats Setters
+// Добавляем для того, чтобы при обновлении статистики выставлялся в True флаг needToUpdateScore и обновлялся счет в UI
+
+- (void)setNumOfTotalCells:(int)numOfTotalCells
+{
+    _numOfTotalCells = numOfTotalCells;
+    if (curLevel >= kGameLevel1)
+    {
+        _needToUpdateScore = TRUE;
+    }
+}
+
+- (void)setNumOfSavedCells:(int)numOfSavedCells
+{
+    _numOfSavedCells = numOfSavedCells;
+    if (curLevel >= kGameLevel1)
+    {
+        _needToUpdateScore = TRUE;
+    }
 }
 
 @end

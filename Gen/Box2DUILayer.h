@@ -10,7 +10,7 @@
 
 @interface Box2DUILayer : CCLayer
 
-- (void) updateScore:(int)collected need:(int)need;
+- (void) updateScore;
 - (BOOL) displayText:(NSString*)text;
 
 @end

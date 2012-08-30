@@ -8,7 +8,7 @@
 
 #import "MagneticCell.h"
 #import "Helper.h"
-#import "DrawingSmoothPrimitives.h"
+#import "HMVectorNode.h"
 
 @interface MagneticCell ()
 {
@@ -83,7 +83,11 @@
 
 - (void)drawMagnetForces
 {
+    // New realisation with Batched Anti-aliased drawing
+    HMVectorNode *drawNode = (HMVectorNode*)[[[self parent] parent] getChildByTag:kDrawNodeTagValue];
+    
     float lineWidth = 1;
+    ccColor4B lineColor = ccc4(217, 166, 241, 255);
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         lineWidth *= 2;
     }
@@ -91,9 +95,7 @@
     for (NSString *posValue in cellsPosToDraw) 
     {
         CGPoint cellPos = CGPointFromString(posValue);
-        CHECK_GL_ERROR_DEBUG();
-        drawColor4B(ccc4(217, 166, 241, 255));
-        drawSmoothLine(self.position, cellPos, lineWidth);
+        [drawNode drawSegmentFrom:self.position to:cellPos radius:lineWidth color:ccc4FFromccc4B(lineColor)];
     }
     [cellsPosToDraw removeAllObjects];
 }

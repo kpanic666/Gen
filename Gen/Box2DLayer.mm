@@ -13,6 +13,7 @@
 #import "GameState.h"
 #import "GCHelper.h"
 #import "SimpleQueryCallback.h"
+#import "HMVectorNode.h"
 
 @interface Box2DLayer()
 {
@@ -227,6 +228,11 @@
         parentCell = [[[ParentCell alloc] initWithWorld:world atLocation:ccp(100, 100)] autorelease];
         [sceneSpriteBatchNode addChild:parentCell z:10 tag:kParentCellSpriteTagValue];
         
+        // Draw Node for drawing DisJoints, ParentCell Radius, Magnetic Forces
+        HMVectorNode *drawNode = [[HMVectorNode alloc] init];
+        [self addChild:drawNode z:0 tag:kDrawNodeTagValue];
+        [drawNode release];
+        
         // Create water bubbles
         for (int x = 0; x < kMaxNumOfBubbleOnScene; x++) {
             [self createBubble];
@@ -279,6 +285,13 @@
 	// It is recommend to disable it
     //
 	[super draw];
+    
+    // Reset DrawNode canvas
+    HMVectorNode *drawNode = (HMVectorNode*)[self getChildByTag:kDrawNodeTagValue];
+    [drawNode clear];
+    
+    // Draw ParentCell Sensor Field
+    [parentCell drawSensorField];
     
     // Draw lines for distance joints between ChildCell and ParentCell
     [parentCell drawDisJoints];
@@ -355,7 +368,7 @@
 
 #pragma mark -
 #pragma mark Bubble Tap Check
-- (void)bubbleTapCheckAtLoc:(b2Vec2)locationWorld
+- (BOOL)bubbleTapCheckAtLoc:(b2Vec2)locationWorld
 {
     b2AABB aabb;
     b2Vec2 delta = b2Vec2(1.0/PTM_RATIO, 1.0/PTM_RATIO);
@@ -368,13 +381,12 @@
     {
         b2Body *foundBody = callback.fixtureFound->GetBody();
         Box2DSprite *foundSprite = (Box2DSprite*) foundBody->GetUserData();
-        if (foundSprite.characterState != kStateTraveling || foundSprite == NULL) {
-            return;
+        if (foundSprite.characterState == kStateTraveling) {
+            [foundSprite changeState:kStateTakingDamage];
+            return true;
         }
-        
-        [foundSprite changeState:kStateTakingDamage];
     }
-
+    return false;
 }
 
 #pragma mark -
@@ -424,6 +436,7 @@
     if (gameManager.levelTotalScore > [[gameState.levelHighestScoreArray objectAtIndex:levelNum-1] integerValue])
     {
         [[gameState levelHighestScoreArray] replaceObjectAtIndex:levelNum-1 withObject:[NSNumber numberWithInt:gameManager.levelTotalScore]];
+        [gameManager setLevelHighScoreAchieved:YES];
         
         // Доложить Score в GameCenter
         unsigned int summaryScore = 0;
@@ -473,28 +486,21 @@
     // Уничтожаем тела клеток попавших в опасность или в выход
     [self destroyBodies];
     
-    // Обновляем состояние всех членов spritebatchnode и подсчет кол-ва детей загнаных в выход
+    // Обновляем состояние всех членов spritebatchnode
     CCArray *listOfGameObjects = [sceneSpriteBatchNode children];
-    int i = 0;
     for (CCSprite *tempSprite in listOfGameObjects)
     {
         if ([tempSprite isKindOfClass:[GameCharacter class]])
         {
             GameCharacter *tempChar = (GameCharacter*)tempSprite;
             [tempChar updateStateWithDeltaTime:dt andListOfGameObjects:listOfGameObjects];
-            if ([tempChar characterState] == kStateSoul)
-            {
-                i++;
-            }
         }
     }
     
-    // Подсчитываем кол-во клеток. Сколько из них спасено, сколько их всего и обновляем счетчик
-    // i - кол-во ячеек попавших в выход
+    // Обновляем счетчик UI, если это нужно
     GameManager *gameManager = [GameManager sharedGameManager];
-    if (gameManager.numOfSavedCells != i) {
-        gameManager.numOfSavedCells = i;
-        [uiLayer updateScore:i need:gameManager.numOfNeededCells];
+    if (gameManager.needToUpdateScore) {
+        [uiLayer updateScore];
     }
     
     // Проверяем выигрыш или проигрыш
@@ -552,7 +558,10 @@
     
     // Проверяем попали мы по пузырю или нет. Если да, то лопаем его и освобождаем ячейку
     if ([sceneSpriteBatchNode getChildByTag:kBubbleCellTagValue]) {
-        [self bubbleTapCheckAtLoc:locationWorld];
+        if ([self bubbleTapCheckAtLoc:locationWorld])
+        {
+            return TRUE;
+        }
     }
     
     // Отображаем главную ячейку под пальцем игрока и она начинает притягивать
@@ -562,7 +571,6 @@
     // Увеличиваем счетчик нажатий на экран
     [GameManager sharedGameManager].levelTappedNum++;
 
-    
     return TRUE;
 }
 

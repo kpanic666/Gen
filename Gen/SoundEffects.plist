@@ -7,12 +7,14 @@
 	<key>kMainMenuScene</key>
 	<dict>
 		<key>BUTTON_PRESSED</key>
-		<string>22k_button_pressed.caf</string>
+		<string>button_pressed.caf</string>
 	</dict>
 	<key>kLevelSelectScene</key>
 	<dict>
 		<key>BUTTON_PRESSED</key>
-		<string>22k_button_pressed.caf</string>
+		<string>button_pressed.caf</string>
+		<key>LEVEL_BUTTON_PRESSED</key>
+		<string>levelselect_button_pressed.caf</string>
 	</dict>
 	<key>kInfoScene</key>
 	<dict/>
@@ -20,16 +22,18 @@
 	<dict/>
 	<key>kGeneralSounds</key>
 	<dict>
+		<key>BUBBLECELL_PRESSED</key>
+		<string>bubblecell_pressed.caf</string>
 		<key>CHILDCELL_SOUL_1</key>
-		<string>22k_childcell_soulV1.caf</string>
+		<string>childcell_soul_1.caf</string>
 		<key>CHILDCELL_DYING_1</key>
-		<string>22k_childcell_dyingV1.caf</string>
+		<string>childcell_dying_1.caf</string>
 		<key>PAUSEMENU_OPENING</key>
-		<string>22k_pausemenu_opening.caf</string>
+		<string>pausemenu_opening.caf</string>
 		<key>PAUSEMENU_CLOSING</key>
-		<string>22k_pausemenu_closing.caf</string>
+		<string>pausemenu_closing.caf</string>
 		<key>BUTTON_PRESSED</key>
-		<string>22k_button_pressed.caf</string>
+		<string>button_pressed.caf</string>
 	</dict>
 </dict>
 </plist>

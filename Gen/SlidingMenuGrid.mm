@@ -129,7 +129,7 @@
 		r.origin = CGPointZero;
 		
 		// If the touch was within this item. Return the item.
-		if (CGRectContainsPoint(r, local))
+		if (CGRectContainsPoint(r, local) && item.isEnabled)
 		{
 			return item;
 		}
@@ -199,9 +199,9 @@
 		
 	}
 	// User wasn't sliding menu and simply tapped the screen. Activate the menu item.
-	else 
+	else
 	{
-		[selectedItem unselected];
+//		[selectedItem unselected];
 		[selectedItem activate];
 	}
 

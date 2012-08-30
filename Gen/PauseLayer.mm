@@ -8,7 +8,9 @@
 
 #import "PauseLayer.h"
 #import "GameManager.h"
+#import "GameState.h"
 #import "CCMenuItemSpriteIndependent.h"
+#import "Helper.h"
 
 #define kBackgroundSpriteTag 9
 
@@ -74,6 +76,7 @@
     CCSprite *background = (CCSprite*)[self getChildByTag:kBackgroundSpriteTag];
     CCLayer *gl = (CCLayer*) [self.parent getChildByTag:kBox2DLayer];
     CCSpriteBatchNode *bn = (CCSpriteBatchNode*)[gl getChildByTag:kMainSpriteBatchNode];
+    [gl setIsTouchEnabled:YES];
     [gl resumeSchedulerAndActions];
     for (CCNode *tempNode in [bn children]) {
         [tempNode resumeSchedulerAndActions];
@@ -123,12 +126,18 @@
     CCSprite *resetSprite = [CCSprite spriteWithSpriteFrameName:@"button_reset.png"];
     CCSprite *levelSelectSprite = [CCSprite spriteWithSpriteFrameName:@"button_level_select.png"];
     CCSprite *skipSprite = [CCSprite spriteWithSpriteFrameName:@"button_skip.png"];
+    CCLabelTTF *levelName = [CCLabelTTF labelWithString:[[GameManager sharedGameManager] levelName] fontName:@"Verdana" fontSize:[Helper convertFontSize:14]];
+    CCLabelTTF *highScore = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"Highscore: %d", [[GameState sharedInstance] getHighestScoreForSceneID:[[GameManager sharedGameManager] curLevel]]]  fontName:@"Helvetica" fontSize:[Helper convertFontSize:13]];
+    levelName.color = ccBLACK;
+    highScore.color = ccBLACK;
     
     // Adding sprites to Batchnode
     [pauseBatchNode addChild:resumeSprite];
     [pauseBatchNode addChild:resetSprite];
     [pauseBatchNode addChild:levelSelectSprite];
     [pauseBatchNode addChild:skipSprite];
+    [background addChild:levelName];
+    [background addChild:highScore];
     
     // Options Menu Items
     CCMenuItemSprite *sfxOnButton = [CCMenuItemSprite itemWithNormalSprite:sfxOnSprite selectedSprite:nil target:self selector:nil];
@@ -160,8 +169,9 @@
     // Right Down - Music
     xButtonPos = backSize.width - padding - musicToggle.contentSize.width * 0.5;
     musicToggle.position = ccp(xButtonPos, yButtonPos);
-    // Right Up - Resume
-    yButtonPos = backSize.height - padding - resumeSprite.contentSize.height * 0.5; 
+    // Left Center - Resume
+    xButtonPos = 0;
+    yButtonPos = backSize.height * 0.5;
     resumeSprite.position = ccp(xButtonPos, yButtonPos);
     // Center - Level Select
     xButtonPos = backSize.width * 0.5;
@@ -174,6 +184,12 @@
     // Center Down - Skip
     yButtonPos -= padding * 2;
     skipSprite.position = ccp(xButtonPos, yButtonPos);
+    // Top Center - Level Name
+    yButtonPos = backSize.height * 0.9;
+    levelName.position = ccp(xButtonPos, yButtonPos);
+    // Top Center - Highscore
+    yButtonPos -= levelName.contentSize.height;
+    highScore.position = ccp(xButtonPos, yButtonPos);
     
     if ([[GameManager sharedGameManager] isMusicON] == NO) {
         [musicToggle setSelectedIndex:1]; // Music is OFF

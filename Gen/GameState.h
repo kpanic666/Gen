@@ -22,6 +22,7 @@
 + (GameState*)sharedInstance;
 - (void)save;
 - (void)resetState;
+- (int)getHighestScoreForSceneID:(SceneTypes)sceneID;
 
 @property (assign) BOOL completedLevel10;
 @property (assign) unsigned int cellsKilled;

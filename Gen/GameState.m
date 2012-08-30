@@ -97,6 +97,11 @@ static GameState *sharedInstance = nil;
     [self save];
 }
 
+- (int)getHighestScoreForSceneID:(SceneTypes)sceneID
+{
+    return [[_levelHighestScoreArray objectAtIndex:(int)sceneID-101] integerValue];
+}
+
 - (void)dealloc
 {
     [_levelHighestScoreArray release];
