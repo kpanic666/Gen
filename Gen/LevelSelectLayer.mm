@@ -35,7 +35,18 @@
 - (void)playScene:(id)itemPassedIn
 {
     PLAYSOUNDEFFECT(@"LEVEL_BUTTON_PRESSED");
-    [[GameManager sharedGameManager] runSceneWithID:(SceneTypes)(kGameLevel1 - 1 + [itemPassedIn tag])];
+    
+    // Добавим брызг
+    CCParticleSystemQuad *psPopUpBubble = [CCParticleSystemQuad particleWithFile:@"ps_popUpBubble.plist"];
+    CCNode *levelButton = (CCNode*)itemPassedIn;
+    psPopUpBubble.position = ccpAdd(levelButton.position, levelButton.parent.position);
+    [self addChild:psPopUpBubble z:5];
+    
+    // Run scene till 0.4 sec
+    [self runAction:[CCSequence actions:
+                     [CCDelayTime actionWithDuration:0.5],
+                     [CCCallBlock actionWithBlock:^(void) { [[GameManager sharedGameManager] runSceneWithID:(SceneTypes)(kGameLevel1-1+[itemPassedIn tag])]; }],
+                     nil]];
 }
 
 - (void)backButtonPressed
