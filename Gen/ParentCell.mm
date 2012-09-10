@@ -175,6 +175,7 @@
         case kStateTraveling:
         {
             // Клетка начинает отображаться на экране и ей можно управлять. В этом состоянии к ней притягиваются дочерние клетки
+//            PLAYSOUNDEFFECT(@"PARENTCELL_PRESSED");
             self.visible = TRUE;
             break;
         }

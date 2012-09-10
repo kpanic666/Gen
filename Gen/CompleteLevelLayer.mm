@@ -112,7 +112,7 @@
 
     if ([GameManager sharedGameManager].hasLevelWin)
     {
-        // Add sound to WIN LEVEL
+        PLAYSOUNDEFFECT(@"LEVELCOMPLETE_WIN");
         GameManager *gm = [GameManager sharedGameManager];
         const float beginScale = 2;
         [levelCompleteLabel setString:@"Level cleared!"];
@@ -265,6 +265,7 @@
     else
     {
         // Add Sound TO LOSE LEVEL
+        PLAYSOUNDEFFECT(@"LEVELCOMPLETE_FAILE");
         [levelCompleteLabel setString:@"Level failed!"];
         [levelCompleteLabel setColor:ccc3(185, 0, 10)];
     }

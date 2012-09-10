@@ -17,7 +17,7 @@
 #define kParentCellSpriteTagValue 10
 #define kRedCellDamage 100
 #define kMagneticPowerMultiplier 0.15
-#define kLevelCount 20
+#define kLevelCount 40
 #define kMaxBubbleMoveDuration 15
 #define kMinBubbleMoveDuration 5
 #define kMaxNumOfBubbleOnScene 5

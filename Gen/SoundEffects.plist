@@ -22,8 +22,14 @@
 	<dict/>
 	<key>kGeneralSounds</key>
 	<dict>
-		<key>BUBBLECELL_PRESSED</key>
-		<string>bubblecell_pressed.caf</string>
+		<key>GROUNDCELL_BUMPED</key>
+		<string>groundcell_bumped.caf</string>
+		<key>LEVELCOMPLETE_FAILE</key>
+		<string>levelcomplete_faile.caf</string>
+		<key>LEVELCOMPLETE_WIN</key>
+		<string>levelcomplete_win.caf</string>
+		<key>CHILDCELL_CONNECTED</key>
+		<string>childcell_connected.caf</string>
 		<key>CHILDCELL_SOUL_1</key>
 		<string>childcell_soul_1.caf</string>
 		<key>CHILDCELL_DYING_1</key>

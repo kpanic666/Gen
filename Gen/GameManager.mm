@@ -104,7 +104,7 @@ static GameManager* _sharedGameManager = nil;
             [soundEngine stopBackgroundMusic];
         }
         [soundEngine preloadBackgroundMusic:trackFileName];
-        [soundEngine setBackgroundMusicVolume:0.5];
+        [soundEngine setBackgroundMusicVolume:0.4];
         [soundEngine playBackgroundMusic:trackFileName loop:YES];
     }
 }
@@ -284,6 +284,7 @@ static GameManager* _sharedGameManager = nil;
         [audioManager setResignBehavior:kAMRBStopPlay autoHandle:YES];
         soundEngine = [SimpleAudioEngine sharedEngine];
         managerSoundState = kAudioManagerReady;
+        [soundEngine setEffectsVolume:0.5];
         CCLOG(@"CocosDenshion is Ready");
     }
 }
@@ -473,7 +474,11 @@ static GameManager* _sharedGameManager = nil;
         return;
     }
     
-    [self performSelectorInBackground:@selector(unloadAudioForSceneWithID:) withObject:[NSNumber numberWithInt:oldScene]];
+    if (oldScene < 100 || currentScene < 100) {
+        [self performSelectorInBackground:@selector(unloadAudioForSceneWithID:) withObject:[NSNumber numberWithInt:oldScene]];
+        // Load Audio for new scene based on sceneID
+        [self performSelectorInBackground:@selector(loadAudioForSceneWithID:) withObject:[NSNumber numberWithInt:currentScene]];
+    }
     
     if ([[CCDirector sharedDirector] runningScene] == nil) {
         [[CCDirector sharedDirector] pushScene:sceneToRun];
@@ -481,8 +486,7 @@ static GameManager* _sharedGameManager = nil;
         [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:0.1f scene:sceneToRun]];
     }
     
-    // Load Audio for new scene based on sceneID
-    [self performSelectorInBackground:@selector(loadAudioForSceneWithID:) withObject:[NSNumber numberWithInt:currentScene]];
+    
 }
 
 - (void)openSiteWithLinkType:(LinkTypes)linkTypeToOpen {

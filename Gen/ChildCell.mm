@@ -18,7 +18,6 @@
     bodyDef.type = b2_dynamicBody;
     bodyDef.position = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO);
     bodyDef.linearDamping = 0.1f;
-    bodyDef.fixedRotation = TRUE;
     bodyDef.allowSleep = FALSE;
     body = world->CreateBody(&bodyDef);
     body->SetUserData(self);
@@ -165,6 +164,7 @@
         case kStateConnected:
         {
             // Нужно менять вид клетки. Это состояние принимается клеткой когда был создан джойнт
+            PLAYSOUNDEFFECT(@"CHILDCELL_CONNECTED");
             [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_connected.png"]];
             break;
         }

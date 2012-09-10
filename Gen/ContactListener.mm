@@ -31,6 +31,14 @@ void ContactListener::BeginContact(b2Contact* contact)
         [spriteA changeState:kStateBeforeSoul];
     }
     
+    // Обработка столкновениий GroundCell с ChildCell
+    if (spriteA.gameObjectType == kGroundType && spriteB.gameObjectType == kChildCellType) {
+        PLAYSOUNDEFFECT(@"GROUNDCELL_BUMPED");
+    }
+    else if (spriteB.gameObjectType == kGroundType && spriteA.gameObjectType == kChildCellType) {
+        PLAYSOUNDEFFECT(@"GROUNDCELL_BUMPED");
+    }
+    
     // Обработка столкновений MagneticCell с ChildCell
     // isActive=False для ChildCells - если в зоне дейтсвия магнита
     if (spriteA.gameObjectType == kEnemyTypeMagneticCell) {

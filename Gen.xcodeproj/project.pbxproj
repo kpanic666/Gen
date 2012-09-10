@@ -16,7 +16,7 @@
 		E9043C1E1536E2830009BA4F /* GB2ShapeCache.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9043C1D1536E2790009BA4F /* GB2ShapeCache.mm */; };
 		E9043C241536E6DC0009BA4F /* scene1bodies.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9043C231536E6DC0009BA4F /* scene1bodies.plist */; };
 		E9051AC615455F7100114B33 /* Scene1ActionLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9051AC515455F7100114B33 /* Scene1ActionLayer.mm */; };
-		E9051ACD15457F8D00114B33 /* MainMenuLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = E9051ACB15457F8D00114B33 /* MainMenuLayer.m */; };
+		E9051ACD15457F8D00114B33 /* MainMenuLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = E9051ACB15457F8D00114B33 /* MainMenuLayer.mm */; };
 		E9051B0615480BC200114B33 /* CCMenuItemSpriteIndependent.m in Sources */ = {isa = PBXBuildFile; fileRef = E9051B0515480BC100114B33 /* CCMenuItemSpriteIndependent.m */; };
 		E90BB36015298B1400C8909B /* MagneticCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = E90BB35F15298B1400C8909B /* MagneticCell.mm */; };
 		E925097315E3712900DD5428 /* HMVectorNode.vsh in Resources */ = {isa = PBXBuildFile; fileRef = E925097115E3712900DD5428 /* HMVectorNode.vsh */; };
@@ -29,6 +29,10 @@
 		E92CCC7415EF729900B9C149 /* pausemenu_closing.caf in Resources */ = {isa = PBXBuildFile; fileRef = E92CCC6E15EF729900B9C149 /* pausemenu_closing.caf */; };
 		E92CCC7515EF729900B9C149 /* pausemenu_opening.caf in Resources */ = {isa = PBXBuildFile; fileRef = E92CCC6F15EF729900B9C149 /* pausemenu_opening.caf */; };
 		E92CCC7715EF9A2A00B9C149 /* bubblecell_pressed.caf in Resources */ = {isa = PBXBuildFile; fileRef = E92CCC7615EF9A2A00B9C149 /* bubblecell_pressed.caf */; };
+		E92CD7AE15F9E49200B9C149 /* childcell_connected.caf in Resources */ = {isa = PBXBuildFile; fileRef = E92CD7AD15F9E49200B9C149 /* childcell_connected.caf */; };
+		E92CD7E615FA01A000B9C149 /* levelcomplete_win.caf in Resources */ = {isa = PBXBuildFile; fileRef = E92CD7E515FA01A000B9C149 /* levelcomplete_win.caf */; };
+		E92CD7E815FA035300B9C149 /* levelcomplete_faile.caf in Resources */ = {isa = PBXBuildFile; fileRef = E92CD7E715FA035300B9C149 /* levelcomplete_faile.caf */; };
+		E92CD7EA15FC760000B9C149 /* groundcell_bumped.caf in Resources */ = {isa = PBXBuildFile; fileRef = E92CD7E915FC760000B9C149 /* groundcell_bumped.caf */; };
 		E9428E9A15A41E1A006E941C /* tut_arrow1-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E9428E9415A41E1A006E941C /* tut_arrow1-hd.png */; };
 		E9428E9B15A41E1A006E941C /* tut_arrow1-ipad-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = E9428E9515A41E1A006E941C /* tut_arrow1-ipad-hd.png */; };
 		E9428E9C15A41E1A006E941C /* tut_arrow1.png in Resources */ = {isa = PBXBuildFile; fileRef = E9428E9615A41E1A006E941C /* tut_arrow1.png */; };
@@ -372,7 +376,7 @@
 		E9051AC415455F7100114B33 /* Scene1ActionLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene1ActionLayer.h; sourceTree = "<group>"; };
 		E9051AC515455F7100114B33 /* Scene1ActionLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Scene1ActionLayer.mm; sourceTree = "<group>"; };
 		E9051ACA15457F8D00114B33 /* MainMenuLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuLayer.h; sourceTree = "<group>"; };
-		E9051ACB15457F8D00114B33 /* MainMenuLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MainMenuLayer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		E9051ACB15457F8D00114B33 /* MainMenuLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = MainMenuLayer.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		E9051B0415480BC100114B33 /* CCMenuItemSpriteIndependent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCMenuItemSpriteIndependent.h; sourceTree = "<group>"; };
 		E9051B0515480BC100114B33 /* CCMenuItemSpriteIndependent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCMenuItemSpriteIndependent.m; sourceTree = "<group>"; };
 		E90BB35E15298B1400C8909B /* MagneticCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagneticCell.h; sourceTree = "<group>"; };
@@ -388,6 +392,10 @@
 		E92CCC6E15EF729900B9C149 /* pausemenu_closing.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = pausemenu_closing.caf; sourceTree = "<group>"; };
 		E92CCC6F15EF729900B9C149 /* pausemenu_opening.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = pausemenu_opening.caf; sourceTree = "<group>"; };
 		E92CCC7615EF9A2A00B9C149 /* bubblecell_pressed.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = bubblecell_pressed.caf; sourceTree = "<group>"; };
+		E92CD7AD15F9E49200B9C149 /* childcell_connected.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = childcell_connected.caf; sourceTree = "<group>"; };
+		E92CD7E515FA01A000B9C149 /* levelcomplete_win.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = levelcomplete_win.caf; sourceTree = "<group>"; };
+		E92CD7E715FA035300B9C149 /* levelcomplete_faile.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = levelcomplete_faile.caf; sourceTree = "<group>"; };
+		E92CD7E915FC760000B9C149 /* groundcell_bumped.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = groundcell_bumped.caf; sourceTree = "<group>"; };
 		E9428E9415A41E1A006E941C /* tut_arrow1-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tut_arrow1-hd.png"; sourceTree = "<group>"; };
 		E9428E9515A41E1A006E941C /* tut_arrow1-ipad-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tut_arrow1-ipad-hd.png"; sourceTree = "<group>"; };
 		E9428E9615A41E1A006E941C /* tut_arrow1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tut_arrow1.png; sourceTree = "<group>"; };
@@ -1202,10 +1210,14 @@
 		E97E9B9C153EEC45008B6B86 /* SFX */ = {
 			isa = PBXGroup;
 			children = (
+				E92CD7E915FC760000B9C149 /* groundcell_bumped.caf */,
+				E92CD7E715FA035300B9C149 /* levelcomplete_faile.caf */,
+				E92CD7E515FA01A000B9C149 /* levelcomplete_win.caf */,
 				E92CCC7615EF9A2A00B9C149 /* bubblecell_pressed.caf */,
 				E92CCC6A15EF729900B9C149 /* button_pressed.caf */,
 				E92CCC6B15EF729900B9C149 /* childcell_dying_1.caf */,
 				E92CCC6C15EF729900B9C149 /* childcell_soul_1.caf */,
+				E92CD7AD15F9E49200B9C149 /* childcell_connected.caf */,
 				E92CCC6D15EF729900B9C149 /* levelselect_button_pressed.caf */,
 				E92CCC6E15EF729900B9C149 /* pausemenu_closing.caf */,
 				E92CCC6F15EF729900B9C149 /* pausemenu_opening.caf */,
@@ -2112,7 +2124,7 @@
 			isa = PBXGroup;
 			children = (
 				E9051ACA15457F8D00114B33 /* MainMenuLayer.h */,
-				E9051ACB15457F8D00114B33 /* MainMenuLayer.m */,
+				E9051ACB15457F8D00114B33 /* MainMenuLayer.mm */,
 			);
 			name = MainMenu;
 			sourceTree = "<group>";
@@ -2353,6 +2365,10 @@
 				E92CCC7415EF729900B9C149 /* pausemenu_closing.caf in Resources */,
 				E92CCC7515EF729900B9C149 /* pausemenu_opening.caf in Resources */,
 				E92CCC7715EF9A2A00B9C149 /* bubblecell_pressed.caf in Resources */,
+				E92CD7AE15F9E49200B9C149 /* childcell_connected.caf in Resources */,
+				E92CD7E615FA01A000B9C149 /* levelcomplete_win.caf in Resources */,
+				E92CD7E815FA035300B9C149 /* levelcomplete_faile.caf in Resources */,
+				E92CD7EA15FC760000B9C149 /* groundcell_bumped.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2387,7 +2403,7 @@
 				E97F98081543C1B800CBFF87 /* BlockCell.mm in Sources */,
 				E9B198DD1545269300AA79D3 /* Box2DUILayer.mm in Sources */,
 				E9051AC615455F7100114B33 /* Scene1ActionLayer.mm in Sources */,
-				E9051ACD15457F8D00114B33 /* MainMenuLayer.m in Sources */,
+				E9051ACD15457F8D00114B33 /* MainMenuLayer.mm in Sources */,
 				E9051B0615480BC200114B33 /* CCMenuItemSpriteIndependent.m in Sources */,
 				E97A0A5F154D421E003D52E8 /* Scene2.mm in Sources */,
 				E97A0A62154D423B003D52E8 /* Scene2ActionLayer.mm in Sources */,

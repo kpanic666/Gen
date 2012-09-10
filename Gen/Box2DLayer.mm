@@ -323,10 +323,7 @@
     ccColor4B c = ccc4(255, 255, 255, 0); // Black transparent background
     CompleteLevelLayer *gameOverLayer = [[[CompleteLevelLayer alloc] initWithColor:c] autorelease];
     [self addChild:gameOverLayer z:10 tag:kGameOverLayer];
-    
-    // TestFlight Checkpoint чтобы проверить сколько уровней проходят тестеры
-    [TestFlight passCheckpoint:[GameManager sharedGameManager].levelName];
-    
+    [self setIsTouchEnabled:NO];
     [self pauseSchedulerAndActions];
 }
 
