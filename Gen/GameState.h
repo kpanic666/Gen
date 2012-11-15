@@ -24,7 +24,13 @@
 // Achievements properties
 @property (assign) BOOL completedLevel10;
 @property (assign) BOOL completedLevel20;
+@property (assign) BOOL completedLevel30;
+@property (assign) BOOL completedLevel40;
+@property (assign) BOOL completedFirstFail;
+@property (assign) BOOL completedUnwary;
+@property (assign) BOOL completedDestroyer;
 @property (assign) unsigned int cellsKilled;
+// Game Stats properties
 @property unsigned int highestOpenedLevel;
 @property (assign) NSMutableArray *levelHighestStarsNumArray;
 @property (assign) NSMutableArray *levelHighestScoreArray;

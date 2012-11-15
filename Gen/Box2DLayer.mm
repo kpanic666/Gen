@@ -858,28 +858,73 @@ ccc3FromUInt(const uint bytes)
     // Check Complete level 10
     if (!gameState.completedLevel10) {
         if (gameManager.curLevel == kGameLevel10 && gameManager.hasLevelWin) {
-            CCLOG(@"Achievement Complete! Finished level 10");
             gameState.completedLevel10 = true;
             [[GCHelper sharedInstance] reportAchievement:kAchievementLevel10 percentComplete:100.0];
         }
     }
-    
     // Check Complete level 20
     if (!gameState.completedLevel20) {
         if (gameManager.curLevel == kGameLevel20 && gameManager.hasLevelWin) {
-            CCLOG(@"Achievement Complete! Finished level 20");
             gameState.completedLevel20 = true;
             [[GCHelper sharedInstance] reportAchievement:kAchievementLevel20 percentComplete:100.0];
         }
     }
+    if (!gameState.completedLevel30) {
+        if (gameManager.curLevel == kGameLevel30 && gameManager.hasLevelWin) {
+            gameState.completedLevel30 = true;
+            [[GCHelper sharedInstance] reportAchievement:kAchievementLevel30 percentComplete:100.0];
+        }
+    }
+    if (!gameState.completedLevel40) {
+        if (gameManager.curLevel == kGameLevel40 && gameManager.hasLevelWin) {
+            gameState.completedLevel40 = true;
+            [[GCHelper sharedInstance] reportAchievement:kAchievementLevel40 percentComplete:100.0];
+        }
+    }
     
-    // Check Kill 100 cells
-    if (gameState.cellsKilled <= kAchievementCellDestroyerNum)
+    // Check First Fail, Unwary, Destroyer (1, 50, 100 spoiled food)
+    if (gameState.cellsKilled > 0 && gameState.cellsKilled <= kAchievementCellDestroyerNum)
     {
-        float pctComplete = ( (float)gameState.cellsKilled / (int)kAchievementCellDestroyerNum ) * 100.0;
-        [[GCHelper sharedInstance] reportAchievement:kAchievementCellDestroyer percentComplete:pctComplete];
-        if (gameState.cellsKilled >= kAchievementCellDestroyerNum) {
-            gameState.cellsKilled++;
+        float pctComplete;
+        
+        if (gameState.cellsKilled < kAchievementFirstFailNum) {
+            pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementFirstFailNum) * 100.0, 100);
+            [[GCHelper sharedInstance] reportAchievement:kAchievementFirstFail percentComplete:pctComplete];
+            pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementUnwaryNum) * 100.0, 100);
+            [[GCHelper sharedInstance] reportAchievement:kAchievementUnwary percentComplete:pctComplete];
+            pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementCellDestroyerNum) * 100.0, 100);
+            [[GCHelper sharedInstance] reportAchievement:kAchievementCellDestroyer percentComplete:pctComplete];
+        }
+        else if (gameState.cellsKilled < kAchievementUnwaryNum)
+        {
+            if (!gameState.completedFirstFail) {
+                gameState.completedFirstFail = true;
+                pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementFirstFailNum) * 100.0, 100);
+                [[GCHelper sharedInstance] reportAchievement:kAchievementFirstFail percentComplete:pctComplete];
+            }
+            pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementUnwaryNum) * 100.0, 100);
+            [[GCHelper sharedInstance] reportAchievement:kAchievementUnwary percentComplete:pctComplete];
+            pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementCellDestroyerNum) * 100.0, 100);
+            [[GCHelper sharedInstance] reportAchievement:kAchievementCellDestroyer percentComplete:pctComplete];
+        }
+        else if (gameState.cellsKilled < kAchievementCellDestroyerNum)
+        {
+            if (!gameState.completedUnwary) {
+                gameState.completedUnwary = true;
+                pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementUnwaryNum) * 100.0, 100);
+                [[GCHelper sharedInstance] reportAchievement:kAchievementUnwary percentComplete:pctComplete];
+            }
+            pctComplete = ((float)gameState.cellsKilled / (int)kAchievementCellDestroyerNum) * 100.0;
+            [[GCHelper sharedInstance] reportAchievement:kAchievementCellDestroyer percentComplete:pctComplete];
+        }
+        else
+        {
+            pctComplete = ((float)gameState.cellsKilled / (int)kAchievementCellDestroyerNum) * 100.0;
+            [[GCHelper sharedInstance] reportAchievement:kAchievementCellDestroyer percentComplete:pctComplete];
+            // Прекращает подсчитывать кол-во уничтоженной еды после получения макс ачивки
+            if (gameState.cellsKilled >= kAchievementCellDestroyerNum) {
+                gameState.cellsKilled++;
+            }
         }
     }
     

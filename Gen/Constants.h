@@ -49,11 +49,9 @@
 #define kAchievementLevel20 @"com.atomgames.genby.achievement.level20"
 #define kAchievementLevel30 @"com.atomgames.genby.achievement.level30"
 #define kAchievementLevel40 @"com.atomgames.genby.achievement.level40"
-#define kAchievementFirstFail @"com.atomgames.genby.achievement.firstfail"
 #define kAchievementStarry @"com.atomgames.genby.achievement.starry"
 #define kAchievementStargazer @"com.atomgames.genby.achievement.stargazer"
 #define kAchievementSuperstar @"com.atomgames.genby.achievement.superstar"
-#define kAchievementUnwary @"com.atomgames.genby.achievement.unwary"
 #define kAchievementBubblepopper @"com.atomgames.genby.achievement.bubblepopper"
 #define kAchievementLighthunger @"com.atomgames.genby.achievement.lighthunger"
 #define kAchievementIFeelGood @"com.atomgames.genby.achievement.ifeelgood"
@@ -63,6 +61,10 @@
 #define kAchievementRushHour @"com.atomgames.genby.achievement.rushhour"
 #define kAchievementBomber @"com.atomgames.genby.achievement.bomber"
 #define kAchievementOhNoNo @"com.atomgames.genby.achievement.ohnono"
+#define kAchievementFirstFail @"com.atomgames.genby.achievement.firstfail"
+#define kAchievementFirstFailNum 1
+#define kAchievementUnwary @"com.atomgames.genby.achievement.unwary"
+#define kAchievementUnwaryNum 50
 #define kAchievementCellDestroyer @"com.atomgames.genby.achievement.celldestroyer" // Destroy 100 cells
 #define kAchievementCellDestroyerNum 100
 // Leaderboards
