@@ -1,0 +1,14 @@
+<map>
+<ExitCell x='480' y='280' />
+<ChildCell x='593' y='125' />
+<ChildCell x='672' y='212' />
+<ChildCell x='672' y='335' />
+<ChildCell x='627' y='448' />
+<ChildCell x='378' y='482' />
+<ChildCell x='507' y='496' />
+<ChildCell x='291' y='407' />
+<ChildCell x='270' y='296' />
+<ChildCell x='323' y='172' />
+<ChildCell x='446' y='109' />
+<Settings maxCellsCount='10' needCellsCount='10' />
+</map>

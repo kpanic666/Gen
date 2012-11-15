@@ -20,7 +20,7 @@
 - (void)createBodyAtLocation:(CGPoint)location
 {
     b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
+    bodyDef.type = b2_staticBody;
     bodyDef.position = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO);
     body = world->CreateBody(&bodyDef);
     body->SetUserData(self);
@@ -39,7 +39,7 @@
 {
     if ((self = [super init])) {
         world = theWorld;
-        [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"bubble3.png"]];
+        [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"bubbleCell.png"]];
         topBorder = ([[CCDirector sharedDirector] winSize].height + self.contentSize.height) / PTM_RATIO;
         gameObjectType = kEnemyTypeBubble;
         characterState = kStateIdle;
@@ -67,7 +67,7 @@
         // С постоянной силой двигаем пузырь вверх до верхней границы экрана. Если выходит за границу - уничтожаем
         if (body->GetPosition().y < topBorder)
         {
-            float yForce = 1.5;
+            float yForce = 1.0;
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
                 yForce *= 2;
             }
@@ -92,9 +92,12 @@
         if ([tempSprite isKindOfClass:[Box2DSprite class]])
         {
             Box2DSprite *spriteObj = (Box2DSprite*)tempSprite;
-            if (spriteObj.gameObjectType == kChildCellType && spriteObj.characterState == kStateBubbled)
+            if (spriteObj.gameObjectType == kChildCellType && spriteObj.characterState == kStateBubbling)
             {
                 [self setWasUsed:YES];
+                
+                // Change body type to dynamic body
+                body->SetType(b2_dynamicBody);
                 
                 // Revolute Joint between ChildCell and BubbleCell Creation. Чтобы закрепить по центру
                 b2RevoluteJointDef ropeJointDef;
@@ -103,6 +106,7 @@
                 ropeJointDef.localAnchorA.SetZero();
                 ropeJointDef.localAnchorB.SetZero();
                 ropeJointDef.collideConnected = false;
+                ropeJointDef.userData = @"BubbleJoint";
                 world->CreateJoint(&ropeJointDef);
             }
         }

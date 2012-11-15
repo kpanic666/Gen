@@ -1,0 +1,46 @@
+<map>
+<dec_plant6 x='430' y='533' rotation='-6' />
+<dec_crab x='59' y='593' />
+<dec_bottle1 x='36' y='584' scaleX='1.26' scaleY='1.57' />
+<dec_plant4 x='412' y='578' />
+<dec_plant5 x='387' y='580' />
+<dec_plant6 x='482' y='554' />
+<dec_plant5 x='405' y='566' scaleX='0.692' scaleY='0.742' />
+<dec_plant5 x='374' y='594' scaleY='0.806' />
+<dec_plant5 x='402' y='594' />
+<dec_plastic1 x='658' y='108' />
+<dec_plastic2 x='701' y='86' />
+<dec_bottle3 x='610' y='74' />
+<dec_bottle3 x='655' y='43' flipX='YES' />
+<dec_plant2 x='219' y='243' />
+<dec_plant2 x='243' y='243' scaleX='1.24' scaleY='1.5' />
+<dec_plant2 x='269' y='242' rotation='32' scaleX='1.24' scaleY='1.5' />
+<dec_plant2 x='247' y='243' rotation='32' scaleX='1.24' scaleY='1.5' />
+<dec_plant1 x='298' y='244' />
+<dec_plant1 x='191' y='243' />
+<dec_plant3 x='62' y='78' />
+<groundCell2 x='285' y='265' />
+<groundCell1 x='625' y='509' />
+<redCell2 x='226' y='25' />
+<redCell1 x='926' y='365' />
+<ExitCell x='860' y='89' />
+<ChildCell x='180' y='122' />
+<ChildCell x='180' y='175' />
+<ChildCell x='114' y='175' />
+<ChildCell x='484' y='60' />
+<ChildCell x='446' y='113' />
+<ChildCell x='521' y='114' />
+<ChildCell x='738' y='567' />
+<ChildCell x='790' y='567' />
+<ChildCell x='758' y='516' />
+<ChildCell x='847' y='567' />
+<ChildCell x='182' y='401' rotation='90' />
+<ChildCell x='242' y='487' rotation='90' />
+<ChildCell x='242' y='437' rotation='90' />
+<ChildCell x='182' y='518' rotation='90' />
+<BombCell x='116' y='122' />
+<BombCell x='489' y='172' />
+<BombCell x='830' y='516' />
+<BombCell x='182' y='458' />
+<Settings maxCellsCount='18' needCellsCount='14' />
+</map>

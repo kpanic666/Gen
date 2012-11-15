@@ -156,6 +156,7 @@ public:
     NSString *path = [[NSBundle mainBundle] pathForResource:plist
                                                ofType:nil
                                           inDirectory:nil];
+    if (path == nil) return;
 
 	NSDictionary *dictionary = [NSDictionary dictionaryWithContentsOfFile:path];
 

@@ -15,66 +15,47 @@
     if ((self = [super init])) {
         uiLayer = box2DUILayer;
         CGPoint cellPos;
-
-        // load physics definitions
-        [[GB2ShapeCache sharedShapeCache] addShapesWithFile:@"scene16bodies.plist"];
         
         // add background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.png"];
+        CCSprite *background = [CCSprite spriteWithFile:@"background1.jpg"];
         [background setPosition:[Helper screenCenter]];
-        [self addChild:background z:-2];
+        [self addChild:background z:-4];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
-        // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
-        cellPos = [Helper convertPosition:ccp(517, 345)];
-        exitCell = [[[ExitCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:exitCell z:-1 tag:kExitCellSpriteTagValue];
-        
-        // add ChildCells
-        CGPoint childCellsPos[kScene16Total] = 
-        {
-            [Helper convertPosition:ccp(98, 37)],
-            [Helper convertPosition:ccp(136, 338)],
-            [Helper convertPosition:ccp(72, 446)],
-            [Helper convertPosition:ccp(255, 78)],
-            [Helper convertPosition:ccp(232, 233)],
-            [Helper convertPosition:ccp(340, 603)],
-            [Helper convertPosition:ccp(414, 460)],
-            [Helper convertPosition:ccp(481, 205)],
-            [Helper convertPosition:ccp(709, 59)],
-            [Helper convertPosition:ccp(709, 320)],
-            [Helper convertPosition:ccp(696, 580)],
-            [Helper convertPosition:ccp(831, 48)],
-            [Helper convertPosition:ccp(820, 236)],
-            [Helper convertPosition:ccp(820, 423)]
-        };
-        for (int i=0; i<kScene16Total; i++) {
-            [self createChildCellAtLocation:childCellsPos[i]];
-        }
+        // add MetalCell with Pin at Center
+        cellPos = [Helper convertPosition:ccp(587, 313)];
+        CGPoint pinPos = [Helper convertPosition:ccp(480, 310)];
+        MetalCell *metalCell1 = [MetalCell metalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:pinPos];
+        [self addChild:metalCell1 z:0];
+        [sceneSpriteBatchNode addChild:metalCell1.pin];
 
-        // add RedCells
-        cellPos = [Helper convertPosition:ccp(184, 144)];
-        RedCell *redCell1 = [RedCell redCellInWorld:world position:cellPos name:@"redCell3"];
-        [self addChild:redCell1 z:-1];
-        cellPos = [Helper convertPosition:ccp(184, 510)];
-        RedCell *redCell2 = [RedCell redCellInWorld:world position:cellPos name:@"redCell3"];
-        [self addChild:redCell2 z:-1];
-        cellPos = [Helper convertPosition:ccp(370, 301)];
-        RedCell *redCell3 = [RedCell redCellInWorld:world position:cellPos name:@"redCell1"];
-        [self addChild:redCell3 z:-1];
-        cellPos = [Helper convertPosition:ccp(458, 82)];
-        RedCell *redCell4 = [RedCell redCellInWorld:world position:cellPos name:@"redCell1"];
-        [self addChild:redCell4 z:-1];
-        cellPos = [Helper convertPosition:ccp(450, 567)];
-        RedCell *redCell5 = [RedCell redCellInWorld:world position:cellPos name:@"redCell2"];
-        [self addChild:redCell5 z:-1];
-        cellPos = [Helper convertPosition:ccp(709, 174)];
-        RedCell *redCell6 = [RedCell redCellInWorld:world position:cellPos name:@"redCell2"];
-        [self addChild:redCell6 z:-1];
-        cellPos = [Helper convertPosition:ccp(723, 479)];
-        RedCell *redCell7 = [RedCell redCellInWorld:world position:cellPos name:@"redCell3"];
-        [self addChild:redCell7 z:-1];
+        NSMutableArray *childCellsArray = [[NSMutableArray alloc] init];
+        for (CCSprite *tempSprite in [sceneSpriteBatchNode children]) {
+            if ([tempSprite isKindOfClass:[Box2DSprite class]])
+            {
+                Box2DSprite *tempObj = (Box2DSprite*)tempSprite;
+                if ([tempObj gameObjectType] == kChildCellType) {
+                    [childCellsArray addObject:(ChildCell*)tempObj];
+                }
+            }
+        }
+        // Make distance joint connections between metalCell and all ChildCells
+        b2DistanceJointDef disJointDef;
+        disJointDef.length = exitCell.contentSize.width * 0.8 / PTM_RATIO;
+        disJointDef.bodyA = metalCell1.body;
+        disJointDef.localAnchorB.SetZero();
+        disJointDef.collideConnected = true;
+        // Calculate offset for disJoint to connect to left side of metal cell (at center of the circle)
+        float offset = (metalCell1.contentSize.width * 0.5 - metalCell1.contentSize.width / 16) / PTM_RATIO;
+        for (int i=0; i < childCellsArray.count; i++) {
+            ChildCell *tempCell = (ChildCell*)[childCellsArray objectAtIndex:i];
+            disJointDef.bodyB = tempCell.body;
+            disJointDef.localAnchorA = b2Vec2(offset, 0);
+            world->CreateJoint(&disJointDef);
+        }
+        [childCellsArray release];
+        childCellsArray = nil;
     }
     return self;
 }

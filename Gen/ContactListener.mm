@@ -14,21 +14,37 @@ void ContactListener::BeginContact(b2Contact* contact)
 {
     Box2DSprite *spriteA = (Box2DSprite*)contact->GetFixtureA()->GetBody()->GetUserData();
     Box2DSprite *spriteB = (Box2DSprite*)contact->GetFixtureB()->GetBody()->GetUserData();
+    b2Fixture *fixtureA = contact->GetFixtureA();
+    b2Fixture *fixtureB = contact->GetFixtureB();
     
     // Обработка столкновениий сенсора ParentCell с ChildCell
     if (spriteA.gameObjectType == kParentCellType && spriteA.characterState == kStateTraveling) {
         [spriteB changeState:kStateConnecting];
     }
-    else if (spriteB.gameObjectType == kParentCellType && spriteA.characterState == kStateTraveling) {
+    else if (spriteB.gameObjectType == kParentCellType && spriteB.characterState == kStateTraveling) {
         [spriteA changeState:kStateConnecting];
     }
     
     // Обработка столкновениий ExitCell с ChildCell
     if (spriteA.gameObjectType == kExitCellType) {
-        [spriteB changeState:kStateBeforeSoul];
+        if (fixtureA->IsSensor()) {
+            [spriteA changeState:kStateOpenedMouth];
+        }
+        else
+        {
+            [spriteA changeState:kStateEating];
+            [spriteB changeState:kStateBeforeSoul];
+        }
     }
     else if (spriteB.gameObjectType == kExitCellType) {
-        [spriteA changeState:kStateBeforeSoul];
+        if (fixtureB->IsSensor()) {
+            [spriteB changeState:kStateOpenedMouth];
+        }
+        else
+        {
+            [spriteB changeState:kStateEating];
+            [spriteA changeState:kStateBeforeSoul];
+        }
     }
     
     // Обработка столкновениий GroundCell с ChildCell
@@ -57,11 +73,11 @@ void ContactListener::BeginContact(b2Contact* contact)
     }
     
     // Обработка столкновений BubbleCell с ChildCell
-    if (spriteA.gameObjectType == kEnemyTypeBubble && spriteA.characterState == kStateIdle) {
+    if ((spriteA.gameObjectType == kEnemyTypeBubble && spriteA.characterState == kStateIdle) && spriteB.gameObjectType == kChildCellType) {
         [spriteB changeState:kStateBubbling];
         [spriteA changeState:kStateTraveling];
     }
-    else if (spriteB.gameObjectType == kEnemyTypeBubble && spriteB.characterState == kStateIdle) {
+    else if ((spriteB.gameObjectType == kEnemyTypeBubble && spriteB.characterState == kStateIdle) && spriteA.gameObjectType == kChildCellType) {
         [spriteA changeState:kStateBubbling];
         [spriteB changeState:kStateTraveling];
     }
@@ -71,6 +87,8 @@ void ContactListener::EndContact(b2Contact* contact)
 {
     Box2DSprite *spriteA = (Box2DSprite*)contact->GetFixtureA()->GetBody()->GetUserData();
     Box2DSprite *spriteB = (Box2DSprite*)contact->GetFixtureB()->GetBody()->GetUserData();
+    b2Fixture *fixtureA = contact->GetFixtureA();
+    b2Fixture *fixtureB = contact->GetFixtureB();
     
     // Обработка столкновениий сенсора ParentCell с ChildCell
     if (spriteA.gameObjectType == kParentCellType && spriteB.characterState == kStateConnected) {
@@ -78,6 +96,14 @@ void ContactListener::EndContact(b2Contact* contact)
     }
     else if (spriteB.gameObjectType == kParentCellType && spriteA.characterState == kStateConnected) {
         [spriteA changeState:kStateDisconnecting];
+    }
+    
+    // Обработка столкновениий ExitCell с ChildCell
+    if (spriteA.gameObjectType == kExitCellType && fixtureA->IsSensor() && spriteB.characterState != kStateBeforeSoul) {
+        [spriteA changeState:kStateCloseMouth];
+    }
+    else if (spriteB.gameObjectType == kExitCellType && fixtureB->IsSensor() && spriteA.characterState != kStateBeforeSoul) {
+        [spriteB changeState:kStateCloseMouth];
     }
     
     // Обработка столкновений MagneticCell с ChildCell

@@ -7,7 +7,6 @@
 //
 
 #import "Scene5ActionLayer.h"
-#import "MetalCell.h"
 
 @implementation Scene5ActionLayer
 
@@ -16,76 +15,36 @@
     if ((self = [super init])) {
         uiLayer = box2DUILayer;
         CGPoint cellPos;
-        CGPoint screenCenter = [Helper screenCenter];
-        
-        // load physics definitions
-        [[GB2ShapeCache sharedShapeCache] addShapesWithFile:@"scene5bodies.plist"];
         
         // add background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.png"];
-        [background setPosition:screenCenter];
-        [self addChild:background z:-2];
+        CCSprite *background = [CCSprite spriteWithFile:@"background1.jpg"];
+        [background setPosition:[Helper screenCenter]];
+        [self addChild:background z:-4];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
+
+        // add MetalCell with Pin at Center
+        cellPos = [Helper convertPosition:ccp(442, 331)];
+        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
         
-        // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
-        cellPos = ccp(screenCenter.x, screenSize.height * 0.2);
-        exitCell = [[[ExitCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:exitCell z:-1 tag:kExitCellSpriteTagValue];
+        // Add Tutorial text and arrows
+        CCSprite *info = [CCSprite spriteWithSpriteFrameName:@"tut_arrow1.png"];
+        info.position = [Helper convertPosition:ccp(503, 278)];
+        info.opacity = 0;
+        info.flipY = YES;
+        info.rotation = 90;
+        [sceneSpriteBatchNode addChild:info z:-2];
+        CCLabelTTF *infoText = [CCLabelTTF labelWithString:@"Some objects\n can be moved" fontName:@"Verdana" fontSize:[Helper convertFontSize:12]];
+        infoText.color = ccBLACK;
+        infoText.opacity = 0;
+        infoText.position = ccp(info.position.x + info.contentSize.width*0.7 + infoText.contentSize.width*0.5, info.position.y);
+        [self addChild:infoText z:-2];
         
-        // add MetalCell and pin at Center. MetalCell will rotate
-        cellPos = [Helper convertPosition:ccp(480, 261)];
-        MetalCell *metalCell1 = [MetalCell metalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        [self addChild:metalCell1 z:-1];
-        [sceneSpriteBatchNode addChild:metalCell1.pin];
-        [metalCell1 setMotorSpeed:2];
-        
-        // add ChildCells and joint the last with Metal Cell
-        CGPoint childCellsPos[kScene5Total] = 
-        {
-            [Helper convertPosition:ccp(480, 200)],
-            [Helper convertPosition:ccp(508, 207)],
-            [Helper convertPosition:ccp(529, 225)],
-            [Helper convertPosition:ccp(539, 253)],
-            [Helper convertPosition:ccp(536, 283)],
-            [Helper convertPosition:ccp(520, 307)],
-            [Helper convertPosition:ccp(496, 318)],
-            [Helper convertPosition:ccp(471, 320)],
-            [Helper convertPosition:ccp(451, 313)],
-            [Helper convertPosition:ccp(433, 298)],
-            [Helper convertPosition:ccp(421, 275)],
-            [Helper convertPosition:ccp(419, 248)],
-            [Helper convertPosition:ccp(430, 225)],
-            [Helper convertPosition:ccp(449, 207)]
-        };
-        for (int i=0; i<kScene5Total; i++) {
-            [self createChildCellAtLocation:childCellsPos[i]];
-        }
- 
-        NSMutableArray *childCellsArray = [[NSMutableArray alloc] init];
-        for (CCSprite *tempSprite in [sceneSpriteBatchNode children]) {
-            if ([tempSprite isKindOfClass:[Box2DSprite class]])
-            {
-                Box2DSprite *tempObj = (Box2DSprite*)tempSprite;
-                if ([tempObj gameObjectType] == kChildCellType) {
-                    [childCellsArray addObject:(ChildCell*)tempObj];
-                }
-            }
-        }
-        // Make distance joint connections between metalCell and all ChildCells
-        b2DistanceJointDef disJointDef;
-        disJointDef.length = exitCell.contentSize.width * 1.17 / PTM_RATIO;
-        disJointDef.bodyA = metalCell1.body;
-        disJointDef.localAnchorB.SetZero();
-        for (int i=0; i < childCellsArray.count; i++) {
-            ChildCell *tempCell = (ChildCell*)[childCellsArray objectAtIndex:i];
-            disJointDef.bodyB = tempCell.body;
-            disJointDef.localAnchorA = metalCell1.body->GetLocalPoint(tempCell.body->GetPosition());
-            world->CreateJoint(&disJointDef);
-        }
-        [childCellsArray release];
-        childCellsArray = nil;
-        
+        // Animating tips
+        [self showTipsElement:info delay:2];
+        [self showTipsElement:infoText delay:2];
+        [self hideTipsElement:info delay:10];
+        [self hideTipsElement:infoText delay:10];
     }
     return self;
 }

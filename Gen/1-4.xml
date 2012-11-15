@@ -1,0 +1,42 @@
+<map>
+<dec_bone1 x='386' y='36' />
+<dec_bone2 x='518' y='81' />
+<dec_bone3 x='327' y='141' />
+<dec_bone4 x='821' y='463' />
+<dec_microwave x='874' y='563' />
+<dec_bone1 x='618' y='59' flipX='YES' />
+<dec_bone2 x='523' y='176' flipX='YES' />
+<dec_bone4 x='482' y='272' flipX='YES' />
+<dec_bone3 x='602' y='472' flipX='YES' />
+<dec_bone3 x='499' y='419' flipY='YES' />
+<dec_bone4 x='752' y='144' flipY='YES' />
+<dec_bone1 x='418' y='415' flipX='YES' flipY='YES' />
+<dec_bone2 x='784' y='212' flipY='YES' />
+<ChildCell x='70' y='394' />
+<dec_bone1 x='807' y='90' rotation='90' />
+<dec_bone2 x='762' y='274' rotation='90' />
+<dec_bone3 x='664' y='36' rotation='90' />
+<dec_bone4 x='416' y='462' rotation='90' />
+<dec_bone1 x='784' y='345' rotation='-90' />
+<dec_bone2 x='688' y='269' rotation='-90' />
+<dec_bone4 x='616' y='208' rotation='-90' />
+<dec_bone3 x='371' y='329' rotation='-90' />
+<dec_bone3 x='472' y='119' rotation='90' />
+<dec_bone4 x='700' y='540' rotation='90' />
+<dec_bone1 x='413' y='144' rotation='-90' />
+<dec_bone2 x='606' y='545' rotation='90' />
+<ChildCell x='70' y='317' />
+<ChildCell x='70' y='245' />
+<ChildCell x='128' y='355' />
+<ChildCell x='128' y='289' />
+<ChildCell x='193' y='323' />
+<ExitCell x='855' y='307' />
+<groundCell1 x='221' y='142' />
+<groundCell2 x='223' y='508' />
+<redCell1 x='447' y='51' />
+<redCell2 x='568' y='315' />
+<redCell1 x='833' y='163' />
+<redCell1 x='734' y='440' />
+<redCell2 x='447' y='559' />
+<Settings maxCellsCount='6' needCellsCount='5' />
+</map>

@@ -9,23 +9,33 @@
 #import "MovingWall.h"
 
 @implementation MovingWall
+{
+    double timeAccum;
+}
 
 +(id) wallWithWorld:(b2World *)theWorld location:(CGPoint)location isVertical:(BOOL)vertical withGroundBody:(b2Body *)groundBody
 {
-    return [[[self alloc] initWithWorld:theWorld location:location isVertical:vertical withGroundBody:groundBody] autorelease];
+    return [[[self alloc] initWithWorld:theWorld location:location isVertical:vertical withGroundBody:groundBody negOffset:-1.0f posOffset:1.0f speed:1] autorelease];
 }
 
-- (id)initWithWorld:(b2World *)theWorld location:(CGPoint)location isVertical:(BOOL)vertical withGroundBody:(b2Body *)groundBody
++(id) wallWithWorld:(b2World *)theWorld location:(CGPoint)location isVertical:(BOOL)vertical withGroundBody:(b2Body *)groundBody negOffset:(float32)negOffset posOffset:(float32)posOffset speed:(float32)speed
+{
+    return [[[self alloc] initWithWorld:theWorld location:location isVertical:vertical withGroundBody:groundBody negOffset:negOffset posOffset:posOffset speed:speed] autorelease];
+}
+
+- (id)initWithWorld:(b2World *)theWorld location:(CGPoint)location isVertical:(BOOL)vertical withGroundBody:(b2Body *)groundBody negOffset:(float32)negOffset posOffset:(float32)posOffset speed:(float32)speed
 {
     if ((self = [super init]))
     {
         world = theWorld;
         [self setIsVertical:vertical];
-        [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"movingwall_idle.png"]];
+        [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[NSString stringWithFormat:@"movingwall%i.png", (int)random() % 2 + 1]]];
         gameObjectType = kMovingWallType;
         characterState = kStateTraveling;
-        _negativeOffset = -2.0f;
-        _positiveOffset = 2.0f;
+        _negativeOffset = negOffset;
+        _positiveOffset = posOffset;
+        _movingSpeed = speed;
+        timeAccum = 0;
         [self createBodyAtLocation:location withGroundBody:groundBody];
     }
     return self;
@@ -64,7 +74,7 @@
     wallJointDef.upperTranslation = _positiveOffset;
     wallJointDef.enableLimit = true;
     wallJointDef.maxMotorForce = 100.0f;
-    wallJointDef.motorSpeed = 1;
+    wallJointDef.motorSpeed = _movingSpeed;
     wallJointDef.enableMotor = true;
     wallJoint = (b2PrismaticJoint*) world->CreateJoint(&wallJointDef);
 }
@@ -103,7 +113,6 @@
 - (void)updateStateWithDeltaTime:(ccTime)deltaTime andListOfGameObjects:(CCArray *)listOfGameObjects
 {
     float32 jTrans = wallJoint->GetJointTranslation();
-    static double timeAccum = 0;
 
     // Если MovingWall достигла конца пути, то двигаем в обратную сторону
     if (jTrans >= self.positiveOffset || jTrans <= self.negativeOffset) {
@@ -114,7 +123,7 @@
     {
         // Если MovingWall зажала какой то предмет и находится на перепутье больше 5 сек - освобождаем
         timeAccum += deltaTime;
-        if (timeAccum > 5.0) {
+        if (timeAccum > 4.0) {
             [self reversMovingDirection];
             timeAccum = 0;
         }

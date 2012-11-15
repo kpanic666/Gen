@@ -8,6 +8,7 @@
 
 #import "GCHelper.h"
 #import "GCDatabase.h"
+#import "AppDelegate.h"
 
 @implementation GCHelper
 
@@ -82,10 +83,10 @@ static GCHelper *sharedHelper = nil;
         dispatch_async(dispatch_get_main_queue(), ^(void)
                        {
                            if (error == NULL) {
-                               NSLog(@"Successfully sent score!");
+                               CCLOG(@"GameCenter: Successfully sent score.");
                                [scoresToReport removeObject:score];
                            } else {
-                               NSLog(@"Score failed to send... will try again later. Reason: %@", error.localizedDescription);
+                               CCLOG(@"GameCenter: Score failed to send... will try again later. Reason: %@", error.localizedDescription);
                            }
                        });
     }];
@@ -97,10 +98,10 @@ static GCHelper *sharedHelper = nil;
         dispatch_async(dispatch_get_main_queue(), ^(void)
                        {
                            if (error == NULL) {
-                               NSLog(@"Successfully sent achievement!");
+                               CCLOG(@"GameCenter: Successfully sent achievement.");
                                [achievementsToReport removeObject:achievement];
                            } else {
-                               NSLog(@"Achievement failed to send... will try again later. Reason: %@", error.localizedDescription);
+                               CCLOG(@"GameCenter: Achievement failed to send... will try again later. Reason: %@", error.localizedDescription);
                            }
                        });
     }];
@@ -122,11 +123,11 @@ static GCHelper *sharedHelper = nil;
     dispatch_async(dispatch_get_main_queue(), ^(void)
                    {
                        if ([GKLocalPlayer localPlayer].isAuthenticated && !userAuthenticated) {
-                           NSLog(@"Authentication changed: player authenticated.");
+                           CCLOG(@"GameCenter: Authentication changed: player authenticated.");
                            userAuthenticated = TRUE;
-                           [self resendData];
+                           if (SYSTEM_VERSION_LESS_THAN(@"5.0")) {[self resendData];}
                        } else if (![GKLocalPlayer localPlayer].isAuthenticated && userAuthenticated) {
-                           NSLog(@"Authentication changed: player not authenticated.");
+                           CCLOG(@"GameCenter: Authentication changed: player not authenticated.");
                            userAuthenticated = FALSE;
                        }
                    });
@@ -137,18 +138,70 @@ static GCHelper *sharedHelper = nil;
     if (!gameCenterAvailable) {
         return;
     }
-    NSLog(@"Authenticating local user...");
-    if ([GKLocalPlayer localPlayer].authenticated == NO) {
-        [[GKLocalPlayer localPlayer] authenticateWithCompletionHandler:nil];
-    } else {
-        NSLog(@"Already authenticated!");
+    
+    GKLocalPlayer *lPlayer = [GKLocalPlayer localPlayer];
+    
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0"))
+    {
+        lPlayer.authenticateHandler = ^(UIViewController *loginVC, NSError *error)
+         {
+             if (lPlayer.authenticated) {
+                 // authentication sucessful
+                 gameCenterAvailable = YES;
+//                 [self enableGameCenterForPlayer:localPlayer];
+             }
+             else if (loginVC)
+             {
+                 // player not log in yet, present the VC
+                 [self presentLoginVC:loginVC];
+             }
+             else
+             {
+                 // authentication failed, provide graceful fallback
+                 CCLOG(@"GameCenter: Failed to authorize. Reason: %@", error.localizedDescription);
+                 [self disableGameCenter];
+             }
+         };
+    }
+    else
+    {
+        if (lPlayer.authenticated) {
+            gameCenterAvailable = YES;
+            // authentication sucessful
+//            [self enableGameCenterForPlayer:localPlayer];
+        }
+        else
+        {
+            // player not log in yet, present the VC
+            [lPlayer authenticateWithCompletionHandler:^(NSError *error)
+             {
+                 if (error) {
+                     // authentication failed, provide graceful fallback
+                     CCLOG(@"GameCenter: Failed to authorize. Reason: %@", error.localizedDescription);
+                     [self disableGameCenter];
+                 }
+             }];
+        }
     }
 }
 
-- (void)reportScore:(NSString *)identifier score:(int)rawScore
+- (void)disableGameCenter
+{
+    CCLOG(@"Not authenticated, disable Game Center.");
+    gameCenterAvailable = NO;
+}
+
+- (void)presentLoginVC:(UIViewController*)loginVC
+{
+    AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
+    [[app navController] presentViewController:loginVC animated:YES completion:nil];
+}
+
+- (void)reportScore:(NSString *)identifier score:(int64_t)rawScore
 {
     GKScore *score = [[[GKScore alloc] initWithCategory:identifier] autorelease];
     score.value = rawScore;
+    score.context = 0;
     [scoresToReport addObject:score];
     [self save];
     
@@ -174,11 +227,11 @@ static GCHelper *sharedHelper = nil;
         dispatch_async(dispatch_get_main_queue(), ^(void)
                        {
                            if (error == NULL) {
-                               NSLog(@"Achievement reset succesfull");
+                               CCLOG(@"Achievement reset succesfully.");
                                [achievementsToReport removeAllObjects];
                                [self save];
                            } else {
-                               NSLog(@"Achievement failed to send... will try again later. Reason: %@", error.localizedDescription);
+                               CCLOG(@"Achievement failed to reset. Reason: %@", error.localizedDescription);
                            }
                        });
     }];

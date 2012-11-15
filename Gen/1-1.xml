@@ -1,0 +1,61 @@
+<map>
+<ChildCell x='183' y='37' />
+<ChildCell x='270' y='50' />
+<ChildCell x='328' y='122' />
+<ChildCell x='328' y='212' />
+<ChildCell x='275' y='288' />
+<ChildCell x='183' y='310' />
+<ChildCell x='95' y='288' />
+<ChildCell x='48' y='212' />
+<ChildCell x='53' y='122' />
+<ChildCell x='100' y='62' />
+<dec_crab x='140' y='547' />
+<dec_plant2 x='113' y='587' tintColor='4611167' tintMultiplier='0.43' />
+<dec_plant2 x='148' y='597' />
+<dec_plant2 x='178' y='504' flipY='YES' />
+<dec_plant2 x='207' y='554' />
+<dec_plant2 x='207' y='524' tintColor='4611167' tintMultiplier='0.43' />
+<dec_plant2 x='187' y='570' flipY='YES' />
+<dec_plant2 x='166' y='504' />
+<dec_plant2 x='169' y='597' flipY='YES' tintColor='4611167' tintMultiplier='0.43' />
+<dec_plant2 x='118' y='514' rotation='15' />
+<dec_plant2 x='97' y='570' flipY='YES' />
+<dec_plant2 x='82' y='544' />
+<dec_plant2 x='77' y='570' tintColor='4611167' tintMultiplier='0.43' />
+<dec_plant2 x='93' y='525' flipY='YES' />
+<dec_plant4 x='120' y='482' />
+<dec_plant5 x='115' y='487' rotation='-30' />
+<dec_plant6 x='187' y='494' />
+<dec_shell2 x='162' y='566' />
+<dec_stones1 x='390' y='337' />
+<dec_stones2 x='541' y='380' />
+<dec_stones3 x='657' y='294' />
+<dec_stones2 x='562' y='305' />
+<dec_stones2 x='639' y='352' />
+<dec_stones1 x='511' y='300' />
+<dec_stones1 x='455' y='410' flipX='YES' />
+<dec_stones2 x='455' y='374' flipY='YES' />
+<dec_stones2 x='608' y='368' flipY='YES' />
+<dec_wood2 x='844' y='96' />
+<dec_wood1 x='772' y='71' rotation='-15' />
+<dec_wood1 x='787' y='87' rotation='-15' />
+<dec_plant1 x='855' y='68' />
+<dec_plant1 x='864' y='71' />
+<dec_plant1 x='855' y='73' />
+<dec_plant1 x='869' y='73' />
+<dec_plant1 x='873' y='76' />
+<dec_plant1 x='813' y='59' />
+<dec_plant1 x='806' y='62' />
+<dec_plant1 x='815' y='62' />
+<dec_plant1 x='802' y='66' />
+<dec_plant1 x='762' y='101' />
+<dec_plant1 x='748' y='85' />
+<dec_plant1 x='755' y='78' />
+<dec_plant1 x='755' y='83' />
+<dec_plant1 x='742' y='83' />
+<dec_plant1 x='802' y='116' />
+<groundCell1 x='186' y='177' />
+<groundCell2 x='561' y='520' />
+<ExitCell x='853' y='531' />
+<Settings maxCellsCount='10' needCellsCount='10' />
+</map>

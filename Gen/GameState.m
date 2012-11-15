@@ -48,6 +48,7 @@ static GameState *sharedInstance = nil;
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeBool:_completedLevel10 forKey:@"CompletedLevel10"];
+    [aCoder encodeBool:_completedLevel20 forKey:@"CompletedLevel20"];
     [aCoder encodeInt:_cellsKilled forKey:@"CellsKilled"];
     [aCoder encodeInt:_highestOpenedLevel forKey:@"HighestOpenedLevel"];
     [aCoder encodeObject:_levelHighestScoreArray forKey:@"LevelHighestScoreArray"];
@@ -72,6 +73,7 @@ static GameState *sharedInstance = nil;
 {
     if ((self = [super init])) {
         [self setCompletedLevel10:[aDecoder decodeBoolForKey:@"CompletedLevel10"]];
+        [self setCompletedLevel20:[aDecoder decodeBoolForKey:@"CompletedLevel20"]];
         [self setCellsKilled:[aDecoder decodeIntForKey:@"CellsKilled"]];
         [self setHighestOpenedLevel:[aDecoder decodeIntForKey:@"HighestOpenedLevel"]];
         _levelHighestScoreArray = [[aDecoder decodeObjectForKey:@"LevelHighestScoreArray"] retain];
@@ -83,6 +85,7 @@ static GameState *sharedInstance = nil;
 - (void)resetState
 {
     [self setCompletedLevel10:NO];
+    [self setCompletedLevel20:NO];
     [self setCellsKilled:0];
     [self setHighestOpenedLevel:1];
     [_levelHighestScoreArray removeAllObjects];

@@ -37,10 +37,10 @@
     return [[[self alloc] initWithWorld:theWorld position:pos name:name] autorelease];
 }
 
-- (NSString *)getRandomParticleName
-{
-    // Set Random texture
-    return [NSString stringWithFormat:@"groundcell_particle%i.png", (int)random() % 2 + 1];
-}
+//- (NSString *)getRandomParticleName
+//{
+//    // Set Random texture
+//    return [NSString stringWithFormat:@"groundcell_particle%i.png", (int)random() % 2 + 1];
+//}
 
 @end

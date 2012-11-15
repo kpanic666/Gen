@@ -1,0 +1,17 @@
+<map>
+<ExitCell x='850' y='522' />
+<ChildCell x='343' y='224' />
+<BombCell x='532' y='224' />
+<ChildCell x='431' y='224' />
+<ChildCell x='431' y='295' />
+<BombCell x='431' y='363' />
+<ChildCell x='431' y='443' />
+<ChildCell x='343' y='293' />
+<BombCell x='532' y='358' />
+<BombCell x='343' y='438' />
+<ChildCell x='343' y='362' />
+<ChildCell x='532' y='296' />
+<ChildCell x='532' y='447' />
+<redCell1 x='445' y='324' />
+<Settings maxCellsCount='12' needCellsCount='7' />
+</map>

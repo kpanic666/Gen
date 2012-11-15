@@ -14,8 +14,10 @@
     float radius;
 }
 
+@property (retain) CCSpriteBatchNode *superpowerBatchNode;
+
 - (void)changeBodyPosition:(b2Vec2)position;
 - (void)drawDisJoints;
-- (void)drawSensorField;
+- (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location batchNodeForPower:(CCSpriteBatchNode*)powerBatchNode;
 
 @end

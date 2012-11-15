@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>frames</key>
+        <dict>
+            <key>parentcell_wave.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{1,1},{986,1010}}</string>
+                <key>offset</key>
+                <string>{-12,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{986,1010}}</string>
+                <key>sourceSize</key>
+                <string>{1010,1010}</string>
+            </dict>
+        </dict>
+        <key>metadata</key>
+        <dict>
+            <key>format</key>
+            <integer>2</integer>
+            <key>realTextureFileName</key>
+            <string>superpower-ipad-hd.pvr.ccz</string>
+            <key>size</key>
+            <string>{1024,1024}</string>
+            <key>smartupdate</key>
+            <string>$TexturePacker:SmartUpdate:9fb3802980e172f2c5c7c7a17e3dbf86$</string>
+            <key>textureFileName</key>
+            <string>superpower-ipad-hd.pvr.ccz</string>
+        </dict>
+    </dict>
+</plist>

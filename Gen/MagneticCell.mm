@@ -29,7 +29,7 @@
     
     b2FixtureDef fixtureDef;
     b2CircleShape shape;
-    shape.m_radius = self.contentSize.width * 1.6f / PTM_RATIO;
+    shape.m_radius = self.contentSize.width * 1.06 / PTM_RATIO;
     fixtureDef.shape = &shape;
     fixtureDef.isSensor = TRUE;
     fixtureDef.filter.categoryBits = kMagneticCellFilterCategory;
@@ -73,12 +73,32 @@
         // Инициал. массив для хранения координат ChildCell к которым нужно нарисовать линию притяжения
         cellsPosToDraw = [[NSMutableArray alloc] init];
         
-        [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"magneticcell_idle.png"]];
+        self.topSwirl = [CCSprite spriteWithSpriteFrameName:@"funnel_02.png"];
+        self.topSwirl.position = location;
+        self.middleSwirl = [CCSprite spriteWithSpriteFrameName:@"funnel_01.png"];
+        self.middleSwirl.position = location;
+        self.middleSwirl.scale = 0.9;
+        self.middleSwirl.color = ccc3(102, 102, 102);
+        [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"funnel_01.png"]];
+        self.topSwirl.opacity = 140;
+        self.middleSwirl.opacity = 80;
+        self.opacity = 70;
+        // Rotating images
+        [self.middleSwirl runAction:[CCRepeatForever actionWithAction:[CCRotateBy actionWithDuration:24.0 angle:360]]];
+        [self.topSwirl runAction:[CCRepeatForever actionWithAction:[CCRotateBy actionWithDuration:5.0 angle:360]]];
         gameObjectType = kEnemyTypeMagneticCell;
         characterState = kStateIdle;
         [self createBodyAtLocation:location];
     }
     return self;
+}
+
+- (void)onEnter
+{
+    [super onEnter];
+    
+    [self.parent addChild:self.middleSwirl z:-1];
+    [self.parent addChild:self.topSwirl z:0];
 }
 
 - (void)drawMagnetForces
@@ -87,7 +107,7 @@
     HMVectorNode *drawNode = (HMVectorNode*)[[[self parent] parent] getChildByTag:kDrawNodeTagValue];
     
     float lineWidth = 1;
-    ccColor4B lineColor = ccc4(217, 166, 241, 255);
+    ccColor4B lineColor = ccc4(159, 101, 58, 255);
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         lineWidth *= 2;
     }
@@ -102,6 +122,8 @@
 
 - (void)dealloc
 {
+    [_topSwirl release];
+    [_middleSwirl release];
     
     [cellsPosToDraw release];
     cellsPosToDraw = nil;

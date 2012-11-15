@@ -14,7 +14,7 @@
 #import "SimpleQueryCallback.h"
 #import "HMVectorNode.h"
 
-#define kGlowOffset 10.0
+#define kGlowOffset ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 10.0 : 5.0)
 
 @implementation BlockCell
 
@@ -99,7 +99,7 @@
     CGPoint lowerBound = [Helper toPoints:minVertex];
     CGPoint upperBound = [Helper toPoints:maxVertex];
     CGPoint thirdBound = ccp(upperBound.x, lowerBound.y);
-    float addPixelsForGlow = kGlowOffset * 2;
+    float addPixelsForGlow = kGlowOffset * 3;
     CGSize retValue = CGSizeMake(ccpDistance(lowerBound, thirdBound) + addPixelsForGlow, ccpDistance(thirdBound, upperBound) + addPixelsForGlow);
     return retValue;
 }
@@ -117,25 +117,25 @@
     CGRect rect = CGRectZero;
     rect.size = textureSize;
     
-    CCTexture2D *noiseTex;
+    NSString *noiseTexName;
     switch (gameObjectType) {
         case kEnemyTypeRedCell:
-            noiseTex = [[CCTextureCache sharedTextureCache] addImage:@"redCell.png"];
+            noiseTexName = [NSString stringWithFormat:@"redCell%i.png", (int)random() % 3 + 1];
             break;
             
         case kGroundType:
-            noiseTex = [[CCTextureCache sharedTextureCache] addImage:@"groundCell.png"];
+            noiseTexName = [NSString stringWithFormat:@"groundCell%i.png", (int)random() % 3 + 1];
             break;
             
         case kMetalType:
-            noiseTex = [[CCTextureCache sharedTextureCache] addImage:@"metalCell.png"];
+            noiseTexName = [NSString stringWithFormat:@"metalCell%i.png", (int)random() % 2 + 1];
             break;
             
         default:
             return NULL;
     }
     
-    CCSprite *noise = [CCSprite spriteWithTexture:noiseTex rect:rect];
+    CCSprite *noise = [CCSprite spriteWithFile:noiseTexName rect:rect];
     ccTexParams tp2 = {GL_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT};
     [noise.texture setTexParameters:&tp2];
     noise.position = ccp(textureSize.width/2, textureSize.height/2);
@@ -221,13 +221,13 @@
     CGSize texSize = targetSprite.textureRect.size;
     
     BluredSprite *blurSprite = [BluredSprite spriteWithTexture:texForGlow];
-    [blurSprite setBlurSize:2];
+    [blurSprite setBlurSize:0.5*CC_CONTENT_SCALE_FACTOR()];
     [blurSprite setOpacity:150];
     [blurSprite setPosition:ccp(texSize.width/2 + kGlowOffset, texSize.height/2 + kGlowOffset)];
     [targetSprite setPosition:ccp(texSize.width/2, texSize.height/2)];
     
     // 1: Create new CCRenderTexture
-    CCRenderTexture *rt = [CCRenderTexture renderTextureWithWidth:texSize.width height:texSize.height pixelFormat:kCCTexture2DPixelFormat_RGBA4444];
+    CCRenderTexture *rt = [CCRenderTexture renderTextureWithWidth:texSize.width height:texSize.height pixelFormat:kCCTexture2DPixelFormat_RGBA8888];
     
     // 2: Call CCRenderTexture:begin
     [rt begin];
@@ -263,24 +263,23 @@
         MaskedSprite *resultSprite = [[[MaskedSprite alloc] initWithTexture:mainTexture rect:texRect maskTexture:maskTexture] autorelease];
         
         // Добавляем к спрайту фигуры эффект тени (слева сверху источник света).
-        if (gameObjectType != kMetalType)
-        {
+//        if (gameObjectType != kMetalType)
+//        {
             CCTexture2D *glowTexture = [self addGlowToSprite:resultSprite with:maskTexture];
             [self setTexture:glowTexture];
             [self setTextureRect:texRect rotated:NO untrimmedSize:texSize];
-        }
-        else
-        {
-            CCRenderTexture *rt = [CCRenderTexture renderTextureWithWidth:texSize.width height:texSize.height pixelFormat:kCCTexture2DPixelFormat_RGBA4444];
-            [rt begin];
-            [resultSprite setPosition:ccp(texSize.width/2, texSize.height/2)];
-            [resultSprite visit];
-            [rt end];
-            
-            [self setTexture:rt.sprite.texture];
-            [self setTextureRect:texRect rotated:NO untrimmedSize:texSize];
-        }
-        [[CCTextureCache sharedTextureCache] removeUnusedTextures];
+//        }
+//        else
+//        {
+//            CCRenderTexture *rt = [CCRenderTexture renderTextureWithWidth:texSize.width height:texSize.height pixelFormat:kCCTexture2DPixelFormat_RGBA4444];
+//            [rt begin];
+//            [resultSprite setPosition:ccp(texSize.width/2, texSize.height/2)];
+//            [resultSprite visit];
+//            [rt end];
+//            
+//            [self setTexture:rt.sprite.texture];
+//            [self setTextureRect:texRect rotated:NO untrimmedSize:texSize];
+//        }
     }
     return self;
 }
@@ -330,7 +329,6 @@
                 
                 // Рэндомизируем положение, размер
                 [particleSprite setRotation:random() % 360 + 1];
-                [particleSprite setOpacity:150];
                 float randomTime = CCRANDOM_0_1() + 1; // 1-2
                 if (CCRANDOM_0_1() <= 0.5f) [particleSprite setScale:0.9];
                 
@@ -352,7 +350,6 @@
                 id seq = [CCEaseInOut actionWithAction:[CCSequence actions:move1, move2, move3, move4, moveToBegin, nil] rate:2];
                 [particleSprite runAction:[CCRepeatForever actionWithAction:seq]];
             }
-            
         }
     }
 }

@@ -20,7 +20,7 @@
     body->SetUserData(self);
     
     b2CircleShape shape;
-    shape.m_radius = self.contentSize.width*0.5 / PTM_RATIO;
+    shape.m_radius = self.contentSize.width*0.25 / PTM_RATIO;
     body->CreateFixture(&shape, 0);
 }
 

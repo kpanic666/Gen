@@ -7,7 +7,6 @@
 //
 
 #import "Scene4ActionLayer.h"
-#import "MetalCell.h"
 
 @implementation Scene4ActionLayer
 
@@ -15,68 +14,30 @@
 {
     if ((self = [super init])) {
         uiLayer = box2DUILayer;
-        CGPoint cellPos;
-        CGPoint screenCenter = [Helper screenCenter];
-        
-        // load physics definitions
-        [[GB2ShapeCache sharedShapeCache] addShapesWithFile:@"scene4bodies.plist"];
         
         // add background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.png"];
-        [background setPosition:screenCenter];
-        [self addChild:background z:-2];
+        CCSprite *background = [CCSprite spriteWithFile:@"background1.jpg"];
+        [background setPosition:[Helper screenCenter]];
+        [self addChild:background z:-4];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
-        // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
-        cellPos = [Helper convertPosition:ccp(476, 195)];
-        exitCell = [[[ExitCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:exitCell z:-1 tag:kExitCellSpriteTagValue];
+        // Add Tutorial text and arrows
+        CCSprite *info = [CCSprite spriteWithSpriteFrameName:@"tut_lightbulb.png"];
+        info.position = [Helper convertPosition:ccp(666, 89)];
+        info.opacity = 0;
+        [sceneSpriteBatchNode addChild:info z:-2];
+        CCLabelTTF *infoText = [CCLabelTTF labelWithString:@"You can restart\n the level from\n pause menu" fontName:@"Verdana" fontSize:[Helper convertFontSize:12]];
+        infoText.color = ccBLACK;
+        infoText.opacity = 0;
+        infoText.position = ccp(info.position.x, info.position.y - info.contentSize.height * 0.7 - infoText.contentSize.height * 0.5);
+        [self addChild:infoText z:-2];
         
-        // add MetalCell
-        cellPos = [Helper convertPosition:ccp(465, 526)];
-        MetalCell *metalCell1 = [MetalCell metalCellInWorld:world position:cellPos name:@"metalCell1"];
-        [self addChild:metalCell1 z:0];
-        
-        // add ChildCells and joint the last with Metal Cell
-        CGPoint childCellsPos[kScene4Total] = 
-        {
-            [Helper convertPosition:ccp(151, 202)],
-            [Helper convertPosition:ccp(231, 99)],
-            [Helper convertPosition:ccp(301, 228)],
-            [Helper convertPosition:ccp(369, 85)],
-            [Helper convertPosition:ccp(591, 78)],
-            [Helper convertPosition:ccp(634, 179)],
-            [Helper convertPosition:ccp(729, 78)],
-            [Helper convertPosition:ccp(775, 133)],
-            [Helper convertPosition:ccp(749, 233)],
-            [Helper convertPosition:ccp(459, 579)]
-        };
-        for (int i=0; i<kScene4Total-1; i++) {
-            [self createChildCellAtLocation:childCellsPos[i]];
-        }
-        ChildCell *childCell = [[[ChildCell alloc] initWithWorld:world atLocation:childCellsPos[9]] autorelease];
-        [sceneSpriteBatchNode addChild:childCell z:1];
-        [GameManager sharedGameManager].numOfTotalCells++;
-        
-        b2DistanceJointDef disJointDef;
-        disJointDef.bodyA = childCell.body;
-        disJointDef.bodyB = metalCell1.body;
-        disJointDef.localAnchorA.SetZero();
-        disJointDef.localAnchorB.Set(1, 0);
-        disJointDef.length = childCell.contentSize.width * 1.5 / PTM_RATIO;
-        world->CreateJoint(&disJointDef);
-        disJointDef.localAnchorB.Set(-1, 0);
-        world->CreateJoint(&disJointDef);
-        
-        
-        // Add moving walls
-        cellPos = [Helper convertPosition:ccp(152, 413)];
-        MovingWall *test1 = [self createMovingWallAtLocation:cellPos vertical:NO];
-        [test1 setMovingSpeed:6];
-        [test1 setNegativeOffset:-5];
-        cellPos = [Helper convertPosition:ccp(696, 261)];
-        [self createMovingWallAtLocation:cellPos vertical:YES];
+        // Animating tips
+        [self showTipsElement:info delay:2];
+        [self showTipsElement:infoText delay:2];
+        [self hideTipsElement:info delay:10];
+        [self hideTipsElement:infoText delay:10];
     }
     return self;
 }

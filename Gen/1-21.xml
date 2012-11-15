@@ -1,0 +1,57 @@
+<map>
+<dec_microwave x='178' y='235' />
+<dec_plant5 x='688' y='452' />
+<dec_plant5 x='701' y='456' scaleX='0.769' scaleY='0.806' />
+<dec_plant5 x='749' y='451' flipX='YES' />
+<dec_plant5 x='760' y='464' flipX='YES' />
+<dec_plant5 x='774' y='449' flipX='YES' scaleX='1.08' scaleY='1.32' />
+<dec_plant1 x='720' y='473' />
+<dec_plant1 x='733' y='472' />
+<dec_plant7 x='237' y='441' />
+<dec_plant7 x='195' y='439' />
+<dec_plant7 x='278' y='453' rotation='5' scaleX='0.512' scaleY='0.541' />
+<dec_plant2 x='419' y='412' />
+<dec_plant2 x='388' y='413' scaleX='0.951' scaleY='0.7' />
+<dec_plant1 x='403' y='412' />
+<dec_plant2 x='461' y='411' />
+<dec_plant2 x='430' y='412' scaleX='0.951' scaleY='0.7' alpha='0.6' />
+<dec_plant1 x='445' y='411' />
+<dec_plant2 x='550' y='411' />
+<dec_plant2 x='519' y='412' scaleX='0.951' scaleY='0.7' />
+<dec_plant1 x='534' y='411' />
+<dec_plant2 x='592' y='410' alpha='0.6' />
+<dec_plant2 x='561' y='411' scaleX='0.951' scaleY='0.7' alpha='0.6' />
+<dec_plant1 x='576' y='410' />
+<dec_plant7 x='277' y='442' flipX='YES' alpha='0.6' />
+<dec_plant7 x='235' y='446' flipX='YES' scaleX='0.837' scaleY='0.931' />
+<dec_plant7 x='191' y='449' flipX='YES' scaleX='0.716' scaleY='1.02' alpha='0.7' />
+<redCell2 x='816' y='165' />
+<redCell1 x='154' y='168' />
+<groundCell1 x='492' y='563' />
+<groundCell1 x='555' y='464' />
+<groundCell1 x='424' y='465' />
+<groundCell1 x='240' y='515' />
+<groundCell1 x='729' y='525' />
+<ExitCell x='480' y='108' />
+<ChildCell x='446' y='609' />
+<BubbleCell x='246' y='332' />
+<BubbleCell x='346' y='333' />
+<BubbleCell x='447' y='334' />
+<BubbleCell x='548' y='334' />
+<BubbleCell x='650' y='336' />
+<BubbleCell x='752' y='335' />
+<BubbleCell x='142' y='330' />
+<BubbleCell x='855' y='335' />
+<ChildCell x='329' y='605' />
+<ChildCell x='174' y='605' />
+<ChildCell x='275' y='606' />
+<ChildCell x='223' y='606' />
+<ChildCell x='547' y='612' />
+<ChildCell x='658' y='608' />
+<ChildCell x='818' y='608' />
+<ChildCell x='713' y='612' />
+<ChildCell x='765' y='608' />
+<ChildCell x='601' y='610' />
+<ChildCell x='389' y='605' />
+<Settings maxCellsCount='12' needCellsCount='12' />
+</map>

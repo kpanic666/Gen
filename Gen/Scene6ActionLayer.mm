@@ -16,81 +16,82 @@
         uiLayer = box2DUILayer;
         CGPoint cellPos;
         
-        // load physics definitions
-        [[GB2ShapeCache sharedShapeCache] addShapesWithFile:@"scene6bodies.plist"];
-        
         // add background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.png"];
+        CCSprite *background = [CCSprite spriteWithFile:@"background1.jpg"];
         [background setPosition:[Helper screenCenter]];
-        [self addChild:background z:-2];
+        [self addChild:background z:-4];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
-        // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
-        cellPos = [Helper convertPosition:ccp(80, 80)];
-        exitCell = [[[ExitCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:exitCell z:-1 tag:kExitCellSpriteTagValue];
-        
         // add GroundCells
-        cellPos = [Helper convertPosition:ccp(813, 179)];
-        [self createGroundCellInWorld:world position:cellPos name:@"groundCell1"];
-        cellPos = [Helper convertPosition:ccp(893, 595)];
-        [self createGroundCellInWorld:world position:cellPos name:@"groundCell2"];
-        cellPos = [Helper convertPosition:ccp(263, 397)];
-        [self createGroundCellInWorld:world position:cellPos name:@"groundCell3"];
-        cellPos = [Helper convertPosition:ccp(561, 430)];
-        [self createGroundCellInWorld:world position:cellPos name:@"groundCell4"];
+        cellPos = [Helper convertPosition:ccp(32, 605)];
+        GroundCell *groundCell1 = [GroundCell groundCellInWorld:world position:cellPos name:@"groundCell1"];
+        [self addChild:groundCell1 z:0];
         
         // add ChildCells
-        CGPoint childCellsPos[kScene6Total-1] =
-        {
-            [Helper convertPosition:ccp(116, 192)],
-            [Helper convertPosition:ccp(190, 206)],
-            [Helper convertPosition:ccp(232, 245)],
-            [Helper convertPosition:ccp(296, 231)],
-            [Helper convertPosition:ccp(372, 217)],
-            [Helper convertPosition:ccp(430, 245)],
-            [Helper convertPosition:ccp(440, 305)],
-            [Helper convertPosition:ccp(486, 351)],
-            [Helper convertPosition:ccp(430, 401)],
-            [Helper convertPosition:ccp(416, 488)],
-            [Helper convertPosition:ccp(372, 546)],
-            [Helper convertPosition:ccp(318, 585)],
-            [Helper convertPosition:ccp(223, 609)],
-            [Helper convertPosition:ccp(130, 590)],
-            [Helper convertPosition:ccp(65, 542)],
-            [Helper convertPosition:ccp(42, 474)],
-            [Helper convertPosition:ccp(37, 397)],
-            [Helper convertPosition:ccp(76, 323)],
-            [Helper convertPosition:ccp(70, 245)],
-            [Helper convertPosition:ccp(566, 351)],
-            [Helper convertPosition:ccp(637, 411)],
-            [Helper convertPosition:ccp(630, 474)],
-            [Helper convertPosition:ccp(586, 510)],
-            [Helper convertPosition:ccp(526, 500)],
-            [Helper convertPosition:ccp(486, 460)],
-            [Helper convertPosition:ccp(500, 390)],
-            [Helper convertPosition:ccp(771, 599)],
-            [Helper convertPosition:ccp(785, 538)],
-            [Helper convertPosition:ccp(830, 488)],
-            [Helper convertPosition:ccp(907, 474)],
-            [Helper convertPosition:ccp(689, 27)],
-            [Helper convertPosition:ccp(667, 90)],
-            [Helper convertPosition:ccp(681, 161)],
-            [Helper convertPosition:ccp(651, 220)],
-            [Helper convertPosition:ccp(644, 292)],
-            [Helper convertPosition:ccp(681, 358)],
-            [Helper convertPosition:ccp(780, 376)],
-            [Helper convertPosition:ccp(852, 333)],
-            [Helper convertPosition:ccp(921, 265)],
-            [Helper convertPosition:ccp(631, 220)]
-        };
-        for (int i=0; i<kScene6Total-1; i++) {
-            [self createChildCellAtLocation:childCellsPos[i]];
+        float offsetY = 30;
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            offsetY *= 2;
+        }
+
+        NSMutableArray *childCellsArray = [[NSMutableArray alloc] init];
+        for (CCSprite *tempSprite in [sceneSpriteBatchNode children]) {
+            if ([tempSprite isKindOfClass:[Box2DSprite class]])
+            {
+                Box2DSprite *tempObj = (Box2DSprite*)tempSprite;
+                if ([tempObj gameObjectType] == kChildCellType) {
+                    [childCellsArray addObject:(ChildCell*)tempObj];
+                }
+            }
         }
         
-        // add BombCell
-        [self createBombCellAtLocation:ccp([Helper screenCenter].x, [Helper screenCenter].y)];
+        b2DistanceJointDef disJointDef;
+        disJointDef.localAnchorA.SetZero();
+        disJointDef.localAnchorB.SetZero();
+        for (int i=0; i < childCellsArray.count; i++) {
+            ChildCell *tempCell = (ChildCell*)[childCellsArray objectAtIndex:i];
+            if (i == 0) {
+                disJointDef.length = offsetY*2.5 / PTM_RATIO;
+                disJointDef.bodyA = groundCell1.body;
+                disJointDef.bodyB = tempCell.body;
+                world->CreateJoint(&disJointDef);
+            }
+            else {
+                disJointDef.length = offsetY / PTM_RATIO;
+                ChildCell *prevCell = (ChildCell*)[childCellsArray objectAtIndex:i-1];
+                disJointDef.bodyA = prevCell.body;
+                disJointDef.bodyB = tempCell.body;
+                world->CreateJoint(&disJointDef);
+            }
+        }
+        [childCellsArray release];
+        childCellsArray = nil;
+        
+        // Add Tutorial text and arrows
+        float fontSize = [Helper convertFontSize:12];
+        NSString *fontName = @"Verdana";
+        NSString *myText = @"Collect necessary\n amount of cells";
+        CGSize maxSize = CGSizeMake(screenSize.width/3, 400);
+        // ----Score Tip----
+        CCSprite *toScoreArrow = [CCSprite spriteWithSpriteFrameName:@"tut_arrow2.png"];
+        toScoreArrow.rotation = 230;
+        toScoreArrow.opacity = 0;
+        toScoreArrow.position = ccp(screenSize.width*0.28, screenSize.height*0.82);
+        [sceneSpriteBatchNode addChild:toScoreArrow z:-2];
+        CGSize actualSize = [myText sizeWithFont:[UIFont fontWithName:fontName size:fontSize]
+                               constrainedToSize:maxSize
+                                   lineBreakMode:UILineBreakModeWordWrap];
+        CCLabelTTF *toScoreText = [CCLabelTTF labelWithString:myText dimensions:actualSize hAlignment:kCCTextAlignmentCenter lineBreakMode:kCCLineBreakModeWordWrap fontName:fontName fontSize:fontSize];
+        toScoreText.position = ccp(screenSize.width*0.30, screenSize.height*0.67);
+        toScoreText.color = ccBLACK;
+        toScoreText.opacity = 0;
+        [self addChild:toScoreText z:-2];
+        
+        // Fading out tips
+        [self showTipsElement:toScoreArrow delay:2];
+        [self showTipsElement:toScoreText delay:2];
+        [self hideTipsElement:toScoreArrow delay:8];
+        [self hideTipsElement:toScoreText delay:8];
     }
     return self;
 }

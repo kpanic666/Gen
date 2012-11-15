@@ -7,53 +7,49 @@
 //
 
 #import "BombCell.h"
-//#import "SimpleQueryCallback.h"
 
 @implementation BombCell
 
 - (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location
 {
-    if ((self = [super initWithWorld:theWorld atLocation:location])) {
+    if ((self = [super init])) {
+        self.dontCount = false;
+        world = theWorld;
+        [self setFoodTextureName:@"deadfish_idle"];
+        [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"deadfish_idle.png"]];
+        [self setPosition:location];
         gameObjectType = kEnemyTypeBomb;
+        characterState = kStateIdle;
+        characterHealth = kChildCellHealth;
+        [self createBodyAtLocation:location];
+        self.boomAnim = [[CCAnimationCache sharedAnimationCache] animationByName:@"deadfish_anim_explosion"];
+        self.timerAnim = [[CCAnimationCache sharedAnimationCache] animationByName:@"deadfish_anim_timer"];
     }
     return self;
 }
 
 - (void)boom
 {
-    
-    // Использовать для вычисления только узкого круга тел, попадающих в радиус взрыва бомбы. чтобы не пробегаться по всем телам
-    
-//    // B2Query Settings
-//    b2AABB aabb;
-//    b2Vec2 delta = b2Vec2([self contentSize].width * kBombRadius / PTM_RATIO, [self contentSize].height * kBombRadius / PTM_RATIO);
-//    b2Vec2 bodyB2Pos = body->GetPosition();
-//    
-//    aabb.lowerBound = bodyB2Pos - delta;
-//    aabb.upperBound = bodyB2Pos + delta;
-//    SimpleQueryCallback callback(bodyB2Pos, NULL);
-//    world->QueryAABB(&callback, aabb);
-//    
-//    if (callback.fixtureFound)
-//    {
-//    }
-    
     // Вычисляем через b2Distance точки воздействия взрыва на телах childCells и кратчайшее расстояние до них для силы воздействия
     // Prepare input for distance query.
-	b2SimplexCache cache;
-	cache.count = 0;
-	b2DistanceInput distanceInput;
-    b2DistanceOutput distanceOutput;
-    b2DistanceProxy bombProxy;
-    bombProxy.Set(body->GetFixtureList()->GetShape(), 0);
-	distanceInput.proxyA = bombProxy;
-    distanceInput.transformA = body->GetTransform();
-	distanceInput.useRadii = false;
+    
+    if (!exploded) exploded = TRUE;
+    
+    [self runAction:[CCAnimate actionWithAnimation:self.boomAnim]];
     
     for (b2Body *b = world->GetBodyList(); b != NULL; b = b->GetNext())
     {
         if (b->GetUserData() != self && b->GetType() == b2_dynamicBody)
         {
+            b2SimplexCache cache;
+            cache.count = 0;
+            b2DistanceInput distanceInput;
+            b2DistanceOutput distanceOutput;
+            b2DistanceProxy bombProxy;
+            bombProxy.Set(body->GetFixtureList()->GetShape(), 0);
+            distanceInput.proxyA = bombProxy;
+            distanceInput.transformA = body->GetTransform();
+            distanceInput.useRadii = false;
             b2DistanceProxy targetProxy;
             targetProxy.Set(b->GetFixtureList()->GetShape(), 0);
             distanceInput.proxyB = targetProxy;
@@ -72,6 +68,10 @@
         }
     }
     
+    // Apply shake effect to screen
+    id shakeAction = [CCShaky3D actionWithRange:2 shakeZ:NO grid:ccg(15, 10) duration:0.5];
+    [[[self parent] parent] runAction: shakeAction];
+    
     [self changeState:kStateTakingDamage];
 }
 
@@ -80,7 +80,7 @@
     if (characterState == newState) {
         return;
     }
-
+    
     [self setCharacterState:newState];
     
     switch (newState) {
@@ -89,11 +89,22 @@
             characterHealth -= kRedCellDamage;
             
             // Destroy Physics body
-            [self stopAllActions];
             self.markedForDestruction = YES;
-            [GameManager sharedGameManager].numOfTotalCells--;
+            if (self.dontCount == false) {
+                [GameManager sharedGameManager].numOfTotalCells--;
+            }
             
-            PLAYSOUNDEFFECT(@"CHILDCELL_DYING_1");
+            
+            if (exploded) {
+                
+                // Add sound of explosion
+            }
+            else
+            {
+                [self stopAllActions];
+                PLAYSOUNDEFFECT(@"CHILDCELL_DYING_1");
+            }
+            
             break;
         }
             
@@ -104,12 +115,12 @@
         case kStateConnected:
         {
             // Нужно менять вид клетки. Это состояние принимается клеткой когда был создан джойнт
-            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"bombcell_activated.png"]];
+            PLAYSOUNDEFFECT(@"CHILDCELL_CONNECTED");
             if (!activated)
             {
                 activated = YES;
                 [self runAction:[CCSequence actions:
-                                 [CCBlink actionWithDuration:kBombTimer blinks:(int)kBombTimer],
+                                 [CCAnimate actionWithAnimation:self.timerAnim],
                                  [CCCallFunc actionWithTarget:self selector:@selector(boom)],
                                  nil]];
             }
@@ -131,8 +142,10 @@
         {
             [self stopAllActions];
             self.markedForDestruction = YES;
-            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_idle.png"]];
-            [GameManager sharedGameManager].numOfTotalCells--;
+            if (self.dontCount == false) {
+                [GameManager sharedGameManager].numOfTotalCells--;
+                [GameManager sharedGameManager].numOfSavedCells++;
+            }
             break;
         }
             
@@ -143,54 +156,63 @@
             
             PLAYSOUNDEFFECT(@"CHILDCELL_SOUL_1");
             
-            // 1. Меняем цвет у умерших клеток
-            self.color = ccc3(255, 0, 253);
-            self.opacity = 200;
-            
             // 2. Двигаем мертвые клетки (души) в центр выхода
-            int timeToMove = random() % 3 + 1;   // 1-4 sec
             exitCellSprite = (GameCharacter*) [[self parent] getChildByTag:kExitCellSpriteTagValue];
-            CCEaseBounceIn *moveInsideElastic = [CCEaseBounceIn actionWithAction:[CCMoveTo actionWithDuration:timeToMove position:exitCellSprite.position]];
-            [self runAction:moveInsideElastic];
+            id moveToMouth = [CCMoveTo actionWithDuration:0.2 position:exitCellSprite.position];
+            id scaleDown = [CCScaleTo actionWithDuration:0.2 scale:0];
+            id fadeOut = [CCFadeOut actionWithDuration:0.2];
+            id spawnScaleFade = [CCSpawn actions:moveToMouth, fadeOut, scaleDown, nil];
+            [self runAction:spawnScaleFade];
             
             break;
         }
             
         case kStateDead:
         {
-            int frameNum = random() % 2 + 1;
-            float travelTime = CCRANDOM_0_1() + 1;
-            float rotateTime = CCRANDOM_0_1() * 2;
-            float rotateAngle = 360;
-            if (CCRANDOM_0_1() <= 0.5f) rotateAngle *= -1;
-            CGRect cellBB = [self adjustedBoudingBox];
-            int yRandPosAtSceen = cellBB.origin.y + random() % (int)cellBB.size.height;
-            int xRandPosAtSceen = cellBB.origin.x + random() % (int)cellBB.size.width;
-            
-            // Change sprite frame to random RedCell particle. Уменьшаем клетку в размере
-            NSString *frameName = [NSString stringWithFormat:@"redcell_particle%d.png", frameNum];
-            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:frameName]];
-            
-            
-            // Move to random position at random speed, rotate and fade after target position
-            CCMoveTo *dyingMove = [CCMoveTo actionWithDuration:travelTime position:ccp(xRandPosAtSceen, yRandPosAtSceen)];
-            CCSequence *dyingFade = [CCSequence actions:
-                                     [CCDelayTime actionWithDuration:travelTime - 0.4f],
-                                     [CCFadeOut actionWithDuration:0.4f],
-                                     [CCCallFunc actionWithTarget:self selector:@selector(removeCellSprite)],
-                                     nil];
-            CCRepeatForever *dyingRotate = [CCRepeatForever actionWithAction:[CCRotateBy actionWithDuration:rotateTime angle:rotateAngle]];
-            
-            [self runAction:dyingRotate];
-            [self runAction:dyingMove];
-            [self runAction:dyingFade];
-            
+            if (exploded)
+            {
+                [[[self parent] parent] runAction:[CCStopGrid action]];
+                [self removeCellSprite];
+            }
+            else
+            {
+                float travelTime = CCRANDOM_0_1() + 1;
+                float rotateTime = CCRANDOM_0_1() * 2;
+                float rotateAngle = 360;
+                if (CCRANDOM_0_1() <= 0.5f) rotateAngle *= -1;
+                CGRect cellBB = [self adjustedBoudingBox];
+                int yRandPosAtSceen = cellBB.origin.y + random() % (int)cellBB.size.height;
+                int xRandPosAtSceen = cellBB.origin.x + random() % (int)cellBB.size.width;
+                
+                // Change sprite frame to random RedCell particle. Уменьшаем клетку в размере
+                [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"food_fish_stale.png"]];
+                
+                // Move to random position at random speed, rotate and fade after target position
+                CCMoveTo *dyingMove = [CCMoveTo actionWithDuration:travelTime position:ccp(xRandPosAtSceen, yRandPosAtSceen)];
+                CCSequence *dyingFade = [CCSequence actions:
+                                         [CCDelayTime actionWithDuration:travelTime - 0.4f],
+                                         [CCFadeOut actionWithDuration:0.4f],
+                                         [CCCallFunc actionWithTarget:self selector:@selector(removeCellSprite)],
+                                         nil];
+                CCRepeatForever *dyingRotate = [CCRepeatForever actionWithAction:[CCRotateBy actionWithDuration:rotateTime angle:rotateAngle]];
+                
+                [self runAction:dyingRotate];
+                [self runAction:dyingMove];
+                [self runAction:dyingFade];
+            }
             break;
         }
             
         default:
             break;
     }
+}
+
+- (void)dealloc
+{
+    [_timerAnim release];
+    [_boomAnim release];
+    [super dealloc];
 }
 
 @end

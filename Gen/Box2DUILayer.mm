@@ -18,7 +18,9 @@
     CCLabelBMFont *leftScoreLabel;
     CCLabelBMFont *centerLabel;
     CCSprite *centerLabelSFX;
-    float originalScale; 
+    float originalScale;
+    CCMenu *pauseMenu;
+    CCSprite *pauseGameSprite;
 }
 @end
 
@@ -43,6 +45,14 @@
     for (CCNode *tempNode in [bn children]) {
         [tempNode pauseSchedulerAndActions];
     }
+}
+
+- (void)hideUI
+{
+    scoreLabel.visible = FALSE;
+    leftScoreLabel.visible = FALSE;
+    pauseMenu.enabled = FALSE;
+    pauseGameSprite.visible = FALSE;
 }
 
 - (void)makeBorderFrames
@@ -74,15 +84,14 @@
         CGSize screenSize = [CCDirector sharedDirector].winSize;
         
         // Place pause menu button
-        CCSprite *pauseGameSprite = [CCSprite spriteWithSpriteFrameName:@"button_pause.png"];
+        pauseGameSprite = [CCSprite spriteWithSpriteFrameName:@"button_pause.png"];
         float padding = [pauseGameSprite contentSize].width*0.5 * 0.2; // отступ от края экрана c учетом спец эффекта меню
         [pauseGameSprite setAnchorPoint:ccp(1, 1)];
-        [pauseGameSprite setPosition:ccp(screenSize.width-padding, screenSize.height-padding)];
+        [pauseGameSprite setPosition:ccp(screenSize.width, screenSize.height)];
         [pauseGameSprite setOpacity:200];
-        [pauseGameSprite setScale:0.8];
         [self addChild:pauseGameSprite z:1];
         CCMenuItemSpriteIndependent *pauseGameButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:pauseGameSprite selectedSprite:nil target:self selector:@selector(pausePressed)];
-        CCMenu *pauseMenu = [CCMenu menuWithItems:pauseGameButton, nil];
+        pauseMenu = [CCMenu menuWithItems:pauseGameButton, nil];
         [self addChild:pauseMenu z:5];
         
         // Init Score Label

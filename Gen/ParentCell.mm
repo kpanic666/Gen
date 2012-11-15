@@ -11,26 +11,23 @@
 #import "HMVectorNode.h"
 
 @implementation ParentCell
-{
-    float radiusLineWidth;
-    BOOL radiusLineWidthGrowing;
-    float RADIUS_LINE_WIDTH_INCREMENT;
-    float RADIUS_LINE_WIDTH_MAX;
-    float RADIUS_LINE_WIDTH_MIN;
-}
 
 - (void)destroyDisJoints
 {
-    for (NSValue *value in disJointsToDestroy) {
-        b2Joint *disJoint = (b2Joint*)[value pointerValue];
-        world->DestroyJoint(disJoint);
+    if ([disJointsToDestroy count] > 0)
+    {
+        for (NSValue *value in disJointsToDestroy) {
+            b2Joint *disJoint = (b2Joint*)[value pointerValue];
+            world->DestroyJoint(disJoint);
+        }
+        [disJointsToDestroy removeAllObjects];
     }
-    [disJointsToDestroy removeAllObjects];
 }
 
 - (void)changeBodyPosition:(b2Vec2)position
 {
     body->SetTransform(position, 0.0f);
+    self.superpowerBatchNode.position = [Helper toPoints:position];
 }
 
 - (void)createBodyAtLocation:(CGPoint)location
@@ -43,7 +40,7 @@
     
     b2FixtureDef fixtureDef;
     b2CircleShape shape;
-    shape.m_radius = self.contentSize.width * 0.25f / PTM_RATIO;
+    shape.m_radius = self.contentSize.width * 0.5f / PTM_RATIO;
     fixtureDef.shape = &shape;
     // Задаем маску фильтрации столкновений. Главная клетка будет игнорироваться абсолютно всеми. Можно свободно двигаться
     fixtureDef.filter.categoryBits = kParentCellFilterCategory;
@@ -52,10 +49,12 @@
     body->CreateFixture(&fixtureDef);
     
     // Создаем сенсор, который будет определять радиус, в котором будут притягиваться клетки
+    // Определяем радиус захвата из текстуры superpower
+    CCSprite *spriteForRadius = [CCSprite spriteWithSpriteFrameName:@"parentcell_wave.png"];
+    radius = spriteForRadius.contentSize.width * 0.5;
+    // Создаем fixture сенсора захвата еды
     fixtureDef.isSensor = TRUE;
-    radius = self.contentSize.width * 1.7;
     shape.m_radius =  radius / PTM_RATIO;
-    // Активируем коллизии для сенсора
     fixtureDef.filter.categoryBits = kParentCellFilterCategory;
     fixtureDef.filter.maskBits = kChildCellFilterCategory;
     body->CreateFixture(&fixtureDef);
@@ -130,35 +129,61 @@
     [self destroyDisJoints];
 }
 
-- (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location
+- (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location batchNodeForPower:(CCSpriteBatchNode*)powerBatchNode
 {
     if ((self = [super init])) {
         world = theWorld;
         disJointsToDestroy = [[NSMutableArray alloc] init];
         [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"parentcell_travelling.png"]];
-        // При запуске уровня спрайт не видет (visible = false), становится видимым только при нажатии на экран
+        self.superpowerBatchNode = powerBatchNode;
+        // При запуске уровня спрайт не виден (visible = false), становится видимым только при нажатии на экран
         self.visible = FALSE;
-        radiusLineWidthGrowing = NO;
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            radiusLineWidth = kParentCellRadiusWidthMax;
-            RADIUS_LINE_WIDTH_INCREMENT = kParentCellRadiusWidthChangeSpeed;
-            RADIUS_LINE_WIDTH_MAX = kParentCellRadiusWidthMax;
-            RADIUS_LINE_WIDTH_MIN = kParentCellRadiusWidthMin;
-        }
-        else
-        {
-            radiusLineWidth = kParentCellRadiusWidthMax * 2;
-            RADIUS_LINE_WIDTH_INCREMENT = kParentCellRadiusWidthChangeSpeed  * 2;
-            RADIUS_LINE_WIDTH_MAX = kParentCellRadiusWidthMax * 2;
-            RADIUS_LINE_WIDTH_MIN = kParentCellRadiusWidthMin * 2;
-        }
-        radiusLineWidthGrowing = false;
         gameObjectType = kParentCellType;
         characterState = kStateIdle;
         
         [self createBodyAtLocation:location];
+        
+        // Adding superpower waves
+        [self initSuperpowerWaves];
     }
     return self;
+}
+
+- (void)initSuperpowerWaves
+{
+    glBlendColor(1.0f, 0, 0, 30.0/255);
+    _superpowerBatchNode.blendFunc = (ccBlendFunc){GL_CONSTANT_ALPHA, GL_ONE};
+    _superpowerBatchNode.visible = false;
+    for (int x = 1; x <= kSuperpowerNumOfWaves; x++) {
+        CCSprite *spWave = [CCSprite spriteWithSpriteFrameName:@"parentcell_wave.png"];
+        [self.superpowerBatchNode addChild:spWave];
+    }
+}
+
+- (void)enableSuperpowerWaves
+{
+    float scaleDelta = 1.0f / kSuperpowerNumOfWaves;
+    CCArray *spArray = [self.superpowerBatchNode children];
+    for (int x = 0; x < [spArray count]; x++) {
+        CCSprite *spWave = (CCSprite*)[spArray objectAtIndex:x];
+        spWave.scale = scaleDelta * (x+1);
+        float rotAngle = 180;
+        if (x % 2 == 0) rotAngle *= -1;
+        [spWave runAction:[CCFadeIn actionWithDuration:0.3]];
+        [spWave runAction:[CCRepeatForever actionWithAction:[CCSequence actions:
+                           [CCScaleTo actionWithDuration:2/(x+1) scale:0],
+                           [CCScaleTo actionWithDuration:0 scale:1], nil]]];
+        [spWave runAction:[CCRepeatForever actionWithAction:[CCRotateBy actionWithDuration:1 angle:rotAngle]]];
+    }
+    self.superpowerBatchNode.visible = true;
+}
+
+- (void)disableSuperpowerWaves
+{
+    _superpowerBatchNode.visible = false;
+    for (CCSprite *spWave in [_superpowerBatchNode children]) {
+        [spWave stopAllActions];
+    }
 }
 
 - (void)changeState:(CharacterStates)newState
@@ -177,6 +202,7 @@
             // Клетка начинает отображаться на экране и ей можно управлять. В этом состоянии к ней притягиваются дочерние клетки
 //            PLAYSOUNDEFFECT(@"PARENTCELL_PRESSED");
             self.visible = TRUE;
+            [self enableSuperpowerWaves];
             break;
         }
             
@@ -185,6 +211,7 @@
             // Включается когда игрок убирает палец от экрана. Спрайт клетки исчезает с экрата (visible = false),
             // дочерние клетки больше не притягиваются, и продолжают движение по энерции. Джоинты разрушаются. Тело не уничтожается
             self.visible = FALSE;
+            [self disableSuperpowerWaves];
             break;
         }
 
@@ -197,6 +224,7 @@
 {
     [disJointsToDestroy release];
     disJointsToDestroy = nil;
+    _superpowerBatchNode = nil;
     
     [super dealloc];
 }
@@ -230,7 +258,7 @@
                 else if (lineAlpha < 40) {
                     lineAlpha = 40;
                 }
-                lineColor = ccc4(110, 235, 52, lineAlpha); // light green
+                lineColor = ccc4(252, 252, 255, lineAlpha); // light green
                 lineWidth = 1;
                 if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
                     lineWidth *= 2;
@@ -247,61 +275,6 @@
             }
             
             [drawNode drawSegmentFrom:anchorA to:anchorB radius:lineWidth color:ccc4FFromccc4B(lineColor)];
-        }
-    }
-}
-
-- (void)drawSensorField
-{
-    if ([self characterState] == kStateTraveling) {
-        HMVectorNode *drawNode = (HMVectorNode*)[[[self parent] parent] getChildByTag:kDrawNodeTagValue];
-        
-        for (b2Fixture *f = body->GetFixtureList(); f; f = f->GetNext())
-        {
-            if (f->IsSensor()) {
-                b2CircleShape *circle = (b2CircleShape*)f->GetShape();
-                b2Vec2 center = body->GetPosition();
-                float32 body_radius = circle->m_radius;
-                const float32 k_segments = 64.0f;
-                const float32 k_increment = 2.0f * b2_pi / k_segments;
-                float32 theta = 0.0f;
-                float xPoint, yPoint;
-                
-                // Строим круг и рисуем его
-                CGPoint vertices[int(k_segments+1)];
-                for (int32 i = 0; i < k_segments+1; ++i)
-                {
-                    b2Vec2 v = center + body_radius * b2Vec2(cosf(theta), sinf(theta));
-                    xPoint = v.x * PTM_RATIO;
-                    yPoint = v.y * PTM_RATIO;
-                    vertices[i]=ccp(xPoint, yPoint);
-                    theta += k_increment;
-                    // Копируем первый элемент массива вершин в последний слот, чтобы замкнуть круг
-                    if (i == k_segments) {
-                        vertices[i] = vertices[0];
-                    }
-                    
-                    if (i > 0) {
-                        [drawNode drawSegmentFrom:vertices[i-1] to:vertices[i] radius:radiusLineWidth color:ccc4f(0.5, 1, 1, 1)];
-                    }
-                }
-                
-                // Pulsing radius line. Rising UP and Down line width
-                if (!radiusLineWidthGrowing) {
-                    radiusLineWidth -= RADIUS_LINE_WIDTH_INCREMENT;
-                    if (radiusLineWidth < RADIUS_LINE_WIDTH_MIN) {
-                        radiusLineWidth = RADIUS_LINE_WIDTH_MIN;
-                        radiusLineWidthGrowing = YES;
-                    }
-                }
-                else {
-                    radiusLineWidth += RADIUS_LINE_WIDTH_INCREMENT;
-                    if (radiusLineWidth > RADIUS_LINE_WIDTH_MAX) {
-                        radiusLineWidth = RADIUS_LINE_WIDTH_MAX;
-                        radiusLineWidthGrowing = NO;
-                    }
-                }
-            }
         }
     }
 }

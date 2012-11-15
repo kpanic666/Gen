@@ -12,5 +12,6 @@
 
 - (void) updateScore;
 - (BOOL) displayText:(NSString*)text;
+- (void) hideUI;
 
 @end

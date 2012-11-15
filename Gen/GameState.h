@@ -10,9 +10,6 @@
 #import "Constants.h"
 
 @interface GameState : NSObject <NSCoding> {
-    // Achievements
-    BOOL _completedLevel10;
-    unsigned int _cellsKilled;
     // Level Stats
     unsigned int _highestOpenedLevel;
     NSMutableArray *_levelHighestStarsNumArray;
@@ -24,7 +21,9 @@
 - (void)resetState;
 - (int)getHighestScoreForSceneID:(SceneTypes)sceneID;
 
+// Achievements properties
 @property (assign) BOOL completedLevel10;
+@property (assign) BOOL completedLevel20;
 @property (assign) unsigned int cellsKilled;
 @property unsigned int highestOpenedLevel;
 @property (assign) NSMutableArray *levelHighestStarsNumArray;

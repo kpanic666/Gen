@@ -11,6 +11,12 @@
 @interface ChildCell : Box2DSprite
 {
     GameCharacter *exitCellSprite;
+    NSString *_foodTextureName;
 }
+
+- (void)removeCellSprite;
+
+@property (readwrite, assign) NSString *foodTextureName;
+@property BOOL dontCount;
 
 @end

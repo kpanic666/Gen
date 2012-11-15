@@ -1,0 +1,46 @@
+<map>
+<dec_stones3 x='57' y='54' />
+<dec_treasures x='103' y='91' />
+<dec_crab x='57' y='120' rotation='-118' />
+<dec_plant5 x='678' y='202' rotation='-120' alpha='0.6' />
+<dec_plant5 x='671' y='173' rotation='-90' scaleX='0.641' scaleY='0.692' alpha='0.6' />
+<dec_plant7 x='671' y='141' rotation='-75' />
+<dec_plant5 x='675' y='189' rotation='-105' alpha='0.6' />
+<dec_plant5 x='689' y='211' rotation='-135' scaleX='0.641' scaleY='0.692' alpha='0.6' />
+<dec_plant5 x='671' y='68' rotation='-105' />
+<dec_plant5 x='676' y='56' rotation='-75' scaleX='0.641' scaleY='0.692' />
+<dec_plant5 x='668' y='91' rotation='-90' />
+<dec_plant5 x='676' y='42' rotation='-75' scaleX='0.641' scaleY='0.692' />
+<dec_plant5 x='752' y='200' rotation='75' />
+<dec_plant5 x='746' y='212' rotation='105' scaleX='0.641' scaleY='0.692' />
+<dec_plant5 x='754' y='177' rotation='90' />
+<dec_plant5 x='746' y='226' rotation='105' scaleX='0.641' scaleY='0.692' />
+<dec_stones2 x='46' y='152' />
+<dec_sponge2 x='486' y='238' />
+<dec_sponge1 x='451' y='237' rotation='-6' />
+<dec_sponge1 x='549' y='292' rotation='79' />
+<dec_sponge1 x='553' y='340' rotation='79' />
+<dec_sponge1 x='399' y='351' rotation='-94' />
+<dec_sponge2 x='401' y='309' rotation='-92' />
+<redCell2 x='474' y='330' />
+<redCell5 x='342' y='478' />
+<redCell1 x='856' y='571' />
+<redCell3 x='124' y='117' />
+<redCell4 x='575' y='558' />
+<groundCell1 x='714' y='140' />
+<MagneticCell x='216' y='436' />
+<MagneticCell x='258' y='117' />
+<MagneticCell x='466' y='33' />
+<MagneticCell x='715' y='358' />
+<MagneticCell x='715' y='603' />
+<ExitCell x='873' y='217' />
+<ChildCell x='927' y='514' />
+<ChildCell x='927' y='562' />
+<ChildCell x='927' y='613' />
+<ChildCell x='49' y='606' />
+<ChildCell x='110' y='606' />
+<ChildCell x='170' y='606' />
+<ChildCell x='230' y='606' />
+<ChildCell x='294' y='606' />
+<Settings maxCellsCount='8' needCellsCount='7' />
+</map>

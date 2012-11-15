@@ -11,6 +11,22 @@
 #import "GCHelper.h"
 #import "TestFlight.h"
 
+@interface MyRootViewController : UINavigationController
+
+@end
+
+@implementation MyRootViewController
+
+- (NSUInteger)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskLandscape;
+}
+
+- (BOOL)shouldAutorotate {
+    return YES;
+}
+
+@end
+
 @implementation AppController
 
 @synthesize window=window_, navController=navController_, director=director_;
@@ -57,12 +73,18 @@
 		CCLOG(@"Retina Display Not supported");
 	
 	// Create a Navigation Controller with the Director
-	navController_ = [[UINavigationController alloc] initWithRootViewController:director_];
+	navController_ = [[MyRootViewController alloc] initWithRootViewController:director_];
 	navController_.navigationBarHidden = YES;
 	
 	// set the Navigation Controller as the root view controller
-	//	[window_ setRootViewController:rootViewController_];
-	[window_ addSubview:navController_.view];
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"6.0")) {
+        [window_ setRootViewController:navController_];
+    }
+    else
+    {
+        [window_ addSubview:navController_.view];
+    }
+	
 	
 	// make main window visible
 	[window_ makeKeyAndVisible];
@@ -89,11 +111,11 @@
     
     // Запускаем SDK TestFlight для аналитики бета теста и аналитики реального использования
     [TestFlight takeOff:kTestFlightTeamToken];
+//    [TestFlight setDeviceIdentifier:[[[UIDevice currentDevice] identifierForVendor] UUIDString]];
     
-	// and add the scene to the stack. The director will run it when it automatically when the view is displayed.
-	[[GameManager sharedGameManager] setupAudioEngine];
+    [[GameManager sharedGameManager] setupAudioEngine];
     [[GameManager sharedGameManager] runSceneWithID:kMainMenuScene];
-	
+    
 	return YES;
 }
 
@@ -102,7 +124,6 @@
 {
 	return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 }
-
 
 // getting a call, pause the game
 -(void) applicationWillResignActive:(UIApplication *)application

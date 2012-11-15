@@ -31,14 +31,12 @@
         CGSize screenSize = [[CCDirector sharedDirector] winSize];
         
         // Background
-        [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB5A1];
         CCSprite *background = [CCSprite spriteWithFile:@"pauseMenuBack.png"];
         background.anchorPoint = ccp(1, 1);
         background.position = ccp(screenSize.width + background.contentSize.width, screenSize.height);
         [self addChild:background z:0 tag:kBackgroundSpriteTag];
-        [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
-        pauseBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"genbyatlas.pvr.ccz"];
+        pauseBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"buttons_sheet_1.pvr.ccz"];
         [background addChild:pauseBatchNode];
         
         PLAYSOUNDEFFECT(@"PAUSEMENU_OPENING");
@@ -118,6 +116,10 @@
     CGSize backSize = background.contentSize;
     
     // Make Sprites for Menu
+    CCSprite *musicOnSpritePsd = [CCSprite spriteWithSpriteFrameName:@"button_music_on_pressed.png"];
+    CCSprite *musicOffSpritePsd = [CCSprite spriteWithSpriteFrameName:@"button_music_off_pressed.png"];
+    CCSprite *sfxOnSpritePsd = [CCSprite spriteWithSpriteFrameName:@"button_sfx_on_pressed.png"];
+    CCSprite *sfxOffSpritePsd = [CCSprite spriteWithSpriteFrameName:@"button_sfx_off_pressed.png"];
     CCSprite *musicOnSprite = [CCSprite spriteWithSpriteFrameName:@"button_music_on.png"];
     CCSprite *musicOffSprite = [CCSprite spriteWithSpriteFrameName:@"button_music_off.png"];
     CCSprite *sfxOnSprite = [CCSprite spriteWithSpriteFrameName:@"button_sfx_on.png"];
@@ -126,10 +128,9 @@
     CCSprite *resetSprite = [CCSprite spriteWithSpriteFrameName:@"button_reset.png"];
     CCSprite *levelSelectSprite = [CCSprite spriteWithSpriteFrameName:@"button_level_select.png"];
     CCSprite *skipSprite = [CCSprite spriteWithSpriteFrameName:@"button_skip.png"];
-    CCLabelTTF *levelName = [CCLabelTTF labelWithString:[[GameManager sharedGameManager] levelName] fontName:@"Verdana" fontSize:[Helper convertFontSize:14]];
-    CCLabelTTF *highScore = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"Highscore: %d", [[GameState sharedInstance] getHighestScoreForSceneID:[[GameManager sharedGameManager] curLevel]]]  fontName:@"Helvetica" fontSize:[Helper convertFontSize:13]];
-    levelName.color = ccBLACK;
-    highScore.color = ccBLACK;
+    CCLabelBMFont *levelName = [CCLabelBMFont labelWithString:[[GameManager sharedGameManager] levelName] fntFile:@"pauseMenuNumbers.fnt"];
+    CCLabelBMFont *highScore = [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%d", [[GameState sharedInstance] getHighestScoreForSceneID:[[GameManager sharedGameManager] curLevel]]] fntFile:@"pauseMenuNumbers.fnt"];
+//    highScore.scale = 0.8;
     
     // Adding sprites to Batchnode
     [pauseBatchNode addChild:resumeSprite];
@@ -140,10 +141,10 @@
     [background addChild:highScore];
     
     // Options Menu Items
-    CCMenuItemSprite *sfxOnButton = [CCMenuItemSprite itemWithNormalSprite:sfxOnSprite selectedSprite:nil target:self selector:nil];
-    CCMenuItemSprite *sfxOffButton = [CCMenuItemSprite itemWithNormalSprite:sfxOffSprite selectedSprite:nil target:self selector:nil];
-    CCMenuItemSprite *musicOnButton = [CCMenuItemSprite itemWithNormalSprite:musicOnSprite selectedSprite:nil target:self selector:nil];
-    CCMenuItemSprite *musicOffButton = [CCMenuItemSprite itemWithNormalSprite:musicOffSprite selectedSprite:nil target:self selector:nil];
+    CCMenuItemSprite *sfxOnButton = [CCMenuItemSprite itemWithNormalSprite:sfxOnSprite selectedSprite:sfxOnSpritePsd target:self selector:nil];
+    CCMenuItemSprite *sfxOffButton = [CCMenuItemSprite itemWithNormalSprite:sfxOffSprite selectedSprite:sfxOffSpritePsd target:self selector:nil];
+    CCMenuItemSprite *musicOnButton = [CCMenuItemSprite itemWithNormalSprite:musicOnSprite selectedSprite:musicOnSpritePsd target:self selector:nil];
+    CCMenuItemSprite *musicOffButton = [CCMenuItemSprite itemWithNormalSprite:musicOffSprite selectedSprite:musicOffSpritePsd target:self selector:nil];
     CCMenuItemSpriteIndependent *resumeButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:resumeSprite selectedSprite:nil target:self selector:@selector(resumePressed)];
     CCMenuItemSpriteIndependent *resetButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:resetSprite selectedSprite:nil target:self selector:@selector(resetPressed)];
     CCMenuItemSpriteIndependent *levelSelectButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:levelSelectSprite selectedSprite:nil target:self selector:@selector(levelSelectPressed)];
@@ -153,42 +154,38 @@
     
     pauseMenu = [CCMenu menuWithItems:musicToggle, sfxToggle, resumeButton, resetButton, levelSelectButton, skipButton, nil];
     [pauseMenu setPosition:ccp(0, 0)];
-    [background addChild:pauseMenu z:3];
-    
-    // Hide and scale down sprites for Options Menu
-    float padding = 0.8;
+    [background addChild:pauseMenu z:3]; 
     
     // Positioning sprites
-    padding = [resumeSprite contentSize].width*0.5 * 0.2; // отступ от края экрана c учетом спец эффекта меню
+    float padding = [skipSprite contentSize].width*0.6; // отступ от края экрана c учетом спец эффекта меню
     float xButtonPos = 0;
     float yButtonPos = 0;
-    // Left Down - SFX
-    xButtonPos = padding + sfxToggle.contentSize.width * 0.5;
-    yButtonPos = padding + sfxToggle.contentSize.height * 0.5;
-    sfxToggle.position = ccp(xButtonPos, yButtonPos);
-    // Right Down - Music
-    xButtonPos = backSize.width - padding - musicToggle.contentSize.width * 0.5;
-    musicToggle.position = ccp(xButtonPos, yButtonPos);
-    // Left Center - Resume
-    xButtonPos = 0;
-    yButtonPos = backSize.height * 0.5;
-    resumeSprite.position = ccp(xButtonPos, yButtonPos);
-    // Center - Level Select
-    xButtonPos = backSize.width * 0.5;
-    yButtonPos = backSize.height * 0.5;
-    levelSelectSprite.position = ccp(xButtonPos, yButtonPos);
-    // Center UP - Reset
-    padding += resetSprite.contentSize.height;
-    yButtonPos += padding;
+    // #1 From Top - Reset Level
+    xButtonPos = backSize.width - padding;
+    yButtonPos = backSize.height - resetSprite.contentSize.height * 0.49;
     resetSprite.position = ccp(xButtonPos, yButtonPos);
-    // Center Down - Skip
-    yButtonPos -= padding * 2;
+    // #2 From Top - Resume Button
+    xButtonPos = backSize.width - resumeSprite.contentSize.width * 0.5;
+    yButtonPos = yButtonPos - resetSprite.contentSize.height*0.5 - resumeSprite.contentSize.height*0.5;
+    resumeSprite.position = ccp(xButtonPos, yButtonPos);
+    // #3 From Top - Level Select
+    xButtonPos = backSize.width - padding;
+    yButtonPos = yButtonPos - resumeSprite.contentSize.height * 0.5 - levelSelectSprite.contentSize.height*0.5;
+    levelSelectSprite.position = ccp(xButtonPos, yButtonPos);
+    // #4 From Top - Skip
+    yButtonPos -= skipSprite.contentSize.height;
     skipSprite.position = ccp(xButtonPos, yButtonPos);
-    // Top Center - Level Name
-    yButtonPos = backSize.height * 0.9;
+    // #5 From Top - SFX Toggle
+    yButtonPos = yButtonPos - levelSelectSprite.contentSize.height*0.5 - sfxToggle.contentSize.height*0.5;
+    sfxToggle.position = ccp(xButtonPos, yButtonPos);
+    // #6 From Top - Music Toggle
+    yButtonPos -= musicToggle.contentSize.height;
+    musicToggle.position = ccp(xButtonPos, yButtonPos);
+    // #7 From Top - Level number
+    yButtonPos = backSize.height * 0.205;
     levelName.position = ccp(xButtonPos, yButtonPos);
-    // Top Center - Highscore
-    yButtonPos -= levelName.contentSize.height;
+    // #8 From Top - Highscore
+    yButtonPos = backSize.height * 0.09;
     highScore.position = ccp(xButtonPos, yButtonPos);
     
     if ([[GameManager sharedGameManager] isMusicON] == NO) {

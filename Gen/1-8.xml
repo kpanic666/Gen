@@ -1,0 +1,52 @@
+<map>
+<dec_plant6 x='68' y='558' rotation='-8' scaleX='0.919' scaleY='0.889' alpha='0.7' />
+<dec_plant6 x='146' y='533' rotation='7' alpha='0.8' />
+<dec_stones3 x='896' y='596' />
+<dec_plant4 x='752' y='582' />
+<dec_plant4 x='885' y='593' scaleX='0.701' scaleY='0.636' />
+<dec_plant4 x='844' y='582' flipX='YES' scaleX='1.19' scaleY='1.25' />
+<dec_plant4 x='742' y='582' flipX='YES' scaleX='1.19' scaleY='1.25' />
+<dec_plant6 x='860' y='559' tintColor='4611167' tintMultiplier='0.43' />
+<dec_plant6 x='788' y='543' alpha='0.7' />
+<dec_plant6 x='763' y='549' rotation='-8' alpha='0.7' />
+<dec_plant4 x='84' y='567' />
+<dec_plant4 x='217' y='578' scaleX='0.701' scaleY='0.636' />
+<dec_plant4 x='176' y='567' flipX='YES' scaleX='1.19' scaleY='1.25' />
+<dec_plant4 x='74' y='567' flipX='YES' scaleX='1.19' scaleY='1.25' tintColor='10713722' tintMultiplier='0.8' />
+<dec_plant6 x='192' y='556' tintColor='4353536' tintMultiplier='0.43' />
+<dec_plant6 x='120' y='528' alpha='0.7' />
+<dec_plant6 x='95' y='534' rotation='-8' alpha='0.7' />
+<dec_plant2 x='215' y='615' />
+<dec_plant2 x='182' y='622' scaleX='1.5' />
+<dec_plant2 x='120' y='606' scaleX='1.5' />
+<dec_plant2 x='107' y='611' scaleX='0.891' scaleY='1.55' />
+<dec_plant2 x='54' y='621' scaleX='0.891' scaleY='1.55' />
+<dec_plant2 x='126' y='627' scaleX='0.891' scaleY='1.55' />
+<dec_plant2 x='89' y='616' scaleX='0.891' scaleY='1.55' />
+<dec_plant1 x='151' y='617' />
+<dec_plant1 x='224' y='633' />
+<dec_plant1 x='201' y='632' />
+<dec_plant1 x='151' y='632' />
+<dec_plant1 x='160' y='632' />
+<dec_plant2 x='126' y='596' scaleX='0.891' scaleY='1.55' />
+<dec_stones3 x='540' y='295' />
+<dec_stones2 x='445' y='305' />
+<dec_stones1 x='394' y='300' />
+<dec_plant2 x='399' y='296' />
+<dec_wood1 x='481' y='292' rotation='22' scaleX='1.41' scaleY='1.36' />
+<dec_plant2 x='419' y='306' />
+<dec_plant2 x='399' y='306' />
+<dec_plant2 x='570' y='296' flipX='YES' />
+<dec_plant2 x='550' y='306' flipX='YES' />
+<dec_plant2 x='570' y='306' flipX='YES' />
+<ExitCell x='476' y='195' />
+<ChildCell x='619' y='112' />
+<ChildCell x='641' y='265' />
+<ChildCell x='724' y='72' />
+<ChildCell x='752' y='259' />
+<ChildCell x='329' y='112' />
+<ChildCell x='294' y='255' />
+<ChildCell x='234' y='72' />
+<ChildCell x='194' y='254' />
+<Settings maxCellsCount='8' needCellsCount='9' />
+</map>

@@ -14,71 +14,31 @@
 {
     if ((self = [super init])) {
         uiLayer = box2DUILayer;
-        CGPoint cellPos;
-
-        // load physics definitions
-        [[GB2ShapeCache sharedShapeCache] addShapesWithFile:@"scene12bodies.plist"];
         
         // add background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.png"];
+        CCSprite *background = [CCSprite spriteWithFile:@"background1.jpg"];
         [background setPosition:[Helper screenCenter]];
-        [self addChild:background z:-2];
+        [self addChild:background z:-4];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
-        // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
-        cellPos = [Helper convertPosition:ccp(480, 564)];
-        exitCell = [[[ExitCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:exitCell z:-1 tag:kExitCellSpriteTagValue];
-
-        // add GroundCells
-        cellPos = [Helper convertPosition:ccp(103, 214)];
-        [self createGroundCellInWorld:world position:cellPos name:@"groundCell1"];
-        cellPos = [Helper convertPosition:ccp(865, 198)];
-        [self createGroundCellInWorld:world position:cellPos name:@"groundCell2"];
+        // Add Tutorial text and arrows
+        CCSprite *info = [CCSprite spriteWithSpriteFrameName:@"tut_arrow1.png"];
+        info.position = [Helper convertPosition:ccp(347, 292)];
+        info.opacity = 0;
+        info.rotation = 253;
+        [sceneSpriteBatchNode addChild:info z:-2];
+        CCLabelTTF *infoText = [CCLabelTTF labelWithString:@"Food will\n bounce away\n from this\n whirlpool" fontName:@"Verdana" fontSize:[Helper convertFontSize:12]];
+        infoText.color = ccBLACK;
+        infoText.opacity = 0;
+        infoText.position = ccp(info.position.x + info.contentSize.width*0.3 + infoText.contentSize.width*0.5, info.position.y - infoText.contentSize.height*0.5);
+        [self addChild:infoText z:-2];
         
-        // add ChildCells
-        CGPoint childCellsPos[kScene12Total] = 
-        {
-            [Helper convertPosition:ccp(178, 22)],
-            [Helper convertPosition:ccp(210, 45)],
-            [Helper convertPosition:ccp(245, 68)],
-            [Helper convertPosition:ccp(285, 84)],
-            [Helper convertPosition:ccp(337, 95)],
-            [Helper convertPosition:ccp(386, 96)],
-            [Helper convertPosition:ccp(434, 100)],
-            [Helper convertPosition:ccp(478, 96)],
-            [Helper convertPosition:ccp(521, 98)],
-            [Helper convertPosition:ccp(568, 102)],
-            [Helper convertPosition:ccp(608, 98)],
-            [Helper convertPosition:ccp(654, 93)],
-            [Helper convertPosition:ccp(692, 70)],
-            [Helper convertPosition:ccp(724, 48)],
-            [Helper convertPosition:ccp(757, 22)]
-        };
-        for (int i=0; i<kScene12Total; i++) {
-            [self createChildCellAtLocation:childCellsPos[i]];
-        }
-        
-        // add RedCells
-        cellPos = [Helper convertPosition:ccp(590, 309)];
-        [self createRedCellInWorld:world position:cellPos name:@"redCell1"];
-        cellPos = [Helper convertPosition:ccp(364, 317)];
-        [self createRedCellInWorld:world position:cellPos name:@"redCell2"];
-        
-        // add MagneticCells
-        cellPos = [Helper convertPosition:ccp(203, 288)];
-        MagneticCell *magneticCell1 = [[[MagneticCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:magneticCell1 z:-1];
-        cellPos = [Helper convertPosition:ccp(245, 342)];
-        MagneticCell *magneticCell2 = [[[MagneticCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:magneticCell2 z:-1];
-        cellPos = [Helper convertPosition:ccp(713, 328)];
-        MagneticCell *magneticCell3 = [[[MagneticCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:magneticCell3 z:-1];
-        cellPos = [Helper convertPosition:ccp(741, 278)];
-        MagneticCell *magneticCell4 = [[[MagneticCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:magneticCell4 z:-1];
+        // Animating tips
+        [self showTipsElement:info delay:2];
+        [self showTipsElement:infoText delay:2];
+        [self hideTipsElement:info delay:8];
+        [self hideTipsElement:infoText delay:8];
     }
     return self;
 }

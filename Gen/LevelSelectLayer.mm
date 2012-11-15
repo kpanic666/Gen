@@ -62,8 +62,6 @@
     // Init item array
     allItems = [[NSMutableArray alloc] init];
     
-    float menuFontSize = [Helper convertFontSize:16];
-    
     // Create CCMenuItemSprite objects with tags, callback methods
 	for (int i = 1; i <= kLevelCount; ++i)
     {
@@ -82,17 +80,9 @@
         {
             // Лепим звезды на пройденных уровнях
             int starsReceivedNum = [[[GameState sharedInstance].levelHighestStarsNumArray objectAtIndex:i-1] integerValue];
-            ccBlendFunc blendInactiveStar = (ccBlendFunc){GL_ONE_MINUS_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA};
-            
-            for (int counter = 1; counter <= 3; counter++)
-            {
-                CCSprite *star = [CCSprite spriteWithSpriteFrameName:@"childcell_idle.png"];
-                star.scale = 0.8;
-                star.position = ccp(item.contentSize.width * 0.25 * counter, 0);
-                [item addChild:star];
-                
-                if (counter > starsReceivedNum) [star setBlendFunc:blendInactiveStar];
-            }
+            CCSprite *stars = [CCSprite spriteWithSpriteFrameName:[NSString stringWithFormat:@"stars_%i.png", starsReceivedNum]];
+            stars.position = ccp(item.contentSize.width * 0.5, 0);
+            [item addChild:stars];
             
             // Пишем номер уровня на уже пройденных уровнях
             CCLabelBMFont *levelNumber = [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%i", i] fntFile:@"levelselectNumbers.fnt"];
@@ -142,6 +132,11 @@
         CCSprite *chooseLevelLabel = [CCSprite spriteWithSpriteFrameName:@"choose_level_label.png"];
         [chooseLevelLabel setPosition:ccp(screenSize.width*0.78, screenSize.height*0.14)];
         [self addChild:chooseLevelLabel];
+        
+//        // Slide tip
+//        CCSprite *slideTip = [CCSprite spriteWithSpriteFrameName:@"tut_finger_slide.png"];
+//        [slideTip setPosition:ccp(screenSize.width*0.7, screenSize.height*0.3)];
+//        [self addChild:slideTip];
         
         // Display Main Menu Buttons
         [self displayLevelSelectMenuButtons];

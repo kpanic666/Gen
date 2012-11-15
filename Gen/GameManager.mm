@@ -27,6 +27,26 @@
 #import "Scene18.h"
 #import "Scene19.h"
 #import "Scene20.h"
+#import "Scene21.h"
+#import "Scene22.h"
+#import "Scene23.h"
+#import "Scene24.h"
+#import "Scene25.h"
+#import "Scene26.h"
+#import "Scene27.h"
+#import "Scene28.h"
+#import "Scene29.h"
+#import "Scene30.h"
+#import "Scene31.h"
+#import "Scene32.h"
+#import "Scene33.h"
+#import "Scene34.h"
+#import "Scene35.h"
+#import "Scene36.h"
+#import "Scene37.h"
+#import "Scene38.h"
+#import "Scene39.h"
+#import "Scene40.h"
 #import "MainMenuLayer.h"
 #import "LevelSelectLayer.h"
 
@@ -336,10 +356,6 @@ static GameManager* _sharedGameManager = nil;
     [self setLevelTappedNum:0];
     [self setNeedToUpdateScore:NO];
     
-    if (sceneID > 100) {
-        [self setLevelName:[NSString stringWithFormat:@"Level 1-%i", (int)sceneID-100]];
-    }
-    
     SceneTypes oldScene = currentScene;
     currentScene = sceneID;
     lastLevel = curLevel;
@@ -355,112 +371,16 @@ static GameManager* _sharedGameManager = nil;
             break;
             
         case kLoadingScene:
-            //sceneToRun = [IntroScene node];
+//            sceneToRun = [LoadingLayer scene];
             break;
             
         case kLevelSelectScene:
             sceneToRun = [LevelSelectLayer scene];
             break;    
             
-        case kGameLevel1:
-            _numOfNeededCells = kScene1Needed;
-            _numOfMaxCells = kScene1Total;
-            sceneToRun = [Scene1 node];
-            break;
-        case kGameLevel2:
-            _numOfNeededCells = kScene2Needed;
-            _numOfMaxCells = kScene2Total;
-            sceneToRun = [Scene2 node];
-            break;
-        case kGameLevel3:
-            _numOfNeededCells = kScene3Needed;
-            _numOfMaxCells = kScene3Total;
-            sceneToRun = [Scene3 node];
-            break;
-        case kGameLevel4:
-            _numOfNeededCells = kScene4Needed;
-            _numOfMaxCells = kScene4Total;
-            sceneToRun = [Scene4 node];
-            break;
-        case kGameLevel5:
-            _numOfNeededCells = kScene5Needed;
-            _numOfMaxCells = kScene5Total;
-            sceneToRun = [Scene5 node];
-            break;
-        case kGameLevel6:
-            _numOfNeededCells = kScene6Needed;
-            _numOfMaxCells = kScene6Total;
-            sceneToRun = [Scene6 node];
-            break;
-        case kGameLevel7:
-            _numOfNeededCells = kScene7Needed;
-            _numOfMaxCells = kScene7Total;
-            sceneToRun = [Scene7 node];
-            break;
-        case kGameLevel8:
-            _numOfNeededCells = kScene8Needed;
-            _numOfMaxCells = kScene8Total;
-            sceneToRun = [Scene8 node];
-            break;
-        case kGameLevel9:
-            _numOfNeededCells = kScene9Needed;
-            _numOfMaxCells = kScene9Total;
-            sceneToRun = [Scene9 node];
-            break;
-        case kGameLevel10:
-            _numOfNeededCells = kScene10Needed;
-            _numOfMaxCells = kScene10Total;
-            sceneToRun = [Scene10 node];
-            break;    
-        case kGameLevel11:
-            _numOfNeededCells = kScene11Needed;
-            _numOfMaxCells = kScene11Total;
-            sceneToRun = [Scene11 node];
-            break;
-        case kGameLevel12:
-            _numOfNeededCells = kScene12Needed;
-            _numOfMaxCells = kScene12Total;
-            sceneToRun = [Scene12 node];
-            break;
-        case kGameLevel13:
-            _numOfNeededCells = kScene13Needed;
-            _numOfMaxCells = kScene13Total;
-            sceneToRun = [Scene13 node];
-            break;
-        case kGameLevel14:
-            _numOfNeededCells = kScene14Needed;
-            _numOfMaxCells = kScene14Total;
-            sceneToRun = [Scene14 node];
-            break;
-        case kGameLevel15:
-            _numOfNeededCells = kScene15Needed;
-            _numOfMaxCells = kScene15Total;
-            sceneToRun = [Scene15 node];
-            break;
-        case kGameLevel16:
-            _numOfNeededCells = kScene16Needed;
-            _numOfMaxCells = kScene16Total;
-            sceneToRun = [Scene16 node];
-            break;
-        case kGameLevel17:
-            _numOfNeededCells = kScene17Needed;
-            _numOfMaxCells = kScene17Total;
-            sceneToRun = [Scene17 node];
-            break;
-        case kGameLevel18:
-            _numOfNeededCells = kScene18Needed;
-            _numOfMaxCells = kScene18Total;
-            sceneToRun = [Scene18 node];
-            break;
-        case kGameLevel19:
-            _numOfNeededCells = kScene19Needed;
-            _numOfMaxCells = kScene19Total;
-            sceneToRun = [Scene19 node];
-            break;
-        case kGameLevel20:
-            _numOfNeededCells = kScene20Needed;
-            _numOfMaxCells = kScene20Total;
-            sceneToRun = [Scene20 node];
+        case kGameLevel1 ... kGameLevel40:
+            [self setLevelName:[NSString stringWithFormat:@"1-%i", (int)sceneID-100]];
+            sceneToRun = [NSClassFromString([NSString stringWithFormat:@"Scene%i", (int)sceneID-100]) node];
             break;
             
         default:
@@ -481,12 +401,11 @@ static GameManager* _sharedGameManager = nil;
     }
     
     if ([[CCDirector sharedDirector] runningScene] == nil) {
-        [[CCDirector sharedDirector] pushScene:sceneToRun];
+        [[CCDirector sharedDirector] runWithScene:sceneToRun];
     } else {
+        [[CCTextureCache sharedTextureCache] removeUnusedTextures];
         [[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:0.1f scene:sceneToRun]];
     }
-    
-    
 }
 
 - (void)openSiteWithLinkType:(LinkTypes)linkTypeToOpen {

@@ -10,7 +10,6 @@
 
 @implementation GameObject
 
-@synthesize reactsToScreenBoundaries;
 @synthesize isActive;
 @synthesize gameObjectType;
 

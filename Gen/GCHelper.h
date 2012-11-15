@@ -26,7 +26,7 @@
 - (void)save;
 - (id)initWithScoresToReport:(NSMutableArray*)theScoresToReport achievementsToReport:(NSMutableArray*)theAchievementsToReport;
 - (void)reportAchievement:(NSString*)identifier percentComplete:(double)percentComplete;
-- (void)reportScore:(NSString*)identifier score:(int)rawScore;
+- (void)reportScore:(NSString*)identifier score:(int64_t)rawScore;
 - (void)resetAchievements;
 
 @end

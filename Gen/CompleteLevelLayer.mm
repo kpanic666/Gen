@@ -19,6 +19,8 @@
 @interface CompleteLevelLayer()
 {
     CCParticleSystemQuad *starEmitter;
+    CCSpriteBatchNode *levelendBatchNode;
+    CCSpriteBatchNode *buttonsBatchNode;
 }
 - (void)displayGameOverMenuButtons;
 - (void)rollBorderFrame;
@@ -31,26 +33,26 @@
 
 - (void)rollBorderFrame
 {
-    CGSize screenSize = [CCDirector sharedDirector].winSize;
-    CGSize borderSize = CGSizeMake(screenSize.width, screenSize.height * 0.15);
-    
-    CCTexture2D *borderTex = [self genBorderWithSize:borderSize];
-    CCSprite *borderTop = [CCSprite spriteWithTexture:borderTex];
-    CCSprite *borderBottom = [CCSprite spriteWithTexture:borderTex];
-    borderTop.anchorPoint = ccp(0.5, 0);
-    borderTop.position = ccp(screenSize.width * 0.5, screenSize.height);
-    borderBottom.anchorPoint = ccp(0.5, 1);
-    borderBottom.position = ccp(screenSize.width * 0.5, 0);
-    [self addChild:borderTop];
-    [self addChild:borderBottom];
-    
-    // Actions
-    id callAction = [CCCallFunc actionWithTarget:self selector:@selector(displayGameOverMenuButtons)];
-    CGPoint borderPos = ccp(screenSize.width * 0.5, screenSize.height - [borderTop contentSize].height);
-    [borderTop runAction:[CCMoveTo actionWithDuration:0.5 position:borderPos]];
-    borderPos = ccp(screenSize.width * 0.5, [borderBottom contentSize].height);
-    [borderBottom runAction:[CCSequence actions:[CCMoveTo actionWithDuration:0.5 position:borderPos], callAction, nil]];
-}
+//    CGSize screenSize = [CCDirector sharedDirector].winSize;
+//    CGSize borderSize = CGSizeMake(screenSize.width, screenSize.height * 0.1);
+//    
+//    CCTexture2D *borderTex = [self genBorderWithSize:borderSize];
+//    CCSprite *borderTop = [CCSprite spriteWithTexture:borderTex];
+//    CCSprite *borderBottom = [CCSprite spriteWithTexture:borderTex];
+//    borderTop.anchorPoint = ccp(0.5, 0);
+//    borderTop.position = ccp(screenSize.width * 0.5, screenSize.height);
+//    borderBottom.anchorPoint = ccp(0.5, 1);
+//    borderBottom.position = ccp(screenSize.width * 0.5, 0);
+//    [self addChild:borderTop];
+//    [self addChild:borderBottom];
+//    
+//    // Actions
+//    id callAction = [CCCallFunc actionWithTarget:self selector:@selector(displayGameOverMenuButtons)];
+//    CGPoint borderPos = ccp(screenSize.width * 0.5, screenSize.height - [borderTop contentSize].height);
+//    [borderTop runAction:[CCMoveTo actionWithDuration:0.5 position:borderPos]];
+//    borderPos = ccp(screenSize.width * 0.5, [borderBottom contentSize].height);
+//    [borderBottom runAction:[CCSequence actions:[CCMoveTo actionWithDuration:0.5 position:borderPos], callAction, nil]];
+} 
 
 - (CCTexture2D*)genBorderWithSize:(CGSize)textureSize {
     
@@ -64,8 +66,16 @@
 {
     if ((self = [super initWithColor:color]))
     {
+        // pre load the sprite frames from the texture atlas
+        levelendBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"menu_levelend_1.pvr.ccz"];
+        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"menu_levelend_1.plist"];
+        [self addChild:levelendBatchNode];
+        buttonsBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"buttons_sheet_1.pvr.ccz"];
+        [self addChild:buttonsBatchNode];
+        
         // Опускаем черный рамки сверху и снизу. Как только они на месте - постепенно осветляем фон
-        [self rollBorderFrame];
+//        [self rollBorderFrame];
+        [self displayGameOverMenuButtons];
     }
     
     return self;
@@ -95,57 +105,62 @@
     float padding, xButtonPos, yButtonPos;
     
     // Fade Out self layer color to 50% transperency
-    [self runAction:[CCFadeTo actionWithDuration:0.3 opacity:128]];
+    [self runAction:[CCFadeTo actionWithDuration:0.3 opacity:100]];
     
     // Menu undercover
-    CCSprite *undercover = [CCSprite spriteWithFile:@"completeMenuUnder.png"];
+    CCSprite *undercover = [CCSprite spriteWithSpriteFrameName:@"completeMenuUnder.png"];
     undercover.position = ccp(screenSize.width * 0.5, screenSize.height * 0.5);
-    [self addChild:undercover z:0 tag:kBackgroundTag];
+    [levelendBatchNode addChild:undercover z:0 tag:kBackgroundTag];
     CGSize undercoverSize = undercover.contentSize;
+    float undercoverTopBorder = undercover.position.y + undercover.contentSize.height*0.5;
+    float undercoverLeftBorder = undercover.position.x - undercover.contentSize.width*0.5;
     
     // Create Label for game status (Win or Lose)
-    CCLabelTTF *levelCompleteLabel = 
-    [CCLabelTTF labelWithString:@"" fontName:@"Verdana" fontSize:[Helper convertFontSize:22]];
-    levelCompleteLabel.color = ccc3(255, 255, 255);
-    levelCompleteLabel.anchorPoint = ccp(0.5, 1);
-    levelCompleteLabel.position = ccp(undercoverSize.width * 0.5, undercoverSize.height * 0.95);
+    CCSprite *levelCompleteLabel = [CCSprite node];
+    levelCompleteLabel.anchorPoint = ccp(0.5, 0);
+    levelCompleteLabel.position = ccp(screenSize.width * 0.5, undercoverTopBorder - levelCompleteLabel.contentSize.height - undercover.contentSize.height * 0.16);
+    
+    // Create Genby picture (win or lose)
+    CCSprite *genbySprite = [CCSprite node];
 
     if ([GameManager sharedGameManager].hasLevelWin)
     {
         PLAYSOUNDEFFECT(@"LEVELCOMPLETE_WIN");
         GameManager *gm = [GameManager sharedGameManager];
         const float beginScale = 2;
-        [levelCompleteLabel setString:@"Level cleared!"];
-        [levelCompleteLabel setColor:ccc3(151, 244, 0)];
+        // Label
+        levelCompleteLabel.position = ccp(screenSize.width * 0.52, levelCompleteLabel.position.y);
+        [levelCompleteLabel setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"label_level_cleared.png"]];
+        // Genby Picture
+        [genbySprite setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"genby_level_win.png"]];
+        genbySprite.anchorPoint = ccp(0.28, 0);
+        genbySprite.position = ccp(undercover.position.x - undercover.contentSize.width*0.5, screenSize.height * 0.49);
         
         // Display positions for Stars
-        NSString *starName = @"childcell_idle.png";
-        ccBlendFunc blendInactiveStar = (ccBlendFunc){GL_ONE_MINUS_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA};
+        NSString *starName = @"star_off.png";
         CCSprite *star1 = [CCSprite spriteWithSpriteFrameName:starName];
         CCSprite *star2 = [CCSprite spriteWithSpriteFrameName:starName];
         CCSprite *star3 = [CCSprite spriteWithSpriteFrameName:starName];
         // Star 1
-        xButtonPos = levelCompleteLabel.position.x - star1.contentSize.width;
-        yButtonPos = levelCompleteLabel.position.y - levelCompleteLabel.contentSize.height * 1.4;
+        padding = star1.contentSize.width*1.3;
+        xButtonPos = undercover.position.x;
+        yButtonPos = levelCompleteLabel.position.y - star1.contentSize.height * 0.9;
         star1.position = ccp(xButtonPos, yButtonPos);
         // Star 2
-        xButtonPos += star1.contentSize.width;
+        xButtonPos += padding;
         star2.position = ccp(xButtonPos, yButtonPos);
         // Star 3
-        xButtonPos += star1.contentSize.width;
+        xButtonPos += padding;
         star3.position = ccp(xButtonPos, yButtonPos);
-        star1.blendFunc = blendInactiveStar;
-        star2.blendFunc = blendInactiveStar;
-        star3.blendFunc = blendInactiveStar;
         star1.scale = beginScale;
         star2.scale = beginScale;
         star3.scale = beginScale;
         star1.opacity = 0;
         star2.opacity = 0;
         star3.opacity = 0;
-        [undercover addChild:star1 z:2 tag:kStar1Tag];
-        [undercover addChild:star2 z:2 tag:kStar2Tag];
-        [undercover addChild:star3 z:2 tag:kStar3Tag];
+        [levelendBatchNode addChild:star1 z:2 tag:kStar1Tag];
+        [levelendBatchNode addChild:star2 z:2 tag:kStar2Tag];
+        [levelendBatchNode addChild:star3 z:2 tag:kStar3Tag];
                 
         // Transform Time Value from double to readable format
         double intPart = 0;
@@ -155,107 +170,140 @@
         int sec = isecs % 60;
         
         // Create Labels for game stats and score
-        CCLabelTTF *goalLabel = 
-        [CCLabelTTF labelWithString:@"Goal:" fontName:@"Verdana" fontSize:[Helper convertFontSize:12]];
-        CCLabelTTF *goalValue = 
-        [CCLabelTTF labelWithString:[NSString stringWithFormat:@" %i", gm.numOfNeededCells] fontName:@"Verdana" fontSize:[Helper convertFontSize:15]];
+        float labelFontSize = [Helper convertFontSize:8];
+//        float valueFontSize = [Helper convertFontSize:15];
+        
+        NSString *fontName = @"Tahoma";
+        NSString *panelName = @"panel_stats_label.png";
+        CCSprite *goalLabelSprite = [CCSprite spriteWithSpriteFrameName:panelName];
+        CCSprite *collectedLabelSprite = [CCSprite spriteWithSpriteFrameName:panelName];
+        CCSprite *touchesLabelSprite = [CCSprite spriteWithSpriteFrameName:panelName];
+        CCSprite *timeLabelSprite = [CCSprite spriteWithSpriteFrameName:panelName];
+        CCSprite *scoreLabelSprite = [CCSprite spriteWithSpriteFrameName:panelName];
+        panelName = @"panel_stats_value.png";
+        CCSprite *goalValueSprite = [CCSprite spriteWithSpriteFrameName:panelName];
+        CCSprite *collectedValueSprite = [CCSprite spriteWithSpriteFrameName:panelName];
+        CCSprite *touchesValueSprite = [CCSprite spriteWithSpriteFrameName:panelName];
+        CCSprite *timeValueSprite = [CCSprite spriteWithSpriteFrameName:panelName];
+        panelName = @"panel_score_value.png";
+        CCSprite *scoreValueSprite = [CCSprite spriteWithSpriteFrameName:panelName];
+        
+        CCLabelTTF *goalLabel =
+        [CCLabelTTF labelWithString:@"Goal" fontName:fontName fontSize:labelFontSize];
+        CCLabelBMFont *goalValue = 
+        [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%i", gm.numOfNeededCells] fntFile:@"levelendScore.fnt"];
         CCLabelTTF *collectedLabel = 
-        [CCLabelTTF labelWithString:@"Collected:" fontName:@"Verdana" fontSize:[Helper convertFontSize:12]];
-        CCLabelTTF *collectedValue = 
-        [CCLabelTTF labelWithString:[NSString stringWithFormat:@" %i", gm.numOfSavedCells] fontName:@"Verdana" fontSize:[Helper convertFontSize:15]];
+        [CCLabelTTF labelWithString:@"Collected" fontName:fontName fontSize:labelFontSize];
+        CCLabelBMFont *collectedValue = 
+        [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%i", gm.numOfSavedCells] fntFile:@"levelendScore.fnt"];
         CCLabelTTF *touchesLabel = 
-        [CCLabelTTF labelWithString:@"Touches:" fontName:@"Verdana" fontSize:[Helper convertFontSize:12]];
-        CCLabelTTF *touchesValue = 
-        [CCLabelTTF labelWithString:[NSString stringWithFormat:@" %i", gm.levelTappedNum] fontName:@"Verdana" fontSize:[Helper convertFontSize:15]];
+        [CCLabelTTF labelWithString:@"Touches" fontName:fontName fontSize:labelFontSize];
+        CCLabelBMFont *touchesValue = 
+        [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%i", gm.levelTappedNum] fntFile:@"levelendScore.fnt"];
         CCLabelTTF *timeLabel = 
-        [CCLabelTTF labelWithString:@"Time:" fontName:@"Verdana" fontSize:[Helper convertFontSize:12]];
-        CCLabelTTF *timeValue = 
-        [CCLabelTTF labelWithString:[NSString stringWithFormat:@" %01d:%02d", min, sec] fontName:@"Verdana" fontSize:[Helper convertFontSize:15]];
+        [CCLabelTTF labelWithString:@"Time" fontName:fontName fontSize:labelFontSize];
+        CCLabelBMFont *timeValue = 
+        [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%01d:%02d", min, sec] fntFile:@"levelendScore.fnt"];
         CCLabelTTF *scoreLabel = 
-        [CCLabelTTF labelWithString:@"Score:" fontName:@"Verdana" fontSize:[Helper convertFontSize:12]];
-        CCLabelTTF *scoreValue = 
-        [CCLabelTTF labelWithString:[NSString stringWithFormat:@" %i", gm.levelTotalScore] fontName:@"Verdana" fontSize:[Helper convertFontSize:15]];
+        [CCLabelTTF labelWithString:@"Score" fontName:fontName fontSize:labelFontSize];
+        CCLabelBMFont *scoreValue =
+        [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%i", gm.levelTotalScore] fntFile:@"levelendScore.fnt"];
         
         // Hide labels and color it
-        goalLabel.opacity = 0;
+        ccColor3B fontColor = ccc3(90, 90, 90);
         goalValue.opacity = 0;
-        collectedLabel.opacity = 0;
         collectedValue.opacity = 0;
-        touchesLabel.opacity = 0;
         touchesValue.opacity = 0;
-        timeLabel.opacity = 0;
         timeValue.opacity = 0;
-        scoreLabel.opacity = 0;
         scoreValue.opacity = 0;
-        goalLabel.scale = beginScale;
-        goalValue.scale = beginScale;
-        collectedLabel.scale = beginScale;
-        collectedValue.scale = beginScale;
-        touchesLabel.scale = beginScale;
-        touchesValue.scale = beginScale;
-        timeLabel.scale = beginScale;
-        timeValue.scale = beginScale;
-        scoreLabel.scale = beginScale;
+        goalLabel.color = fontColor;
+        collectedLabel.color = fontColor;
+        touchesLabel.color = fontColor;
+        timeLabel.color = fontColor;
+        scoreLabel.color = fontColor;
+        goalValue.scale = 1.6;
+        collectedValue.scale = 1.6;
+        touchesValue.scale = 1.6;
+        timeValue.scale = 1.6;
         scoreValue.scale = beginScale;
-        
-        // Reconfigu anchor points for alignment
-        CGPoint ancVal = ccp(1, 0.5); // Right alignment
-        goalLabel.anchorPoint = ancVal;
-        collectedLabel.anchorPoint = ancVal;
-        touchesLabel.anchorPoint = ancVal;
-        timeLabel.anchorPoint = ancVal;
-        scoreLabel.anchorPoint = ancVal;
-        ancVal = ccp(0, 0.5);   // Left alignment
-        goalValue.anchorPoint = ancVal;
-        collectedValue.anchorPoint = ancVal;
-        touchesValue.anchorPoint = ancVal;
-        timeValue.anchorPoint = ancVal;
-        scoreValue.anchorPoint = ancVal;
+        CGPoint anc = ccp(0.5, 0.67);
+        scoreValue.anchorPoint = anc;
+        goalValue.anchorPoint = anc;
+        collectedValue.anchorPoint = anc;
+        touchesValue.anchorPoint = anc;
+        timeValue.anchorPoint = anc;
         
         // Adding labels to undercover
-        [undercover addChild:scoreLabel];
-        [undercover addChild:scoreValue];
-        [undercover addChild:goalLabel];
-        [undercover addChild:goalValue];
-        [undercover addChild:collectedLabel];
-        [undercover addChild:collectedValue];
-        [undercover addChild:touchesLabel];
-        [undercover addChild:touchesValue];
-        [undercover addChild:timeLabel];
-        [undercover addChild:timeValue];
+        [levelendBatchNode addChild:scoreLabelSprite z:2];
+        [levelendBatchNode addChild:scoreValueSprite z:2];
+        [levelendBatchNode addChild:goalLabelSprite z:2];
+        [levelendBatchNode addChild:goalValueSprite z:2];
+        [levelendBatchNode addChild:collectedLabelSprite z:2];
+        [levelendBatchNode addChild:collectedValueSprite z:2];
+        [levelendBatchNode addChild:touchesLabelSprite z:2];
+        [levelendBatchNode addChild:touchesValueSprite z:2];
+        [levelendBatchNode addChild:timeLabelSprite z:2];
+        [levelendBatchNode addChild:timeValueSprite z:2];
+        
+        [self addChild:scoreLabel z:3];
+        [self addChild:scoreValue z:3];
+        [self addChild:goalLabel z:3];
+        [self addChild:goalValue z:3];
+        [self addChild:collectedLabel z:3];
+        [self addChild:collectedValue z:3];
+        [self addChild:touchesLabel z:3];
+        [self addChild:touchesValue z:3];
+        [self addChild:timeLabel z:3];
+        [self addChild:timeValue z:3];
         
         // Positioning Labels
         // Score
-        xButtonPos = undercoverSize.width * 0.5;
+        xButtonPos = screenSize.width * 0.51;
         yButtonPos = star1.position.y - undercoverSize.height * 0.14;
-        scoreLabel.position = ccp(xButtonPos, yButtonPos);
-        scoreValue.position = ccp(xButtonPos, yButtonPos);
+        padding = scoreLabelSprite.contentSize.width*0.5 + scoreValueSprite.contentSize.width*0.53;
+        scoreLabelSprite.position = ccp(xButtonPos, yButtonPos);
+        scoreValueSprite.position = ccp(xButtonPos + padding, yButtonPos);
+        scoreLabel.position = scoreLabelSprite.position;
+        scoreValue.position = scoreValueSprite.position;
+        
         // Goal
-        xButtonPos = undercoverSize.width * 0.35;
-        yButtonPos = scoreValue.position.y - scoreValue.contentSize.height*1.2;
-        goalLabel.position = ccp(xButtonPos, yButtonPos);
-        goalValue.position = ccp(xButtonPos, yButtonPos);
+        xButtonPos = undercoverLeftBorder + goalLabelSprite.contentSize.width*0.5 + undercover.contentSize.width * 0.08;
+        yButtonPos -= scoreLabelSprite.contentSize.height * 1.5;
+        padding = goalLabelSprite.contentSize.width*0.5 + goalValueSprite.contentSize.width*0.5;
+        goalLabelSprite.position = ccp(xButtonPos, yButtonPos);
+        goalValueSprite.position = ccp(xButtonPos+padding, yButtonPos);
+        goalLabel.position = goalLabelSprite.position;
+        goalValue.position = goalValueSprite.position;
+        
         // Collected
-        yButtonPos -= goalValue.contentSize.height;
-        collectedLabel.position = ccp(xButtonPos, yButtonPos);
-        collectedValue.position = ccp(xButtonPos, yButtonPos);
-        // Touches
-        xButtonPos = undercoverSize.width * 0.75;
-        yButtonPos = scoreValue.position.y - scoreValue.contentSize.height*1.2;
-        touchesLabel.position = ccp(xButtonPos, yButtonPos);
-        touchesValue.position = ccp(xButtonPos, yButtonPos);
+        yButtonPos -= collectedLabelSprite.contentSize.height * 1.5;
+        collectedLabelSprite.position = ccp(xButtonPos, yButtonPos);
+        collectedValueSprite.position = ccp(xButtonPos+padding, yButtonPos);
+        collectedLabel.position = collectedLabelSprite.position;
+        collectedValue.position = collectedValueSprite.position;
+        
         // Time
-        yButtonPos -= touchesValue.contentSize.height;        
-        timeLabel.position = ccp(xButtonPos, yButtonPos);
-        timeValue.position = ccp(xButtonPos, yButtonPos);
+        xButtonPos = screenSize.width * 0.55;
+        timeLabelSprite.position = ccp(xButtonPos, yButtonPos);
+        timeValueSprite.position = ccp(xButtonPos+padding, yButtonPos);
+        timeLabel.position = timeLabelSprite.position;
+        timeValue.position = timeValueSprite.position;
+        
+        // Touches
+        yButtonPos = goalLabelSprite.position.y;
+        touchesLabelSprite.position = ccp(xButtonPos, yButtonPos);
+        touchesValueSprite.position = ccp(xButtonPos+padding, yButtonPos);
+        touchesLabel.position = touchesLabelSprite.position;
+        touchesValue.position = touchesValueSprite.position;
+                
         
         // Display Highscore Warning when we update score for this lvl
         if (gm.levelHighScoreAchieved) {
             CCSprite *highscore = [CCSprite spriteWithSpriteFrameName:@"highscore_bubble.png"];
             highscore.opacity = 0;
             highscore.scale = beginScale;
-            highscore.position = ccp(undercoverSize.width, undercoverSize.height * 0.5);
-            [undercover addChild:highscore];
+            highscore.position = ccp(screenSize.width*0.18, screenSize.height * 0.75);
+            [levelendBatchNode addChild:highscore z:3];
         }
         
         // Анимируем появление элементов меню
@@ -266,31 +314,39 @@
     {
         // Add Sound TO LOSE LEVEL
         PLAYSOUNDEFFECT(@"LEVELCOMPLETE_FAILE");
-        [levelCompleteLabel setString:@"Level failed!"];
-        [levelCompleteLabel setColor:ccc3(185, 0, 10)];
+        [levelCompleteLabel setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"label_level_failed.png"]];
+        [genbySprite setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"genby_level_failed.png"]];
+        genbySprite.anchorPoint = ccp(0.5, 1);
+        genbySprite.position = ccp(levelCompleteLabel.position.x, levelCompleteLabel.position.y);
     }
     
-    // Добавляем после анимации, чтобы текст со статусом прохождения уровня и кнопки были без анимации
-    [undercover addChild:levelCompleteLabel];
+    // Добавляем потому как определяемся с содержимым только после условий
+    [levelendBatchNode addChild:levelCompleteLabel];
+    [levelendBatchNode addChild:genbySprite];
     
     // Menu Buttons
     // Make Sprites for Menu
     CCSprite *resetSprite = [CCSprite spriteWithSpriteFrameName:@"button_reset.png"];
     CCSprite *levelSelectSprite = [CCSprite spriteWithSpriteFrameName:@"button_level_select.png"];
     CCSprite *skipSprite = [CCSprite spriteWithSpriteFrameName:@"button_skip.png"];
-    [undercover addChild:levelSelectSprite];
-    [undercover addChild:resetSprite];
-    [undercover addChild:skipSprite];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        skipSprite.scale = 1.2;
+        resetSprite.scale = 1.2;
+        levelSelectSprite.scale = 1.2;
+    }
+    [buttonsBatchNode addChild:levelSelectSprite];
+    [buttonsBatchNode addChild:resetSprite];
+    [buttonsBatchNode addChild:skipSprite];
     CCMenuItemSpriteIndependent *resetButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:resetSprite selectedSprite:nil target:self selector:@selector(resetPressed)];
     CCMenuItemSpriteIndependent *levelSelectButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:levelSelectSprite selectedSprite:nil target:self selector:@selector(levelSelectPressed)];
     CCMenuItemSpriteIndependent *skipButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:skipSprite selectedSprite:nil target:self selector:@selector(nextPressed)];    
     CCMenu *gameOverMenu = [CCMenu menuWithItems:resetButton, levelSelectButton, skipButton, nil];
     [gameOverMenu setPosition:ccp(0, 0)];
-    [undercover addChild:gameOverMenu z:3];
+    [self addChild:gameOverMenu z:3];
     // Left Down - Level Select
     padding = resetSprite.contentSize.width * 1.5;
-    xButtonPos = undercoverSize.width * 0.5 - padding;
-    yButtonPos = resetSprite.contentSize.height * 0.5 * 0.4;
+    xButtonPos = screenSize.width * 0.5 - padding;
+    yButtonPos = undercover.position.y - undercoverSize.height*0.5 + resetSprite.contentSize.height*0.95;
     levelSelectSprite.position = ccp(xButtonPos, yButtonPos);
     // Center Down - Reset
     xButtonPos += padding;
@@ -305,24 +361,49 @@
     // Последователь скрывает все элементы меню, а затем через определенные промежутки времени показывает их
     float delayTimer = 0;
     float delayInc = 0.1;
-    CCNode *undercover = [self getChildByTag:kBackgroundTag];
     
-    for (CCNode *tempNode in [undercover children])
+    // Показываем графику из батча
+    for (CCSprite *tempNode in [levelendBatchNode children])
     {
-        // Объявляем набор анимации элементов меню
-        CCFadeIn *fadeAction = [CCFadeIn actionWithDuration:0.6];
-        CCScaleTo *scaleDownAction = [CCScaleTo actionWithDuration:0.2 scale:0.5];
-        CCScaleTo *scaleUpAction = [CCScaleTo actionWithDuration:0.2 scale:1.2];
-        CCScaleTo *scaleDownOriginal = [CCScaleTo actionWithDuration:0.2 scale:1.0];
-        CCSequence *scaleUpDownAction = [CCSequence actions:scaleDownAction, scaleUpAction, scaleDownOriginal, nil];
-        CCSpawn *spawnAction = [CCSpawn actions:fadeAction, scaleUpDownAction, nil];
-        CCDelayTime *delayAction = [CCDelayTime actionWithDuration:delayTimer];
-        
-        // Запускаем анимацию
-        [tempNode runAction:[CCSequence actions:delayAction, spawnAction, nil]];
-        
-        delayTimer += delayInc;
+        if (tempNode.opacity == 0) {
+            // Объявляем набор анимации элементов меню
+            CCFadeIn *fadeAction = [CCFadeIn actionWithDuration:0.6];
+            CCScaleTo *scaleDownAction = [CCScaleTo actionWithDuration:0.2 scale:0.5];
+            CCScaleTo *scaleUpAction = [CCScaleTo actionWithDuration:0.2 scale:1.2];
+            CCScaleTo *scaleDownOriginal = [CCScaleTo actionWithDuration:0.2 scale:1.0];
+            CCSequence *scaleUpDownAction = [CCSequence actions:scaleDownAction, scaleUpAction, scaleDownOriginal, nil];
+            CCSpawn *spawnAction = [CCSpawn actions:fadeAction, scaleUpDownAction, nil];
+            CCDelayTime *delayAction = [CCDelayTime actionWithDuration:delayTimer];
+            
+            // Запускаем анимацию
+            [tempNode runAction:[CCSequence actions:delayAction, spawnAction, nil]];
+            
+            delayTimer += delayInc;
+        }
     }
+    
+    // Показываем текст статистики
+    for (CCNode *tempNode in [self children])
+    {
+        if ([tempNode isKindOfClass:[CCLabelTTF class]] || [tempNode isKindOfClass:[CCLabelBMFont class]]) {
+            // Объявляем набор анимации элементов меню
+            if (tempNode.scale > 1) {
+                CCFadeIn *fadeAction = [CCFadeIn actionWithDuration:0.6];
+                CCScaleTo *scaleDownAction = [CCScaleTo actionWithDuration:0.2 scale:tempNode.scale/4];
+                CCScaleTo *scaleUpAction = [CCScaleTo actionWithDuration:0.2 scale:tempNode.scale/2*1.2];
+                CCScaleTo *scaleDownOriginal = [CCScaleTo actionWithDuration:0.2 scale:tempNode.scale/2];
+                CCSequence *scaleUpDownAction = [CCSequence actions:scaleDownAction, scaleUpAction, scaleDownOriginal, nil];
+                CCSpawn *spawnAction = [CCSpawn actions:fadeAction, scaleUpDownAction, nil];
+                CCDelayTime *delayAction = [CCDelayTime actionWithDuration:delayTimer];
+                
+                // Запускаем анимацию
+                [tempNode runAction:[CCSequence actions:delayAction, spawnAction, nil]];
+                
+                delayTimer += delayInc;
+            }
+        }
+    }
+    
     return delayTimer;
 }
 
@@ -330,21 +411,20 @@
 {
     // Add Sound to Pop UP THE STAR
     [star setScale:0.1];
-    star.blendFunc = (ccBlendFunc){GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
-    [star runAction:[CCScaleTo actionWithDuration:0.5 scale:1.2]];
+    [star setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"star_on.png"]];
+    [star runAction:[CCScaleTo actionWithDuration:0.5 scale:1]];
     starEmitter.position = star.position;
     [starEmitter resetSystem];
 }
 
 - (void)popUpStars
 {
-    CCNode *undercover = [self getChildByTag:kBackgroundTag];
-    CCSprite *star1 = (CCSprite*) [undercover getChildByTag:kStar1Tag];
-    CCSprite *star2 = (CCSprite*) [undercover getChildByTag:kStar2Tag];
-    CCSprite *star3 = (CCSprite*) [undercover getChildByTag:kStar3Tag];
+    CCSprite *star1 = (CCSprite*) [levelendBatchNode getChildByTag:kStar1Tag];
+    CCSprite *star2 = (CCSprite*) [levelendBatchNode getChildByTag:kStar2Tag];
+    CCSprite *star3 = (CCSprite*) [levelendBatchNode getChildByTag:kStar3Tag];
     GameManager *gm = [GameManager sharedGameManager];
     starEmitter = [CCParticleSystemQuad particleWithFile:@"ps_popUpStar.plist"];
-    [undercover addChild:starEmitter];
+    [self addChild:starEmitter];
     [starEmitter stopSystem];
     CCCallFuncN *explodeStar = [CCCallFuncN actionWithTarget:self selector:@selector(explodeStar:)];
     

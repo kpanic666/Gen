@@ -37,7 +37,6 @@
     SimpleAudioEngine *soundEngine;
     NSMutableDictionary *listOfSoundEffectFiles;
     NSMutableDictionary *soundEffectsState;
-
 }
 
 @property (readwrite) BOOL isMusicON;

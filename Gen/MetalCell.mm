@@ -10,24 +10,30 @@
 
 @implementation MetalCell
 
-@synthesize pin;
-
 - (id)initWithWorld:(b2World*)theWorld position:(CGPoint)pos name:(NSString*)name withPinAtPos:(CGPoint)pinPos
 {
     if ((self = [super initWithType:kMetalType withWorld:theWorld position:pos name:name])) {
         
         body->SetType(b2_dynamicBody);
         body->SetUserData(self);
+        // Set filter properties
+        b2Filter filter;
+        for (b2Fixture *f = body->GetFixtureList(); f; f = f->GetNext())
+        {
+            filter = f->GetFilterData();
+            filter.categoryBits = kMetalCellFilterCategory;
+            f->SetFilterData(filter);
+        }
         
         // make pin for the MetalCell body. Need for the revolute joint
-        pin = [[[MetalCellPin alloc] initWithWorld:theWorld atLocation:pinPos] autorelease];
+        self.pin = [[[MetalCellPin alloc] initWithWorld:theWorld atLocation:pinPos] autorelease];
         // Rev Joint creation
         b2RevoluteJointDef revJointDef;
         revJointDef.bodyA = body;
-        revJointDef.bodyB = pin.body;
-        revJointDef.localAnchorA = body->GetLocalPoint(pin.body->GetPosition());
+        revJointDef.bodyB = _pin.body;
+        revJointDef.localAnchorA = body->GetLocalPoint(_pin.body->GetPosition());
         revJointDef.localAnchorB.SetZero();
-        pinJoint = (b2RevoluteJoint*) world->CreateJoint(&revJointDef);
+        self.pinJoint = (b2RevoluteJoint*) world->CreateJoint(&revJointDef);
     }
     return self;
 }
@@ -38,20 +44,28 @@
         
         body->SetType(b2_dynamicBody);
         body->SetUserData(self);
+        // Set filter properties
+        b2Filter filter;
+        for (b2Fixture *f = body->GetFixtureList(); f; f = f->GetNext())
+        {
+            filter = f->GetFilterData();
+            filter.categoryBits = kMetalCellFilterCategory;
+            f->SetFilterData(filter);
+        }
     }
     return self;
 }
 
 - (void)setMotorSpeed:(float32)motorSpeed
 {
-    if (pinJoint != NULL) {
-        if (pinJoint->IsMotorEnabled()) {
-            pinJoint->SetMotorSpeed(motorSpeed);
+    if (_pinJoint != NULL) {
+        if (_pinJoint->IsMotorEnabled()) {
+            _pinJoint->SetMotorSpeed(motorSpeed);
         }
         else {
-            pinJoint->SetMaxMotorTorque(1000);
-            pinJoint->SetMotorSpeed(motorSpeed);
-            pinJoint->EnableMotor(YES);
+            _pinJoint->SetMaxMotorTorque(1000);
+            _pinJoint->SetMotorSpeed(motorSpeed);
+            _pinJoint->EnableMotor(YES);
         }
     }
 }
@@ -68,7 +82,9 @@
 
 - (void) dealloc
 {
-    pin = nil;
+    [_pin release];
+    _pin = nil;
+    _pinJoint = nil;
     [super dealloc];
 }
 

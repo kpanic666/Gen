@@ -10,6 +10,9 @@
 
 @interface MagneticCell : Box2DSprite
 
+@property (nonatomic, retain) CCSprite *topSwirl;
+@property (nonatomic, retain) CCSprite *middleSwirl;
+
 - (void)drawMagnetForces;
 
 @end

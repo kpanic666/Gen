@@ -7,118 +7,29 @@
 //
 
 #import "Scene14ActionLayer.h"
+#import "MetalCell.h"
 
 @implementation Scene14ActionLayer
-
-- (void)makeCubeWithDimention:(int)dim offset:(float)offset atPos:(CGPoint)startPos
-{
-    // Создаем массив для хранения ссылок на созданные ячейки куба
-    id cellsBodyArray[dim][dim];
-    
-    // Создаем куб и заполняем массив для дальнейшего связывания ячеек джойнтами
-    for (int r=0; r < dim; r++)
-    {
-        for (int c=0; c < dim; c++)
-        {
-            cellsBodyArray[c][r] = [self createChildCellAtLocation:ccpAdd(startPos, ccp(offset * c, -offset * r))];
-        }
-    }
-    
-    // Соединяем элементы куба между собой RevoluteJoint'ами
-    b2DistanceJointDef disJointDef;
-    disJointDef.localAnchorA.SetZero();
-    disJointDef.localAnchorB.SetZero();
-    for (int r=0; r < dim; r++)
-    {
-        for (int c=0; c < dim; c++)
-        {
-            // Соединяем ячейку с предыдущей в ряду
-            if (c > 0)
-            {
-                ChildCell *tempCell = (ChildCell*)cellsBodyArray[c-1][r];
-                disJointDef.bodyA = tempCell.body;
-                tempCell = (ChildCell*)cellsBodyArray[c][r];
-                disJointDef.bodyB = tempCell.body;
-                disJointDef.length = offset / PTM_RATIO;
-                world->CreateJoint(&disJointDef);
-            }
-            // Соединяем ячейку с предыдущей в столбце
-            if (r > 0)
-            {
-                ChildCell *tempCell = (ChildCell*)cellsBodyArray[c][r-1];
-                disJointDef.bodyA = tempCell.body;
-                tempCell = (ChildCell*)cellsBodyArray[c][r];
-                disJointDef.bodyB = tempCell.body;
-                disJointDef.length = offset / PTM_RATIO;
-                world->CreateJoint(&disJointDef);
-            }
-            // Соединяем ячейки по диагонали для прочности.
-            if (c > 0 && r > 0)
-            {
-                ChildCell *tempCell = (ChildCell*)cellsBodyArray[c-1][r-1];
-                disJointDef.bodyA = tempCell.body;
-                tempCell = (ChildCell*)cellsBodyArray[c][r];
-                disJointDef.bodyB = tempCell.body;
-                // Вычисляем длину гиппотенузы
-                disJointDef.length = sqrtf(2 * offset * offset) / PTM_RATIO;
-                world->CreateJoint(&disJointDef);
-            }
-        }
-    }
-}
 
 - (id)initWithBox2DUILayer:(Box2DUILayer *)box2DUILayer
 {
     if ((self = [super init])) {
         uiLayer = box2DUILayer;
         CGPoint cellPos;
-
-        // load physics definitions
-        [[GB2ShapeCache sharedShapeCache] addShapesWithFile:@"scene14bodies.plist"];
         
         // add background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.png"];
+        CCSprite *background = [CCSprite spriteWithFile:@"background1.jpg"];
         [background setPosition:[Helper screenCenter]];
-        [self addChild:background z:-2];
+        [self addChild:background z:-4];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
-        
-        // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
-        cellPos = [Helper convertPosition:ccp(888, 313)];
-        exitCell = [[[ExitCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:exitCell z:-1 tag:kExitCellSpriteTagValue];
-        
-        // add GroundCells
-        cellPos = [Helper convertPosition:ccp(740, 147)];
-        [self createGroundCellInWorld:world position:cellPos name:@"groundCell1"];
-        cellPos = [Helper convertPosition:ccp(453, 66)];
-        [self createGroundCellInWorld:world position:cellPos name:@"groundCell2"];
-        cellPos = [Helper convertPosition:ccp(611, 554)];
-        [self createGroundCellInWorld:world position:cellPos name:@"groundCell3"];
-        
-        // add ChildCells
-        float offset = 15; // Расстояние между элементами куба (между ячейками)
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            offset *= 2;
-        }
-        cellPos = [Helper convertPosition:ccp(34, 34)]; // Top left corner of Cube
-        [self makeCubeWithDimention:3 offset:offset atPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(34, 470)]; // Top left corner of Cube
-        [self makeCubeWithDimention:4 offset:offset atPos:cellPos];
-        
-        // add RedCells
-        cellPos = [Helper convertPosition:ccp(585, 192)];
-        [self createRedCellInWorld:world position:cellPos name:@"redCell1"];
-        cellPos = [Helper convertPosition:ccp(585, 425)];
-        [self createRedCellInWorld:world position:cellPos name:@"redCell1"];
-        
-        // add MagneticCells
-        cellPos = [Helper convertPosition:ccp(770, 256)];
-        MagneticCell *magneticCell1 = [[[MagneticCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:magneticCell1 z:-1];
-        cellPos = [Helper convertPosition:ccp(482, 362)];
-        MagneticCell *magneticCell2 = [[[MagneticCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:magneticCell2 z:-1];
+
+        // add MetalCell with Pin at Center
+        cellPos = [Helper convertPosition:ccp(480, 300)];
+        CGPoint pinPos = [Helper convertPosition:ccp(481, 421)];
+        MetalCell *metalCell1 = [MetalCell metalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:pinPos];
+        [self addChild:metalCell1 z:1];
+        [self addChild:metalCell1.pin z:2];
     }
     return self;
 }

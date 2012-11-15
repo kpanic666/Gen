@@ -7,7 +7,6 @@
 //
 
 #import "Scene10ActionLayer.h"
-#import "MetalCell.h"
 
 @implementation Scene10ActionLayer
 
@@ -15,66 +14,30 @@
 {
     if ((self = [super init])) {
         uiLayer = box2DUILayer;
-        CGPoint cellPos;
-
-        // load physics definitions
-        [[GB2ShapeCache sharedShapeCache] addShapesWithFile:@"scene10bodies.plist"];
         
         // add background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.png"];
+        CCSprite *background = [CCSprite spriteWithFile:@"background1.jpg"];
         [background setPosition:[Helper screenCenter]];
-        [self addChild:background z:-2];
+        [self addChild:background z:-4];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
+
+        // Add Tutorial text and arrows
+        CCSprite *info = [CCSprite spriteWithSpriteFrameName:@"tut_warning.png"];
+        info.position = [Helper convertPosition:ccp(230, 110)];
+        info.opacity = 0;
+        [sceneSpriteBatchNode addChild:info z:-2];
+        CCLabelTTF *infoText = [CCLabelTTF labelWithString:@"Some food can explode!\n Try to feed it to Genby\n or get rid of it" fontName:@"Verdana" fontSize:[Helper convertFontSize:12]];
+        infoText.color = ccBLACK;
+        infoText.opacity = 0;
+        infoText.position = ccp(info.position.x + info.contentSize.width*0.7 + infoText.contentSize.width*0.5, info.position.y);
+        [self addChild:infoText z:-2];
         
-        // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
-        cellPos = [Helper convertPosition:ccp(874, 172)];
-        exitCell = [[[ExitCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:exitCell z:-1 tag:kExitCellSpriteTagValue];
-        
-        // add MetalCell with Pin at Center
-        cellPos = [Helper convertPosition:ccp(429, 344)];
-        CGPoint pinPos = [Helper convertPosition:ccp(578, 385)];
-        MetalCell *metalCell1 = [MetalCell metalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:pinPos];
-        [self addChild:metalCell1 z:-1];
-        [sceneSpriteBatchNode addChild:metalCell1.pin];
-        
-        // add GroundCells
-        cellPos = [Helper convertPosition:ccp(882, 531)];
-        [self createGroundCellInWorld:world position:cellPos name:@"groundCell1"];
-        
-        // add ChildCells
-        CGPoint childCellsPos[kScene10Total] = 
-        {
-            [Helper convertPosition:ccp(32, 253)],
-            [Helper convertPosition:ccp(81, 267)],
-            [Helper convertPosition:ccp(56, 297)],
-            [Helper convertPosition:ccp(23, 331)],
-            [Helper convertPosition:ccp(80, 335)],
-            [Helper convertPosition:ccp(723, 320)],
-            [Helper convertPosition:ccp(696, 336)],
-            [Helper convertPosition:ccp(732, 355)],
-            [Helper convertPosition:ccp(766, 347)],
-            [Helper convertPosition:ccp(671, 369)],
-            [Helper convertPosition:ccp(720, 396)],
-            [Helper convertPosition:ccp(761, 394)]
-        };
-        for (int i=0; i<kScene10Total; i++) {
-            [self createChildCellAtLocation:childCellsPos[i]];
-        }
-        
-        // add RedCells
-        cellPos = [Helper convertPosition:ccp(334, 523)];
-        [self createRedCellInWorld:world position:cellPos name:@"redCell1"];
-        cellPos = [Helper convertPosition:ccp(449, 247)];
-        [self createRedCellInWorld:world position:cellPos name:@"redCell2"];
-        cellPos = [Helper convertPosition:ccp(480, 58)];
-        [self createRedCellInWorld:world position:cellPos name:@"redCell3"];
-        
-        // add MagneticCells
-        cellPos = [Helper convertPosition:ccp(645, 203)];
-        MagneticCell *magneticCell1 = [[[MagneticCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:magneticCell1 z:-1];
+        // Animating tips
+        [self showTipsElement:info delay:2];
+        [self showTipsElement:infoText delay:2];
+        [self hideTipsElement:info delay:10];
+        [self hideTipsElement:infoText delay:10];
     }
     return self;
 }

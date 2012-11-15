@@ -14,6 +14,17 @@
 #import "GCHelper.h"
 #import "SimpleQueryCallback.h"
 #import "HMVectorNode.h"
+#import "TBXML.h"
+
+static inline ccColor3B
+ccc3FromUInt(const uint bytes)
+{
+	GLubyte r	= bytes >> 16 & 0xFF;
+	GLubyte g	= bytes >> 8 & 0xFF;
+	GLubyte b	= bytes & 0xFF;
+    
+	return ccc3(r, g, b);
+}
 
 @interface Box2DLayer()
 {
@@ -47,7 +58,7 @@
     world->SetDebugDraw(m_debugDraw);
     uint32 flags = 0;
 	flags += b2Draw::e_shapeBit;
-//	flags += b2Draw::e_jointBit;
+	flags += b2Draw::e_jointBit;
 //    flags += b2Draw::e_aabbBit;
 	//		flags += b2Draw::e_pairBit;
 	//		flags += b2Draw::e_centerOfMassBit;
@@ -87,12 +98,27 @@
     groundBody->CreateFixture(&groundShape, 0);
 }
 
+- (CCSprite*)createDecorWithSpriteFrameName:(NSString *)name location:(CGPoint)location
+{
+    CCSprite *decor = [CCSprite spriteWithSpriteFrameName:name];
+    [decor setPosition:location];
+    [decorsBatchNode addChild:decor];
+    return decor;
+}
+
 - (ChildCell*)createChildCellAtLocation:(CGPoint)location
 {
     ChildCell *childCell = [[[ChildCell alloc] initWithWorld:world atLocation:location] autorelease];
-    [sceneSpriteBatchNode addChild:childCell z:1];
+    [sceneSpriteBatchNode addChild:childCell z:2];
     [GameManager sharedGameManager].numOfTotalCells++;
     return childCell;
+}
+
+- (ExitCell*)createExitCellAtLocation:(CGPoint)location
+{
+    exitCell = [[[ExitCell alloc] initWithWorld:world atLocation:location] autorelease];
+    [sceneSpriteBatchNode addChild:exitCell z:1 tag:kExitCellSpriteTagValue];
+    return exitCell;
 }
 
 - (BombCell*)createBombCellAtLocation:(CGPoint)location
@@ -101,6 +127,13 @@
     [sceneSpriteBatchNode addChild:bombCell z:1];
     [GameManager sharedGameManager].numOfTotalCells++;
     return bombCell;
+}
+
+- (MagneticCell*)createMagneticCellAtLocation:(CGPoint)location
+{
+    MagneticCell *magneticCell = [[[MagneticCell alloc] initWithWorld:world atLocation:location] autorelease];
+    [sceneSpriteBatchNode addChild:magneticCell z:-1];
+    return magneticCell;
 }
 
 - (BubbleCell*)createBubbleCellAtLocation:(CGPoint)location
@@ -117,11 +150,18 @@
     return movingWall;
 }
 
+- (MovingWall*)createMovingWallAtLocation:(CGPoint)location vertical:(BOOL)vertical negOffset:(float32)negOffset posOffset:(float32)posOffset speed:(float32)speed
+{
+    MovingWall *movingWall = (MovingWall*)[MovingWall wallWithWorld:world location:location isVertical:vertical withGroundBody:groundBody negOffset:negOffset posOffset:posOffset speed:speed];
+    [sceneSpriteBatchNode addChild:movingWall z:1];
+    return movingWall;
+}
+
 - (GroundCell*)createGroundCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name
 {
     GroundCell *groundCell = [GroundCell groundCellInWorld:theWorld position:pos name:name];
     [self addChild:groundCell z:-1];
-    [groundCell createParticles];
+//    [groundCell createParticles];
     return groundCell;
 }
 
@@ -133,24 +173,45 @@
     return redCell;
 }
 
+- (RedCell*)createRedCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name withPinAtPos:(CGPoint)pinPos
+{
+    RedCell *redCell = [RedCell redCellInWorld:theWorld position:pos name:name withPinAtPos:pinPos];
+    [self addChild:redCell z:-1];
+    [sceneSpriteBatchNode addChild:redCell.pin];
+    return redCell;
+}
+
+- (MetalCell*)createMetalCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name
+{
+    MetalCell *metalCell = [MetalCell metalCellInWorld:theWorld position:pos name:name];
+    [self addChild:metalCell z:-1];
+    return metalCell;
+}
+
+- (MetalCell*)createMetalCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name withPinAtPos:(CGPoint)pinPos
+{
+    MetalCell *metalCell = [MetalCell metalCellInWorld:theWorld position:pos name:name withPinAtPos:pinPos];
+    [self addChild:metalCell z:-1];
+    [sceneSpriteBatchNode addChild:metalCell.pin];
+    return metalCell;
+}
+
 - (void)resetBubbleWithNode:(id)node
 {
     CCSprite *bubble = (CCSprite*)node;
     [bubble stopAllActions];
     bubble.scale = 1;
+    bubble.opacity = 255;
     
     // Set Random Position
+    float xGravity = world->GetGravity().x;
+    float xOffset = screenSize.width * 0.5 * xGravity;
     float yOffset = [bubble boundingBox].size.height * 0.5;
     float offScreenYPosition = screenSize.height + 1 + yOffset;
     int yPosition =  (yOffset * -1) - 1;
-    int xPosition = random() % (int)screenSize.width;
+    int xPosition = random() % (int)(screenSize.width + ABS(xOffset));
+    if (xOffset > 0) xPosition -= xOffset;
     [bubble setPosition:ccp(xPosition, yPosition)];
-    
-    // Set Random Move Duration 
-    int moveDuration = random() % kMaxBubbleMoveDuration;
-    if (moveDuration < kMinBubbleMoveDuration) {
-        moveDuration = kMinBubbleMoveDuration;
-    }
     
     // Set Horizontal Reflection (flipX)
     if ([bubble flipX]) {
@@ -160,37 +221,400 @@
         [bubble setFlipX:YES];
     }
     
-    
     // Set Random texture
-    int bubbleToDraw = random() % 3 + 1; // 1 to 3
+    int bubbleToDraw = random() % 4 + 1; // 1 to 4
     NSString *bubbleFileName = [NSString stringWithFormat:@"bubble%d.png",bubbleToDraw];
     [bubble setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:bubbleFileName]];
     
     // Actions
-    id scaleAction = [CCScaleBy actionWithDuration:1 scaleX:1.3 scaleY:0.6];
-    id scaleSeqAction = [CCSequence actions:scaleAction, [scaleAction reverse], nil];
-    id moveAction = [CCMoveTo actionWithDuration:moveDuration position:ccp([bubble position].x, offScreenYPosition)];
-    id resetAction = [CCCallFuncN actionWithTarget:self selector:@selector(resetBubbleWithNode:)];
-    id sequenceAction = [CCSequence actions:moveAction, resetAction, nil];
+    xGravity = ABS(xGravity);
+    if (xGravity < 1) {
+        xGravity = 1;
+    }
+    float moveTime = 8 / xGravity;
+    int opacityTime = random() % (2) + 1;
+    // Set Random Delay Before Move up
+    int moveDelay = random() % kMaxBubbleMoveDelay;
+    if (moveDelay < kMinBubbleMoveDelay) {
+        moveDelay = kMinBubbleMoveDelay;
+    }
     
-    [bubble runAction:sequenceAction];
-    [bubble runAction:[CCRepeatForever actionWithAction:scaleSeqAction]];
-    int newZOrder = kMaxBubbleMoveDuration - moveDuration;
-    [sceneSpriteBatchNode reorderChild:bubble z:newZOrder];
+    // Scale up and down actions
+    id scaleUp = [CCScaleTo actionWithDuration:1 scaleX:0.7 scaleY:1.3];
+    id scaleDown = [CCScaleTo actionWithDuration:1 scaleX:1.2 scaleY:0.8];
+    id scaleSeq = [CCSequence actions:scaleUp, scaleDown, nil];
+    
+    // Fade Out actions
+    id opacityFade = [CCFadeOut actionWithDuration:opacityTime];
+    id opacityFadeDelay = [CCDelayTime actionWithDuration:moveDelay+moveTime*0.7 ];
+    id opacityFadeSeq = [CCSequence actionOne:opacityFadeDelay two:opacityFade];
+    
+    // Move from bottom to cover actions
+    id moveAction = [CCMoveTo actionWithDuration:moveTime position:ccp([bubble position].x + xOffset, offScreenYPosition)];
+    id moveDelayAction = [CCDelayTime actionWithDuration:moveDelay];
+    
+    // Reset actions. Reset all setting and reuse bubbles for next round up
+    id resetAction = [CCCallFuncN actionWithTarget:self selector:@selector(resetBubbleWithNode:)];
+    
+    // Main sequence
+    id waitMoveResetSeq = [CCSequence actions:moveDelayAction, moveAction, resetAction, nil];
+    
+    [bubble runAction:waitMoveResetSeq];
+    [bubble runAction:[CCRepeatForever actionWithAction:scaleSeq]];
+    [bubble runAction:opacityFadeSeq];
 }
 
 - (void)createBubble
 {
-    int bubbleToDraw = random() % 3 + 1; // 1 to 3
+    int bubbleToDraw = random() % 4 + 1; // 1 to 4
     NSString *bubbleFileName = [NSString stringWithFormat:@"bubble%d.png",bubbleToDraw];
     CCSprite *bubbleSprite = [CCSprite spriteWithSpriteFrameName:bubbleFileName];
-    [sceneSpriteBatchNode addChild:bubbleSprite];
+    [sceneSpriteBatchNode addChild:bubbleSprite z:5];
     [self resetBubbleWithNode:bubbleSprite];
+}
+
+#pragma mark -
+#pragma mark Water and Waves
+
+- (void)resetBlickWithNode:(id)node
+{
+    CCSprite *blick = (CCSprite*)node;
+    
+    // Set Random Position
+    int xPosition = random() % (int)(screenSize.width / 32);
+    [blick setPosition:ccp(xPosition * 32, screenSize.height)];
+    
+    // Set Random texture
+    int blickToDraw = random() % 2 + 1; // 1 to 2
+    NSString *blickFileName = [NSString stringWithFormat:@"water_blick%d.png",blickToDraw];
+    [blick setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:blickFileName]];
+    
+    // Actions
+    // Set Random Delay Before Fade in
+    int startDelay = random() % kMaxBubbleMoveDelay;
+    if (startDelay < kMinBubbleMoveDelay) {
+        startDelay = kMinBubbleMoveDelay;
+    }
+    
+    // Reset action. Reset all setting and reuse blicks for next round up
+    id resetAction = [CCCallFuncN actionWithTarget:self selector:@selector(resetBlickWithNode:)];
+    
+    // Fade actions
+    id fadeStartPause = [CCDelayTime actionWithDuration:startDelay];
+    id fadeInAction = [CCFadeIn actionWithDuration:1];
+    id fadeMiddleStatePause = [CCDelayTime actionWithDuration:0.5];
+    id fadeOutAction = [CCFadeOut actionWithDuration:0.5];
+    id fadeSeq = [CCSequence actions:fadeStartPause, fadeInAction, fadeMiddleStatePause, fadeOutAction, resetAction, nil];
+    
+    [blick runAction:fadeSeq];
+}
+
+- (void)createWaterBlick
+{
+    int blickToDraw = random() % 2 + 1; // 1 to 2
+    NSString *blickFileName = [NSString stringWithFormat:@"water_blick%d.png",blickToDraw];
+    CCSprite *blickSprite = [CCSprite spriteWithSpriteFrameName:blickFileName];
+    [blickSprite setAnchorPoint:ccp(0.5, 1)];
+    [blickSprite setOpacity:0];
+    [waterBatchNode addChild:blickSprite z:1];
+    [self resetBlickWithNode:blickSprite];
+}
+
+- (void)createWater
+{
+    CCSprite *bottomSprite = [CCSprite spriteWithSpriteFrameName:@"water_bottom.png"];
+    CCSprite *topSprite = [CCSprite spriteWithSpriteFrameName:@"water_top.png"];
+    CCSprite *surfForegroundSprite = [CCSprite spriteWithSpriteFrameName:@"water_surf_foreground.png"];
+    CCSprite *surfBackgroundSprite = [CCSprite spriteWithSpriteFrameName:@"water_surf_background.png"];
+    int numOfBottomTiles = screenSize.width / bottomSprite.contentSize.width;
+    int numOfTopTiles = screenSize.width / topSprite.contentSize.width;
+    int numOfForegroundTiles = screenSize.width / surfForegroundSprite.contentSize.width + 2;
+    int numOfBackgroundTiles = screenSize.width / surfBackgroundSprite.contentSize.width + 2;
+    
+    // Start to fill all bottom and top side of the screen with water sprites
+    for (int x = 0; x <= numOfBottomTiles; x++) {
+        CCSprite *waterSprite = [CCSprite spriteWithSpriteFrameName:@"water_bottom.png"];
+        [waterSprite setAnchorPoint:ccp(0, 0)];
+        [waterSprite setPosition:ccp(x * waterSprite.contentSize.width, 0)];
+        [waterBatchNode addChild:waterSprite z:0];
+    }
+    for (int x = 0; x <= numOfTopTiles; x++) {
+        CCSprite *waterSprite = [CCSprite spriteWithSpriteFrameName:@"water_top.png"];
+        [waterSprite setAnchorPoint:ccp(0, 1)];
+        [waterSprite setPosition:ccp(x * waterSprite.contentSize.width, screenSize.height)];
+        [waterBatchNode addChild:waterSprite z:0];
+    }
+    
+    // Add waves at the top of the stage
+    for (int x = -1; x < numOfBackgroundTiles; x++) {
+        CCSprite *waterSprite = [CCSprite spriteWithSpriteFrameName:@"water_surf_background.png"];
+        [waterSprite setAnchorPoint:ccp(0, 1)];
+        [waterSprite setPosition:ccp(x * waterSprite.contentSize.width, screenSize.height)];
+        [waterBatchNode addChild:waterSprite z:2 tag:kWaterWaveBackgroundTag];
+        if (x == numOfBackgroundTiles-1) rightmostXPosOfWave = waterSprite.position.x;
+    }
+    for (int x = -1; x < numOfForegroundTiles; x++) {
+        CCSprite *waterSprite = [CCSprite spriteWithSpriteFrameName:@"water_surf_foreground.png"];
+        [waterSprite setAnchorPoint:ccp(0, 1)];
+        [waterSprite setPosition:ccp(x * waterSprite.contentSize.width, screenSize.height)];
+        [waterBatchNode addChild:waterSprite z:3 tag:kWaterWaveForegroundTag];
+        if (x == -1) leftmostXPosOfWave = waterSprite.position.x;
+    }
+}
+
+- (void)updateWater:(ccTime)dt
+{
+    float dX = kWaterWavesPPS * dt;
+    leftmostXPosOfWave += dX;
+    rightmostXPosOfWave -= dX;
+    
+    // False - to the left, True - to the right
+    for (CCSprite *tempSprite in [waterBatchNode children])
+    {
+        if (tempSprite.tag == kWaterWaveBackgroundTag)
+        {
+            [self moveWaterWithSprite:tempSprite andDirection:false dX:dX];
+        }
+        else if (tempSprite.tag == kWaterWaveForegroundTag)
+        {
+            [self moveWaterWithSprite:tempSprite andDirection:true dX:dX];
+        }
+    }
+}
+
+- (void)moveWaterWithSprite:(CCSprite*)sprite andDirection:(BOOL)toRight dX:(float)dX
+{
+    if (toRight == TRUE) {
+        if (sprite.position.x >= screenSize.width) {
+            sprite.position = ccp(leftmostXPosOfWave - sprite.contentSize.width, sprite.position.y);
+            leftmostXPosOfWave = sprite.position.x;
+        }
+        else
+        {
+            sprite.position = ccp(sprite.position.x + dX, sprite.position.y);
+        }
+    }
+    else
+    {
+        if (sprite.position.x <= -1 * sprite.contentSize.width) {
+            sprite.position = ccp(rightmostXPosOfWave + sprite.contentSize.width, sprite.position.y);
+            rightmostXPosOfWave = sprite.position.x;
+        }
+        else
+        {
+            sprite.position = ccp(sprite.position.x - dX, sprite.position.y);
+        }
+    }
+}
+
+- (void)setFlowing:(b2Vec2)flowingCurse
+{
+    world->SetGravity(flowingCurse);
+    
+    // Create additional water bubbles, because area of flowing is growing up now
+    int nBubblesToAdd = ABS(flowingCurse.x) * kMaxNumOfBubbleOnScene / 2;
+    for (int x = 0; x < nBubblesToAdd; x++) {
+        [self createBubble];
+    }
+    
+    // Change particle system properties
+    [psPlankton setGravity:ccp(50*flowingCurse.x, [psPlankton gravity].y)];
 }
 
 - (void)displayLevelName
 {
-    [uiLayer displayText:[GameManager sharedGameManager].levelName];
+    [uiLayer displayText:[NSString stringWithFormat:@"Level %@", [GameManager sharedGameManager].levelName]];
+}
+
+- (BOOL)loadLevelMapFromXML
+{
+    // Загружаем XML из локальной сборки, если не найден, то проверяем на сервере в интернете
+    NSError *error;
+    TBXML *xml;
+    
+    // 1. Load XML from local build
+    xml = [[[TBXML alloc] initWithXMLFile:[GameManager sharedGameManager].levelName fileExtension:@"xml" error:&error] autorelease];
+    if (error) {
+        CCLOG(@"TBXML Error-Failed to open local file:%@ %@", [error localizedDescription], [error userInfo]);
+    }
+    else
+    {
+        CCLOG(@"TBXML Loaded local file - %@", [TBXML elementName:xml.rootXMLElement]);
+        // If TBXML found a root node, process element and iterate all children
+        if (xml.rootXMLElement)
+        {
+            [self traverseLevelMapElements:xml.rootXMLElement];
+            return true;
+        }
+        else
+        {
+            CCLOG(@"TBXML local file incorrect");
+            return false;
+        }
+    }
+    
+    // 2. If nothing found on local disk, than Load XML from network
+    // Create a success block to be called when the asyn request completes
+//    NSString *urlString = [NSString stringWithFormat:@"http://192.168.2.1/%@.xml",[GameManager sharedGameManager].levelName];
+    NSString *urlString = [NSString stringWithFormat:@"http://127.0.0.1/%@.xml",[GameManager sharedGameManager].levelName];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSData *xmlData = [[NSData alloc] initWithContentsOfURL:url];
+    TBXML *xmlInet = [[TBXML alloc] initWithXMLData:xmlData error:&error];
+    
+    if (error) {
+        CCLOG(@"TBXML Error-Failed to open XML from Network:%@ %@", [error localizedDescription], [error userInfo]);
+        return false;
+    }
+    else
+    {
+        CCLOG(@"TBXML Loaded XML from Network");
+        // If TBXML found a root node, process element and iterate all children
+        if ([[TBXML elementName:xmlInet.rootXMLElement] isEqualToString:@"map"])
+        {
+            [self traverseLevelMapElements:xmlInet.rootXMLElement];
+        }
+        else
+        {
+            CCLOG(@"TBXML XML from Network has incorrect content");
+            return false;
+        }
+    }
+    
+    [xmlData release];
+    [xmlInet release];
+    
+    return true;
+}
+
+#pragma mark -
+#pragma mark XML Level Parser
+
+- (void)traverseLevelMapElements:(TBXMLElement*)element
+{
+    // Имена атрибутов
+    NSString *attribNames[] = {
+        @"x",
+        @"y",
+        @"rotation",
+        @"scaleX",
+        @"scaleY",
+        @"tintMultiplier",
+        @"alpha",
+        @"tintColor",
+        @"flipX",
+        @"flipY"
+    };
+
+    do {
+        // Obtain first attribute from element
+        TBXMLAttribute * attribute = element->firstAttribute;
+        
+        // if attribute is valid
+        if (attribute)
+        {
+            // Variable
+            float cX,cY;
+            NSString *elementName = [TBXML elementName:element];
+
+            
+            cX = [[TBXML valueOfAttributeNamed:attribNames[0] forElement:element] floatValue];
+            cY = [[TBXML valueOfAttributeNamed:attribNames[1] forElement:element] floatValue];
+            CGPoint cellPos = [Helper convertPosition:ccp(cX, cY)];
+            
+            if ([elementName isEqualToString:@"ChildCell"]) {
+                [self createChildCellAtLocation:cellPos];
+            }
+            else if ([elementName isEqualToString:@"ExitCell"])
+            {
+                [self createExitCellAtLocation:cellPos];
+            }
+            else if ([elementName isEqualToString:@"BubbleCell"])
+            {
+                [self createBubbleCellAtLocation:cellPos];
+            }
+            else if ([elementName isEqualToString:@"MagneticCell"])
+            {
+                [self createMagneticCellAtLocation:cellPos];
+            }
+            else if ([elementName isEqualToString:@"BombCell"])
+            {
+                [self createBombCellAtLocation:cellPos];
+            }
+            else if ([[elementName substringToIndex:6] isEqualToString:@"ground"])
+            {
+                [self createGroundCellInWorld:world position:cellPos name:elementName];
+            }
+            else if ([[elementName substringToIndex:3] isEqualToString:@"red"])
+            {
+                [self createRedCellInWorld:world position:cellPos name:elementName];
+            }
+            else if ([[elementName substringToIndex:5] isEqualToString:@"metal"])
+            {
+                [self createMetalCellInWorld:world position:cellPos name:elementName];
+            }
+            else if ([[elementName substringToIndex:4] isEqualToString:@"dec_"])
+            {
+                NSString *attribValue;
+                CCSprite *cSprite = [self createDecorWithSpriteFrameName:[elementName stringByAppendingString:@".png"] location:cellPos];
+
+                for (int i = 2; i < 10; i++) {
+                    attribValue = [TBXML valueOfAttributeNamed:attribNames[i] forElement:element];
+                    if (attribValue == NULL) {
+                        continue;
+                    }
+                    
+                    switch (i) {
+                        // Rotation
+                        case 2:
+                            [cSprite setRotation:[attribValue floatValue]];
+                            break;
+                        // ScaleX
+                        case 3:
+                            [cSprite setScaleX:[attribValue floatValue]];
+                            break;
+                        // ScaleY
+                        case 4:
+                            [cSprite setScaleY:[attribValue floatValue]];
+                            break;
+                        // TintMultiplier - 5 Alpha - 6
+                        case 5 ... 6:
+                            [cSprite setOpacity:255 * [attribValue floatValue]];
+                            break;
+                        // Tint
+                        case 7:
+                        {
+                            [cSprite setColor:ccc3FromUInt([attribValue intValue])];
+                            break;
+                        }
+                        // FlipX
+                        case 8:
+                            [cSprite setFlipX:[attribValue boolValue]];
+                            break;
+                        // FlipY
+                        case 9:
+                            [cSprite setFlipY:[attribValue boolValue]];
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                }
+            }
+            else if ([elementName isEqualToString:@"Settings"])
+            {
+                int i = [[TBXML valueOfAttributeNamed:@"maxCellsCount" forElement:element] intValue];
+                [[GameManager sharedGameManager] setNumOfMaxCells:i];
+                i = [[TBXML valueOfAttributeNamed:@"needCellsCount" forElement:element] intValue];
+                [[GameManager sharedGameManager] setNumOfNeededCells:i];
+            }
+        }
+        
+        // if the element has child elements, process them
+        if (element->firstChild)
+            [self traverseLevelMapElements:element->firstChild];
+        
+        // Obtain next sibling element
+    } while ((element = element->nextSibling));
 }
 
 - (id)init
@@ -217,15 +641,30 @@
 #if DEBUG_DRAW
         [self setupDebugDraw];
 #endif
-        [self scheduleUpdate];
+        // load physics definitions
+        NSString *sceneBodiesFileName = [NSString stringWithFormat:@"scene%@bodies.plist", [[GameManager sharedGameManager].levelName substringFromIndex:2]];
+        [[GB2ShapeCache sharedShapeCache] addShapesWithFile:sceneBodiesFileName];
+        [[GB2ShapeCache sharedShapeCache] addShapesWithFile:@"food_bodies.plist"];
         
         // pre load the sprite frames from the texture atlas
-        sceneSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"genbyatlas.pvr.ccz"];
+        sceneSpriteBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"genbyatlas.pvr.ccz" capacity:40];
+        decorsBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"ingame_decors.pvr.ccz"];
+        waterBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"water_tiles.pvr.ccz" capacity:98];
+        superpowerBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"superpower.pvr.ccz"];
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"genbyatlas.plist"];
+        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"ingame_decors.plist"];
+        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"water_tiles.plist"];
+        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"superpower.plist"];
+        [self addChild:decorsBatchNode z:-2];
         [self addChild:sceneSpriteBatchNode z:1 tag:kMainSpriteBatchNode];
+        [self addChild:superpowerBatchNode z:2];
+        [self addChild:waterBatchNode z:3];
+        
+        // Add animation cache
+        [[CCAnimationCache sharedAnimationCache] addAnimationsWithFile:@"genby_anim.plist"];
         
         // add ParentCell (main hero will always be under the finger)
-        parentCell = [[[ParentCell alloc] initWithWorld:world atLocation:ccp(100, 100)] autorelease];
+        parentCell = [[[ParentCell alloc] initWithWorld:world atLocation:ccp(100, 100) batchNodeForPower:superpowerBatchNode] autorelease];
         [sceneSpriteBatchNode addChild:parentCell z:10 tag:kParentCellSpriteTagValue];
         
         // Draw Node for drawing DisJoints, ParentCell Radius, Magnetic Forces
@@ -233,14 +672,24 @@
         [self addChild:drawNode z:0 tag:kDrawNodeTagValue];
         [drawNode release];
         
+        [self loadLevelMapFromXML];
+        
         // Create water bubbles
         for (int x = 0; x < kMaxNumOfBubbleOnScene; x++) {
             [self createBubble];
         }
         
+        // Create water blicks
+        for (int x = 0; x < kMaxNumOfBubbleOnScene; x++) {
+            [self createWaterBlick];
+        }
+        [self createWater];
+        
+        [self scheduleUpdate];
+        
         // Create plankton particles
         psPlankton = [CCParticleSystemQuad particleWithFile:@"ps_plankton.plist"];
-        [self addChild:psPlankton z:-1];
+        [self addChild:psPlankton z:-3];
 //        psPlankton.position = ccp(screenSize.width * 0.5, screenSize.height);
     
         // Фиксируем прогресс пройденных уровней. Пройдя уровень сравниваем со значением макс доступного и если меньше то увеличиваем на один
@@ -252,7 +701,7 @@
         }
         
         // Display level name with delay
-        [self scheduleOnce:@selector(displayLevelName) delay:0.5];
+        [self scheduleOnce:@selector(displayLevelName) delay:0.4];
     }
     return self;
 }
@@ -290,9 +739,6 @@
     HMVectorNode *drawNode = (HMVectorNode*)[self getChildByTag:kDrawNodeTagValue];
     [drawNode clear];
     
-    // Draw ParentCell Sensor Field
-    [parentCell drawSensorField];
-    
     // Draw lines for distance joints between ChildCell and ParentCell
     [parentCell drawDisJoints];
 
@@ -319,17 +765,33 @@
 
 - (void)displayGameOverLayer
 {
-    [uiLayer setVisible:FALSE];
-    ccColor4B c = ccc4(255, 255, 255, 0); // Black transparent background
+    [uiLayer hideUI];
+    ccColor4B c = ccc4(0, 0, 0, 0); // Black transparent background
     CompleteLevelLayer *gameOverLayer = [[[CompleteLevelLayer alloc] initWithColor:c] autorelease];
     [self addChild:gameOverLayer z:10 tag:kGameOverLayer];
+    // Останавливаем всю анимацию и жизнь в фоне
     [self setIsTouchEnabled:NO];
     [self pauseSchedulerAndActions];
+    for (CCNode *tempNode in [sceneSpriteBatchNode children]) {
+        [tempNode pauseSchedulerAndActions];
+    }
 }
 
 - (void)showTipsElement:(CCNode*)element delay:(float)delay
 {
     [element runAction:[CCSequence actions:[CCDelayTime actionWithDuration:delay], [CCFadeIn actionWithDuration:1], nil]];
+}
+
+- (void)hideTipsElement:(CCNode*)element delay:(float)delay
+{
+    [element runAction:[CCSequence actions:
+                        [CCDelayTime actionWithDuration:delay],
+                        [CCFadeOut actionWithDuration:1],
+                        [CCCallBlockN actionWithBlock:
+                         ^(CCNode *node){
+                             [node removeFromParentAndCleanup:YES];
+                         }],
+                        nil]];
 }
 
 - (void)calcScore
@@ -402,6 +864,15 @@
         }
     }
     
+    // Check Complete level 20
+    if (!gameState.completedLevel20) {
+        if (gameManager.curLevel == kGameLevel20 && gameManager.hasLevelWin) {
+            CCLOG(@"Achievement Complete! Finished level 20");
+            gameState.completedLevel20 = true;
+            [[GCHelper sharedInstance] reportAchievement:kAchievementLevel20 percentComplete:100.0];
+        }
+    }
+    
     // Check Kill 100 cells
     if (gameState.cellsKilled <= kAchievementCellDestroyerNum)
     {
@@ -468,14 +939,18 @@
     }
     
     // Adjust sprite for physics bodies
-    for (b2Body *b = world->GetBodyList(); b != NULL; b = b->GetNext()) {
-        if (b->GetUserData() != NULL) {
+    for (b2Body *b = world->GetBodyList(); b != NULL; b = b->GetNext())
+    {
+        if (b->GetUserData() != NULL)
+        {
             Box2DSprite *sprite = (Box2DSprite*) b->GetUserData();
-            sprite.position = ccp(b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO);
-            sprite.rotation = CC_RADIANS_TO_DEGREES(b->GetAngle() * -1);
-            // Mark body for delete
-            if (sprite.markedForDestruction) {
-                [self markBodyForDestruction:sprite];
+            if (sprite != 0) {
+                sprite.position = ccp(b->GetPosition().x * PTM_RATIO, b->GetPosition().y * PTM_RATIO);
+                sprite.rotation = CC_RADIANS_TO_DEGREES(b->GetAngle() * -1);
+                // Mark body for delete
+                if (sprite.markedForDestruction) {
+                    [self markBodyForDestruction:sprite];
+                }
             }
         }
     }
@@ -490,9 +965,17 @@
         if ([tempSprite isKindOfClass:[GameCharacter class]])
         {
             GameCharacter *tempChar = (GameCharacter*)tempSprite;
+            // Заставляем осьминожку грустить если еда пропадает
+            if (tempChar.gameObjectType == kChildCellType && tempChar.characterState == kStateDead) {
+                [exitCell changeState:kStateSad];
+            }
             [tempChar updateStateWithDeltaTime:dt andListOfGameObjects:listOfGameObjects];
+            
         }
     }
+    
+    // Двигаем водные волны
+    [self updateWater:dt];
     
     // Обновляем счетчик UI, если это нужно
     GameManager *gameManager = [GameManager sharedGameManager];

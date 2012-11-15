@@ -9,7 +9,11 @@
 typedef enum {
     kStateSpawning,         // Начальное состояние для всех объектов
     kStateIdle,             // ParentCell without touch, ChildCell вне радиуса действия ParentCell
-    kStateBreathing,
+    kStatePlayingWhenIdle, // Genby двигает щупальцами от нечего делать
+    kStateSad,
+    kStateOpenedMouth,
+    kStateCloseMouth,
+    kStateEating,
     kStateTakingDamage,     // ChildCell при соприкосновении с RedCell
     kStateDead,             // ChildCell при смерти
     kStateTraveling,        // ParentCell при нажатии на экран

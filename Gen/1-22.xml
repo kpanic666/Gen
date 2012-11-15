@@ -1,0 +1,25 @@
+<map>
+<dec_plant7 x='773' y='77' rotation='15' />
+<dec_plant7 x='713' y='69' flipX='YES' />
+<dec_plant7 x='732' y='83' rotation='15' scaleX='0.578' scaleY='0.649' alpha='0.6' />
+<dec_plant7 x='755' y='73' rotation='-15' scaleX='0.578' scaleY='0.649' alpha='0.6' />
+<dec_plant7 x='694' y='80' scaleX='0.884' scaleY='0.756' />
+<dec_plastic1 x='394' y='616' />
+<dec_stones2 x='316' y='588' />
+<dec_stones3 x='369' y='565' />
+<dec_anchor x='320' y='602' />
+<dec_plant4 x='294' y='509' />
+<dec_star x='855' y='569' />
+<dec_plant3 x='845' y='508' />
+<dec_plant1 x='816' y='512' />
+<dec_plant1 x='827' y='588' />
+<redCell1 x='585' y='151' />
+<groundCell2 x='453' y='47' />
+<groundCell3 x='611' y='559' />
+<groundCell1 x='740' y='107' />
+<redCell1 x='585' y='450' />
+<ExitCell x='867' y='308' />
+<MagneticCell x='725' y='215' />
+<MagneticCell x='482' y='387' />
+<Settings maxCellsCount='0' needCellsCount='9' />
+</map>

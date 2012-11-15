@@ -9,40 +9,23 @@
 #import "ChildCell.h"
 #import "GameManager.h"
 #import "GameState.h"
+#import "GB2ShapeCache.h"
 
 @implementation ChildCell
 
 - (void)createBodyAtLocation:(CGPoint)location
 {
     b2BodyDef bodyDef;
-    bodyDef.type = b2_dynamicBody;
-    bodyDef.position = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO);
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position = b2Vec2(location.x/PTM_RATIO, location.y/PTM_RATIO);
     bodyDef.linearDamping = 0.1f;
     bodyDef.allowSleep = FALSE;
-    body = world->CreateBody(&bodyDef);
+	body = world->CreateBody(&bodyDef);
     body->SetUserData(self);
     
-    b2FixtureDef fixtureDef;
-    b2CircleShape shape;
-    // Создаем тела и спрайты с 2мя разными размерами
-    float scale = CCRANDOM_0_1();
-    if (scale <= 0.5f) {
-        scale = 0.8f;
-        fixtureDef.density = 3.0;
-        fixtureDef.friction = 0.1;
-        fixtureDef.restitution = 0.4;
-    } else {
-        scale = 1.0f;
-        fixtureDef.density = 5.0;
-        fixtureDef.friction = 0.3;
-        fixtureDef.restitution = 0.1;
-    }
-    [self setScale:scale];
-    shape.m_radius = self.contentSize.width * scale / 4 / PTM_RATIO;     // Делим на 4 ( на 2 чтоб получить радиус и еще на 2, чтобы компенсировать графику с подстветкой по краям
-    fixtureDef.shape = &shape;
-    fixtureDef.filter.categoryBits = kChildCellFilterCategory;
-    fixtureDef.filter.maskBits = 0xFFFF ^ kBubbledChildCellFilterCategory;
-    body->CreateFixture(&fixtureDef);
+    // add the fixture definitions to the body
+	[[GB2ShapeCache sharedShapeCache] addFixturesToBody:body forShapeName:[self foodTextureName]];
+    [self setAnchorPoint:[[GB2ShapeCache sharedShapeCache] anchorPointForShape:[self foodTextureName]]];
 }
 
 - (void)updateStateWithDeltaTime:(ccTime)deltaTime andListOfGameObjects:(CCArray *)listOfGameObjects
@@ -65,37 +48,30 @@
     
     if (characterState == kStateSoul && [self numberOfRunningActions] == 0) {
         if (body == nil) {
-            
-            // Уменьшает клетку
-            self.scale = 0.7;
-            
-            // Определяем следующую точку для произвольного движения внутри выхода
-            if (!exitCellSprite) {
-                exitCellSprite = (GameCharacter*) [[self parent] getChildByTag:kExitCellSpriteTagValue];
-            }
-            CGRect exitBoundingBox = [exitCellSprite adjustedBoudingBox];
-            int yPositionInExitCell = exitBoundingBox.origin.y + random() % (int)exitBoundingBox.size.height;
-            int xPositionInExitCell = exitBoundingBox.origin.x + random() % (int)exitBoundingBox.size.width;
-            
-            // Рэндомно двигаем клетки внутри выхода
-            id randomMove = [CCSequence actions:
-                              [CCMoveTo actionWithDuration:2.5f position:ccp(xPositionInExitCell, yPositionInExitCell)],
-                              [CCDelayTime actionWithDuration:0.1f],
-                              nil];
-            [self runAction:randomMove];
+
+            [self removeFromParentAndCleanup:YES];
         }
     }
     
-    if (characterState == kStateBubbling) {
-        // Уничтожаем все джойнты кроме RopeJoint
+    if (characterState == kStateBubbling)
+    {
+        int i = 0;
+        
+        // Уничтожаем все джойнты кроме RevoluteJoint
         for (b2JointEdge *edge = body->GetJointList(); edge; edge = edge->next)
         {
-            if (edge->joint->GetType() != e_ropeJoint) {
+            if (edge->joint->GetUserData() != @"BubbleJoint") {
                 world->DestroyJoint(edge->joint);
+            }
+            else
+            {
+                i++;
             }
         }
         
-        [self changeState:kStateBubbled];
+        if (i>0) {
+            [self changeState:kStateBubbled];
+        }
     }
 }
 
@@ -103,7 +79,21 @@
 {
     if ((self = [super init])) {
         world = theWorld;
-        [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_idle.png"]];
+        _dontCount = false;
+        // Выбираем рэндомную текстуру еды для объекта и сохраняем в глобальную переменную для дальнейшего использования
+        NSString *foodNames[] = {
+            @"food_apple",
+            @"food_bigmac",
+            @"food_cake",
+            @"food_fish",
+            @"food_fry",
+            @"food_hotdog",
+            @"food_weed",
+            @"food_chicken"
+        };
+        [self setFoodTextureName:foodNames[rand()%8]];
+        [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[[self foodTextureName] stringByAppendingString:@".png"]]];
+        [self setPosition:location];
         gameObjectType = kChildCellType;
         characterState = kStateSpawning;
         characterHealth = kChildCellHealth;
@@ -146,7 +136,9 @@
             
             // Destroy Physics body
             self.markedForDestruction = YES;
-            [GameManager sharedGameManager].numOfTotalCells--;
+            if (_dontCount == false) {
+                [GameManager sharedGameManager].numOfTotalCells--;
+            }
             
             // Count number of destroyed cells for all time for achievement
             if ([GameState sharedInstance].cellsKilled < kAchievementCellDestroyerNum) {
@@ -165,7 +157,7 @@
         {
             // Нужно менять вид клетки. Это состояние принимается клеткой когда был создан джойнт
             PLAYSOUNDEFFECT(@"CHILDCELL_CONNECTED");
-            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_connected.png"]];
+            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[[self foodTextureName] stringByAppendingString:@"_prsd.png"]]];
             break;
         }
             
@@ -177,7 +169,7 @@
         {
             // Меняется внешний вид клетки на обычный. В этом состояний объект может продолжать двигаться по инерции,
             // но на нее уже не влияет игрок.
-            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_idle.png"]];
+            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[[self foodTextureName] stringByAppendingString:@".png"]]];
             
             // Если настройки фильтрации коллизий остались после пузыря, то меняем их на исходные и останавливаем ячейку
             b2Fixture *childFixture = body->GetFixtureList();
@@ -198,9 +190,11 @@
         case kStateBeforeSoul:
         {
             self.markedForDestruction = YES;
-            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"childcell_idle.png"]];
-            [GameManager sharedGameManager].numOfTotalCells--;
-            [GameManager sharedGameManager].numOfSavedCells++;
+            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[[self foodTextureName] stringByAppendingString:@".png"]]];
+            if (_dontCount == false) {
+                [GameManager sharedGameManager].numOfTotalCells--;
+                [GameManager sharedGameManager].numOfSavedCells++;
+            }
             break;
         }
             
@@ -211,22 +205,19 @@
             
             PLAYSOUNDEFFECT(@"CHILDCELL_SOUL_1");
             
-            // 1. Меняем цвет у умерших клеток
-            self.color = ccc3(255, 0, 253);
-            self.opacity = 200;
-            
             // 2. Двигаем мертвые клетки (души) в центр выхода
-            int timeToMove = random() % 3 + 1;   // 1-4 sec
             exitCellSprite = (GameCharacter*) [[self parent] getChildByTag:kExitCellSpriteTagValue];
-            CCEaseBounceIn *moveInsideElastic = [CCEaseBounceIn actionWithAction:[CCMoveTo actionWithDuration:timeToMove position:exitCellSprite.position]];
-            [self runAction:moveInsideElastic];
+            id moveToMouth = [CCMoveTo actionWithDuration:0.2 position:exitCellSprite.position];
+            id scaleDown = [CCScaleTo actionWithDuration:0.2 scale:0];
+            id fadeOut = [CCFadeOut actionWithDuration:0.2];
+            id spawnScaleFade = [CCSpawn actions:moveToMouth, fadeOut, scaleDown, nil];
+            [self runAction:spawnScaleFade];
 
             break;
         }
             
         case kStateDead:
         {
-            int frameNum = random() % 2 + 1;
             float travelTime = CCRANDOM_0_1() + 1;
             float rotateTime = CCRANDOM_0_1() * 2;
             float rotateAngle = 360;
@@ -235,9 +226,8 @@
             int yRandPosAtSceen = cellBB.origin.y + random() % (int)cellBB.size.height;
             int xRandPosAtSceen = cellBB.origin.x + random() % (int)cellBB.size.width;
             
-            // Change sprite frame to random RedCell particle. Уменьшаем клетку в размере
-            NSString *frameName = [NSString stringWithFormat:@"redcell_particle%d.png", frameNum];
-            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:frameName]];
+            // Change sprite frame to stale frame for apropriate food
+            [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:[[self foodTextureName] stringByAppendingString:@"_stale.png"]]];
             
             
             // Move to random position at random speed, rotate and fade after target position
@@ -262,11 +252,13 @@
             body->SetLinearVelocity(b2Vec2_zero);
             body->SetAngularVelocity(0);
             
+            // Меняем фильтры столкновений, чтобы ячейки сталкивались только с красными стенами
             b2Fixture *childFixture = body->GetFixtureList();
             b2Filter childFilter = childFixture->GetFilterData();
             childFilter.categoryBits = kBubbledChildCellFilterCategory;
             childFilter.maskBits = kRedCellFilterCategory;
             childFixture->SetFilterData(childFilter);
+            
             break;
         }
             

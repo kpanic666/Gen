@@ -7,7 +7,6 @@
 //
 
 #import "Scene2ActionLayer.h"
-#import "MetalCell.h"
 
 @implementation Scene2ActionLayer
 
@@ -17,37 +16,43 @@
         uiLayer = box2DUILayer;
         CGPoint cellPos;
         
-        // load physics definitions
-        [[GB2ShapeCache sharedShapeCache] addShapesWithFile:@"scene2bodies.plist"];
-        
         // add background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.png"];
+        CCSprite *background = [CCSprite spriteWithFile:@"background1.jpg"];
         [background setPosition:[Helper screenCenter]];
-        [self addChild:background z:-2];
+        [self addChild:background z:-4];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
-        // add ChildCells
-        for (int i = 0; i < kScene2Total; i++) {
-            [self createChildCellAtLocation:ccp(screenSize.width*0.1 + i * 5, screenSize.height*0.25 + i * 5)];
+        // Add moving walls
+        cellPos = [Helper convertPosition:ccp(450, 222)];
+        [self createMovingWallAtLocation:cellPos vertical:YES negOffset:0 posOffset:5.0f speed:4];
+        cellPos = [Helper convertPosition:ccp(594, 562)];
+        [self createMovingWallAtLocation:cellPos vertical:YES negOffset:-5.0f posOffset:0 speed:4];
+        cellPos = [Helper convertPosition:ccp(732, 222)];
+        [self createMovingWallAtLocation:cellPos vertical:YES negOffset:0 posOffset:5.0f speed:4];
+        
+        // Add Tutorial text and arrows
+        CGSize toExitTextSize = CGSizeMake(100, 30);
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            toExitTextSize = CGSizeMake(toExitTextSize.width * 2, toExitTextSize.height * 2);
         }
+
+        // ----Tip----
+        CCSprite *info = [CCSprite spriteWithSpriteFrameName:@"tut_lightbulb.png"];
+        info.position = [Helper convertPosition:ccp(527, 47)];
+        info.opacity = 0;
+        [sceneSpriteBatchNode addChild:info z:-2];
+        CCLabelTTF *infoText = [CCLabelTTF labelWithString:@"Collect as many food as you can" dimensions:toExitTextSize hAlignment:kCCTextAlignmentCenter lineBreakMode:kCCLineBreakModeWordWrap fontName:@"Verdana" fontSize:[Helper convertFontSize:12] ];
+        infoText.color = ccBLACK;
+        infoText.opacity = 0;
+        infoText.position = ccp(info.position.x + info.contentSize.width*0.7 + infoText.contentSize.width*0.5, info.position.y);
+        [self addChild:infoText z:-2];
         
-        // add RedCells
-        cellPos = [Helper convertPosition:ccp(442, 544)];
-        [self createRedCellInWorld:world position:cellPos name:@"redCell1"];
-        cellPos = [Helper convertPosition:ccp(445, 167)];
-        [self createRedCellInWorld:world position:cellPos name:@"redCell2"];
-        
-        // add ExitCell (выход) в который нужно загнать клетки, чтобы их собрать и пройти уровень
-        cellPos = [Helper convertPosition:ccp(834, 354)];
-        exitCell = [[[ExitCell alloc] initWithWorld:world atLocation:cellPos] autorelease];
-        [sceneSpriteBatchNode addChild:exitCell z:-1 tag:kExitCellSpriteTagValue];
-        
-        // add MetalCell with Pin at Center
-        cellPos = [Helper convertPosition:ccp(442, 352)];
-        MetalCell *metalCell1 = [MetalCell metalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        [self addChild:metalCell1 z:-1];
-        [sceneSpriteBatchNode addChild:metalCell1.pin];
+        // Animating tips
+        [self showTipsElement:info delay:2];
+        [self showTipsElement:infoText delay:2];
+        [self hideTipsElement:info delay:10];
+        [self hideTipsElement:infoText delay:10];
     }
     return self;
 }

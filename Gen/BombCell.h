@@ -10,7 +10,10 @@
 
 @interface BombCell : ChildCell
 {
-    BOOL activated;
-}
+    BOOL activated; // была активирована, но еще не взорвалась
+    BOOL exploded; // была взорвана
+} 
 
+@property (nonatomic, retain) CCAnimation *boomAnim;
+@property (nonatomic, retain) CCAnimation *timerAnim;
 @end

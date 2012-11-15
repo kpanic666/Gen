@@ -1,0 +1,24 @@
+<map>
+<redCell5 x='468' y='340' />
+<redCell1 x='750' y='501' />
+<redCell3 x='843' y='292' />
+<redCell2 x='153' y='350' />
+<redCell4 x='285' y='134' />
+<groundCell2 x='807' y='107' />
+<groundCell1 x='390' y='616' />
+<ExitCell x='166' y='556' />
+<ChildCell x='746' y='442' />
+<ChildCell x='496' y='552' />
+<ChildCell x='367' y='519' />
+<ChildCell x='748' y='346' />
+<ChildCell x='185' y='411' />
+<ChildCell x='718' y='188' />
+<ChildCell x='305' y='237' />
+<ChildCell x='547' y='32' />
+<ChildCell x='499' y='76' />
+<ChildCell x='440' y='33' />
+<ChildCell x='353' y='35' />
+<ChildCell x='410' y='78' />
+<ChildCell x='306' y='72' />
+<Settings maxCellsCount='13' needCellsCount='11' />
+</map>

@@ -10,9 +10,26 @@
 
 @interface ExitCell : Box2DSprite
 {
-    CCSprite *glowUndercover;
+    CGPoint leftEyeInitPos;
+    CGPoint rightEyeInitPos;
+    CGPoint tongueInitPos;
+    
+    float millisecondsStayingIdle;
+    int foodInSensorCounter;
 }
 
-@property (nonatomic, readwrite, retain) CCSprite *glowUndercover;
+@property (nonatomic, retain) CCSprite *leftEye;
+@property (nonatomic, retain) CCSprite *rightEye;
+@property (nonatomic, retain) CCSprite *tongue;
+@property (nonatomic, retain) CCSprite *blink;
+
+// Animations
+@property (nonatomic, retain) CCAnimation *tentaclesAnim;
+@property (nonatomic, retain) CCAnimation *tongueAnim;
+@property (nonatomic, retain) CCAnimation *blinkAnim;
+@property (nonatomic, retain) CCAnimation *openMouthAnim;
+@property (nonatomic, retain) CCAnimation *closeMouthAnim;
+@property (nonatomic, retain) CCAnimation *eatingAnim;
+@property (nonatomic, retain) CCAnimation *sadAnim;
 
 @end

@@ -1,0 +1,13 @@
+<map>
+<redCell1 x='644' y='448' />
+<groundCell1 x='271' y='83' />
+<groundCell2 x='290' y='421' />
+<ExitCell x='854' y='103' />
+<ChildCell x='44' y='544' />
+<ChildCell x='60' y='445' />
+<ChildCell x='76' y='346' />
+<BubbleCell x='208' y='544' />
+<BubbleCell x='208' y='445' />
+<BubbleCell x='208' y='346' />
+<Settings maxCellsCount='3' needCellsCount='3' />
+</map>

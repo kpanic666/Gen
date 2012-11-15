@@ -17,6 +17,7 @@
 #import "MovingWall.h"
 #import "BubbleCell.h"
 #import "GroundCell.h"
+#import "MetalCell.h"
 #import "RedCell.h"
 #import "ParentCell.h"
 #import "Helper.h"
@@ -37,22 +38,39 @@
     ContactListener *contactListener;
 	GLESDebugDraw *m_debugDraw;
     CCSpriteBatchNode *sceneSpriteBatchNode;
+    CCSpriteBatchNode *decorsBatchNode;
+    CCSpriteBatchNode *waterBatchNode;
+    CCSpriteBatchNode *superpowerBatchNode;
     NSMutableArray *bodiesToDestroy;
     ParentCell *parentCell;
     ExitCell *exitCell;
     bool gameOver;
     CCParticleSystemQuad *psPlankton;
+    float leftmostXPosOfWave;
+    float rightmostXPosOfWave;
 }
 
 - (id)initWithBox2DUILayer:(Box2DUILayer*)box2DUILayer;
 - (void)markBodyForDestruction:(Box2DSprite*)obj;
 - (void)destroyBodies;
+- (void)setFlowing:(b2Vec2)flowingCurse;
+
+// Конструкторы игровых объектов
+- (CCSprite*)createDecorWithSpriteFrameName:(NSString*)name location:(CGPoint)location;
 - (ChildCell*)createChildCellAtLocation:(CGPoint)location;
+- (ExitCell*)createExitCellAtLocation:(CGPoint)location;
 - (BombCell*)createBombCellAtLocation:(CGPoint)location;
+- (MagneticCell*)createMagneticCellAtLocation:(CGPoint)location;
 - (BubbleCell*)createBubbleCellAtLocation:(CGPoint)location;
 - (MovingWall*)createMovingWallAtLocation:(CGPoint)location vertical:(BOOL)vertical;
+- (MovingWall*)createMovingWallAtLocation:(CGPoint)location vertical:(BOOL)vertical negOffset:(float32)negOffset posOffset:(float32)posOffset speed:(float32)speed;
 - (GroundCell*)createGroundCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name;
+- (MetalCell*)createMetalCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name;
+- (MetalCell*)createMetalCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name withPinAtPos:(CGPoint)pinPos;
 - (RedCell*)createRedCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name;
+- (RedCell*)createRedCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name withPinAtPos:(CGPoint)pinPos;
+
 - (void)showTipsElement:(CCNode*)element delay:(float)delay;
+- (void)hideTipsElement:(CCNode*)element delay:(float)delay;
 
 @end

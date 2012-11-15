@@ -65,7 +65,7 @@
 	for (CCMenuItem* item in self.children)
 	{
 		// Calculate the position of our menu item. 
-		item.position = CGPointMake(self.position.x + col * padding.x + (iPageCount * winSize.width), self.position.y - row * padding.y);
+		item.position = CGPointMake(self.position.x + col * padding.x + (iPageCount * winSize.width * 0.85), self.position.y - row * padding.y);
 		
 		// Increment our positions for the next item(s).
 		++col;
@@ -256,7 +256,7 @@
 	
 	return (bVerticalPaging) ?
 		CGPointMake(menuOrigin.x,menuOrigin.y-(iCurrentPage*winSize.height))
-		: CGPointMake((menuOrigin.x-(iCurrentPage*winSize.width)),menuOrigin.y);
+		: CGPointMake((menuOrigin.x-(iCurrentPage*winSize.width * 0.85)),menuOrigin.y);
 }
 
 - (CGPoint) GetPositionOfCurrentPageWithOffset:(float)offset
@@ -265,7 +265,7 @@
 	
 	return (bVerticalPaging) ?
 	CGPointMake(menuOrigin.x,menuOrigin.y-(iCurrentPage*winSize.height)+offset)
-	: CGPointMake((menuOrigin.x-(iCurrentPage*winSize.width)+offset),menuOrigin.y);
+	: CGPointMake((menuOrigin.x-(iCurrentPage*winSize.width * 0.85)+offset),menuOrigin.y);
 }
 
 // Returns the swiping dead zone. 

@@ -1,0 +1,14 @@
+<map>
+<redCell2 x='444' y='128' />
+<redCell1 x='442' y='544' />
+<ChildCell x='131' y='313' />
+<ChildCell x='66' y='284' />
+<ChildCell x='60' y='335' />
+<ChildCell x='110' y='362' />
+<ChildCell x='60' y='397' />
+<ChildCell x='137' y='414' />
+<ChildCell x='181' y='362' />
+<ChildCell x='196' y='313' />
+<ExitCell x='862' y='328' />
+<Settings maxCellsCount='8' needCellsCount='6' />
+</map>

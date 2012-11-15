@@ -1,0 +1,24 @@
+<map>
+<groundCell2 x='865' y='220' />
+<groundCell1 x='103' y='236' />
+<redCell2 x='366' y='320' />
+<redCell1 x='593' y='315' />
+<ExitCell x='480' y='564' />
+<ChildCell x='305' y='72' />
+<MagneticCell x='260' y='375' />
+<MagneticCell x='203' y='288' />
+<MagneticCell x='741' y='278' />
+<MagneticCell x='685' y='364' />
+<ChildCell x='351' y='67' />
+<ChildCell x='397' y='61' />
+<ChildCell x='444' y='57' />
+<ChildCell x='493' y='56' />
+<ChildCell x='539' y='57' />
+<ChildCell x='587' y='59' />
+<ChildCell x='637' y='65' />
+<ChildCell x='684' y='74' />
+<ChildCell x='260' y='87' />
+<ChildCell x='225' y='50' />
+<ChildCell x='715' y='39' />
+<Settings maxCellsCount='12' needCellsCount='8' />
+</map>

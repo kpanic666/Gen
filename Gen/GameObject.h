@@ -14,12 +14,10 @@
 
 @interface GameObject : CCSprite {
     BOOL isActive;
-    BOOL reactsToScreenBoundaries;
     GameObjectType gameObjectType;
 }
 
 @property (readwrite) BOOL isActive;
-@property (readwrite) BOOL reactsToScreenBoundaries;
 @property (readwrite) GameObjectType gameObjectType;
 
 - (void)changeState:(CharacterStates)newState;
