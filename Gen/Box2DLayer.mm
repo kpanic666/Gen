@@ -885,42 +885,31 @@ ccc3FromUInt(const uint bytes)
     // Check First Fail, Unwary, Destroyer (1, 50, 100 spoiled food)
     if (gameState.cellsKilled > 0 && gameState.cellsKilled <= kAchievementCellDestroyerNum)
     {
-        float pctComplete;
-        
         if (gameState.cellsKilled < kAchievementFirstFailNum) {
-            pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementFirstFailNum) * 100.0, 100);
-            [[GCHelper sharedInstance] reportAchievement:kAchievementFirstFail percentComplete:pctComplete];
-            pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementUnwaryNum) * 100.0, 100);
-            [[GCHelper sharedInstance] reportAchievement:kAchievementUnwary percentComplete:pctComplete];
-            pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementCellDestroyerNum) * 100.0, 100);
-            [[GCHelper sharedInstance] reportAchievement:kAchievementCellDestroyer percentComplete:pctComplete];
+            [self calcAndReportAchievement:kAchievementFirstFail curValue:gameState.cellsKilled maxValue:kAchievementFirstFailNum];
+            [self calcAndReportAchievement:kAchievementUnwary curValue:gameState.cellsKilled maxValue:kAchievementUnwaryNum];
+            [self calcAndReportAchievement:kAchievementCellDestroyer curValue:gameState.cellsKilled maxValue:kAchievementCellDestroyerNum];
         }
         else if (gameState.cellsKilled < kAchievementUnwaryNum)
         {
             if (!gameState.completedFirstFail) {
                 gameState.completedFirstFail = true;
-                pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementFirstFailNum) * 100.0, 100);
-                [[GCHelper sharedInstance] reportAchievement:kAchievementFirstFail percentComplete:pctComplete];
+                [self calcAndReportAchievement:kAchievementFirstFail curValue:gameState.cellsKilled maxValue:kAchievementFirstFailNum];
             }
-            pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementUnwaryNum) * 100.0, 100);
-            [[GCHelper sharedInstance] reportAchievement:kAchievementUnwary percentComplete:pctComplete];
-            pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementCellDestroyerNum) * 100.0, 100);
-            [[GCHelper sharedInstance] reportAchievement:kAchievementCellDestroyer percentComplete:pctComplete];
+            [self calcAndReportAchievement:kAchievementUnwary curValue:gameState.cellsKilled maxValue:kAchievementUnwaryNum];
+            [self calcAndReportAchievement:kAchievementCellDestroyer curValue:gameState.cellsKilled maxValue:kAchievementCellDestroyerNum];
         }
         else if (gameState.cellsKilled < kAchievementCellDestroyerNum)
         {
             if (!gameState.completedUnwary) {
                 gameState.completedUnwary = true;
-                pctComplete = MIN(((float)gameState.cellsKilled / (int)kAchievementUnwaryNum) * 100.0, 100);
-                [[GCHelper sharedInstance] reportAchievement:kAchievementUnwary percentComplete:pctComplete];
+                [self calcAndReportAchievement:kAchievementUnwary curValue:gameState.cellsKilled maxValue:kAchievementUnwaryNum];
             }
-            pctComplete = ((float)gameState.cellsKilled / (int)kAchievementCellDestroyerNum) * 100.0;
-            [[GCHelper sharedInstance] reportAchievement:kAchievementCellDestroyer percentComplete:pctComplete];
+            [self calcAndReportAchievement:kAchievementCellDestroyer curValue:gameState.cellsKilled maxValue:kAchievementCellDestroyerNum];
         }
         else
         {
-            pctComplete = ((float)gameState.cellsKilled / (int)kAchievementCellDestroyerNum) * 100.0;
-            [[GCHelper sharedInstance] reportAchievement:kAchievementCellDestroyer percentComplete:pctComplete];
+            [self calcAndReportAchievement:kAchievementCellDestroyer curValue:gameState.cellsKilled maxValue:kAchievementCellDestroyerNum];
             // Прекращает подсчитывать кол-во уничтоженной еды после получения макс ачивки
             if (gameState.cellsKilled >= kAchievementCellDestroyerNum) {
                 gameState.cellsKilled++;
@@ -928,7 +917,48 @@ ccc3FromUInt(const uint bytes)
         }
     }
     
+    // Check Light Hunger, I feel Good, On no no (50, 150, 300 eaten food)
+    if (gameState.foodEaten > 0 && gameState.foodEaten <= kAchievementOhNoNoNum)
+    {
+        if (gameState.foodEaten < kAchievementLighthungerNum) {
+            [self calcAndReportAchievement:kAchievementLighthunger curValue:gameState.foodEaten maxValue:kAchievementLighthungerNum];
+            [self calcAndReportAchievement:kAchievementIFeelGood curValue:gameState.foodEaten maxValue:kAchievementIFeelGoodNum];
+            [self calcAndReportAchievement:kAchievementOhNoNo curValue:gameState.foodEaten maxValue:kAchievementOhNoNoNum];
+        }
+        else if (gameState.foodEaten < kAchievementIFeelGoodNum)
+        {
+            if (!gameState.completedLightHunger) {
+                gameState.completedLightHunger = true;
+                [self calcAndReportAchievement:kAchievementLighthunger curValue:gameState.foodEaten maxValue:kAchievementLighthungerNum];
+            }
+            [self calcAndReportAchievement:kAchievementIFeelGood curValue:gameState.foodEaten maxValue:kAchievementIFeelGoodNum];
+            [self calcAndReportAchievement:kAchievementOhNoNo curValue:gameState.foodEaten maxValue:kAchievementOhNoNoNum];
+        }
+        else if (gameState.foodEaten < kAchievementOhNoNoNum)
+        {
+            if (!gameState.completedIFeelGood) {
+                gameState.completedIFeelGood = true;
+                [self calcAndReportAchievement:kAchievementIFeelGood curValue:gameState.foodEaten maxValue:kAchievementIFeelGoodNum];
+            }
+            [self calcAndReportAchievement:kAchievementOhNoNo curValue:gameState.foodEaten maxValue:kAchievementOhNoNoNum];
+        }
+        else
+        {
+            [self calcAndReportAchievement:kAchievementOhNoNo curValue:gameState.foodEaten maxValue:kAchievementOhNoNoNum];
+            // Прекращает подсчитывать кол-во уничтоженной еды после получения макс ачивки
+            if (gameState.foodEaten >= kAchievementOhNoNoNum) {
+                gameState.foodEaten++;
+            }
+        }
+    }
+    
     [gameState save];
+}
+
+- (void)calcAndReportAchievement:(NSString*)achiv curValue:(unsigned int)curValue maxValue:(unsigned int)maxValue
+{
+    float pctComplete = MIN(((float)curValue / maxValue) * 100.0, 100);
+    [[GCHelper sharedInstance] reportAchievement:achiv percentComplete:pctComplete];
 }
 
 - (void)updateGameStatsAndProgress

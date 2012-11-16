@@ -54,13 +54,16 @@
 #define kAchievementSuperstar @"com.atomgames.genby.achievement.superstar"
 #define kAchievementBubblepopper @"com.atomgames.genby.achievement.bubblepopper"
 #define kAchievementLighthunger @"com.atomgames.genby.achievement.lighthunger"
+#define kAchievementLighthungerNum 50
 #define kAchievementIFeelGood @"com.atomgames.genby.achievement.ifeelgood"
+#define kAchievementIFeelGoodNum 150
+#define kAchievementOhNoNo @"com.atomgames.genby.achievement.ohnono"
+#define kAchievementOhNoNoNum 300
 #define kAchievementAwesome @"com.atomgames.genby.achievement.awesome"
 #define kAchievementTrueGenbyFan @"com.atomgames.genby.achievement.truegenbyfan"
 #define kAchievementFastAndSatisfying @"com.atomgames.genby.achievement.fastandsatisfying"
 #define kAchievementRushHour @"com.atomgames.genby.achievement.rushhour"
 #define kAchievementBomber @"com.atomgames.genby.achievement.bomber"
-#define kAchievementOhNoNo @"com.atomgames.genby.achievement.ohnono"
 #define kAchievementFirstFail @"com.atomgames.genby.achievement.firstfail"
 #define kAchievementFirstFailNum 1
 #define kAchievementUnwary @"com.atomgames.genby.achievement.unwary"

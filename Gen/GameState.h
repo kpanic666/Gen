@@ -29,7 +29,14 @@
 @property (assign) BOOL completedFirstFail;
 @property (assign) BOOL completedUnwary;
 @property (assign) BOOL completedDestroyer;
+@property (assign) BOOL completedLightHunger;
+@property (assign) BOOL completedIFeelGood;
+@property (assign) BOOL completedOhNoNo;
 @property (assign) unsigned int cellsKilled;
+@property (assign) unsigned int starsCollected;
+@property (assign) unsigned int foodEaten;
+@property (assign) unsigned int bubblesPoped;
+@property (assign) unsigned int bombsExploded;
 // Game Stats properties
 @property unsigned int highestOpenedLevel;
 @property (assign) NSMutableArray *levelHighestStarsNumArray;

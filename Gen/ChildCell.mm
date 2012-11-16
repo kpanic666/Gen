@@ -205,6 +205,11 @@
             
             PLAYSOUNDEFFECT(@"CHILDCELL_SOUL_1");
             
+            // Count number of eaten food for achievement
+            if ([GameState sharedInstance].foodEaten < kAchievementOhNoNoNum) {
+                [GameState sharedInstance].foodEaten++;
+            }
+            
             // 2. Двигаем мертвые клетки (души) в центр выхода
             exitCellSprite = (GameCharacter*) [[self parent] getChildByTag:kExitCellSpriteTagValue];
             id moveToMouth = [CCMoveTo actionWithDuration:0.2 position:exitCellSprite.position];
