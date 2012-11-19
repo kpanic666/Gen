@@ -32,8 +32,14 @@
 @property (assign) BOOL completedLightHunger;
 @property (assign) BOOL completedIFeelGood;
 @property (assign) BOOL completedOhNoNo;
+@property (assign) BOOL completedStarry;
+@property (assign) BOOL completedStargazer;
+@property (assign) BOOL completedSuperstar;
+@property (assign) BOOL completedAwesome;
+@property (assign) BOOL completedRushHour;
+@property (assign) BOOL completedTrueGenbyFan;
+@property (assign) double gameTotalRunTime; // Суммарное игровое время, когда игра была запущенна
 @property (assign) unsigned int cellsKilled;
-@property (assign) unsigned int starsCollected;
 @property (assign) unsigned int foodEaten;
 @property (assign) unsigned int bubblesPoped;
 @property (assign) unsigned int bombsExploded;
@@ -41,5 +47,6 @@
 @property unsigned int highestOpenedLevel;
 @property (assign) NSMutableArray *levelHighestStarsNumArray;
 @property (assign) NSMutableArray *levelHighestScoreArray;
+@property unsigned int totalNumOfReceivedStars;
 
 @end

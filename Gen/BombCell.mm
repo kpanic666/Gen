@@ -7,6 +7,7 @@
 //
 
 #import "BombCell.h"
+#import "GameState.h"
 
 @implementation BombCell
 
@@ -95,8 +96,12 @@
             }
             
             
-            if (exploded) {
-                
+            if (exploded == true)
+            {
+                // Count number of destroyed cells for all time for achievement
+                if ([GameState sharedInstance].bombsExploded < kAchievementBomberNum) {
+                    [GameState sharedInstance].bombsExploded++;
+                }
                 // Add sound of explosion
             }
             else

@@ -7,6 +7,7 @@
 //
 
 #import "BubbleCell.h"
+#import "GameState.h"
 
 @interface BubbleCell()
 {
@@ -146,8 +147,12 @@
                     {
                         [childCell changeState:kStateTakingDamage];
                     }
-                    
                 }
+            }
+            
+            // Count number of destroyed cells for all time for achievement
+            if ([GameState sharedInstance].bubblesPoped < kAchievementBubblepopperNum) {
+                [GameState sharedInstance].bubblesPoped++;
             }
             
             characterHealth -= kRedCellDamage;

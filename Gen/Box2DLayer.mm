@@ -29,7 +29,6 @@ ccc3FromUInt(const uint bytes)
 @interface Box2DLayer()
 {
     // Added for game stat and scores
-    double levelStartTime;
     double levelRemainingTime;
 }
 
@@ -456,32 +455,32 @@ ccc3FromUInt(const uint bytes)
     // 2. If nothing found on local disk, than Load XML from network
     // Create a success block to be called when the asyn request completes
 //    NSString *urlString = [NSString stringWithFormat:@"http://192.168.2.1/%@.xml",[GameManager sharedGameManager].levelName];
-    NSString *urlString = [NSString stringWithFormat:@"http://127.0.0.1/%@.xml",[GameManager sharedGameManager].levelName];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSData *xmlData = [[NSData alloc] initWithContentsOfURL:url];
-    TBXML *xmlInet = [[TBXML alloc] initWithXMLData:xmlData error:&error];
-    
-    if (error) {
-        CCLOG(@"TBXML Error-Failed to open XML from Network:%@ %@", [error localizedDescription], [error userInfo]);
-        return false;
-    }
-    else
-    {
-        CCLOG(@"TBXML Loaded XML from Network");
-        // If TBXML found a root node, process element and iterate all children
-        if ([[TBXML elementName:xmlInet.rootXMLElement] isEqualToString:@"map"])
-        {
-            [self traverseLevelMapElements:xmlInet.rootXMLElement];
-        }
-        else
-        {
-            CCLOG(@"TBXML XML from Network has incorrect content");
-            return false;
-        }
-    }
-    
-    [xmlData release];
-    [xmlInet release];
+//    NSString *urlString = [NSString stringWithFormat:@"http://127.0.0.1/%@.xml",[GameManager sharedGameManager].levelName];
+//    NSURL *url = [NSURL URLWithString:urlString];
+//    NSData *xmlData = [[NSData alloc] initWithContentsOfURL:url];
+//    TBXML *xmlInet = [[TBXML alloc] initWithXMLData:xmlData error:&error];
+//    
+//    if (error) {
+//        CCLOG(@"TBXML Error-Failed to open XML from Network:%@ %@", [error localizedDescription], [error userInfo]);
+//        return false;
+//    }
+//    else
+//    {
+//        CCLOG(@"TBXML Loaded XML from Network");
+//        // If TBXML found a root node, process element and iterate all children
+//        if ([[TBXML elementName:xmlInet.rootXMLElement] isEqualToString:@"map"])
+//        {
+//            [self traverseLevelMapElements:xmlInet.rootXMLElement];
+//        }
+//        else
+//        {
+//            CCLOG(@"TBXML XML from Network has incorrect content");
+//            return false;
+//        }
+//    }
+//    
+//    [xmlData release];
+//    [xmlInet release];
     
     return true;
 }
@@ -633,7 +632,7 @@ ccc3FromUInt(const uint bytes)
         bodiesToDestroy = [[NSMutableArray alloc] init];
         
         // Обнуляем переменные для статистики и счета
-        levelStartTime = CACurrentMediaTime();
+        [GameManager sharedGameManager].levelElapsedTime = 0;
         levelRemainingTime = 0;
         
         [self setupWorld];
@@ -686,6 +685,7 @@ ccc3FromUInt(const uint bytes)
         [self createWater];
         
         [self scheduleUpdate];
+        [self schedule:@selector(levelTimeTick:) interval:1];
         
         // Create plankton particles
         psPlankton = [CCParticleSystemQuad particleWithFile:@"ps_plankton.plist"];
@@ -797,7 +797,6 @@ ccc3FromUInt(const uint bytes)
 - (void)calcScore
 {
     GameManager *gameManager = [GameManager sharedGameManager];
-    gameManager.levelElapsedTime = CACurrentMediaTime() - levelStartTime;
     levelRemainingTime = kLevelMaxTime - gameManager.levelElapsedTime;
     
     // Проверяем оставшееся время. может быть отрицательным если игрок сильно замешкался, то ставим в 0
@@ -862,7 +861,6 @@ ccc3FromUInt(const uint bytes)
             [[GCHelper sharedInstance] reportAchievement:kAchievementLevel10 percentComplete:100.0];
         }
     }
-    // Check Complete level 20
     if (!gameState.completedLevel20) {
         if (gameManager.curLevel == kGameLevel20 && gameManager.hasLevelWin) {
             gameState.completedLevel20 = true;
@@ -952,6 +950,77 @@ ccc3FromUInt(const uint bytes)
         }
     }
     
+    // Check Starry, Stargazer, Superstar, Awesome (15, 50, 100, all stars collected)
+    if (gameState.totalNumOfReceivedStars > 0 && gameState.totalNumOfReceivedStars < kAchievementStarryNum)
+    {
+        [self calcAndReportAchievement:kAchievementStarry curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementStarryNum];
+        [self calcAndReportAchievement:kAchievementStargazer curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementStargazerNum];
+        [self calcAndReportAchievement:kAchievementSuperstar curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementSuperstarNum];
+    }
+    else if (gameState.totalNumOfReceivedStars < kAchievementStargazerNum)
+    {
+        if (!gameState.completedStarry) {
+            gameState.completedStarry = true;
+            [self calcAndReportAchievement:kAchievementStarry curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementStarryNum];
+        }
+        [self calcAndReportAchievement:kAchievementStargazer curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementStargazerNum];
+        [self calcAndReportAchievement:kAchievementSuperstar curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementSuperstarNum];
+    }
+    else if (gameState.totalNumOfReceivedStars < kAchievementSuperstarNum)
+    {
+        if (!gameState.completedStargazer) {
+            gameState.completedStargazer = true;
+            [self calcAndReportAchievement:kAchievementStargazer curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementStargazerNum];
+        }
+        [self calcAndReportAchievement:kAchievementSuperstar curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementSuperstarNum];
+    }
+    else
+    {
+        if (!gameState.completedSuperstar) {
+            gameState.completedSuperstar = true;
+            [self calcAndReportAchievement:kAchievementSuperstar curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementSuperstarNum];
+        }
+        [self calcAndReportAchievement:kAchievementAwesome curValue:gameState.totalNumOfReceivedStars maxValue:kLevelCount * 3];
+    }
+    
+    // Check Bubblepoper
+    if (gameState.bubblesPoped <= kAchievementBubblepopperNum)
+    {
+        [self calcAndReportAchievement:kAchievementBubblepopper curValue:gameState.bubblesPoped maxValue:kAchievementBubblepopperNum];
+        if (gameState.bubblesPoped >= kAchievementBubblepopperNum) {
+            gameState.bubblesPoped++;
+        }
+    }
+    
+    // Check Bomber
+    if (gameState.bombsExploded <= kAchievementBomberNum)
+    {
+        [self calcAndReportAchievement:kAchievementBomber curValue:gameState.bombsExploded maxValue:kAchievementBomberNum];
+        if (gameState.bombsExploded >= kAchievementBomberNum) {
+            gameState.bombsExploded++;
+        }
+    }
+    
+    // Check Rush Hour
+    if (!gameState.completedRushHour && gameManager.hasLevelWin == true)
+    {
+        if (gameManager.levelElapsedTime <= kAchievementRushHourNum)
+        {
+            gameState.completedRushHour = true;
+            [[GCHelper sharedInstance] reportAchievement:kAchievementRushHour percentComplete:100];
+        }
+    }
+    
+    // Check True genby fan
+    if (!gameState.completedTrueGenbyFan)
+    {
+        if (gameState.gameTotalRunTime >= kAchievementTrueGenbyFanNum)
+        {
+            gameState.completedTrueGenbyFan = true;
+            [[GCHelper sharedInstance] reportAchievement:kAchievementTrueGenbyFan percentComplete:100];
+        }
+    }
+    
     [gameState save];
 }
 
@@ -971,8 +1040,16 @@ ccc3FromUInt(const uint bytes)
     if ([GameState sharedInstance].highestOpenedLevel == levelNum) [GameState sharedInstance].highestOpenedLevel++;
     
     // Запоминаем кол-во набранных звезд если их больше чем было
-    if (gameManager.levelStarsNum > [[gameState.levelHighestStarsNumArray objectAtIndex:levelNum-1] integerValue]) {
+    if (gameManager.levelStarsNum > [[gameState.levelHighestStarsNumArray objectAtIndex:levelNum-1] integerValue])
+    {
         [[gameState levelHighestStarsNumArray] replaceObjectAtIndex:levelNum-1 withObject:[NSNumber numberWithInt:gameManager.levelStarsNum]];
+        
+        // Подсчитываем общее кол-во полученных звезд
+        gameState.totalNumOfReceivedStars = 0;
+        for (id levelStar in gameState.levelHighestStarsNumArray)
+        {
+            gameState.totalNumOfReceivedStars += [levelStar integerValue];
+        }
     }
     
     // Запоминаем High Score для уровня и докладываем в GameCenter если значение изменилось
@@ -983,7 +1060,8 @@ ccc3FromUInt(const uint bytes)
         
         // Доложить Score в GameCenter
         unsigned int summaryScore = 0;
-        for (int i=0; i < [gameState.levelHighestScoreArray count]; i++) {
+        for (int i=0; i < [gameState.levelHighestScoreArray count]; i++)
+        {
             summaryScore += [[gameState.levelHighestScoreArray objectAtIndex:i] integerValue];
         }
         [[GCHelper sharedInstance] reportScore:kLeaderboardChapter1 score:summaryScore];
@@ -1067,8 +1145,8 @@ ccc3FromUInt(const uint bytes)
             gameOver = true;
             [gameManager setHasLevelWin:YES];
             [self calcScore];
-            [self checkAchievements];
             [self updateGameStatsAndProgress];
+            [self checkAchievements];
             [self scheduleOnce:@selector(displayGameOverLayer) delay:1.5];
         }
         else if (gameManager.numOfTotalCells == 0 && gameManager.numOfSavedCells < gameManager.numOfNeededCells)
@@ -1078,6 +1156,12 @@ ccc3FromUInt(const uint bytes)
             [self scheduleOnce:@selector(displayGameOverLayer) delay:1.5];
         }
     }
+}
+
+-(void) levelTimeTick:(ccTime)dt
+{
+    [GameManager sharedGameManager].levelElapsedTime += dt;
+    [GameState sharedInstance].gameTotalRunTime += dt;
 }
 
 - (void)markBodyForDestruction:(Box2DSprite *)obj
