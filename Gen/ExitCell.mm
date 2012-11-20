@@ -161,12 +161,14 @@
             
         case kStateOpenedMouth:
             CCLOG(@"kStateOpenMouth");
+            PLAYSOUNDEFFECT(@"GENBY_OPEN");
             [self showEyesAndTongue:NO];
             animateAction = [CCAnimate actionWithAnimation:self.openMouthAnim];
             break;
             
         case kStateCloseMouth:
             if (foodInSensorCounter > 0) return;
+            PLAYSOUNDEFFECT(@"GENBY_CLOSE");
             [self showEyesAndTongue:NO];
             animateAction = [CCAnimate actionWithAnimation:self.closeMouthAnim];
             CCLOG(@"kStateCloseMouth");
@@ -175,6 +177,7 @@
         case kStateEating:
         {
             if (foodInSensorCounter > 0) return;
+            PLAYSOUNDEFFECT(@"GENBY_SWALLOW");
             [self showEyesAndTongue:NO];
             animateAction = [CCAnimate actionWithAnimation:self.eatingAnim];
             CCLOG(@"kStateEating");
@@ -183,6 +186,7 @@
             
         case kStateSad:
             if (foodInSensorCounter > 0) return;
+            PLAYSOUNDEFFECT(@"GENBY_SAD");
             [self showEyesAndTongue:NO];
             animateAction = [CCAnimate actionWithAnimation:self.sadAnim];
             CCLOG(@"kStateSad");

@@ -119,13 +119,14 @@ static GameManager* _sharedGameManager = nil;
             waitCycles = waitCycles + 1;
         }
     }
-    if (managerSoundState == kAudioManagerReady && isMusicON) {
+    if (managerSoundState == kAudioManagerReady && isMusicON && playedBackgroundMusic != trackFileName) {
         if ([soundEngine isBackgroundMusicPlaying]) {
             [soundEngine stopBackgroundMusic];
         }
         [soundEngine preloadBackgroundMusic:trackFileName];
-        [soundEngine setBackgroundMusicVolume:0.4];
+        [soundEngine setBackgroundMusicVolume:0.3];
         [soundEngine playBackgroundMusic:trackFileName loop:YES];
+        playedBackgroundMusic = trackFileName;
     }
 }
 
@@ -364,6 +365,7 @@ static GameManager* _sharedGameManager = nil;
     switch (sceneID) {
         case kMainMenuScene:
             sceneToRun = [MainMenuLayer scene];
+            [self playBackgroundTrack:BACKGROUND_TRACK_1];
             break;
             
         case kInfoScene:
@@ -376,11 +378,19 @@ static GameManager* _sharedGameManager = nil;
             
         case kLevelSelectScene:
             sceneToRun = [LevelSelectLayer scene];
+            [self playBackgroundTrack:BACKGROUND_TRACK_1];
             break;    
             
         case kGameLevel1 ... kGameLevel40:
             [self setLevelName:[NSString stringWithFormat:@"1-%i", (int)sceneID-100]];
             sceneToRun = [NSClassFromString([NSString stringWithFormat:@"Scene%i", (int)sceneID-100]) node];
+            if (sceneID < kGameLevel21) {
+                [self playBackgroundTrack:BACK_1];
+            }
+            else
+            {
+                [self playBackgroundTrack:BACK_2];
+            }
             break;
             
         default:

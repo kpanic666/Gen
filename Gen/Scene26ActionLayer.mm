@@ -17,7 +17,7 @@
         
         // add background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.jpg"];
+        CCSprite *background = [CCSprite spriteWithFile:@"background2.jpg"];
         [background setPosition:[Helper screenCenter]];
         [self addChild:background z:-4];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];

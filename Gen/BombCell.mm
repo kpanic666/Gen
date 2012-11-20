@@ -88,6 +88,7 @@
         case kStateTakingDamage:
         {
             characterHealth -= kRedCellDamage;
+            STOPSOUNDEFFECT(timerSound);
             
             // Destroy Physics body
             self.markedForDestruction = YES;
@@ -102,7 +103,7 @@
                 if ([GameState sharedInstance].bombsExploded < kAchievementBomberNum) {
                     [GameState sharedInstance].bombsExploded++;
                 }
-                // Add sound of explosion
+                PLAYSOUNDEFFECT(@"BOMBCELL_EXPLOSION");
             }
             else
             {
@@ -120,10 +121,10 @@
         case kStateConnected:
         {
             // Нужно менять вид клетки. Это состояние принимается клеткой когда был создан джойнт
-            PLAYSOUNDEFFECT(@"CHILDCELL_CONNECTED");
             if (!activated)
             {
                 activated = YES;
+                timerSound = PLAYSOUNDEFFECT(@"BOMBCELL_TIMER");
                 [self runAction:[CCSequence actions:
                                  [CCAnimate actionWithAnimation:self.timerAnim],
                                  [CCCallFunc actionWithTarget:self selector:@selector(boom)],
@@ -146,6 +147,7 @@
         case kStateBeforeSoul:
         {
             [self stopAllActions];
+            STOPSOUNDEFFECT(timerSound);
             self.markedForDestruction = YES;
             if (self.dontCount == false) {
                 [GameManager sharedGameManager].numOfTotalCells--;

@@ -189,6 +189,7 @@
             // И начинает лететь вверх увлекая за собой этот ChildCell
         {
             // Actions
+            PLAYSOUNDEFFECT(@"BUBBLECELL");
             id scaleAction = [CCScaleBy actionWithDuration:0.4 scaleX:1.3 scaleY:0.8];
             id scaleSeqAction = [CCSequence actions:scaleAction, [scaleAction reverse], nil];
             [self runAction:[CCRepeatForever actionWithAction:scaleSeqAction]];

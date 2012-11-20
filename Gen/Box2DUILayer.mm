@@ -15,9 +15,11 @@
 @interface Box2DUILayer()
 {
     CCLabelBMFont *scoreLabel;
+    CCLabelBMFont *totalLabel;
     CCLabelBMFont *leftScoreLabel;
     CCLabelBMFont *centerLabel;
     CCSprite *centerLabelSFX;
+    CCSprite *infopanel;
     float originalScale;
     CCMenu *pauseMenu;
     CCSprite *pauseGameSprite;
@@ -32,6 +34,7 @@
     if ([self.parent getChildByTag:kPauseLayer]) {
         return;
     }
+    
     // Затеняем фон
     ccColor4B c = ccc4(0, 0, 0, 100); // Black transparent background
     PauseLayer *pauseLayer = [[[PauseLayer alloc] initWithColor:c] autorelease];
@@ -49,7 +52,9 @@
 
 - (void)hideUI
 {
+    infopanel.visible = FALSE;
     scoreLabel.visible = FALSE;
+    totalLabel.visible = FALSE;
     leftScoreLabel.visible = FALSE;
     pauseMenu.enabled = FALSE;
     pauseGameSprite.visible = FALSE;
@@ -83,6 +88,12 @@
     if ((self = [super init])) {
         CGSize screenSize = [CCDirector sharedDirector].winSize;
         
+        // Place info panel
+        infopanel = [CCSprite spriteWithSpriteFrameName:@"infopanel.png"];
+        infopanel.anchorPoint = ccp(0, 1);
+        infopanel.position = ccp(0, screenSize.height);
+        [self addChild:infopanel z:1];
+        
         // Place pause menu button
         pauseGameSprite = [CCSprite spriteWithSpriteFrameName:@"button_pause.png"];
         float padding = [pauseGameSprite contentSize].width*0.5 * 0.2; // отступ от края экрана c учетом спец эффекта меню
@@ -95,31 +106,40 @@
         [self addChild:pauseMenu z:5];
         
         // Init Score Label
-        scoreLabel = [CCLabelBMFont labelWithString:@"               " fntFile:@"levelNameText.fnt"];
+        scoreLabel = [CCLabelBMFont labelWithString:@"  " fntFile:@"levelNameText.fnt"];
+        scoreLabel.alignment = kCCTextAlignmentRight;
         scoreLabel.anchorPoint = ccp(0, 1);
-        scoreLabel.position = ccp(padding, screenSize.height - padding);
+        scoreLabel.position = ccp(infopanel.contentSize.width * 0.15, screenSize.height - padding);
         originalScale = 0.6;
         scoreLabel.scale = originalScale;
-        [self addChild:scoreLabel z:1];
+        [self addChild:scoreLabel z:2];
+        
+        // Init Total Label
+        totalLabel = [CCLabelBMFont labelWithString:@"  " fntFile:@"levelNameText.fnt"];
+        totalLabel.alignment = kCCTextAlignmentLeft;
+        totalLabel.anchorPoint = ccp(0, 1);
+        totalLabel.position = ccp(infopanel.contentSize.width * 0.4, screenSize.height - padding);
+        totalLabel.scale = originalScale;
+        [self addChild:totalLabel z:2];
         
         // Init Left Score label, который показывает сколько осталось не использованных детей и если их меньше чем нужно для завершения уровня становится красным.
-        leftScoreLabel = [CCLabelBMFont labelWithString:@"        " fntFile:@"levelNameText.fnt"];
+        leftScoreLabel = [CCLabelBMFont labelWithString:@"  " fntFile:@"levelNameText.fnt"];
         leftScoreLabel.anchorPoint = ccp(0, 1);
-        leftScoreLabel.position = ccp(scoreLabel.position.x + scoreLabel.contentSize.width, scoreLabel.position.y);
+        leftScoreLabel.position = ccp(infopanel.contentSize.width * 0.77, screenSize.height - padding);
         leftScoreLabel.scale = originalScale;
-        [self addChild:leftScoreLabel z:1];
+        [self addChild:leftScoreLabel z:2];
         
-        // Init Center information label for name of level and other info
-        centerLabel = [CCLabelBMFont labelWithString:@"          " fntFile:@"levelNameText.fnt"];
-        centerLabel.position = ccp(screenSize.width*0.5, screenSize.height*0.5);
-        centerLabel.visible = NO;
-        [self addChild:centerLabel z:2];
-        
-        // Add Cover for center text, which would be sfx when text appear 
+        // Add Cover for center text, which would be sfx when text appear
         centerLabelSFX = [CCSprite spriteWithSpriteFrameName:@"level_name_sfx.png"];
-        centerLabelSFX.position = ccp(centerLabel.position.x - centerLabel.contentSize.width/2, centerLabel.position.y);
+        centerLabelSFX.position = ccp(screenSize.width*0.5, screenSize.height*0.5);
         centerLabelSFX.visible = NO;
         [self addChild:centerLabelSFX z:1];
+        
+        // Init Center information label for name of level and other info
+        centerLabel = [CCLabelBMFont labelWithString:@"    " fntFile:@"levelNameText.fnt"];
+        centerLabel.position = ccp(screenSize.width*0.5 + centerLabel.contentSize.width, screenSize.height*0.5);
+        centerLabel.visible = NO;
+        [self addChild:centerLabel z:2];
         
         // Add frame borders if game is running on iPad
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -134,12 +154,13 @@
     [scoreLabel stopAllActions];
     GameManager *gameManager = [GameManager sharedGameManager];
     [gameManager setNeedToUpdateScore:FALSE];
-    [scoreLabel setString:[NSString stringWithFormat:@"Eaten: %i of %i", gameManager.numOfSavedCells, gameManager.numOfNeededCells]];
-    [leftScoreLabel setString:[NSString stringWithFormat:@"Left: %i", gameManager.numOfTotalCells]];
+    [scoreLabel setString:[NSString stringWithFormat:@"%i", gameManager.numOfSavedCells]];
+    [totalLabel setString:[NSString stringWithFormat:@"%i", gameManager.numOfNeededCells]];
+    [leftScoreLabel setString:[NSString stringWithFormat:@"%i", gameManager.numOfTotalCells]];
     
     // Turn Left Score to Red color when мало ячеек для окончания уровня.
     if ((gameManager.numOfTotalCells < (gameManager.numOfNeededCells - gameManager.numOfSavedCells)) && gameManager.numOfSavedCells < gameManager.numOfNeededCells) {
-        leftScoreLabel.color = ccc3(255, 50, 50);
+        leftScoreLabel.color = ccc3(0, 255, 255);
     }
     
     // Pop up the score
@@ -157,24 +178,17 @@
     centerLabel.visible = YES;
     
     [centerLabelSFX stopAllActions];
-    centerLabelSFX.position = ccp(centerLabel.position.x - centerLabel.contentSize.width/2, centerLabel.position.y);
     centerLabelSFX.opacity = 0;
     centerLabelSFX.visible = YES;
     
-    id move = [CCMoveTo actionWithDuration:1.5 position:ccp(centerLabel.position.x + centerLabel.contentSize.width, centerLabel.position.y)];
     id fadeIn = [CCFadeIn actionWithDuration:0.4];
-    id fadeInText = [CCFadeIn actionWithDuration:0.7];
-    id fadeBackText = [fadeInText reverse];
-    id pauseBetweenFading = [CCDelayTime actionWithDuration:0.4];
     id fadeBack = [fadeIn reverse];
     id hide = [CCHide action];
-    id delayBefore = [CCDelayTime actionWithDuration:0.5];
-    id delay = [CCDelayTime actionWithDuration:0.3];
-    id sfxLabelFadingSeq = [CCSequence actions:fadeIn, pauseBetweenFading, fadeBack, hide, nil];
-    id sfxLabelAction = [CCSpawn actions:sfxLabelFadingSeq, move, nil];
-    id textAction = [CCSequence actions:delayBefore, fadeInText, delay, fadeBackText, hide, nil];
+    id delay = [CCDelayTime actionWithDuration:1.5];
+    id sfxLabelFadingSeq = [CCSequence actions:fadeIn, delay, fadeBack, hide, nil];
+    id textAction = [CCSequence actions:[[fadeIn copy] autorelease] , [[delay copy] autorelease], [[fadeBack copy] autorelease], hide, nil];
     
-    [centerLabelSFX runAction:sfxLabelAction];
+    [centerLabelSFX runAction:sfxLabelFadingSeq];
     [centerLabel runAction:textAction];
     return TRUE;
 }

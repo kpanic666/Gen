@@ -71,6 +71,7 @@
 - (void)resumePressed
 {
     CGSize screenSize = [[CCDirector sharedDirector] winSize];
+    
     CCSprite *background = (CCSprite*)[self getChildByTag:kBackgroundSpriteTag];
     CCLayer *gl = (CCLayer*) [self.parent getChildByTag:kBox2DLayer];
     CCSpriteBatchNode *bn = (CCSpriteBatchNode*)[gl getChildByTag:kMainSpriteBatchNode];

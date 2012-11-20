@@ -12,15 +12,12 @@
 <dec_plant5 x='560' y='310' flipX='YES' scaleX='1.08' scaleY='1.32' />
 <dec_plant1 x='506' y='334' />
 <dec_plant1 x='519' y='333' />
-<dec_box x='71' y='586' scaleX='1.24' scaleY='1.35' />
 <dec_plant2 x='151' y='206' />
 <dec_plant2 x='120' y='207' scaleX='0.951' scaleY='0.7' />
 <dec_plant1 x='135' y='206' />
 <dec_plant2 x='193' y='205' alpha='0.6' />
 <dec_plant2 x='162' y='206' scaleX='0.951' scaleY='0.7' alpha='0.6' />
 <dec_plant1 x='177' y='205' />
-<dec_plant3 x='778' y='567' />
-<dec_plant4 x='568' y='577' />
 <groundCell1 x='480' y='504' scaleX='1.07' />
 <groundCell2 x='441' y='350' />
 <groundCell3 x='808' y='179' />

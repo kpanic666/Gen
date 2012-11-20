@@ -409,6 +409,20 @@
 
 - (void)explodeStar:(CCSprite*)star
 {
+    switch ([star tag]) {
+        case 1:
+            PLAYSOUNDEFFECT(@"STAR1");
+            break;
+            
+        case 2:
+            PLAYSOUNDEFFECT(@"STAR2");
+            break;
+            
+        case 3:
+            PLAYSOUNDEFFECT(@"STAR3");
+            break;
+    }
+    
     // Add Sound to Pop UP THE STAR
     [star setScale:0.1];
     [star setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"star_on.png"]];

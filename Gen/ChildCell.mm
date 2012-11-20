@@ -203,7 +203,8 @@
             // Клетка ударилась об выход и должна уничтожить физ тело и сменить спрайт и дрыгаться внутри выхода
             [self setCharacterHealth:0];
             
-            PLAYSOUNDEFFECT(@"CHILDCELL_SOUL_1");
+            NSString *soundName = [NSString stringWithFormat:@"CHILDCELL_SOUL_%i", (int)random() % 3 + 1];
+            PLAYSOUNDEFFECT(soundName);
             
             // Count number of eaten food for achievement
             if ([GameState sharedInstance].foodEaten < kAchievementOhNoNoNum) {

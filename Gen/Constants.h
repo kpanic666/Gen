@@ -61,9 +61,9 @@
 #define kAchievementLighthunger @"com.atomgames.genby.achievement.lighthunger"
 #define kAchievementLighthungerNum 50
 #define kAchievementIFeelGood @"com.atomgames.genby.achievement.ifeelgood"
-#define kAchievementIFeelGoodNum 150
+#define kAchievementIFeelGoodNum 300
 #define kAchievementOhNoNo @"com.atomgames.genby.achievement.ohnono"
-#define kAchievementOhNoNoNum 300
+#define kAchievementOhNoNoNum 500
 #define kAchievementTrueGenbyFan @"com.atomgames.genby.achievement.truegenbyfan"
 #define kAchievementTrueGenbyFanNum 1800
 #define kAchievementRushHour @"com.atomgames.genby.achievement.rushhour"
@@ -173,19 +173,11 @@ typedef enum {
 
 // Background Music
 // Menu Scenes
-//#define BACKGROUND_TRACK_MAIN_MENU @"VikingPreludeV1.mp3"
-
-// GameLevel1
 #define BACKGROUND_TRACK_1 @"back_Wallpaper.mp3"
-
-// GameLevel2
-//#define BACKGROUND_TRACK_PUZZLE @"VikingPreludeV1.mp3"
-
-// GameLevel3
-//#define BACKGROUND_TRACK_MINECRAFT @"DrillBitV2.mp3"
-
-// GameLevel4
-//#define BACKGROUND_TRACK_ESCAPE @"EscapeTheFutureV3.mp3"
+// GameLevel 1-20
+#define BACK_1 @"back_1.mp3"
+// GameLevel 21-40
+#define BACK_2 @"back_2.mp3"
 
 // PTM ratio for Box2D
 #define PTM_RATIO ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 64.0 : 32.0)

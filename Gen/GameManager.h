@@ -13,6 +13,7 @@
 @interface GameManager : NSObject {
     BOOL isMusicON;
     BOOL isSoundEffectsON;
+    NSString *playedBackgroundMusic;
     BOOL hasLevelWin;
     SceneTypes currentScene;
     SceneTypes curLevel;

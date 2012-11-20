@@ -422,7 +422,7 @@ ccc3FromUInt(const uint bytes)
 
 - (void)displayLevelName
 {
-    [uiLayer displayText:[NSString stringWithFormat:@"Level %@", [GameManager sharedGameManager].levelName]];
+    [uiLayer displayText:[[GameManager sharedGameManager].levelName substringFromIndex:2]];
 }
 
 - (BOOL)loadLevelMapFromXML
@@ -817,6 +817,10 @@ ccc3FromUInt(const uint bytes)
     if (gameManager.numOfSavedCells == gameManager.numOfMaxCells) {
         gameManager.levelStarsNum = 3;
     }
+    // Исключение для 6 уровня
+    if (gameManager.curLevel == kGameLevel6 && gameManager.levelStarsNum > 0) {
+        gameManager.levelStarsNum = 3;
+    }
     gameManager.levelTotalScore += gameManager.levelStarsNum * kStarAchievedMulti;
     // Насчитываем очки за кол-во нажатий на игровое поле при прохождении уровня. За каждое нажатие вычитаем очки
     gameManager.levelTotalScore += gameManager.levelTappedNum * kTapMulti;
@@ -1119,7 +1123,7 @@ ccc3FromUInt(const uint bytes)
         {
             GameCharacter *tempChar = (GameCharacter*)tempSprite;
             // Заставляем осьминожку грустить если еда пропадает
-            if (tempChar.gameObjectType == kChildCellType && tempChar.characterState == kStateDead) {
+            if (tempChar.gameObjectType == kChildCellType && tempChar.characterState == kStateTakingDamage) {
                 [exitCell changeState:kStateSad];
             }
             [tempChar updateStateWithDeltaTime:dt andListOfGameObjects:listOfGameObjects];
