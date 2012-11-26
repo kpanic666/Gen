@@ -124,7 +124,7 @@ static GameManager* _sharedGameManager = nil;
             [soundEngine stopBackgroundMusic];
         }
         [soundEngine preloadBackgroundMusic:trackFileName];
-        [soundEngine setBackgroundMusicVolume:0.3];
+        [soundEngine setBackgroundMusicVolume:0.4];
         [soundEngine playBackgroundMusic:trackFileName loop:YES];
         playedBackgroundMusic = trackFileName;
     }
@@ -465,9 +465,10 @@ static GameManager* _sharedGameManager = nil;
     
     // Делаем рамку уровня если игра запускается на iPad, чтобы не менять графику и физ объекты, мы просто все поменщаем в центр экрана
     // Слева и справа по 32 поинта, сверхи и снизу по 64
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        levelSize = CGSizeMake(levelSize.width - kiPadScreenOffsetX * 2, levelSize.height - kiPadScreenOffsetY * 2);
-    }
+    // Iphone Screen to iPad
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+//        levelSize = CGSizeMake(levelSize.width - kiPadScreenOffsetX * 2, levelSize.height - kiPadScreenOffsetY * 2);
+//    }
 
     return levelSize;
 }

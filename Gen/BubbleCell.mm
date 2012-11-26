@@ -109,6 +109,8 @@
                 ropeJointDef.collideConnected = false;
                 ropeJointDef.userData = @"BubbleJoint";
                 world->CreateJoint(&ropeJointDef);
+                
+                return;
             }
         }
     }

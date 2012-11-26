@@ -69,9 +69,10 @@ ccc3FromUInt(const uint bytes)
     CGSize levelSize = [[GameManager sharedGameManager] getDimensionsOfCurrentScene];
     b2Vec2 lowerLeft = b2Vec2(0, 0);
     // Сдвигаем рамку земли в центр экрана если игра запущена на iPad
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        lowerLeft += b2Vec2(kiPadScreenOffsetX / PTM_RATIO, kiPadScreenOffsetY / PTM_RATIO);
-    }
+    // Iphone Screen to iPad
+//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+//        lowerLeft += b2Vec2(kiPadScreenOffsetX / PTM_RATIO, kiPadScreenOffsetY / PTM_RATIO);
+//    }
     b2Vec2 lowerRight = lowerLeft + b2Vec2(levelSize.width/PTM_RATIO, 0);
     b2Vec2 upperRight = lowerRight + b2Vec2(0, levelSize.height/PTM_RATIO);
     b2Vec2 upperLeft = lowerLeft + b2Vec2(0, levelSize.height/PTM_RATIO);

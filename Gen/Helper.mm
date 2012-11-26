@@ -9,20 +9,36 @@
 
 #import "Helper.h"
 
-
 @implementation Helper
 
-
-// convenience method to convert a CGPoint to a b2Vec2
 +(b2Vec2) toMeters:(CGPoint)point
 {
 	return b2Vec2(point.x / PTM_RATIO, point.y / PTM_RATIO);
 }
 
-// convenience method to convert a b2Vec2 to a CGPoint
++(b2Vec2) toMetersFromPixels:(CGPoint)point
+{
+    return b2Vec2(point.x / [Helper pixelsToMeterRatio], point.y / [Helper pixelsToMeterRatio]);
+}
+
 +(CGPoint) toPoints:(b2Vec2)vec
 {
 	return ccpMult(CGPointMake(vec.x, vec.y), PTM_RATIO);
+}
+
++(CGPoint) toPixels:(b2Vec2)vec
+{
+	return ccpMult(CGPointMake(vec.x, vec.y), [Helper pixelsToMeterRatio]);
+}
+
++(float) pixelsToMeterRatio
+{
+	return (CC_CONTENT_SCALE_FACTOR() * PTM_RATIO);
+}
+
++(float) pointsToMeterRatio
+{
+	return (PTM_RATIO);
 }
 
 +(CGPoint) locationFromTouch:(UITouch*)touch

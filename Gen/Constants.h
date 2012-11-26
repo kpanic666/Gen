@@ -17,7 +17,7 @@
 #define kChildCellHealth 100
 #define kParentCellSpriteTagValue 10
 #define kRedCellDamage 100
-#define kMagneticPowerMultiplier 0.1
+#define kMagneticPowerMultiplier 7
 #define kLevelCount 40
 // Air bubbles and sun bliks properties
 #define kWaterWaveForegroundTag 22
@@ -26,8 +26,8 @@
 #define kMaxBubbleMoveDelay 10
 #define kMinBubbleMoveDelay 0
 #define kMaxNumOfBubbleOnScene 13
-#define kiPadScreenOffsetX 32
-#define kiPadScreenOffsetY 64
+//#define kiPadScreenOffsetX 32
+//#define kiPadScreenOffsetY 64
 // Parent Cell Radius drawing
 #define kSuperpowerNumOfWaves 4
 #define kSuperpowerScaleChangeSpeed 0.1
@@ -181,6 +181,7 @@ typedef enum {
 
 // PTM ratio for Box2D
 #define PTM_RATIO ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 64.0 : 32.0)
+//#define PTM_RATIO 32.0f
 
 // iOS version check macros
 #define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
