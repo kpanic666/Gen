@@ -17,7 +17,7 @@
 #define kChildCellHealth 100
 #define kParentCellSpriteTagValue 10
 #define kRedCellDamage 100
-#define kMagneticPowerMultiplier 7
+#define kMagneticPowerMultiplier 8
 #define kLevelCount 40
 // Air bubbles and sun bliks properties
 #define kWaterWaveForegroundTag 22

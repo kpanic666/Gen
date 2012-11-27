@@ -68,11 +68,7 @@
         // С постоянной силой двигаем пузырь вверх до верхней границы экрана. Если выходит за границу - уничтожаем
         if (body->GetPosition().y < topBorder)
         {
-            float yForce = 1.0;
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                yForce *= 2;
-            }
-            body->ApplyForceToCenter(b2Vec2(0,yForce));
+            body->ApplyForceToCenter(b2Vec2(0,2));
         }
         else
         {
