@@ -61,15 +61,16 @@
 // Конвертирует точку из координат iPhoneRetina в любые другие в зависимости от устройства на котором вызывается
 +(CGPoint) convertPosition:(CGPoint)point
 {
-    point = ccp(point.x, 640-point.y);
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
     {
+        point = ccp(point.x, 640-point.y);
         return ccpMult(point, 0.5);
     }
     else
     {
         // Центрируем все объекты на экране iPad, используя координаты для iPhone.
-        return ccpAdd(point, ccp(32, 64));
+        point = ccp(point.x, 768-point.y);
+        return point;
     }
 }
 

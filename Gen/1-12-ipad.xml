@@ -1,0 +1,28 @@
+<map>
+<dec_wood2 x='489' y='652' flipX='YES' />
+<dec_wood2 x='410' y='680' />
+<dec_wood2 x='466' y='687' scaleX='1.05' scaleY='1.18' />
+<dec_wood1 x='306' y='688' />
+<dec_star x='269' y='699' />
+<dec_plant1 x='476' y='623' />
+<redCell1 x='839' y='667' />
+<redCell2 x='595' y='372' />
+<groundCell2 x='134' y='503' />
+<groundCell1 x='151' y='147' />
+<groundCell3 x='566' y='100' />
+<dec_star x='480' y='692' />
+<dec_sponge1 x='319' y='673' rotation='-19' scaleX='0.571' scaleY='0.477' />
+<dec_plant1 x='414' y='658' />
+<dec_plant1 x='401' y='671' />
+<ExitCell x='770' y='224' />
+<ChildCell x='61' y='223' />
+<MagneticCell x='356' y='265' />
+<MagneticCell x='352' y='487' />
+<ChildCell x='63' y='295' />
+<ChildCell x='105' y='235' />
+<ChildCell x='115' y='284' />
+<ChildCell x='107' y='339' />
+<ChildCell x='45' y='350' />
+<ChildCell x='41' y='177' />
+<Settings maxCellsCount='7' needCellsCount='5' />
+</map>

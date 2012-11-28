@@ -1,0 +1,42 @@
+<map>
+<ChildCell x='146' y='81' />
+<ChildCell x='40' y='81' />
+<ChildCell x='92' y='81' />
+<ChildCell x='252' y='81' />
+<ChildCell x='198' y='81' />
+<dec_plastic1 x='696' y='730' />
+<dec_stones2 x='618' y='702' />
+<dec_stones3 x='671' y='679' />
+<dec_anchor x='622' y='716' />
+<dec_plant4 x='606' y='618' />
+<dec_plant5 x='849' y='448' rotation='-120' alpha='0.6' />
+<dec_plant5 x='841' y='419' rotation='-90' scaleX='0.641' scaleY='0.692' alpha='0.6' />
+<dec_plant7 x='841' y='387' rotation='-75' />
+<dec_plant5 x='845' y='436' rotation='-105' alpha='0.6' />
+<dec_plant5 x='860' y='458' rotation='-135' scaleX='0.641' scaleY='0.692' alpha='0.6' />
+<dec_plant5 x='886' y='314' rotation='-105' />
+<dec_plant5 x='891' y='302' rotation='-75' scaleX='0.641' scaleY='0.692' />
+<dec_plant5 x='884' y='337' rotation='-90' />
+<groundCell1 x='942' y='410' />
+<dec_plant5 x='891' y='288' rotation='-75' scaleX='0.641' scaleY='0.692' />
+<dec_star x='223' y='737' />
+<dec_plant7 x='62' y='318' rotation='15' />
+<dec_plant7 x='27' y='328' flipX='YES' />
+<dec_plant7 x='83' y='329' rotation='15' scaleX='0.578' scaleY='0.649' alpha='0.6' />
+<dec_plant7 x='40' y='305' rotation='-15' scaleX='0.578' scaleY='0.649' alpha='0.6' />
+<dec_plant7 x='105' y='330' rotation='15' />
+<dec_plant7 x='344' y='491' rotation='15' />
+<dec_plant7 x='284' y='483' flipX='YES' />
+<dec_plant7 x='323' y='482' rotation='15' scaleX='0.578' scaleY='0.649' alpha='0.6' />
+<dec_plant7 x='323' y='482' rotation='-15' scaleX='0.578' scaleY='0.649' alpha='0.6' />
+<dec_plant7 x='296' y='496' scaleX='0.884' scaleY='0.756' />
+<dec_plant3 x='213' y='676' />
+<dec_plant1 x='174' y='685' />
+<dec_plant1 x='183' y='680' />
+<dec_plant1 x='195' y='756' />
+<groundCell2 x='87' y='370' />
+<groundCell3 x='385' y='153' />
+<groundCell4 x='325' y='635' />
+<ExitCell x='84' y='659' />
+<Settings maxCellsCount='5' needCellsCount='5' />
+</map>

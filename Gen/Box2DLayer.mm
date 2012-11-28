@@ -432,8 +432,18 @@ ccc3FromUInt(const uint bytes)
     NSError *error;
     TBXML *xml;
     
-    // 1. Load XML from local build
-    xml = [[[TBXML alloc] initWithXMLFile:[GameManager sharedGameManager].levelName fileExtension:@"xml" error:&error] autorelease];
+    // 1. Определяем имя файла с координатами объектов в нем
+    NSString *xmlFileName = [NSString stringWithFormat:@"%@.xml", [GameManager sharedGameManager].levelName];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && [[CCFileUtils sharedFileUtils] iPadFileExistsAtPath:xmlFileName]) {
+        xmlFileName = [NSString stringWithFormat:@"%@-ipad.xml", [GameManager sharedGameManager].levelName];
+    }
+    else
+    {
+        xmlFileName = [NSString stringWithFormat:@"%@.xml", [GameManager sharedGameManager].levelName];
+    }
+    
+    // 2. Load XML from local build
+    xml = [[[TBXML alloc] initWithXMLFile:xmlFileName error:&error] autorelease];
     if (error) {
         CCLOG(@"TBXML Error-Failed to open local file:%@ %@", [error localizedDescription], [error userInfo]);
     }
@@ -453,35 +463,35 @@ ccc3FromUInt(const uint bytes)
         }
     }
     
-    // 2. If nothing found on local disk, than Load XML from network
+    // 3. If nothing found on local disk, than Load XML from network
     // Create a success block to be called when the asyn request completes
 //    NSString *urlString = [NSString stringWithFormat:@"http://192.168.2.1/%@.xml",[GameManager sharedGameManager].levelName];
-//    NSString *urlString = [NSString stringWithFormat:@"http://127.0.0.1/%@.xml",[GameManager sharedGameManager].levelName];
-//    NSURL *url = [NSURL URLWithString:urlString];
-//    NSData *xmlData = [[NSData alloc] initWithContentsOfURL:url];
-//    TBXML *xmlInet = [[TBXML alloc] initWithXMLData:xmlData error:&error];
-//    
-//    if (error) {
-//        CCLOG(@"TBXML Error-Failed to open XML from Network:%@ %@", [error localizedDescription], [error userInfo]);
-//        return false;
-//    }
-//    else
-//    {
-//        CCLOG(@"TBXML Loaded XML from Network");
-//        // If TBXML found a root node, process element and iterate all children
-//        if ([[TBXML elementName:xmlInet.rootXMLElement] isEqualToString:@"map"])
-//        {
-//            [self traverseLevelMapElements:xmlInet.rootXMLElement];
-//        }
-//        else
-//        {
-//            CCLOG(@"TBXML XML from Network has incorrect content");
-//            return false;
-//        }
-//    }
-//    
-//    [xmlData release];
-//    [xmlInet release];
+    NSString *urlString = [NSString stringWithFormat:@"http://127.0.0.1/%@",xmlFileName];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSData *xmlData = [[NSData alloc] initWithContentsOfURL:url];
+    TBXML *xmlInet = [[TBXML alloc] initWithXMLData:xmlData error:&error];
+    
+    if (error) {
+        CCLOG(@"TBXML Error-Failed to open XML from Network:%@ %@", [error localizedDescription], [error userInfo]);
+        return false;
+    }
+    else
+    {
+        CCLOG(@"TBXML Loaded XML from Network");
+        // If TBXML found a root node, process element and iterate all children
+        if ([[TBXML elementName:xmlInet.rootXMLElement] isEqualToString:@"map"])
+        {
+            [self traverseLevelMapElements:xmlInet.rootXMLElement];
+        }
+        else
+        {
+            CCLOG(@"TBXML XML from Network has incorrect content");
+            return false;
+        }
+    }
+    
+    [xmlData release];
+    [xmlInet release];
     
     return true;
 }

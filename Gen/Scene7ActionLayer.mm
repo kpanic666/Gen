@@ -24,10 +24,10 @@
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
         // add RedCells
-        cellPos = [Helper convertPosition:ccp(480, 159)];
+        cellPos = ccp(screenSize.width*0.5, screenSize.height*0.75);
         RedCell *redCell1 = [self createRedCellInWorld:world position:cellPos name:@"redCell1" withPinAtPos:cellPos];
         [redCell1 setMotorSpeed:2.5];
-        cellPos = [Helper convertPosition:ccp(480, 476)];
+        cellPos = ccp(screenSize.width*0.5, screenSize.height*0.25);
         RedCell *redCell2 = [self createRedCellInWorld:world position:cellPos name:@"redCell1" withPinAtPos:cellPos];
         [redCell2 setMotorSpeed:-2.5];
     }

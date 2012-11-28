@@ -37,18 +37,6 @@
         bubble1 = [self createBubbleCellAtLocation:cellPos];
         cellPos = [Helper convertPosition:ccp(312, 339)];
         bubble2 = [self createBubbleCellAtLocation:cellPos];
-        cellPos = [Helper convertPosition:ccp(800, 563)];
-        [self createBubbleCellAtLocation:cellPos];
-        cellPos = [Helper convertPosition:ccp(867, 557)];
-        [self createBubbleCellAtLocation:cellPos];
-        cellPos = [Helper convertPosition:ccp(820, 514)];
-        [self createBubbleCellAtLocation:cellPos];
-        cellPos = [Helper convertPosition:ccp(873, 493)];
-        [self createBubbleCellAtLocation:cellPos];
-        cellPos = [Helper convertPosition:ccp(820, 460)];
-        [self createBubbleCellAtLocation:cellPos];
-        cellPos = [Helper convertPosition:ccp(878, 444)];
-        [self createBubbleCellAtLocation:cellPos];
         
         // Add Tutorial text and arrows
         tutStep = 0;

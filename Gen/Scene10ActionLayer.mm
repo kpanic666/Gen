@@ -27,7 +27,7 @@
         info.position = [Helper convertPosition:ccp(230, 110)];
         info.opacity = 0;
         [sceneSpriteBatchNode addChild:info z:-2];
-        CCLabelTTF *infoText = [CCLabelTTF labelWithString:@"Some food can explode!\n Try to feed it to Genby\n or get rid of it" fontName:@"Verdana" fontSize:[Helper convertFontSize:12]];
+        CCLabelTTF *infoText = [CCLabelTTF labelWithString:@"Some food can explode!\n Try feed it to Genby\n or get rid of it" fontName:@"Verdana" fontSize:[Helper convertFontSize:12]];
         infoText.color = ccBLACK;
         infoText.opacity = 0;
         infoText.position = ccp(info.position.x + info.contentSize.width*0.7 + infoText.contentSize.width*0.5, info.position.y);

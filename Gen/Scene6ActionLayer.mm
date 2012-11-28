@@ -70,19 +70,19 @@
         // Add Tutorial text and arrows
         float fontSize = [Helper convertFontSize:12];
         NSString *fontName = @"Verdana";
-        NSString *myText = @"Collect necessary\n amount of cells";
+        NSString *myText = @"Collect necessary\n amount of food";
         CGSize maxSize = CGSizeMake(screenSize.width/3, 400);
         // ----Score Tip----
         CCSprite *toScoreArrow = [CCSprite spriteWithSpriteFrameName:@"tut_arrow2.png"];
         toScoreArrow.rotation = 230;
         toScoreArrow.opacity = 0;
-        toScoreArrow.position = ccp(screenSize.width*0.28, screenSize.height*0.82);
+        toScoreArrow.position = ccp(screenSize.width*0.19, screenSize.height*0.84);
         [sceneSpriteBatchNode addChild:toScoreArrow z:-2];
         CGSize actualSize = [myText sizeWithFont:[UIFont fontWithName:fontName size:fontSize]
                                constrainedToSize:maxSize
                                    lineBreakMode:UILineBreakModeWordWrap];
         CCLabelTTF *toScoreText = [CCLabelTTF labelWithString:myText dimensions:actualSize hAlignment:kCCTextAlignmentCenter lineBreakMode:kCCLineBreakModeWordWrap fontName:fontName fontSize:fontSize];
-        toScoreText.position = ccp(screenSize.width*0.30, screenSize.height*0.67);
+        toScoreText.position = ccp(screenSize.width*0.25, screenSize.height*0.7);
         toScoreText.color = ccBLACK;
         toScoreText.opacity = 0;
         [self addChild:toScoreText z:-2];

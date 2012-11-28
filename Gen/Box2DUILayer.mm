@@ -60,29 +60,6 @@
     pauseGameSprite.visible = FALSE;
 }
 
-- (void)makeBorderFrames
-{
-    CGSize screenSize = [CCDirector sharedDirector].winSize;
-    [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-    CCSprite *borderTop = [CCSprite spriteWithFile:@"border_horizontal.png"];
-    CCSprite *borderBottom = [CCSprite spriteWithTexture:[borderTop texture]];
-    CCSprite *borderLeft = [CCSprite spriteWithFile:@"border_vertical.png"];
-    CCSprite *borderRight = [CCSprite spriteWithTexture:[borderLeft texture]];
-    [borderTop setAnchorPoint:ccp(0.5, 1)];
-    [borderBottom setAnchorPoint:ccp(0.5, 0)];
-    [borderLeft setAnchorPoint:ccp(0, 0.5)];
-    [borderRight setAnchorPoint:ccp(1, 0.5)];
-    [borderTop setPosition:ccp(screenSize.width * 0.5, screenSize.height)];
-    [borderBottom setPosition:ccp(screenSize.width * 0.5, 0)];
-    [borderLeft setPosition:ccp(0, screenSize.height * 0.5)];
-    [borderRight setPosition:ccp(screenSize.width, screenSize.height * 0.5)];
-    [self addChild:borderTop z:0];
-    [self addChild:borderBottom z:0];
-    [self addChild:borderLeft z:0];
-    [self addChild:borderRight z:0];
-    [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
-}
-
 - (id) init {
     
     if ((self = [super init])) {
@@ -140,11 +117,6 @@
         centerLabel.position = ccp(screenSize.width*0.5 + centerLabel.contentSize.width, screenSize.height*0.5);
         centerLabel.visible = NO;
         [self addChild:centerLabel z:2];
-        
-        // Add frame borders if game is running on iPad
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            [self makeBorderFrames];
-        }
     }
     return self;
 }

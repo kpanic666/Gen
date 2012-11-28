@@ -1,0 +1,72 @@
+<map>
+<dec_plant5 x='715' y='574' />
+<dec_plant5 x='728' y='578' scaleX='0.769' scaleY='0.806' />
+<dec_plant5 x='776' y='573' flipX='YES' />
+<dec_plant5 x='787' y='586' flipX='YES' />
+<dec_plant5 x='801' y='571' flipX='YES' scaleX='1.08' scaleY='1.32' />
+<dec_plant1 x='747' y='595' />
+<dec_plant1 x='760' y='594' />
+<dec_plant7 x='264' y='563' />
+<dec_plant7 x='222' y='561' />
+<dec_plant7 x='305' y='575' rotation='5' scaleX='0.512' scaleY='0.541' />
+<dec_plant2 x='446' y='534' />
+<dec_plant2 x='415' y='535' scaleX='0.951' scaleY='0.7' />
+<dec_plant1 x='430' y='534' />
+<dec_plant2 x='488' y='533' />
+<dec_plant2 x='457' y='534' scaleX='0.951' scaleY='0.7' alpha='0.6' />
+<dec_plant1 x='472' y='533' />
+<dec_plant2 x='577' y='533' />
+<dec_plant2 x='546' y='534' scaleX='0.951' scaleY='0.7' />
+<dec_plant1 x='561' y='533' />
+<dec_plant2 x='619' y='532' alpha='0.6' />
+<dec_plant2 x='588' y='533' scaleX='0.951' scaleY='0.7' alpha='0.6' />
+<dec_plant1 x='603' y='532' />
+<dec_plant7 x='304' y='564' flipX='YES' alpha='0.6' />
+<dec_plant7 x='262' y='568' flipX='YES' scaleX='0.837' scaleY='0.931' />
+<dec_plant7 x='218' y='571' flipX='YES' scaleX='0.716' scaleY='1.02' alpha='0.7' />
+<dec_plant5 x='24' y='564' />
+<dec_plant5 x='37' y='568' scaleX='0.769' scaleY='0.806' />
+<dec_plant5 x='85' y='563' flipX='YES' />
+<dec_plant5 x='96' y='576' flipX='YES' />
+<dec_plant5 x='110' y='561' flipX='YES' scaleX='1.08' scaleY='1.32' />
+<dec_plant1 x='56' y='585' />
+<dec_plant1 x='69' y='584' />
+<dec_plant7 x='953' y='576' />
+<dec_plant7 x='911' y='574' />
+<dec_plant7 x='994' y='588' rotation='5' scaleX='0.512' scaleY='0.541' />
+<dec_plant7 x='993' y='577' flipX='YES' alpha='0.6' />
+<dec_plant7 x='951' y='581' flipX='YES' scaleX='0.837' scaleY='0.931' />
+<dec_plant7 x='907' y='584' flipX='YES' scaleX='0.716' scaleY='1.02' alpha='0.7' />
+<redCell2 x='866' y='231' />
+<redCell1 x='154' y='234' />
+<groundCell1 x='519' y='685' />
+<groundCell1 x='582' y='586' />
+<groundCell1 x='451' y='587' />
+<groundCell1 x='267' y='637' />
+<groundCell1 x='756' y='647' />
+<groundCell1 x='65' y='637' />
+<groundCell1 x='956' y='650' />
+<ExitCell x='512' y='174' />
+<ChildCell x='451' y='733' />
+<BubbleCell x='311' y='445' />
+<BubbleCell x='411' y='446' />
+<BubbleCell x='512' y='447' />
+<BubbleCell x='613' y='447' />
+<BubbleCell x='715' y='449' />
+<BubbleCell x='817' y='448' />
+<BubbleCell x='207' y='443' />
+<BubbleCell x='920' y='448' />
+<ChildCell x='334' y='729' />
+<ChildCell x='179' y='729' />
+<ChildCell x='280' y='730' />
+<ChildCell x='228' y='730' />
+<ChildCell x='594' y='733' />
+<ChildCell x='705' y='729' />
+<ChildCell x='865' y='729' />
+<ChildCell x='760' y='733' />
+<ChildCell x='812' y='729' />
+<ChildCell x='648' y='731' />
+<ChildCell x='394' y='729' />
+<BubbleCell x='102' y='442' />
+<Settings maxCellsCount='12' needCellsCount='12' />
+</map>
