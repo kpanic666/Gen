@@ -1,0 +1,9 @@
+<map>
+<redCell1 x='512' y='722' />
+<redCell2 x='512' y='49' />
+<ExitCell x='105' y='366' />
+<ChildCell x='919' y='337' />
+<ChildCell x='923' y='385' />
+<ChildCell x='919' y='435' />
+<Settings maxCellsCount='3' needCellsCount='3' />
+</map>

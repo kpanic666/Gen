@@ -1,0 +1,35 @@
+<map>
+<dec_plant7 x='287' y='529' />
+<dec_plant7 x='245' y='527' />
+<dec_plant7 x='328' y='541' rotation='5' scaleX='0.512' scaleY='0.541' />
+<dec_plant7 x='327' y='530' flipX='YES' alpha='0.6' />
+<dec_plant7 x='285' y='534' flipX='YES' scaleX='0.837' scaleY='0.931' />
+<dec_plant7 x='241' y='537' flipX='YES' scaleX='0.716' scaleY='1.02' alpha='0.7' />
+<dec_plant5 x='474' y='353' />
+<dec_plant5 x='487' y='357' scaleX='0.769' scaleY='0.806' />
+<dec_plant5 x='535' y='352' flipX='YES' />
+<dec_plant5 x='546' y='365' flipX='YES' />
+<dec_plant5 x='560' y='350' flipX='YES' scaleX='1.08' scaleY='1.32' />
+<dec_plant1 x='506' y='374' />
+<dec_plant1 x='519' y='373' />
+<dec_plant2 x='151' y='246' />
+<dec_plant2 x='120' y='247' scaleX='0.951' scaleY='0.7' />
+<dec_plant1 x='135' y='246' />
+<dec_plant2 x='193' y='245' alpha='0.6' />
+<dec_plant2 x='162' y='246' scaleX='0.951' scaleY='0.7' alpha='0.6' />
+<dec_plant1 x='177' y='245' />
+<groundCell1 x='512' y='571' scaleX='1.07' />
+<groundCell2 x='441' y='390' />
+<groundCell3 x='808' y='201' />
+<groundCell4 x='639' y='103' />
+<groundCell5 x='134' y='162' />
+<redCell1 x='391' y='271' />
+<redCell2 x='912' y='196' />
+<redCell3 x='726' y='47' />
+<ChildCell x='673' y='670' />
+<ExitCell x='106' y='127' />
+<BubbleCell x='912' y='684' />
+<BubbleCell x='643' y='479' />
+<BubbleCell x='124' y='478' />
+<Settings maxCellsCount='1' needCellsCount='1' />
+</map>

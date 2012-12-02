@@ -1,0 +1,19 @@
+<map>
+<dec_plant7 x='339' y='143' />
+<dec_plant7 x='297' y='141' />
+<dec_plant7 x='380' y='155' rotation='5' scaleX='0.512' scaleY='0.541' />
+<dec_plant7 x='379' y='144' flipX='YES' alpha='0.6' />
+<dec_plant7 x='337' y='148' flipX='YES' scaleX='0.837' scaleY='0.931' />
+<dec_plant7 x='293' y='151' flipX='YES' scaleX='0.716' scaleY='1.02' alpha='0.7' />
+<dec_plant2 x='332' y='264' />
+<dec_plant2 x='301' y='265' scaleX='0.951' scaleY='0.7' />
+<dec_plant1 x='316' y='264' />
+<dec_plant2 x='374' y='263' alpha='0.6' />
+<dec_plant2 x='343' y='264' scaleX='0.951' scaleY='0.7' alpha='0.6' />
+<dec_plant1 x='358' y='263' />
+<redCell1 x='657' y='683' />
+<redCell2 x='901' y='345' />
+<groundCell1 x='342' y='214' />
+<ExitCell x='853' y='563' />
+<Settings maxCellsCount='0' needCellsCount='15' />
+</map>

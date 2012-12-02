@@ -24,7 +24,7 @@
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
         // add MetalCell with Pin at Center
-        cellPos = [Helper convertPosition:ccp(453, 325)];
+        cellPos = ccp(screenSize.width*0.5, screenSize.height*0.5);
         MetalCell *metalCell1 = [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
         [metalCell1 setMotorSpeed:5.0f];
         

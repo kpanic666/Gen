@@ -206,6 +206,8 @@
 		E92CD7E615FA01A000B9C149 /* levelcomplete_win.caf in Resources */ = {isa = PBXBuildFile; fileRef = E92CD7E515FA01A000B9C149 /* levelcomplete_win.caf */; };
 		E92CD7E815FA035300B9C149 /* levelcomplete_faile.caf in Resources */ = {isa = PBXBuildFile; fileRef = E92CD7E715FA035300B9C149 /* levelcomplete_faile.caf */; };
 		E92CD7EA15FC760000B9C149 /* groundcell_bumped.caf in Resources */ = {isa = PBXBuildFile; fileRef = E92CD7E915FC760000B9C149 /* groundcell_bumped.caf */; };
+		E940BCAF166B70A70020F109 /* 1-32-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E940BCAE166B70A70020F109 /* 1-32-ipad.xml */; };
+		E940BCB1166B769A0020F109 /* 1-38-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E940BCB0166B769A0020F109 /* 1-38-ipad.xml */; };
 		E9425D1216102912001F4A9F /* scene13bodies.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9425D1116102912001F4A9F /* scene13bodies.plist */; };
 		E9425D1816118749001F4A9F /* Default-Landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E9425D1416118748001F4A9F /* Default-Landscape@2x.png */; };
 		E9425D1916118749001F4A9F /* Default-Landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = E9425D1516118749001F4A9F /* Default-Landscape.png */; };
@@ -360,6 +362,18 @@
 		E98B2F381666261D005607DA /* 1-20-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F371666261D005607DA /* 1-20-ipad.xml */; };
 		E98B2F3A1666287F005607DA /* 1-21-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F391666287F005607DA /* 1-21-ipad.xml */; };
 		E98B2F3C1666291E005607DA /* 1-22-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F3B1666291E005607DA /* 1-22-ipad.xml */; };
+		E98B2F3E16663AE0005607DA /* 1-23-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F3D16663AE0005607DA /* 1-23-ipad.xml */; };
+		E98B2F4016663C49005607DA /* 1-24-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F3F16663C49005607DA /* 1-24-ipad.xml */; };
+		E98B2F4216663CFB005607DA /* 1-25-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F4116663CFB005607DA /* 1-25-ipad.xml */; };
+		E98B2F4416663E42005607DA /* 1-26-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F4316663E42005607DA /* 1-26-ipad.xml */; };
+		E98B2F46166644AF005607DA /* 1-27-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F45166644AF005607DA /* 1-27-ipad.xml */; };
+		E98B2F4816664610005607DA /* 1-28-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F4716664610005607DA /* 1-28-ipad.xml */; };
+		E98B2F4A166647D2005607DA /* 1-29-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F49166647D2005607DA /* 1-29-ipad.xml */; };
+		E98B2F4C16664C07005607DA /* 1-31-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F4B16664C07005607DA /* 1-31-ipad.xml */; };
+		E98B2F4E166651CC005607DA /* 1-34-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F4D166651CC005607DA /* 1-34-ipad.xml */; };
+		E98B2F5016665234005607DA /* 1-35-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F4F16665234005607DA /* 1-35-ipad.xml */; };
+		E98B2F5216665278005607DA /* 1-36-ipad.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98B2F5116665278005607DA /* 1-36-ipad.xml */; };
+		E98B2F8F166774BD005607DA /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E98B2F8E166774BD005607DA /* StoreKit.framework */; };
 		E98C50671635473A00395FAA /* 1-1.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98C505D1635473900395FAA /* 1-1.xml */; };
 		E98C50681635473A00395FAA /* 1-2.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98C505E1635473900395FAA /* 1-2.xml */; };
 		E98C50691635473A00395FAA /* 1-3.xml in Resources */ = {isa = PBXBuildFile; fileRef = E98C505F1635473900395FAA /* 1-3.xml */; };
@@ -938,6 +952,8 @@
 		E92CD7E515FA01A000B9C149 /* levelcomplete_win.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = levelcomplete_win.caf; sourceTree = "<group>"; };
 		E92CD7E715FA035300B9C149 /* levelcomplete_faile.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = levelcomplete_faile.caf; sourceTree = "<group>"; };
 		E92CD7E915FC760000B9C149 /* groundcell_bumped.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = groundcell_bumped.caf; sourceTree = "<group>"; };
+		E940BCAE166B70A70020F109 /* 1-32-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-32-ipad.xml"; sourceTree = "<group>"; };
+		E940BCB0166B769A0020F109 /* 1-38-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-38-ipad.xml"; sourceTree = "<group>"; };
 		E9425D1116102912001F4A9F /* scene13bodies.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = scene13bodies.plist; sourceTree = "<group>"; };
 		E9425D1416118748001F4A9F /* Default-Landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@2x.png"; sourceTree = "<group>"; };
 		E9425D1516118749001F4A9F /* Default-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape.png"; sourceTree = "<group>"; };
@@ -1145,6 +1161,18 @@
 		E98B2F371666261D005607DA /* 1-20-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-20-ipad.xml"; sourceTree = "<group>"; };
 		E98B2F391666287F005607DA /* 1-21-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-21-ipad.xml"; sourceTree = "<group>"; };
 		E98B2F3B1666291E005607DA /* 1-22-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-22-ipad.xml"; sourceTree = "<group>"; };
+		E98B2F3D16663AE0005607DA /* 1-23-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-23-ipad.xml"; sourceTree = "<group>"; };
+		E98B2F3F16663C49005607DA /* 1-24-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-24-ipad.xml"; sourceTree = "<group>"; };
+		E98B2F4116663CFB005607DA /* 1-25-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-25-ipad.xml"; sourceTree = "<group>"; };
+		E98B2F4316663E42005607DA /* 1-26-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-26-ipad.xml"; sourceTree = "<group>"; };
+		E98B2F45166644AF005607DA /* 1-27-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-27-ipad.xml"; sourceTree = "<group>"; };
+		E98B2F4716664610005607DA /* 1-28-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-28-ipad.xml"; sourceTree = "<group>"; };
+		E98B2F49166647D2005607DA /* 1-29-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-29-ipad.xml"; sourceTree = "<group>"; };
+		E98B2F4B16664C07005607DA /* 1-31-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-31-ipad.xml"; sourceTree = "<group>"; };
+		E98B2F4D166651CC005607DA /* 1-34-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-34-ipad.xml"; sourceTree = "<group>"; };
+		E98B2F4F16665234005607DA /* 1-35-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-35-ipad.xml"; sourceTree = "<group>"; };
+		E98B2F5116665278005607DA /* 1-36-ipad.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-36-ipad.xml"; sourceTree = "<group>"; };
+		E98B2F8E166774BD005607DA /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		E98C505D1635473900395FAA /* 1-1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-1.xml"; sourceTree = "<group>"; };
 		E98C505E1635473900395FAA /* 1-2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-2.xml"; sourceTree = "<group>"; };
 		E98C505F1635473900395FAA /* 1-3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "1-3.xml"; sourceTree = "<group>"; };
@@ -1414,6 +1442,7 @@
 				E9DF19D51541C96D00B6483D /* UIKit.framework in Frameworks */,
 				E995870F150B77550006115C /* CoreGraphics.framework in Frameworks */,
 				E9958711150B77550006115C /* GameKit.framework in Frameworks */,
+				E98B2F8F166774BD005607DA /* StoreKit.framework in Frameworks */,
 				E9DF559115C29663007D76D6 /* libz.dylib in Frameworks */,
 				E9DF558D15C294F8007D76D6 /* libTestFlight.a in Frameworks */,
 			);
@@ -2494,6 +2523,7 @@
 		E99586FF150B77550006115C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E98B2F8E166774BD005607DA /* StoreKit.framework */,
 				E9DF559015C29663007D76D6 /* libz.dylib */,
 				E9958700150B77550006115C /* QuartzCore.framework */,
 				E9958702150B77550006115C /* OpenGLES.framework */,
@@ -2536,7 +2566,6 @@
 				E9958716150B77550006115C /* fps_images.png */,
 				E9831C43151089AE006F2E31 /* fps_images-ipadhd.png */,
 				E9958718150B77550006115C /* fps_images-hd.png */,
-				E9958726150B77550006115C /* Info.plist */,
 				E9958727150B77550006115C /* iTunesArtwork */,
 			);
 			name = Resources;
@@ -2557,6 +2586,7 @@
 		E9958912150B77570006115C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E9958726150B77550006115C /* Info.plist */,
 				E9E1FA2E15417BDE00116ADC /* Prefix.pch */,
 				E9958914150B77570006115C /* main.m */,
 			);
@@ -2639,6 +2669,19 @@
 				E98B2F371666261D005607DA /* 1-20-ipad.xml */,
 				E98B2F391666287F005607DA /* 1-21-ipad.xml */,
 				E98B2F3B1666291E005607DA /* 1-22-ipad.xml */,
+				E98B2F3D16663AE0005607DA /* 1-23-ipad.xml */,
+				E98B2F3F16663C49005607DA /* 1-24-ipad.xml */,
+				E98B2F4116663CFB005607DA /* 1-25-ipad.xml */,
+				E98B2F4316663E42005607DA /* 1-26-ipad.xml */,
+				E98B2F45166644AF005607DA /* 1-27-ipad.xml */,
+				E98B2F4716664610005607DA /* 1-28-ipad.xml */,
+				E98B2F49166647D2005607DA /* 1-29-ipad.xml */,
+				E98B2F4B16664C07005607DA /* 1-31-ipad.xml */,
+				E940BCAE166B70A70020F109 /* 1-32-ipad.xml */,
+				E98B2F4D166651CC005607DA /* 1-34-ipad.xml */,
+				E98B2F4F16665234005607DA /* 1-35-ipad.xml */,
+				E98B2F5116665278005607DA /* 1-36-ipad.xml */,
+				E940BCB0166B769A0020F109 /* 1-38-ipad.xml */,
 				E98C505D1635473900395FAA /* 1-1.xml */,
 				E98C505E1635473900395FAA /* 1-2.xml */,
 				E98C505F1635473900395FAA /* 1-3.xml */,
@@ -3414,6 +3457,19 @@
 				E98B2F381666261D005607DA /* 1-20-ipad.xml in Resources */,
 				E98B2F3A1666287F005607DA /* 1-21-ipad.xml in Resources */,
 				E98B2F3C1666291E005607DA /* 1-22-ipad.xml in Resources */,
+				E98B2F3E16663AE0005607DA /* 1-23-ipad.xml in Resources */,
+				E98B2F4016663C49005607DA /* 1-24-ipad.xml in Resources */,
+				E98B2F4216663CFB005607DA /* 1-25-ipad.xml in Resources */,
+				E98B2F4416663E42005607DA /* 1-26-ipad.xml in Resources */,
+				E98B2F46166644AF005607DA /* 1-27-ipad.xml in Resources */,
+				E98B2F4816664610005607DA /* 1-28-ipad.xml in Resources */,
+				E98B2F4A166647D2005607DA /* 1-29-ipad.xml in Resources */,
+				E98B2F4C16664C07005607DA /* 1-31-ipad.xml in Resources */,
+				E98B2F4E166651CC005607DA /* 1-34-ipad.xml in Resources */,
+				E98B2F5016665234005607DA /* 1-35-ipad.xml in Resources */,
+				E98B2F5216665278005607DA /* 1-36-ipad.xml in Resources */,
+				E940BCAF166B70A70020F109 /* 1-32-ipad.xml in Resources */,
+				E940BCB1166B769A0020F109 /* 1-38-ipad.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
