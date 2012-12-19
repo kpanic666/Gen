@@ -4,83 +4,96 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>water_blick1.png</key>
+            <key>bottom_border.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{208,2},{184,264}}</string>
+                <string>{{2,2},{928,82}}</string>
                 <key>offset</key>
-                <string>{2,0}</string>
+                <string>{-5,6}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{2,0},{184,264}}</string>
+                <string>{{0,0},{928,82}}</string>
                 <key>sourceSize</key>
-                <string>{184,264}</string>
+                <string>{938,94}</string>
             </dict>
-            <key>water_blick2.png</key>
+            <key>button_close.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{66,2},{140,179}}</string>
-                <key>offset</key>
-                <string>{3,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{3,0},{140,179}}</string>
-                <key>sourceSize</key>
-                <string>{140,179}</string>
-            </dict>
-            <key>water_bottom.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{34,2},{30,74}}</string>
+                <string>{{152,278},{180,180}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{30,74}}</string>
+                <string>{{0,0},{180,180}}</string>
                 <key>sourceSize</key>
-                <string>{30,74}</string>
+                <string>{180,180}</string>
             </dict>
-            <key>water_surf_background.png</key>
+            <key>item_background.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,268},{277,45}}</string>
+                <string>{{152,2},{276,168}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{277,45}}</string>
+                <string>{{3,3},{276,168}}</string>
                 <key>sourceSize</key>
-                <string>{277,45}</string>
+                <string>{282,174}</string>
             </dict>
-            <key>water_surf_foreground.png</key>
+            <key>middle.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,315},{334,31}}</string>
+                <string>{{430,2},{928,8}}</string>
+                <key>offset</key>
+                <string>{-5,0}</string>
+                <key>rotated</key>
+                <true/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{928,8}}</string>
+                <key>sourceSize</key>
+                <string>{938,8}</string>
+            </dict>
+            <key>price_background.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{152,172},{190,104}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{334,31}}</string>
+                <string>{{1,0},{190,104}}</string>
                 <key>sourceSize</key>
-                <string>{334,31}</string>
+                <string>{192,104}</string>
             </dict>
-            <key>water_top.png</key>
+            <key>sp_icon.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{30,206}}</string>
+                <string>{{152,460},{98,99}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{30,206}}</string>
+                <string>{{0,0},{98,99}}</string>
                 <key>sourceSize</key>
-                <string>{30,206}</string>
+                <string>{98,99}</string>
+            </dict>
+            <key>top_border.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{86,2},{928,64}}</string>
+                <key>offset</key>
+                <string>{-5,0}</string>
+                <key>rotated</key>
+                <true/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{928,64}}</string>
+                <key>sourceSize</key>
+                <string>{938,64}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -88,13 +101,13 @@
             <key>format</key>
             <integer>2</integer>
             <key>realTextureFileName</key>
-            <string>water_tiles-hd.pvr.ccz</string>
+            <string>superpower_popup-ipad-hd.pvr.ccz</string>
             <key>size</key>
-            <string>{512,512}</string>
+            <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:c22009830e61a48cb3ddb0231ecd61e0$</string>
+            <string>$TexturePacker:SmartUpdate:ccda074404e30dcf3d52a9e2d4f27fec$</string>
             <key>textureFileName</key>
-            <string>water_tiles-hd.pvr.ccz</string>
+            <string>superpower_popup-ipad-hd.pvr.ccz</string>
         </dict>
     </dict>
 </plist>

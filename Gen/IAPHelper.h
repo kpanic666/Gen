@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 Andrey Korikov. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 
 UIKIT_EXTERN NSString *const IAPHelperProductPurchasedNotification;

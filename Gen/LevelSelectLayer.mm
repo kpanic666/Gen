@@ -12,6 +12,8 @@
 #import "SlidingMenuGrid.h"
 #import "CCMenuItemSpriteIndependent.h"
 #import "Helper.h"
+#import "IAPHelper.h"
+#import "ShopLayer.h"
 
 @interface LevelSelectLayer()
 {
@@ -20,6 +22,7 @@
 - (void)displayLevelSelectMenuButtons;
 - (void)playScene:(CCMenuItemFont*)itemPassedIn;
 - (void)backButtonPressed;
+- (void)spButtonPressed;
 @end
 
 @implementation LevelSelectLayer
@@ -53,6 +56,24 @@
 {
     PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
     [[GameManager sharedGameManager] runSceneWithID:kMainMenuScene];
+}
+
+- (void)spButtonPressed
+{
+    // Проверяем не создан ли уже слой с паузой
+    if ([self getChildByTag:kShopLayer]) {
+        return;
+    }
+    
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
+    
+    // Затеняем фон и добавляем слой с магазином
+    ccColor4B c = ccc4(0, 0, 0, 150); // Black transparent background
+    ShopLayer *shopLayer = [[[ShopLayer alloc] initWithColor:c] autorelease];
+    [self addChild:shopLayer z:10 tag:kShopLayer];
+    
+    // Отключаем нажатия
+    [self setIsTouchEnabled:NO];
 }
 
 - (void)displayLevelSelectMenuButtons
@@ -104,7 +125,9 @@
 	 
 	[self addChild:menuGrid z:1];
     
-    // Back button menu
+    // Add additional functional buttons
+    
+    // Back button
     CCSprite *backSprite = [CCSprite spriteWithSpriteFrameName:@"button_back.png"];
     float padding = [backSprite contentSize].width*0.5 * 0.2;
     float xButtonPos = [backSprite contentSize].width*0.5 + padding;
@@ -112,8 +135,19 @@
     [backSprite setPosition:ccp(xButtonPos, yButtonPos)];
     [self addChild:backSprite z:1];
     CCMenuItemSpriteIndependent *backButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:backSprite selectedSprite:nil target:self selector:@selector(backButtonPressed)];
-    CCMenu *backMenu = [CCMenu menuWithItems:backButton, nil];
-    [self addChild:backMenu z:5];
+    
+    // Superpower button
+    CCSprite *spSprite = [CCSprite spriteWithSpriteFrameName:@"button_sp_none.png"];
+    padding = [spSprite contentSize].width*0.5 * 0.2;
+    xButtonPos = [spSprite contentSize].width*0.5 + padding;
+    yButtonPos = screenSize.height - [backSprite contentSize].height*0.5 - padding;
+    [spSprite setPosition:ccp(xButtonPos, yButtonPos)];
+    [self addChild:spSprite z:1];
+    CCMenuItemSpriteIndependent *spButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:spSprite selectedSprite:nil target:self selector:@selector(spButtonPressed)];
+    
+    // Make menu for buttons
+    CCMenu *buttonsMenu = [CCMenu menuWithItems:backButton, spButton, nil];
+    [self addChild:buttonsMenu z:5];
 }
 
 - (id)init

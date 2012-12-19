@@ -13,6 +13,7 @@
 #import "CCMenuItemSpriteIndependent.h"
 #import "ChildCell.h"
 #import "GB2ShapeCache.h"
+#import "IAPHelper.h"
 // Needed to obtain the Navigation Controller
 #import "AppDelegate.h"
 
@@ -21,6 +22,7 @@
 #define kOptionsSpriteTag 11
 #define kMusicToggleTag 12
 #define kSfxToggleTag 13
+#define kRestorePurchaseSpriteTag 14
 
 @interface MainMenuLayer()
 {
@@ -51,6 +53,12 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
     [[GameManager sharedGameManager] runSceneWithID:kLevelSelectScene];
 }
 
+- (void)restorePurchasePressed
+{
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
+    [[IAPHelper sharedInstance] restoreCompletedTransactions];
+}
+
 - (void)optionsPressed
 {
     PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
@@ -60,17 +68,6 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
 - (void)leaderboardPressed
 {
     PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
-    
-//    GKGameCenterViewController *gameCenterController = [[GKGameCenterViewController alloc] init];
-//    
-//    if (gameCenterController != nil)
-//    {
-//        gameCenterController.gameCenterDelegate = self;
-//        AppController *app = (AppController*) [[UIApplication sharedApplication] delegate];
-//        [[app navController] presentModalViewController: gameCenterController animated: YES];
-//    }
-//    
-//    [gameCenterController release];
     
     GKLeaderboardViewController *leaderboardViewController = [[GKLeaderboardViewController alloc] init];
     if (leaderboardViewController != NULL) {
@@ -147,8 +144,10 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
 - (void)removeOptionsMenu
 {
     CCSprite *infoSprite = (CCSprite*)[buttonsBatchNode getChildByTag:kInfoSpriteTag];
+    CCSprite *restoreSprite = (CCSprite*)[buttonsBatchNode getChildByTag:kRestorePurchaseSpriteTag];
     CCSprite *panelSprite = (CCSprite*)[buttonsBatchNode getChildByTag:kPanelSpriteTag];
     [infoSprite removeFromParentAndCleanup:YES];
+    [restoreSprite removeFromParentAndCleanup:YES];
     [panelSprite removeFromParentAndCleanup:YES];
     [optionsMenu removeFromParentAndCleanup:YES];
     optionsMenu = nil;
@@ -164,20 +163,24 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
         CCMenuItemToggle *musicToggle = (CCMenuItemToggle*) [optionsMenu getChildByTag:kMusicToggleTag];
         CCMenuItemToggle *sfxToggle = (CCMenuItemToggle*) [optionsMenu getChildByTag:kSfxToggleTag];
         CCSprite *infoSprite = (CCSprite*)[buttonsBatchNode getChildByTag:kInfoSpriteTag];
+        CCSprite *restoreSprite = (CCSprite*)[buttonsBatchNode getChildByTag:kRestorePurchaseSpriteTag];
         CCSprite *panelSprite = (CCSprite*)[buttonsBatchNode getChildByTag:kPanelSpriteTag];
         
         // Меняем z чтобы не накладывались кнопки подменю сверху на кнопку Опций при сворачивании.
         [self reorderChild:optionsMenu z:1];
         [buttonsBatchNode reorderChild:infoSprite z:0];
+        [buttonsBatchNode reorderChild:restoreSprite z:0];
         CCCallFunc *removeMenuAction = [CCCallFunc actionWithTarget:self selector:@selector(removeOptionsMenu)];
         CCMoveTo *move1Action = [CCMoveTo actionWithDuration:0.2 position:optionsSprite.position];
         CCMoveTo *move2Action = [CCMoveTo actionWithDuration:0.3 position:optionsSprite.position];
         CCMoveTo *move3Action = [CCMoveTo actionWithDuration:0.4 position:optionsSprite.position];
-        CCScaleTo *scaleAction = [CCScaleTo actionWithDuration:0.4 scaleX:0.1 scaleY:1];
+        CCMoveTo *move4Action = [CCMoveTo actionWithDuration:0.5 position:optionsSprite.position];
+        CCScaleTo *scaleAction = [CCScaleTo actionWithDuration:0.5 scaleX:0.1 scaleY:1];
         [panelSprite runAction:[CCSequence actions:scaleAction, removeMenuAction, nil]];
         [sfxToggle runAction:[CCSequence actions:move1Action, hideAction, nil]];
         [musicToggle runAction:[CCSequence actions:move2Action, hideAction, nil]];
         [infoSprite runAction:[CCSequence actions:move3Action, hideAction, nil]];
+        [restoreSprite runAction:[CCSequence actions:move4Action, hideAction, nil]];
     }
     else 
     {
@@ -191,11 +194,13 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
         CCSprite *sfxOnSprite = [CCSprite spriteWithSpriteFrameName:@"button_sfx_on.png"];
         CCSprite *sfxOffSprite = [CCSprite spriteWithSpriteFrameName:@"button_sfx_off.png"];
         CCSprite *infoSprite = [CCSprite spriteWithSpriteFrameName:@"button_info.png"];
+        CCSprite *restoreSprite = [CCSprite spriteWithSpriteFrameName:@"button_restore_purchase.png"];
         CCSprite *panelSprite = [CCSprite spriteWithSpriteFrameName:@"optionsButtonUnder.png"];
         
         // Adding sprites to Batchnode
         [buttonsBatchNode addChild:panelSprite z:1 tag:kPanelSpriteTag];
         [buttonsBatchNode addChild:infoSprite z:2 tag:kInfoSpriteTag];
+        [buttonsBatchNode addChild:restoreSprite z:2 tag:kRestorePurchaseSpriteTag];
         
         // Options Menu Items
         CCMenuItemSprite *sfxOnButton = [CCMenuItemSprite itemWithNormalSprite:sfxOnSprite selectedSprite:sfxOnSpritePsd target:self selector:nil];
@@ -203,10 +208,11 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
         CCMenuItemSprite *musicOnButton = [CCMenuItemSprite itemWithNormalSprite:musicOnSprite selectedSprite:musicOnSpritePsd target:self selector:nil];
         CCMenuItemSprite *musicOffButton = [CCMenuItemSprite itemWithNormalSprite:musicOffSprite selectedSprite:musicOffSpritePsd target:self selector:nil];
         CCMenuItemSpriteIndependent *infoButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:infoSprite selectedSprite:nil target:self selector:@selector(showCredits)];
+        CCMenuItemSpriteIndependent *restoreButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:restoreSprite selectedSprite:nil target:self selector:@selector(restorePurchasePressed)];
         CCMenuItemToggle *musicToggle = [CCMenuItemToggle itemWithTarget:self selector:@selector(musicTogglePressed) items:musicOnButton, musicOffButton, nil];
         CCMenuItemToggle *sfxToggle = [CCMenuItemToggle itemWithTarget:self selector:@selector(SFXTogglePressed) items:sfxOnButton, sfxOffButton, nil];
         
-        optionsMenu = [CCMenu menuWithItems:musicToggle, sfxToggle, infoButton, nil];
+        optionsMenu = [CCMenu menuWithItems:musicToggle, sfxToggle, infoButton, restoreButton, nil];
         [optionsMenu setPosition:ccp(0, 0)];
         [self addChild:optionsMenu z:6];
         
@@ -224,14 +230,18 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
         yButtonPos = optionsSprite.position.y;
         [panelSprite setPosition:ccp(xButtonPos, yButtonPos)];
         padding = infoSprite.contentSize.width;
-        xButtonPos += padding*1.5;
+        xButtonPos += padding*1.3;
         sfxToggle.position = ccp(xButtonPos, yButtonPos);
-        xButtonPos += padding*1.5;
-        yButtonPos -= padding*0.2;
-        musicToggle.position = ccp(xButtonPos, yButtonPos);
-        xButtonPos += padding*1.5;
+        xButtonPos += padding*1.1;
         yButtonPos += padding*0.2;
+        musicToggle.position = ccp(xButtonPos, yButtonPos);
+        xButtonPos += padding*1.1;
+        yButtonPos -= padding*0.2;
         [infoSprite setPosition:ccp(xButtonPos, yButtonPos)];
+        xButtonPos += padding*1.1;
+//        yButtonPos += padding*0.2;
+        [restoreSprite setPosition:ccp(xButtonPos, yButtonPos)];
+        
         
         if ([[GameManager sharedGameManager] isMusicON] == NO) {
             [musicToggle setSelectedIndex:1]; // Music is OFF
@@ -245,10 +255,12 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
         CCDelayTime *delay1Action = [CCDelayTime actionWithDuration:0.1];
         CCDelayTime *delay2Action = [CCDelayTime actionWithDuration:0.2];
         CCDelayTime *delay3Action = [CCDelayTime actionWithDuration:0.3];
+        CCDelayTime *delay4Action = [CCDelayTime actionWithDuration:0.4];
         [panelSprite runAction:[CCScaleTo actionWithDuration:0.2 scaleX:1 scaleY:1]];
         [sfxToggle runAction:[CCSequence actions:hideAction, delay1Action ,showAction, nil]];
         [musicToggle runAction:[CCSequence actions:hideAction, delay2Action, showAction, nil]];
-        [infoSprite runAction:[CCSequence actions:hideAction, delay3Action, showAction, nil]];  
+        [infoSprite runAction:[CCSequence actions:hideAction, delay3Action, showAction, nil]];
+        [restoreSprite runAction:[CCSequence actions:hideAction, delay4Action, showAction, nil]];
     }
 }
 
@@ -405,7 +417,7 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
 
 - (void)update:(ccTime)dt
 {
-    // Выпадаем еду
+    // Сбрасываем еду
     if (fallenBlocksCounter > fallenBlocksFreq) {
         fallenBlocksCounter = 0;
         [self createFood];

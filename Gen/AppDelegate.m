@@ -10,6 +10,7 @@
 #import "GameManager.h"
 #import "GCHelper.h"
 #import "TestFlight.h"
+#import "IAPHelper.h"
 
 @interface MyRootViewController : UINavigationController
 
@@ -34,6 +35,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Запускаем обработчик внутриигровых покупок
+    [IAPHelper sharedInstance];
     
 	// Create the main window
 	window_ = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

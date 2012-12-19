@@ -1405,7 +1405,7 @@
             <key>size</key>
             <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:695dfb7055c6c5043af92b73e5473b2b$</string>
+            <string>$TexturePacker:SmartUpdate:cd81c33a21b99f4558afa8cfc5973ba6$</string>
             <key>textureFileName</key>
             <string>genbyatlas.pvr.ccz</string>
         </dict>

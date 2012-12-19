@@ -8,6 +8,7 @@
 
 #define kBox2DLayer 15
 #define kPauseLayer 16
+#define kShopLayer 24
 #define kGameOverLayer 17
 #define kMainSpriteBatchNode 18
 #define kBubbleCellTagValue 19
@@ -26,8 +27,6 @@
 #define kMaxBubbleMoveDelay 10
 #define kMinBubbleMoveDelay 0
 #define kMaxNumOfBubbleOnScene 13
-//#define kiPadScreenOffsetX 32
-//#define kiPadScreenOffsetY 64
 // Parent Cell Radius drawing
 #define kSuperpowerNumOfWaves 4
 #define kSuperpowerScaleChangeSpeed 0.1
@@ -78,6 +77,18 @@
 #define kAchievementCellDestroyerNum 100
 // Leaderboards
 #define kLeaderboardChapter1 @"com.atomgames.genby.leaderboard.chapter1"
+// In App Purchases IDs
+#define kInAppLevelpack @"com.atomgames.genby.levelpack"
+#define kInAppMagicShieldsRefName @"com.atomgames.genby.magicshields"
+#define kInAppMagicShieldsSmall @"com.atomgames.genby.magicshields10"
+#define kInAppMagicShieldsSmallNum 10
+#define kInAppMagicShieldsMedium @"com.atomgames.genby.magicshields25"
+#define kInAppMagicShieldsMediumNum 25
+#define kInAppMagicShieldsLarge @"com.atomgames.genby.magicshields60"
+#define kInAppMagicShieldsLargeNum 60
+#define kInAppMagicShieldsSuperLarge @"com.atomgames.genby.magicshields100"
+#define kInAppMagicShieldsSuperLargeNum 100
+
 
 // Collision Filter Categories. 0×1, 0×2, 0×4, 0×8, 0×10, 0×20, 0×40, 0×80.. From 0×0001 to 0×8000 and only power of 2!
 // You can use ^ to exclude category from maskbit or use | to sum category in mask bits. maskbits = 0xFFFF ^ 0x0002

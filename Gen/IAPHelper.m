@@ -8,6 +8,8 @@
 
 #import "IAPHelper.h"
 #import <StoreKit/StoreKit.h>
+#import "VerificationController.h"
+#import "Constants.h"
 
 NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurchasedNotification";
 
@@ -28,10 +30,11 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
     static IAPHelper *sharedInstance;
     dispatch_once(&once, ^{
         NSSet *productIdentifiers = [NSSet setWithObjects:
-                                     @"com.atomgames.genby.levelpack",
-                                     @"com.atomgames.genby.magicshields10",
-                                     @"com.atomgames.genby.magicshields25",
-                                     @"com.atomgames.genby.magicshields60",
+                                     kInAppLevelpack,
+                                     kInAppMagicShieldsSmall,
+                                     kInAppMagicShieldsMedium,
+                                     kInAppMagicShieldsLarge,
+                                     kInAppMagicShieldsSuperLarge,
                                      nil];
         sharedInstance = [[self alloc] initWithProductIdentifiers:productIdentifiers];
     });
@@ -62,6 +65,22 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
     return self;
 }
 
+- (void)validateReceiptForTransaction:(SKPaymentTransaction *)transaction
+{
+    VerificationController *verifier = [VerificationController sharedInstance];
+    [verifier verifyPurchase:transaction completionHandler:^(BOOL success)
+    {
+        if (success)
+        {
+            NSLog(@"IAP: Successfully verified receipt!");
+            [self provideContentForProductIdentifier:transaction.payment.productIdentifier];
+        } else {
+            NSLog(@"IAP: Failed to validate receipt.");
+            [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
+        }
+    }];
+}
+
 - (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler
 {
     _completionHandler = [completionHandler copy];
@@ -83,6 +102,8 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
     SKPayment * payment = [SKPayment paymentWithProduct:product];
     [[SKPaymentQueue defaultQueue] addPayment:payment];
 }
+
+#pragma mark SKPaymentTransactionOBserver
 
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
 {
@@ -108,7 +129,8 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
 {
     NSLog(@"IAP: completeTransaction...");
     
-    [self provideContentForProductIdentifier:transaction.payment.productIdentifier];
+//    [self provideContentForProductIdentifier:transaction.payment.productIdentifier];
+    [self validateReceiptForTransaction:transaction];
     [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
 }
 
@@ -116,7 +138,8 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
 {
     NSLog(@"IAP: restoreTransaction...");
     
-    [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier];
+//    [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier];
+    [self validateReceiptForTransaction:transaction];
     [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
 }
 
@@ -137,11 +160,38 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
 
 - (void)provideContentForProductIdentifier:(NSString *)productIdentifier
 {
-    [_purchasedProductIdentifiers addObject:productIdentifier];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:productIdentifier];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    [[NSNotificationCenter defaultCenter] postNotificationName:IAPHelperProductPurchasedNotification object:productIdentifier userInfo:nil];
+    if ([productIdentifier isEqualToString:kInAppLevelpack])
+    {
+        [_purchasedProductIdentifiers addObject:productIdentifier];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:productIdentifier];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    else
+    {
+        int currentValue = [[NSUserDefaults standardUserDefaults] integerForKey:kInAppMagicShieldsRefName];
+        
+        if ([productIdentifier isEqualToString:kInAppMagicShieldsSmall])
+        {
+            currentValue += kInAppMagicShieldsSmallNum;
+        }
+        else if ([productIdentifier isEqualToString:kInAppMagicShieldsMedium])
+        {
+            currentValue += kInAppMagicShieldsMediumNum;
+        }
+        else if ([productIdentifier isEqualToString:kInAppMagicShieldsLarge])
+        {
+            currentValue += kInAppMagicShieldsLargeNum;
+        }
+        else if ([productIdentifier isEqualToString:kInAppMagicShieldsSuperLarge])
+        {
+            currentValue += kInAppMagicShieldsSuperLargeNum;
+        }
+        
+        [[NSUserDefaults standardUserDefaults] setInteger:currentValue forKey:kInAppMagicShieldsRefName];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:IAPHelperProductPurchasedNotification object:productIdentifier userInfo:nil];
 }
 
 #pragma mark - SKProductsRequestDelegate
