@@ -41,6 +41,7 @@
     CCSpriteBatchNode *decorsBatchNode;
     CCSpriteBatchNode *waterBatchNode;
     CCSpriteBatchNode *superpowerBatchNode;
+    CCSpriteBatchNode *watershieldsBatchNode;
     NSMutableArray *bodiesToDestroy;
     ParentCell *parentCell;
     ExitCell *exitCell;
@@ -69,6 +70,9 @@
 - (MetalCell*)createMetalCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name withPinAtPos:(CGPoint)pinPos;
 - (RedCell*)createRedCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name;
 - (RedCell*)createRedCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name withPinAtPos:(CGPoint)pinPos;
+
+// Активация суперсилы на childcells
+- (void)activateWaterShields;
 
 - (void)showTipsElement:(CCNode*)element delay:(float)delay;
 - (void)hideTipsElement:(CCNode*)element delay:(float)delay;

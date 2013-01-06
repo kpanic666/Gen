@@ -52,7 +52,7 @@
 				</dict>
 				<dict>
 					<key>delayUnits</key>
-					<real>1</real>
+					<integer>2</integer>
 					<key>notification</key>
 					<dict/>
 					<key>offset</key>
@@ -189,16 +189,6 @@
 					<string>{0, 0}</string>
 					<key>spriteframe</key>
 					<string>sp_big_anim0018.png</string>
-				</dict>
-				<dict>
-					<key>delayUnits</key>
-					<real>1</real>
-					<key>notification</key>
-					<dict/>
-					<key>offset</key>
-					<string>{0, 0}</string>
-					<key>spriteframe</key>
-					<string>sp_big_anim0019.png</string>
 				</dict>
 			</array>
 			<key>loop</key>

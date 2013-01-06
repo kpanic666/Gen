@@ -12,12 +12,19 @@
 {
     GameCharacter *exitCellSprite;
     NSString *_foodTextureName;
+    CCSprite *watershieldSprite;
 }
 
 - (void)removeCellSprite;
+- (void)activateWaterShieldsWithBatchNode:(CCSpriteBatchNode*)wsBatchNode;
 
 @property (readwrite, assign) NSString *foodTextureName;
+@property (retain) CCSpriteBatchNode *watershieldsBatchNode;
 @property BOOL dontCount;
 @property BOOL spActive;            // TRUE - когда активна суперсила, FALSE - когда суперсилы нет.
+
+// Animations
+@property (nonatomic, retain) CCAnimation *watershieldStartAnim;
+@property (nonatomic, retain) CCAnimation *watershieldCycleAnim;
 
 @end

@@ -49,8 +49,14 @@
     if (characterState == kStateSoul && [self numberOfRunningActions] == 0) {
         if (body == nil) {
 
-            [self removeFromParentAndCleanup:YES];
+            [self removeCellSprite];
+            return;
         }
+    }
+    
+    if (self.spActive && watershieldSprite)
+    {
+        watershieldSprite.position = self.position;
     }
     
     if (characterState == kStateBubbling)
@@ -106,6 +112,7 @@
 - (void) removeCellSprite {
     
     [self setIsActive:FALSE];
+    [watershieldSprite removeFromParentAndCleanup:YES];
     [self removeFromParentAndCleanup:YES];
 }
 
@@ -135,18 +142,27 @@
         {
             characterHealth -= kRedCellDamage;
             
-            // Destroy Physics body
-            self.markedForDestruction = YES;
-            if (_dontCount == false) {
-                [GameManager sharedGameManager].numOfTotalCells--;
+            if (characterHealth <= 0)
+            {
+                // Destroy Physics body
+                self.markedForDestruction = YES;
+                if (_dontCount == false) {
+                    [GameManager sharedGameManager].numOfTotalCells--;
+                }
+                
+                // Count number of destroyed cells for all time for achievement
+                if ([GameState sharedInstance].cellsKilled < kAchievementCellDestroyerNum) {
+                    [GameState sharedInstance].cellsKilled++;
+                }
+                
+                PLAYSOUNDEFFECT(@"CHILDCELL_DYING_1");
+            }
+            else
+            {
+                [watershieldSprite removeFromParentAndCleanup:YES];
+                self.spActive = FALSE;
             }
             
-            // Count number of destroyed cells for all time for achievement
-            if ([GameState sharedInstance].cellsKilled < kAchievementCellDestroyerNum) {
-                [GameState sharedInstance].cellsKilled++;
-            }
-        
-            PLAYSOUNDEFFECT(@"CHILDCELL_DYING_1");
             break;
         }
             
@@ -280,9 +296,25 @@
     }
 }
 
+#pragma mark -
+#pragma mark Water Shields
+
+- (void)activateWaterShieldsWithBatchNode:(CCSpriteBatchNode *)wsBatchNode
+{
+    self.watershieldsBatchNode = wsBatchNode;
+    self.spActive = TRUE;
+    characterHealth *= 2;
+    watershieldSprite = [CCSprite spriteWithSpriteFrameName:@"water_shield_cycle0001.png"];
+    watershieldSprite.position = self.position;
+    [self.watershieldsBatchNode addChild:watershieldSprite];
+}
+
 - (void)dealloc
 {
+    [_watershieldCycleAnim release];
+    [_watershieldStartAnim release];
     exitCellSprite = nil;
+    _watershieldsBatchNode = nil;
     [super dealloc];
 }
 

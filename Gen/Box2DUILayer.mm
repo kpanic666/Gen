@@ -64,7 +64,11 @@
     // Проверяем есть ли уже купленные заряды
     if ([[IAPHelper sharedInstance] canConsumeProduct:kInAppMagicShieldsRefName quantity:1])
     {
-        [self decSpCounter];
+        if ([[IAPHelper sharedInstance] consumeProduct:kInAppMagicShieldsRefName quantity:1])
+        {
+            [self decSpCounter];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"WaterShieldsActivatedNotification" object:self];
+        }
     }
     else
     {
@@ -99,11 +103,8 @@
 
 - (void)decSpCounter
 {
-    if ([[IAPHelper sharedInstance] consumeProduct:kInAppMagicShieldsRefName quantity:1])
-    {
-        // Анимируем покупку суперсил
-        [self animateSpCounterWithString:@"-1"];
-    }
+    // Анимируем покупку суперсил
+    [self animateSpCounterWithString:@"-1"];
 }
 
 - (void)animateSpCounterWithString:(NSString*)num

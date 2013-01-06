@@ -163,19 +163,6 @@
             <key>sp_big_anim0006.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,152},{347,299}}</string>
-                <key>offset</key>
-                <string>{0,19}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{347,299}}</string>
-                <key>sourceSize</key>
-                <string>{347,337}</string>
-            </dict>
-            <key>sp_big_anim0007.png</key>
-            <dict>
-                <key>frame</key>
                 <string>{{351,435},{331,295}}</string>
                 <key>offset</key>
                 <string>{-4,16}</string>
@@ -186,7 +173,7 @@
                 <key>sourceSize</key>
                 <string>{347,337}</string>
             </dict>
-            <key>sp_big_anim0008.png</key>
+            <key>sp_big_anim0007.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,453},{309,293}}</string>
@@ -199,7 +186,7 @@
                 <key>sourceSize</key>
                 <string>{347,337}</string>
             </dict>
-            <key>sp_big_anim0009.png</key>
+            <key>sp_big_anim0008.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{313,732},{297,307}}</string>
@@ -212,7 +199,7 @@
                 <key>sourceSize</key>
                 <string>{347,337}</string>
             </dict>
-            <key>sp_big_anim0010.png</key>
+            <key>sp_big_anim0009.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{309,1031},{269,301}}</string>
@@ -225,7 +212,7 @@
                 <key>sourceSize</key>
                 <string>{347,337}</string>
             </dict>
-            <key>sp_big_anim0011.png</key>
+            <key>sp_big_anim0010.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,1005},{249,305}}</string>
@@ -238,7 +225,7 @@
                 <key>sourceSize</key>
                 <string>{347,337}</string>
             </dict>
-            <key>sp_big_anim0012.png</key>
+            <key>sp_big_anim0011.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{612,1193},{251,293}}</string>
@@ -251,7 +238,7 @@
                 <key>sourceSize</key>
                 <string>{347,337}</string>
             </dict>
-            <key>sp_big_anim0013.png</key>
+            <key>sp_big_anim0012.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,748},{255,305}}</string>
@@ -264,7 +251,7 @@
                 <key>sourceSize</key>
                 <string>{347,337}</string>
             </dict>
-            <key>sp_big_anim0014.png</key>
+            <key>sp_big_anim0013.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,1256},{261,299}}</string>
@@ -277,7 +264,7 @@
                 <key>sourceSize</key>
                 <string>{347,337}</string>
             </dict>
-            <key>sp_big_anim0015.png</key>
+            <key>sp_big_anim0014.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{303,1302},{251,291}}</string>
@@ -290,7 +277,7 @@
                 <key>sourceSize</key>
                 <string>{347,337}</string>
             </dict>
-            <key>sp_big_anim0016.png</key>
+            <key>sp_big_anim0015.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{2,1519},{253,277}}</string>
@@ -303,7 +290,7 @@
                 <key>sourceSize</key>
                 <string>{347,337}</string>
             </dict>
-            <key>sp_big_anim0017.png</key>
+            <key>sp_big_anim0016.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{235,1774},{247,257}}</string>
@@ -316,7 +303,7 @@
                 <key>sourceSize</key>
                 <string>{347,337}</string>
             </dict>
-            <key>sp_big_anim0018.png</key>
+            <key>sp_big_anim0017.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{686,152},{255,243}}</string>
@@ -329,7 +316,7 @@
                 <key>sourceSize</key>
                 <string>{347,337}</string>
             </dict>
-            <key>sp_big_anim0019.png</key>
+            <key>sp_big_anim0018.png</key>
             <dict>
                 <key>frame</key>
                 <string>{{484,1616},{247,247}}</string>
@@ -378,7 +365,7 @@
             <key>size</key>
             <string>{1024,2048}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:bcc399d712958cbf21d52ccd07637c24$</string>
+            <string>$TexturePacker:SmartUpdate:99bc6ee2d2db03421ffec45916e46f65$</string>
             <key>textureFileName</key>
             <string>superpower_popup-ipad-hd.pvr.ccz</string>
         </dict>

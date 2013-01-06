@@ -273,6 +273,24 @@ ccc3FromUInt(const uint bytes)
     [self resetBubbleWithNode:bubbleSprite];
 }
 
+- (void)activateWaterShields
+{
+    // Загружаем атлас с графикой супер силы
+    watershieldsBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"watershields.pvr.ccz" capacity:42];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"watershields.plist"];
+    [self addChild:watershieldsBatchNode z:2];
+    
+    // Включаем суперсилу для еды
+    for (CCSprite *tempSprite in [sceneSpriteBatchNode children])
+    {
+        if ([tempSprite isKindOfClass:[ChildCell class]])
+        {
+            ChildCell *childCell = (ChildCell*) tempSprite;
+            [childCell activateWaterShieldsWithBatchNode:watershieldsBatchNode];
+        }
+    }
+}
+
 #pragma mark -
 #pragma mark Water and Waves
 
@@ -711,6 +729,9 @@ ccc3FromUInt(const uint bytes)
             [[GameState sharedInstance] save];
         }
         
+        // Start listening WaterShields Activated message from SuperPower button. When it is tapped, we will know about this
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activateWaterShields) name:@"WaterShieldsActivatedNotification" object:nil];
+        
         // Display level name with delay
         [self scheduleOnce:@selector(displayLevelName) delay:0.4];
     }
@@ -719,6 +740,8 @@ ccc3FromUInt(const uint bytes)
 
 -(void) dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"WaterShieldsActivatedNotification" object:nil];
+    
     delete contactListener;
     contactListener = NULL;
     [bodiesToDestroy release];
