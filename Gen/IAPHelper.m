@@ -8,12 +8,18 @@
 
 #import "IAPHelper.h"
 #import <StoreKit/StoreKit.h>
-#import "VerificationController.h"
 #import "Constants.h"
 
 NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurchasedNotification";
 
 @interface IAPHelper() <SKProductsRequestDelegate, SKPaymentTransactionObserver>
+
+@property (nonatomic, copy) void (^onTransactionCancelled)();
+@property (nonatomic, copy) void (^onTransactionCompleted)(NSString *productId);
+
+@property (nonatomic, copy) void (^onRestoreFailed)(NSError* error);
+@property (nonatomic, copy) void (^onRestoreCompleted)();
+
 @end
 
 @implementation IAPHelper
@@ -47,9 +53,10 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
     {
         // Store product identifiers
         _productsIdentifiers = productIdentifiers;
+        _productsCache = [[NSMutableArray alloc] init];
         
         // Check for previously purchased products
-        _purchasedProductIdentifiers = [NSMutableSet set];
+        _purchasedProductIdentifiers = [[NSMutableSet alloc] init];
         for (NSString *productIdentifier in _productsIdentifiers) {
             BOOL productPurchased = [[NSUserDefaults standardUserDefaults] boolForKey:productIdentifier];
             if (productPurchased) {
@@ -61,24 +68,10 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
         }
         
         [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+        
+        [self reloadProducts];
     }
     return self;
-}
-
-- (void)validateReceiptForTransaction:(SKPaymentTransaction *)transaction
-{
-    VerificationController *verifier = [VerificationController sharedInstance];
-    [verifier verifyPurchase:transaction completionHandler:^(BOOL success)
-    {
-        if (success)
-        {
-            NSLog(@"IAP: Successfully verified receipt!");
-            [self provideContentForProductIdentifier:transaction.payment.productIdentifier];
-        } else {
-            NSLog(@"IAP: Failed to validate receipt.");
-            [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
-        }
-    }];
 }
 
 - (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler
@@ -90,17 +83,125 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
     [_productsRequest start];
 }
 
++ (id)objectForKey:(NSString*) key
+{
+    id obj = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+    
+    return obj;
+}
+
++ (NSNumber*)numberForKey:(NSString*) key
+{
+    return [NSNumber numberWithInt:[[IAPHelper objectForKey:key] intValue]];
+}
+
+- (void)reloadProducts
+{
+    [_productsCache removeAllObjects];
+    self.isProductsAvailable = NO;
+    [self requestProductsWithCompletionHandler:^(BOOL success, NSArray *products) {
+        if (success)
+        {
+            [_productsCache addObjectsFromArray:products];
+            
+            // Сортируем массив с описанием продуктов по цене
+            [_productsCache sortUsingComparator:^(id a, id b)
+            {
+                NSDecimalNumber *first = [(SKProduct*)a price];
+                NSDecimalNumber *second = [(SKProduct*)b price];
+                return [first compare:second];
+            }];
+        }
+    }];
+}
+
+-(void) restorePreviousTransactionsOnComplete:(void (^)(void)) completionBlock
+                                       onError:(void (^)(NSError*)) errorBlock
+{
+    self.onRestoreCompleted = completionBlock;
+    self.onRestoreFailed = errorBlock;
+    
+	[[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+}
+
+-(void) restoreCompleted
+{
+    if(self.onRestoreCompleted)
+        self.onRestoreCompleted();
+    self.onRestoreCompleted = nil;
+}
+
+-(void) restoreFailedWithError:(NSError*) error
+{
+    if(self.onRestoreFailed)
+        self.onRestoreFailed(error);
+    self.onRestoreFailed = nil;
+}
+
+- (void)removeAllKeychainData
+{
+    for (NSString *productIdentifier in _productsIdentifiers)
+    {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:productIdentifier];
+    }
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kInAppMagicShieldsRefName];
+    [_purchasedProductIdentifiers removeAllObjects];
+}
+
+- (void)showAlertWithTitle:(NSString*)title message:(NSString*)message
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:message
+                                                   delegate:nil
+                                          cancelButtonTitle:NSLocalizedString(@"Dismiss", @"")
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
 - (BOOL)productPurchased:(NSString *)productIdentifier
 {
     return [_purchasedProductIdentifiers containsObject:productIdentifier];
 }
 
-- (void)buyProduct:(SKProduct *)product
+- (void)buyFeature:(SKProduct *)product onComplete:(void (^)(NSString *))completionBlock onCancelled:(void (^)(void))cancelBlock
 {
     NSLog(@"IAP: Buying %@...", product.productIdentifier);
     
+    self.onTransactionCompleted = completionBlock;
+    self.onTransactionCancelled = cancelBlock;
+    
     SKPayment * payment = [SKPayment paymentWithProduct:product];
     [[SKPaymentQueue defaultQueue] addPayment:payment];
+}
+
+- (BOOL)canConsumeProduct:(NSString*) productIdentifier
+{
+	int count = [[IAPHelper numberForKey:productIdentifier] intValue];
+	
+	return (count > 0);
+}
+
+- (BOOL)canConsumeProduct:(NSString*) productIdentifier quantity:(int) quantity
+{
+	int count = [[IAPHelper numberForKey:productIdentifier] intValue];
+    
+	return (count >= quantity);
+}
+
+- (BOOL)consumeProduct:(NSString*) productIdentifier quantity:(int) quantity
+{
+	int count = [[IAPHelper numberForKey:productIdentifier] intValue];
+	if(count < quantity)
+	{
+		return NO;
+	}
+	else
+	{
+		count -= quantity;
+        [[NSUserDefaults standardUserDefaults] setInteger:count forKey:productIdentifier];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+		return YES;
+	}
 }
 
 #pragma mark SKPaymentTransactionOBserver
@@ -125,40 +226,50 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
     }
 }
 
-- (void)completeTransaction:(SKPaymentTransaction *)transaction
+- (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error
 {
-    NSLog(@"IAP: completeTransaction...");
-    
-//    [self provideContentForProductIdentifier:transaction.payment.productIdentifier];
-    [self validateReceiptForTransaction:transaction];
-    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+    [self restoreFailedWithError:error];
 }
 
-- (void)restoreTransaction:(SKPaymentTransaction *)transaction
+- (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue
 {
-    NSLog(@"IAP: restoreTransaction...");
-    
-//    [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier];
-    [self validateReceiptForTransaction:transaction];
-    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+    [self restoreCompleted];
 }
 
-- (void)failedTransaction:(SKPaymentTransaction *)transaction
+- (void)failedTransaction: (SKPaymentTransaction *)transaction
 {
-    NSLog(@"IAP: failedTransaction...");
-    if (transaction.error.code != SKErrorPaymentCancelled)
-    {
-        NSLog(@"IAP: Transaction error: %@", transaction.error.localizedDescription);
-    }
+#ifndef NDEBUG
+    NSLog(@"IAP: Failed transaction: %@", [transaction description]);
+    NSLog(@"error: %@", transaction.error);
+#endif
+	
+    [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
     
-    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+    if(self.onTransactionCancelled)
+        self.onTransactionCancelled();
 }
 
-- (void)restoreCompletedTransactions {
-    [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+- (void)completeTransaction: (SKPaymentTransaction *)transaction
+{
+#ifndef NDEBUG
+        NSLog(@"IAP: Complete transaction.");
+#endif
+    [self provideContentForProductIdentifier:transaction.payment.productIdentifier];
+    [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
 }
 
-- (void)provideContentForProductIdentifier:(NSString *)productIdentifier
+- (void) restoreTransaction: (SKPaymentTransaction *)transaction
+{
+#ifndef NDEBUG
+        NSLog(@"IAP: Restore transaction: %@", [transaction description]);
+#endif
+    
+    [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier];
+    [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
+}
+
+#pragma mark In-App purchases callbacks
+-(void) provideContentForProductIdentifier:(NSString*) productIdentifier
 {
     if ([productIdentifier isEqualToString:kInAppLevelpack])
     {
@@ -191,7 +302,12 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:IAPHelperProductPurchasedNotification object:productIdentifier userInfo:nil];
+    if(self.onTransactionCompleted)
+        self.onTransactionCompleted(productIdentifier);
+    
+    // Создаем оповещение, что покупка совершена. Передаем какую покупку приобрел пользователь
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:productIdentifier forKey:@"productIdentifier"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:IAPHelperProductPurchasedNotification object:self userInfo:userInfo];
 }
 
 #pragma mark - SKProductsRequestDelegate
@@ -210,6 +326,7 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
               skProduct.price.floatValue);
     }
     
+    self.isProductsAvailable = YES;
     _completionHandler(YES, skProducts);
     _completionHandler = nil;
     
@@ -221,9 +338,20 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
     NSLog(@"IAP: Failed to load list of products.");
     _productsRequest = nil;
     
+    self.isProductsAvailable = NO;
     _completionHandler(NO, nil);
     _completionHandler = nil;
     
+}
+
+- (void)dealloc
+{
+    [_productsCache release];
+    _productsCache = nil;
+    [_purchasedProductIdentifiers release];
+    _purchasedProductIdentifiers = nil;
+    
+    [super dealloc];
 }
 
 @end

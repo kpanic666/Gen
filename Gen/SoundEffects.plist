@@ -11,6 +11,8 @@
 	</dict>
 	<key>kLevelSelectScene</key>
 	<dict>
+		<key>INAPP_PURCHASED</key>
+		<string>inapp_purchased.caf</string>
 		<key>BUTTON_PRESSED</key>
 		<string>button_pressed.caf</string>
 		<key>LEVEL_BUTTON_PRESSED</key>
@@ -22,6 +24,8 @@
 	<dict/>
 	<key>kGeneralSounds</key>
 	<dict>
+		<key>INAPP_PURCHASED</key>
+		<string>inapp_purchased.caf</string>
 		<key>STAR3</key>
 		<string>star_3.caf</string>
 		<key>STAR2</key>

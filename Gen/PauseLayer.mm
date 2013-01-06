@@ -81,6 +81,7 @@
         [tempNode resumeSchedulerAndActions];
     }
     PLAYSOUNDEFFECT(@"PAUSEMENU_CLOSING");
+    
     CCMoveTo *moveAction = [CCMoveTo actionWithDuration:0.2 position:ccp(screenSize.width + background.contentSize.width, screenSize.height)];
     CCCallFunc *callAction = [CCCallFunc actionWithTarget:self selector:@selector(removeFromParentAndCleanup:)];
     [background runAction:[CCSequence actions:moveAction, callAction, nil]];

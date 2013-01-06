@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>animations</key>
+	<dict>
+		<key>sp_popup_anim</key>
+		<dict>
+			<key>delayPerUnit</key>
+			<real>0.03999999910593033</real>
+			<key>frames</key>
+			<array>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0001.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0002.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0003.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0004.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0005.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0006.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0007.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0008.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0009.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0010.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0011.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0012.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0013.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0014.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0015.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0016.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0017.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0018.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>sp_big_anim0019.png</string>
+				</dict>
+			</array>
+			<key>loop</key>
+			<true/>
+			<key>loops</key>
+			<integer>1</integer>
+			<key>restoreOriginalFrame</key>
+			<false/>
+		</dict>
+	</dict>
+	<key>properties</key>
+	<dict>
+		<key>format</key>
+		<integer>2</integer>
+		<key>spritesheets</key>
+		<array>
+			<string>superpower_popup.plist</string>
+		</array>
+	</dict>
+</dict>
+</plist>

@@ -18,11 +18,16 @@
 @interface LevelSelectLayer()
 {
     NSMutableArray *allItems;
+    CCMenu *buttonsMenu;
+    SlidingMenuGrid *menuGrid;
+    CCSprite *spSprite;
+    CCLabelTTF *spCounter;
 }
 - (void)displayLevelSelectMenuButtons;
 - (void)playScene:(CCMenuItemFont*)itemPassedIn;
 - (void)backButtonPressed;
 - (void)spButtonPressed;
+- (void)inAppPurchaseBuyed:(NSNotification *)notify;
 @end
 
 @implementation LevelSelectLayer
@@ -67,13 +72,60 @@
     
     PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
     
-    // Затеняем фон и добавляем слой с магазином
-    ccColor4B c = ccc4(0, 0, 0, 150); // Black transparent background
-    ShopLayer *shopLayer = [[[ShopLayer alloc] initWithColor:c] autorelease];
+    // Добавляем слой с магазином
+    ShopLayer *shopLayer = [ShopLayer node];
     [self addChild:shopLayer z:10 tag:kShopLayer];
+}
+
+-(void) updateScore:(NSString*)productIdentifier
+{
+    NSString *currentValue = [[IAPHelper numberForKey:kInAppMagicShieldsRefName] stringValue];
+    NSUInteger startInd = productIdentifier.length - 3;
+    NSString *buyedValue = [[productIdentifier substringFromIndex:startInd]stringByTrimmingCharactersInSet:[NSCharacterSet letterCharacterSet]];
     
-    // Отключаем нажатия
-    [self setIsTouchEnabled:NO];
+    if (spSprite.tag == kSuperpowerNoneIconTag)
+    {
+        [spSprite setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"button_sp_buyed.png"]];
+        spSprite.tag = kSuperpowerBuyedIconTag;
+    }
+    
+    [spCounter setString:currentValue];
+    
+    // Анимируем покупку суперсил
+    // Создаем label с кол-вом купленных суперсил
+    CCLabelBMFont *buyedLabel = [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"+%@", buyedValue] fntFile:@"levelselectNumbers.fnt"];
+    buyedLabel.anchorPoint = ccp(1, 0.5);
+    buyedLabel.opacity = 0;
+    buyedLabel.position = ccp(spCounter.position.x, CGRectGetMinY(spCounter.boundingBox) - buyedLabel.contentSize.height/2);
+    [self addChild:buyedLabel z:2];
+    
+    // Запускаем действия
+    id move1 = [CCEaseOut actionWithAction:[CCMoveBy actionWithDuration:0.5f position:ccp(0, -20)] rate:2];
+    id move2 = [CCMoveBy actionWithDuration:0.4f position:ccp(0, -30)];
+    id fadeInAct = [CCFadeIn actionWithDuration:0.4];
+    id fadeOutAct = [CCFadeOut actionWithDuration:0.5];
+    id removeAct = [CCCallBlock actionWithBlock:
+                      ^{
+                          [buyedLabel removeFromParentAndCleanup:YES];
+                      }];
+    id spawnAct1 = [CCSpawn actionOne:move1 two:fadeInAct];
+    id spawnAct2 = [CCSpawn actionOne:move2 two:fadeOutAct];
+    id seqAct = [CCSequence actions:spawnAct1, spawnAct2, removeAct, nil];
+    [buyedLabel runAction:seqAct];
+}
+
+- (void)inAppPurchaseBuyed:(NSNotification *)notify
+{
+    NSString *productIdentifier = [notify.userInfo valueForKey:@"productIdentifier"];
+    
+    if ([productIdentifier isEqualToString:kInAppLevelpack])
+    {
+        
+    }
+    else
+    {
+        [self updateScore:productIdentifier];
+    }
 }
 
 - (void)displayLevelSelectMenuButtons
@@ -107,7 +159,7 @@
             
             // Пишем номер уровня на уже пройденных уровнях
             CCLabelBMFont *levelNumber = [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%i", i] fntFile:@"levelselectNumbers.fnt"];
-            levelNumber.position = ccp(item.contentSize.width*0.5, item.contentSize.height*0.45);
+            levelNumber.position = ccp(item.contentSize.width*0.5, item.contentSize.height*0.5);
             levelNumber.alignment = kCCTextAlignmentCenter;
             [item addChild:levelNumber];
         }
@@ -118,8 +170,8 @@
 	
 	//Init SlidingMenuGrid object with array and some other information
     CCSprite *normalSprite = [CCSprite spriteWithSpriteFrameName:@"choose_level_button.png"];; // Only for size of texture
-    SlidingMenuGrid *menuGrid = [SlidingMenuGrid menuWithArray:allItems cols:4 rows:5
-                                                      position:ccp(screenSize.width*0.15, screenSize.height*0.89)
+    menuGrid = [SlidingMenuGrid menuWithArray:allItems cols:4 rows:5
+                                                      position:ccp(screenSize.width*0.18, screenSize.height*0.89)
                                                       padding:ccp(normalSprite.contentSize.width*1.18, normalSprite.contentSize.height * 1.26)
                                                       verticalPages:false];
 	 
@@ -137,7 +189,19 @@
     CCMenuItemSpriteIndependent *backButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:backSprite selectedSprite:nil target:self selector:@selector(backButtonPressed)];
     
     // Superpower button
-    CCSprite *spSprite = [CCSprite spriteWithSpriteFrameName:@"button_sp_none.png"];
+    // Определяем есть ли купленные заряды. Если есть то показываем счетчик и цветную кнопку, если нет - то черно-белую
+    int currentValue = [[IAPHelper numberForKey:kInAppMagicShieldsRefName] intValue];
+    
+    if (currentValue > 0) {
+        spSprite = [CCSprite spriteWithSpriteFrameName:@"button_sp_buyed.png"];
+        spSprite.tag = kSuperpowerBuyedIconTag;
+    }
+    else
+    {
+        spSprite = [CCSprite spriteWithSpriteFrameName:@"button_sp_none.png"];
+        spSprite.tag = kSuperpowerNoneIconTag;
+    }
+    
     padding = [spSprite contentSize].width*0.5 * 0.2;
     xButtonPos = [spSprite contentSize].width*0.5 + padding;
     yButtonPos = screenSize.height - [backSprite contentSize].height*0.5 - padding;
@@ -145,8 +209,14 @@
     [self addChild:spSprite z:1];
     CCMenuItemSpriteIndependent *spButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:spSprite selectedSprite:nil target:self selector:@selector(spButtonPressed)];
     
+    // Добавляем счетчик оставшихся зарядов
+    spCounter = [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%d", currentValue] fntFile:@"levelselectNumbers.fnt"];
+    spCounter.anchorPoint = ccp(1, 0.25);
+    spCounter.position = ccp(CGRectGetMaxX(spSprite.boundingBox), CGRectGetMinY(spSprite.boundingBox));
+    [self addChild:spCounter z:2];
+    
     // Make menu for buttons
-    CCMenu *buttonsMenu = [CCMenu menuWithItems:backButton, spButton, nil];
+    buttonsMenu = [CCMenu menuWithItems:backButton, spButton, nil];
     [self addChild:buttonsMenu z:5];
 }
 
@@ -154,6 +224,9 @@
 {
     if ((self = [super init])) {
         CGSize screenSize = [[CCDirector sharedDirector] winSize];
+        
+        // Добавляем обзорщик событий для покупки внутриигровых объектов
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inAppPurchaseBuyed:) name:IAPHelperProductPurchasedNotification object:nil];
         
         // Background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
@@ -167,11 +240,6 @@
         [chooseLevelLabel setPosition:ccp(screenSize.width*0.78, screenSize.height*0.14)];
         [self addChild:chooseLevelLabel];
         
-//        // Slide tip
-//        CCSprite *slideTip = [CCSprite spriteWithSpriteFrameName:@"tut_finger_slide.png"];
-//        [slideTip setPosition:ccp(screenSize.width*0.7, screenSize.height*0.3)];
-//        [self addChild:slideTip];
-        
         // Display Main Menu Buttons
         [self displayLevelSelectMenuButtons];
     }
@@ -180,6 +248,8 @@
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:IAPHelperProductPurchasedNotification object:nil];
+    
     [allItems release];
     allItems = nil;
     [super dealloc];

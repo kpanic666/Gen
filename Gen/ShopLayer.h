@@ -10,5 +10,8 @@
 
 @interface ShopLayer : CCLayerColor
 
+@property CGRect popUpWindowRect;
+
 - (void)createUndercoverWithHeight:(float)uHeight;
+
 @end

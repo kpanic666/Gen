@@ -79,7 +79,8 @@
 {
     if ((self = [super init])) {
         world = theWorld;
-        _dontCount = false;
+        _dontCount = FALSE;
+        _spActive = FALSE;
         // Выбираем рэндомную текстуру еды для объекта и сохраняем в глобальную переменную для дальнейшего использования
         NSString *foodNames[] = {
             @"food_apple",

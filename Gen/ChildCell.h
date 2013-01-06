@@ -18,5 +18,6 @@
 
 @property (readwrite, assign) NSString *foodTextureName;
 @property BOOL dontCount;
+@property BOOL spActive;            // TRUE - когда активна суперсила, FALSE - когда суперсилы нет.
 
 @end

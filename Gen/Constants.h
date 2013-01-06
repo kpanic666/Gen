@@ -12,6 +12,8 @@
 #define kGameOverLayer 17
 #define kMainSpriteBatchNode 18
 #define kBubbleCellTagValue 19
+#define kSuperpowerNoneIconTag 9
+#define kSuperpowerBuyedIconTag 10
 #define kExitCellSpriteTagValue 20
 #define kExitCellPlayingWhenIdleTimer 4.0f
 #define kDrawNodeTagValue 21

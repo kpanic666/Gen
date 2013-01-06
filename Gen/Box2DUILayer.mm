@@ -11,6 +11,8 @@
 #import "GameManager.h"
 #import "PauseLayer.h"
 #import "Helper.h"
+#import "IAPHelper.h"
+#import "ShopLayer.h"
 
 @interface Box2DUILayer()
 {
@@ -23,7 +25,14 @@
     float originalScale;
     CCMenu *pauseMenu;
     CCSprite *pauseGameSprite;
+    CCSprite *spSprite;
+    CCLabelBMFont *spCounter;
 }
+- (void)spButtonPressed;
+- (void)incSpCounter:(NSString *)productIdentifier;
+- (void)decSpCounter;
+- (void)inAppPurchaseBuyed:(NSNotification *)notify;
+
 @end
 
 @implementation Box2DUILayer
@@ -50,18 +59,101 @@
     }
 }
 
-- (void)hideUI
+- (void)spButtonPressed
 {
-    infopanel.visible = FALSE;
-    scoreLabel.visible = FALSE;
-    totalLabel.visible = FALSE;
-    leftScoreLabel.visible = FALSE;
-    pauseMenu.enabled = FALSE;
-    pauseGameSprite.visible = FALSE;
+    // Проверяем есть ли уже купленные заряды
+    if ([[IAPHelper sharedInstance] canConsumeProduct:kInAppMagicShieldsRefName quantity:1])
+    {
+        [self decSpCounter];
+    }
+    else
+    {
+        // Проверяем не создан ли уже слой с магазином
+        if ([self getChildByTag:kShopLayer]) {
+            return;
+        }
+        
+        PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
+        
+        // Добавляем слой с магазином
+        ShopLayer *shopLayer = [ShopLayer node];
+        [self addChild:shopLayer z:10 tag:kShopLayer];
+    }
 }
 
-- (id) init {
+- (void)inAppPurchaseBuyed:(NSNotification *)notify
+{
+    NSString *productIdentifier = [notify.userInfo valueForKey:@"productIdentifier"];
     
+    [self incSpCounter:productIdentifier];
+}
+
+- (void)incSpCounter:(NSString *)productIdentifier
+{
+    NSUInteger startInd = productIdentifier.length - 3;
+    NSString *buyedValue = [[productIdentifier substringFromIndex:startInd]stringByTrimmingCharactersInSet:[NSCharacterSet letterCharacterSet]];
+    
+    // Анимируем покупку суперсил
+    [self animateSpCounterWithString:[NSString stringWithFormat:@"+%@", buyedValue]];
+}
+
+- (void)decSpCounter
+{
+    if ([[IAPHelper sharedInstance] consumeProduct:kInAppMagicShieldsRefName quantity:1])
+    {
+        // Анимируем покупку суперсил
+        [self animateSpCounterWithString:@"-1"];
+    }
+}
+
+- (void)animateSpCounterWithString:(NSString*)num
+{
+    int currentValue = [[IAPHelper numberForKey:kInAppMagicShieldsRefName] intValue];
+    
+    if (currentValue == 0 && spSprite.tag == kSuperpowerBuyedIconTag )
+    {
+        [spSprite setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"button_sp_none.png"]];
+        spSprite.tag = kSuperpowerNoneIconTag;
+    }
+    else if
+        (currentValue > 0 && spSprite.tag == kSuperpowerNoneIconTag)
+    {
+        [spSprite setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"button_sp_buyed.png"]];
+        spSprite.tag = kSuperpowerBuyedIconTag;
+    }
+    
+    [spCounter setString:[NSString stringWithFormat:@"%i", currentValue]];
+    
+    // Создаем label с кол-вом купленных суперсил
+    CCLabelBMFont *buyedLabel = [CCLabelBMFont labelWithString:num fntFile:@"levelselectNumbers.fnt"];
+    buyedLabel.anchorPoint = ccp(1, 0.5);
+    buyedLabel.opacity = 0;
+    buyedLabel.position = ccp(spCounter.position.x, CGRectGetMinY(spCounter.boundingBox) - buyedLabel.contentSize.height/2);
+    [self addChild:buyedLabel z:2];
+    
+    // Запускаем действия
+    id move1 = [CCEaseOut actionWithAction:[CCMoveBy actionWithDuration:0.5f position:ccp(0, -20)] rate:2];
+    id move2 = [CCMoveBy actionWithDuration:0.4f position:ccp(0, -30)];
+    id fadeInAct = [CCFadeIn actionWithDuration:0.4];
+    id fadeOutAct = [CCFadeOut actionWithDuration:0.5];
+    id removeAct = [CCCallBlock actionWithBlock:
+                    ^{
+                        [buyedLabel removeFromParentAndCleanup:YES];
+                    }];
+    id spawnAct1 = [CCSpawn actionOne:move1 two:fadeInAct];
+    id spawnAct2 = [CCSpawn actionOne:move2 two:fadeOutAct];
+    id seqAct = [CCSequence actions:spawnAct1, spawnAct2, removeAct, nil];
+    [buyedLabel runAction:seqAct];
+}
+
+- (void)hideUI
+{
+    self.visible = FALSE;
+    pauseMenu.enabled = FALSE;
+}
+
+- (id)init
+{    
     if ((self = [super init])) {
         CGSize screenSize = [CCDirector sharedDirector].winSize;
         
@@ -79,7 +171,35 @@
         [pauseGameSprite setOpacity:200];
         [self addChild:pauseGameSprite z:1];
         CCMenuItemSpriteIndependent *pauseGameButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:pauseGameSprite selectedSprite:nil target:self selector:@selector(pausePressed)];
-        pauseMenu = [CCMenu menuWithItems:pauseGameButton, nil];
+        
+        // Place SuperPower button
+        int currentValue = [[IAPHelper numberForKey:kInAppMagicShieldsRefName] intValue];
+        
+        if (currentValue > 0) {
+            spSprite = [CCSprite spriteWithSpriteFrameName:@"button_sp_buyed.png"];
+            spSprite.tag = kSuperpowerBuyedIconTag;
+        }
+        else
+        {
+            spSprite = [CCSprite spriteWithSpriteFrameName:@"button_sp_none.png"];
+            spSprite.tag = kSuperpowerNoneIconTag;
+        }
+        
+        padding = [spSprite contentSize].width*0.5 * 0.2;
+        [spSprite setAnchorPoint:ccp(1, 1)];
+        [spSprite setPosition:ccp(pauseGameSprite.position.x - spSprite.contentSize.width - padding,
+                                  screenSize.height)];
+        [self addChild:spSprite z:1];
+        CCMenuItemSpriteIndependent *spButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:spSprite selectedSprite:nil target:self selector:@selector(spButtonPressed)];
+        
+        // Добавляем счетчик оставшихся зарядов
+        spCounter = [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%d", currentValue] fntFile:@"levelselectNumbers.fnt"];
+        spCounter.anchorPoint = ccp(1, 0.25);
+        spCounter.position = ccp(CGRectGetMaxX(spSprite.boundingBox), CGRectGetMinY(spSprite.boundingBox));
+        [self addChild:spCounter z:2];
+        
+        // Menu
+        pauseMenu = [CCMenu menuWithItems:pauseGameButton, spButton, nil];
         [self addChild:pauseMenu z:5];
         
         // Init Score Label
@@ -114,9 +234,12 @@
         
         // Init Center information label for name of level and other info
         centerLabel = [CCLabelBMFont labelWithString:@"    " fntFile:@"levelNameText.fnt"];
-        centerLabel.position = ccp(screenSize.width*0.5 + centerLabel.contentSize.width, screenSize.height*0.5);
+        centerLabel.position = ccp(screenSize.width*0.5 + centerLabel.contentSize.width * 1.5, screenSize.height*0.5);
         centerLabel.visible = NO;
         [self addChild:centerLabel z:2];
+        
+        // Добавляем обзорщик событий для покупки внутриигровых объектов
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inAppPurchaseBuyed:) name:IAPHelperProductPurchasedNotification object:nil];
     }
     return self;
 }

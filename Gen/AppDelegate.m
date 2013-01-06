@@ -153,6 +153,9 @@
 {
 	if( [navController_ visibleViewController] == director_ )
 		[director_ startAnimation];
+    
+    // Запрашиваем данные по продуктам из inAppPurchase
+    [[IAPHelper sharedInstance] reloadProducts];
 }
 
 // application will be killed

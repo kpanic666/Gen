@@ -56,7 +56,14 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
 - (void)restorePurchasePressed
 {
     PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
-    [[IAPHelper sharedInstance] restoreCompletedTransactions];
+    [[IAPHelper sharedInstance] restorePreviousTransactionsOnComplete:^
+     {
+         
+     }
+                                                              onError:^(NSError *error)
+     {
+         
+     }];
 }
 
 - (void)optionsPressed
@@ -111,6 +118,7 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
     // Delete on RELEASE
     [[GCHelper sharedInstance] resetAchievements];
     [[GameState sharedInstance] resetState];
+    [[IAPHelper sharedInstance] removeAllKeychainData];
     
 //    CCLOG(@"OptionsMenu->Info Button Pressed!");
 //	[[GameManager sharedGameManager] runSceneWithID:kCreditsScene];
