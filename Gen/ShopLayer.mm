@@ -276,7 +276,8 @@
     [self addChild:spDesc z:1];
 }
 
-#pragma mark Touch Delegates
+#pragma mark - Touch Delegates
+
 - (void)registerWithTouchDispatcher
 {
     [[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:INT_MIN+1 swallowsTouches:YES];

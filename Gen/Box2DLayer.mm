@@ -51,28 +51,10 @@ ccc3FromUInt(const uint bytes)
 	world->SetContinuousPhysics(TRUE);
 }
 
-- (void)setupDebugDraw
-{
-    m_debugDraw = new GLESDebugDraw(PTM_RATIO);
-    world->SetDebugDraw(m_debugDraw);
-    uint32 flags = 0;
-	flags += b2Draw::e_shapeBit;
-	flags += b2Draw::e_jointBit;
-//    flags += b2Draw::e_aabbBit;
-	//		flags += b2Draw::e_pairBit;
-	//		flags += b2Draw::e_centerOfMassBit;
-	m_debugDraw->SetFlags(flags);
-}
-
 - (void)createGround
 {
     CGSize levelSize = [[GameManager sharedGameManager] getDimensionsOfCurrentScene];
     b2Vec2 lowerLeft = b2Vec2(0, 0);
-    // Сдвигаем рамку земли в центр экрана если игра запущена на iPad
-    // Iphone Screen to iPad
-//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-//        lowerLeft += b2Vec2(kiPadScreenOffsetX / PTM_RATIO, kiPadScreenOffsetY / PTM_RATIO);
-//    }
     b2Vec2 lowerRight = lowerLeft + b2Vec2(levelSize.width/PTM_RATIO, 0);
     b2Vec2 upperRight = lowerRight + b2Vec2(0, levelSize.height/PTM_RATIO);
     b2Vec2 upperLeft = lowerLeft + b2Vec2(0, levelSize.height/PTM_RATIO);
@@ -161,7 +143,6 @@ ccc3FromUInt(const uint bytes)
 {
     GroundCell *groundCell = [GroundCell groundCellInWorld:theWorld position:pos name:name];
     [self addChild:groundCell z:-1];
-//    [groundCell createParticles];
     return groundCell;
 }
 
@@ -273,12 +254,15 @@ ccc3FromUInt(const uint bytes)
     [self resetBubbleWithNode:bubbleSprite];
 }
 
-- (void)activateWaterShields
+- (void)activateWaterShields:(NSNotification *)notify
 {
     // Загружаем атлас с графикой супер силы
     watershieldsBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"watershields.pvr.ccz" capacity:42];
     [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"watershields.plist"];
     [self addChild:watershieldsBatchNode z:2];
+    
+    // Add animation cache
+    [[CCAnimationCache sharedAnimationCache] addAnimationsWithFile:@"watershields_anim.plist"];
     
     // Включаем суперсилу для еды
     for (CCSprite *tempSprite in [sceneSpriteBatchNode children])
@@ -286,13 +270,15 @@ ccc3FromUInt(const uint bytes)
         if ([tempSprite isKindOfClass:[ChildCell class]])
         {
             ChildCell *childCell = (ChildCell*) tempSprite;
-            [childCell activateWaterShieldsWithBatchNode:watershieldsBatchNode];
+            if (childCell.gameObjectType == kChildCellType)
+            {
+                [childCell activateWaterShieldsWithBatchNode:watershieldsBatchNode];
+            }
         }
     }
 }
 
-#pragma mark -
-#pragma mark Water and Waves
+#pragma mark - Water and Waves
 
 - (void)resetBlickWithNode:(id)node
 {
@@ -377,26 +363,6 @@ ccc3FromUInt(const uint bytes)
         [waterSprite setPosition:ccp(x * waterSprite.contentSize.width, screenSize.height)];
         [waterBatchNode addChild:waterSprite z:3 tag:kWaterWaveForegroundTag];
         if (x == -1) leftmostXPosOfWave = waterSprite.position.x;
-    }
-}
-
-- (void)updateWater:(ccTime)dt
-{
-    float dX = kWaterWavesPPS * dt;
-    leftmostXPosOfWave += dX;
-    rightmostXPosOfWave -= dX;
-    
-    // False - to the left, True - to the right
-    for (CCSprite *tempSprite in [waterBatchNode children])
-    {
-        if (tempSprite.tag == kWaterWaveBackgroundTag)
-        {
-            [self moveWaterWithSprite:tempSprite andDirection:false dX:dX];
-        }
-        else if (tempSprite.tag == kWaterWaveForegroundTag)
-        {
-            [self moveWaterWithSprite:tempSprite andDirection:true dX:dX];
-        }
     }
 }
 
@@ -514,8 +480,7 @@ ccc3FromUInt(const uint bytes)
     return true;
 }
 
-#pragma mark -
-#pragma mark XML Level Parser
+#pragma mark - XML Level Parser
 
 - (void)traverseLevelMapElements:(TBXMLElement*)element
 {
@@ -664,6 +629,9 @@ ccc3FromUInt(const uint bytes)
         [GameManager sharedGameManager].levelElapsedTime = 0;
         levelRemainingTime = 0;
         
+        // Start listening WaterShields Activated message from SuperPower button. When it is tapped, we will know about this
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activateWaterShields:) name:@"WaterShieldsActivatedNotification" object:nil];
+        
         [self setupWorld];
         [self createGround];
 #if DEBUG_DRAW
@@ -729,12 +697,14 @@ ccc3FromUInt(const uint bytes)
             [[GameState sharedInstance] save];
         }
         
-        // Start listening WaterShields Activated message from SuperPower button. When it is tapped, we will know about this
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activateWaterShields) name:@"WaterShieldsActivatedNotification" object:nil];
-        
         // Display level name with delay
         [self scheduleOnce:@selector(displayLevelName) delay:0.4];
     }
+    return self;
+}
+
+- (id)initWithBox2DUILayer:(Box2DUILayer *)box2DUILayer
+{
     return self;
 }
 
@@ -758,6 +728,19 @@ ccc3FromUInt(const uint bytes)
     }
     
     [super dealloc];
+}
+
+- (void)setupDebugDraw
+{
+    m_debugDraw = new GLESDebugDraw(PTM_RATIO);
+    world->SetDebugDraw(m_debugDraw);
+    uint32 flags = 0;
+	flags += b2Draw::e_shapeBit;
+	flags += b2Draw::e_jointBit;
+    //    flags += b2Draw::e_aabbBit;
+	//		flags += b2Draw::e_pairBit;
+	//		flags += b2Draw::e_centerOfMassBit;
+	m_debugDraw->SetFlags(flags);
 }
 
 - (void)draw
@@ -862,8 +845,8 @@ ccc3FromUInt(const uint bytes)
     gameManager.levelTotalScore = MAX(0, gameManager.levelTotalScore);
 }
 
-#pragma mark -
-#pragma mark Bubble Tap Check
+#pragma mark - Bubble Tap Check
+
 - (BOOL)bubbleTapCheckAtLoc:(b2Vec2)locationWorld
 {
     b2AABB aabb;
@@ -877,7 +860,13 @@ ccc3FromUInt(const uint bytes)
     {
         b2Body *foundBody = callback.fixtureFound->GetBody();
         Box2DSprite *foundSprite = (Box2DSprite*) foundBody->GetUserData();
-        if (foundSprite.characterState == kStateTraveling) {
+        if (foundSprite.characterState == kStateTraveling)
+        {
+            // Count number of destroyed cells for all time for achievement
+            if ([GameState sharedInstance].bubblesPoped < kAchievementBubblepopperNum) {
+                [GameState sharedInstance].bubblesPoped++;
+            }
+            
             [foundSprite changeState:kStateTakingDamage];
             return true;
         }
@@ -885,8 +874,8 @@ ccc3FromUInt(const uint bytes)
     return false;
 }
 
-#pragma mark -
-#pragma mark Achievements checking
+#pragma mark - Achievements checking
+
 - (void)checkAchievements
 {
     GameManager *gameManager = [GameManager sharedGameManager];
@@ -1108,7 +1097,7 @@ ccc3FromUInt(const uint bytes)
     [gameState save];
 }
 
-#pragma mark Update
+#pragma mark - Loops
 
 - (void)update:(ccTime)dt
 {
@@ -1202,6 +1191,26 @@ ccc3FromUInt(const uint bytes)
     [GameState sharedInstance].gameTotalRunTime += dt;
 }
 
+- (void)updateWater:(ccTime)dt
+{
+    float dX = kWaterWavesPPS * dt;
+    leftmostXPosOfWave += dX;
+    rightmostXPosOfWave -= dX;
+    
+    // False - to the left, True - to the right
+    for (CCSprite *tempSprite in [waterBatchNode children])
+    {
+        if (tempSprite.tag == kWaterWaveBackgroundTag)
+        {
+            [self moveWaterWithSprite:tempSprite andDirection:false dX:dX];
+        }
+        else if (tempSprite.tag == kWaterWaveForegroundTag)
+        {
+            [self moveWaterWithSprite:tempSprite andDirection:true dX:dX];
+        }
+    }
+}
+
 - (void)markBodyForDestruction:(Box2DSprite *)obj
 {
     [bodiesToDestroy addObject:[NSValue valueWithPointer:obj]];
@@ -1220,7 +1229,7 @@ ccc3FromUInt(const uint bytes)
     [bodiesToDestroy removeAllObjects];
 }
 
-#pragma mark Touch Events
+#pragma mark - Touch Events
 
 - (void)registerWithTouchDispatcher
 {
@@ -1265,12 +1274,6 @@ ccc3FromUInt(const uint bytes)
 {    
     // Прячем главную клетку и перестаем притягивать
     [parentCell changeState:kStateIdle];
-}
-
-
-- (id)initWithBox2DUILayer:(Box2DUILayer *)box2DUILayer
-{
-    return self;
 }
 
 @end

@@ -7,7 +7,7 @@
             <key>water_shield_cycle0001.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{84,124},{35,30}}</string>
+                <string>{{219,116},{35,30}}</string>
                 <key>offset</key>
                 <string>{2,-1}</string>
                 <key>rotated</key>
@@ -20,13 +20,13 @@
             <key>water_shield_cycle0002.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{139,80},{39,32}}</string>
+                <string>{{126,120},{37,32}}</string>
                 <key>offset</key>
                 <string>{2,-1}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{5,7},{39,32}}</string>
+                <string>{{6,7},{37,32}}</string>
                 <key>sourceSize</key>
                 <string>{45,44}</string>
             </dict>
@@ -137,11 +137,11 @@
             <key>water_shield_cycle0011.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{38,191},{33,38}}</string>
+                <string>{{179,116},{33,38}}</string>
                 <key>offset</key>
                 <string>{1,-3}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{7,6},{33,38}}</string>
                 <key>sourceSize</key>
@@ -189,7 +189,7 @@
             <key>water_shield_cycle0015.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,118},{35,38}}</string>
+                <string>{{44,116},{35,38}}</string>
                 <key>offset</key>
                 <string>{2,-1}</string>
                 <key>rotated</key>
@@ -202,7 +202,7 @@
             <key>water_shield_cycle0016.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{78,156},{33,34}}</string>
+                <string>{{2,189},{33,34}}</string>
                 <key>offset</key>
                 <string>{3,-1}</string>
                 <key>rotated</key>
@@ -215,11 +215,11 @@
             <key>water_shield_cycle0017.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{149,190},{35,34}}</string>
+                <string>{{219,80},{35,34}}</string>
                 <key>offset</key>
                 <string>{2,-1}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{7,6},{35,34}}</string>
                 <key>sourceSize</key>
@@ -228,7 +228,7 @@
             <key>water_shield_cycle0018.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{42,156},{33,34}}</string>
+                <string>{{2,154},{33,34}}</string>
                 <key>offset</key>
                 <string>{2,-1}</string>
                 <key>rotated</key>
@@ -243,18 +243,18 @@
                 <key>frame</key>
                 <string>{{230,2},{24,22}}</string>
                 <key>offset</key>
-                <string>{1,0}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{9,8},{24,22}}</string>
+                <string>{{8,8},{24,22}}</string>
                 <key>sourceSize</key>
                 <string>{40,38}</string>
             </dict>
             <key>water_shield_start0002.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{149,227},{26,26}}</string>
+                <string>{{38,191},{26,26}}</string>
                 <key>offset</key>
                 <string>{1,0}</string>
                 <key>rotated</key>
@@ -267,7 +267,7 @@
             <key>water_shield_start0003.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{150,156},{28,30}}</string>
+                <string>{{36,224},{28,30}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -280,7 +280,7 @@
             <key>water_shield_start0004.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{121,124},{30,32}}</string>
+                <string>{{2,224},{30,32}}</string>
                 <key>offset</key>
                 <string>{-1,-1}</string>
                 <key>rotated</key>
@@ -293,7 +293,7 @@
             <key>water_shield_start0005.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{114,156},{32,34}}</string>
+                <string>{{165,151},{32,34}}</string>
                 <key>offset</key>
                 <string>{-1,-1}</string>
                 <key>rotated</key>
@@ -306,7 +306,7 @@
             <key>water_shield_start0006.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{155,114},{34,34}}</string>
+                <string>{{219,148},{34,34}}</string>
                 <key>offset</key>
                 <string>{1,-1}</string>
                 <key>rotated</key>
@@ -319,20 +319,20 @@
             <key>water_shield_start0007.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{111,191},{36,36}}</string>
+                <string>{{42,153},{36,36}}</string>
                 <key>offset</key>
-                <string>{0,-1}</string>
+                <string>{-1,-1}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,2},{36,36}}</string>
+                <string>{{1,2},{36,36}}</string>
                 <key>sourceSize</key>
                 <string>{40,38}</string>
             </dict>
             <key>water_shield_start0008.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{73,191},{36,36}}</string>
+                <string>{{84,124},{36,36}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -358,7 +358,7 @@
             <key>water_shield_start0010.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{44,116},{38,38}}</string>
+                <string>{{86,84},{38,38}}</string>
                 <key>offset</key>
                 <string>{-1,0}</string>
                 <key>rotated</key>
@@ -371,7 +371,7 @@
             <key>water_shield_start0011.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{86,84},{38,38}}</string>
+                <string>{{139,80},{38,38}}</string>
                 <key>offset</key>
                 <string>{1,0}</string>
                 <key>rotated</key>
@@ -384,11 +384,11 @@
             <key>water_shield_start0012.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,191},{38,34}}</string>
+                <string>{{179,80},{38,34}}</string>
                 <key>offset</key>
                 <string>{0,-1}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{1,3},{38,34}}</string>
                 <key>sourceSize</key>
@@ -397,7 +397,7 @@
             <key>water_shield_start0013.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,155},{38,34}}</string>
+                <string>{{2,118},{38,34}}</string>
                 <key>offset</key>
                 <string>{-1,-1}</string>
                 <key>rotated</key>
@@ -417,7 +417,7 @@
             <key>size</key>
             <string>{256,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:4722e38eb89206f0d8282732103cce3d$</string>
+            <string>$TexturePacker:SmartUpdate:d5c701a885508bd96b3d60706693f805$</string>
             <key>textureFileName</key>
             <string>watershields.pvr.ccz</string>
         </dict>

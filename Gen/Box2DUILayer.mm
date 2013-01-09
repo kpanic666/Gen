@@ -14,6 +14,9 @@
 #import "IAPHelper.h"
 #import "ShopLayer.h"
 
+#define kPauseButtonTag 1
+#define kSPButtonTag 2
+
 @interface Box2DUILayer()
 {
     CCLabelBMFont *scoreLabel;
@@ -67,6 +70,22 @@
         if ([[IAPHelper sharedInstance] consumeProduct:kInAppMagicShieldsRefName quantity:1])
         {
             [self decSpCounter];
+            
+            PLAYSOUNDEFFECT(@"WATERSHIELDS_START");
+            
+            // Выключаем кнопку суперсилы в текущем уровне
+            spSprite.opacity = 100;
+            spCounter.opacity = 100;
+            if (pauseMenu)
+            {
+                CCMenuItemSprite *spButton = (CCMenuItemSprite *)[pauseMenu getChildByTag:kSPButtonTag];
+                
+                if (spButton)
+                {
+                    [spButton setIsEnabled:FALSE];
+                }
+            }
+            
             [[NSNotificationCenter defaultCenter] postNotificationName:@"WaterShieldsActivatedNotification" object:self];
         }
     }
@@ -85,13 +104,6 @@
     }
 }
 
-- (void)inAppPurchaseBuyed:(NSNotification *)notify
-{
-    NSString *productIdentifier = [notify.userInfo valueForKey:@"productIdentifier"];
-    
-    [self incSpCounter:productIdentifier];
-}
-
 - (void)incSpCounter:(NSString *)productIdentifier
 {
     NSUInteger startInd = productIdentifier.length - 3;
@@ -105,6 +117,13 @@
 {
     // Анимируем покупку суперсил
     [self animateSpCounterWithString:@"-1"];
+}
+
+- (void)inAppPurchaseBuyed:(NSNotification *)notify
+{
+    NSString *productIdentifier = [notify.userInfo valueForKey:@"productIdentifier"];
+    
+    [self incSpCounter:productIdentifier];
 }
 
 - (void)animateSpCounterWithString:(NSString*)num
@@ -158,6 +177,9 @@
     if ((self = [super init])) {
         CGSize screenSize = [CCDirector sharedDirector].winSize;
         
+        // Добавляем обзорщик событий для покупки внутриигровых объектов
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inAppPurchaseBuyed:) name:IAPHelperProductPurchasedNotification object:nil];
+        
         // Place info panel
         infopanel = [CCSprite spriteWithSpriteFrameName:@"infopanel.png"];
         infopanel.anchorPoint = ccp(0, 1);
@@ -172,6 +194,7 @@
         [pauseGameSprite setOpacity:200];
         [self addChild:pauseGameSprite z:1];
         CCMenuItemSpriteIndependent *pauseGameButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:pauseGameSprite selectedSprite:nil target:self selector:@selector(pausePressed)];
+        pauseGameButton.tag = kPauseButtonTag;
         
         // Place SuperPower button
         int currentValue = [[IAPHelper numberForKey:kInAppMagicShieldsRefName] intValue];
@@ -192,6 +215,7 @@
                                   screenSize.height)];
         [self addChild:spSprite z:1];
         CCMenuItemSpriteIndependent *spButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:spSprite selectedSprite:nil target:self selector:@selector(spButtonPressed)];
+        spButton.tag = kSPButtonTag;
         
         // Добавляем счетчик оставшихся зарядов
         spCounter = [CCLabelBMFont labelWithString:[NSString stringWithFormat:@"%d", currentValue] fntFile:@"levelselectNumbers.fnt"];
@@ -238,9 +262,6 @@
         centerLabel.position = ccp(screenSize.width*0.5 + centerLabel.contentSize.width * 1.5, screenSize.height*0.5);
         centerLabel.visible = NO;
         [self addChild:centerLabel z:2];
-        
-        // Добавляем обзорщик событий для покупки внутриигровых объектов
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inAppPurchaseBuyed:) name:IAPHelperProductPurchasedNotification object:nil];
     }
     return self;
 }
@@ -287,6 +308,13 @@
     [centerLabelSFX runAction:sfxLabelFadingSeq];
     [centerLabel runAction:textAction];
     return TRUE;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:IAPHelperProductPurchasedNotification object:nil];
+    
+    [super dealloc];
 }
 
 @end

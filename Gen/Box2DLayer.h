@@ -72,7 +72,7 @@
 - (RedCell*)createRedCellInWorld:(b2World *)theWorld position:(CGPoint)pos name:(NSString *)name withPinAtPos:(CGPoint)pinPos;
 
 // Активация суперсилы на childcells
-- (void)activateWaterShields;
+- (void)activateWaterShields:(NSNotification *)notify;
 
 - (void)showTipsElement:(CCNode*)element delay:(float)delay;
 - (void)hideTipsElement:(CCNode*)element delay:(float)delay;

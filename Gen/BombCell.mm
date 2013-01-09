@@ -14,7 +14,9 @@
 - (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location
 {
     if ((self = [super init])) {
-        self.dontCount = false;
+        self.dontCount = FALSE;
+        self.spActive = FALSE;
+        
         world = theWorld;
         [self setFoodTextureName:@"deadfish_idle"];
         [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"deadfish_idle.png"]];
@@ -213,6 +215,11 @@
         default:
             break;
     }
+}
+
+- (void) activateWaterShieldsWithBatchNode:(CCSpriteBatchNode *)wsBatchNode
+{
+    return;
 }
 
 - (void)dealloc

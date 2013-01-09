@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>animations</key>
+	<dict>
+		<key>ws_start_anim</key>
+		<dict>
+			<key>delayPerUnit</key>
+			<real>0.0333</real>
+			<key>frames</key>
+			<array>
+				<dict>
+					<key>delayUnits</key>
+					<integer>3</integer>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_start0001.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<integer>3</integer>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_start0002.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<integer>2</integer>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_start0003.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<integer>2</integer>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_start0004.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<integer>1</integer>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_start0005.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_start0006.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_start0007.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_start0008.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_start0009.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_start0010.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_start0011.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_start0012.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_start0013.png</string>
+				</dict>
+			</array>
+			<key>loop</key>
+			<false/>
+			<key>loops</key>
+			<integer>1</integer>
+			<key>restoreOriginalFrame</key>
+			<false/>
+		</dict>
+		<key>ws_cycle_anim</key>
+		<dict>
+			<key>delayPerUnit</key>
+			<real>0.0333</real>
+			<key>frames</key>
+			<array>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0001.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0002.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0003.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0004.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<integer>2</integer>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0005.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0006.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0007.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0008.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0009.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0010.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0011.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0012.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0013.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0014.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0015.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0016.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0017.png</string>
+				</dict>
+				<dict>
+					<key>delayUnits</key>
+					<real>1</real>
+					<key>notification</key>
+					<dict/>
+					<key>offset</key>
+					<string>{0, 0}</string>
+					<key>spriteframe</key>
+					<string>water_shield_cycle0018.png</string>
+				</dict>
+			</array>
+			<key>loop</key>
+			<true/>
+			<key>loops</key>
+			<integer>-1</integer>
+			<key>restoreOriginalFrame</key>
+			<false/>
+		</dict>
+	</dict>
+	<key>properties</key>
+	<dict>
+		<key>format</key>
+		<integer>2</integer>
+		<key>spritesheets</key>
+		<array>
+			<string>watershields.plist</string>
+		</array>
+	</dict>
+</dict>
+</plist>

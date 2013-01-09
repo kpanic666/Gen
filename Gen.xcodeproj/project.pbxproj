@@ -482,6 +482,8 @@
 		E98FA640169993BE0096B455 /* watershields-ipad-hd.pvr.ccz in Resources */ = {isa = PBXBuildFile; fileRef = E98FA63A169993BE0096B455 /* watershields-ipad-hd.pvr.ccz */; };
 		E98FA641169993BE0096B455 /* watershields.plist in Resources */ = {isa = PBXBuildFile; fileRef = E98FA63B169993BE0096B455 /* watershields.plist */; };
 		E98FA642169993BE0096B455 /* watershields.pvr.ccz in Resources */ = {isa = PBXBuildFile; fileRef = E98FA63C169993BE0096B455 /* watershields.pvr.ccz */; };
+		E98FA644169AC4F90096B455 /* watershields_anim.plist in Resources */ = {isa = PBXBuildFile; fileRef = E98FA643169AC4F90096B455 /* watershields_anim.plist */; };
+		E98FA684169D6FA10096B455 /* watershields_start.caf in Resources */ = {isa = PBXBuildFile; fileRef = E98FA683169D6FA10096B455 /* watershields_start.caf */; };
 		E9958701150B77550006115C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958700150B77550006115C /* QuartzCore.framework */; };
 		E9958703150B77550006115C /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958702150B77550006115C /* OpenGLES.framework */; };
 		E9958705150B77550006115C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9958704150B77550006115C /* OpenAL.framework */; };
@@ -1345,6 +1347,8 @@
 		E98FA63A169993BE0096B455 /* watershields-ipad-hd.pvr.ccz */ = {isa = PBXFileReference; lastKnownFileType = file; path = "watershields-ipad-hd.pvr.ccz"; sourceTree = "<group>"; };
 		E98FA63B169993BE0096B455 /* watershields.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = watershields.plist; sourceTree = "<group>"; };
 		E98FA63C169993BE0096B455 /* watershields.pvr.ccz */ = {isa = PBXFileReference; lastKnownFileType = file; path = watershields.pvr.ccz; sourceTree = "<group>"; };
+		E98FA643169AC4F90096B455 /* watershields_anim.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = watershields_anim.plist; sourceTree = "<group>"; };
+		E98FA683169D6FA10096B455 /* watershields_start.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = watershields_start.caf; sourceTree = "<group>"; };
 		E99586FC150B77550006115C /* Gen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9958700150B77550006115C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E9958702150B77550006115C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -2143,6 +2147,7 @@
 		E97E9B9C153EEC45008B6B86 /* SFX */ = {
 			isa = PBXGroup;
 			children = (
+				E98FA683169D6FA10096B455 /* watershields_start.caf */,
 				E98FA6331696DA120096B455 /* inapp_purchased.caf */,
 				E98DDAE0165A85C000679034 /* star_1.caf */,
 				E98DDAE1165A85C000679034 /* star_2.caf */,
@@ -2693,6 +2698,16 @@
 			name = "Water Shields";
 			sourceTree = "<group>";
 		};
+		E98FA645169AC5100096B455 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				E98D700C16897B23009EA6CD /* sp_popup_anim.plist */,
+				E98FA643169AC4F90096B455 /* watershields_anim.plist */,
+				E9897A0B162ED42200F5BB4D /* genby_anim.plist */,
+			);
+			name = Animation;
+			sourceTree = "<group>";
+		};
 		E99586F1150B77550006115C = {
 			isa = PBXGroup;
 			children = (
@@ -2840,8 +2855,7 @@
 			children = (
 				E98D700F16897EC5009EA6CD /* Levels */,
 				E98D701016897EEE009EA6CD /* Bodies */,
-				E98D700C16897B23009EA6CD /* sp_popup_anim.plist */,
-				E9897A0B162ED42200F5BB4D /* genby_anim.plist */,
+				E98FA645169AC5100096B455 /* Animation */,
 				E963EAD115DCF5DA00E85692 /* ps_popUpBubble.plist */,
 				E981BB06157794F7003050E5 /* ps_popUpStar.plist */,
 				E981BB0415778834003050E5 /* ps_plankton.plist */,
@@ -3573,6 +3587,8 @@
 				E98FA640169993BE0096B455 /* watershields-ipad-hd.pvr.ccz in Resources */,
 				E98FA641169993BE0096B455 /* watershields.plist in Resources */,
 				E98FA642169993BE0096B455 /* watershields.pvr.ccz in Resources */,
+				E98FA644169AC4F90096B455 /* watershields_anim.plist in Resources */,
+				E98FA684169D6FA10096B455 /* watershields_start.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -24,6 +24,8 @@
 	<dict/>
 	<key>kGeneralSounds</key>
 	<dict>
+		<key>WATERSHIELDS_START</key>
+		<string>watershields_start.caf</string>
 		<key>INAPP_PURCHASED</key>
 		<string>inapp_purchased.caf</string>
 		<key>STAR3</key>

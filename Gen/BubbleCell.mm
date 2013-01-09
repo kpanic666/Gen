@@ -136,7 +136,8 @@
             for (b2JointEdge *edge = body->GetJointList(); edge; edge = edge->next)
             {
                 Box2DSprite *childCell = (Box2DSprite*) edge->joint->GetBodyB()->GetUserData();
-                if ([childCell gameObjectType] == kChildCellType) {
+                if ([childCell gameObjectType] == kChildCellType)
+                {
                     if (body->GetPosition().y < topBorder)
                     {
                         [childCell changeState:kStateIdle];
@@ -146,11 +147,6 @@
                         [childCell changeState:kStateTakingDamage];
                     }
                 }
-            }
-            
-            // Count number of destroyed cells for all time for achievement
-            if ([GameState sharedInstance].bubblesPoped < kAchievementBubblepopperNum) {
-                [GameState sharedInstance].bubblesPoped++;
             }
             
             characterHealth -= kRedCellDamage;
