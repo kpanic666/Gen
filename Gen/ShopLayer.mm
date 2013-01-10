@@ -39,7 +39,7 @@
         
         screenSize = [CCDirector sharedDirector].winSize;
         
-        shopBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"superpower_popup.pvr.ccz" capacity:177];
+        shopBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"superpower_popup.pvr.ccz"];
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"superpower_popup.plist"];
         [self addChild:shopBatchNode];
         
@@ -95,16 +95,18 @@
         if (processIcon != nil && [processIcon isRunning]) {
             [processIcon removeFromParentAndCleanup:YES];
             [processText removeFromParentAndCleanup:YES];
+            processIcon = nil;
+            processText = nil;
         }
         [self unschedule:_cmd];
         [self displayMenuButtons];
     }
     else if (processIcon == nil && processText == nil)
     {
-        processIcon = [CCSprite spriteWithSpriteFrameName:@"process_icon.png"];
+        processIcon = [CCSprite spriteWithFile:@"process_icon.png"];
         processIcon.anchorPoint = ccp(0.42, 0.5);
         processIcon.position = ccp(CGRectGetMidX(_popUpWindowRect), CGRectGetMidY(_popUpWindowRect));
-        [shopBatchNode addChild:processIcon z:2];
+        [self addChild:processIcon z:2];
         
         processText = [CCLabelTTF labelWithString:@"Loading..." fontName:@"Tahoma" fontSize:[Helper convertFontSize:14]];
         processText.color = ccc3(50, 50, 50);

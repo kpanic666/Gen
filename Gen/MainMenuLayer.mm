@@ -56,6 +56,7 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
 - (void)restorePurchasePressed
 {
     PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
+    
     [[IAPHelper sharedInstance] restorePreviousTransactionsOnComplete:^
      {
          

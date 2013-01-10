@@ -129,6 +129,8 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
     if(self.onRestoreCompleted)
         self.onRestoreCompleted();
     self.onRestoreCompleted = nil;
+    
+    [self showAlertWithTitle:@"Restore Purchases" message:@"Success!"];
 }
 
 -(void) restoreFailedWithError:(NSError*) error

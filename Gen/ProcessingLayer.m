@@ -17,7 +17,7 @@
         CGSize screenSize = [CCDirector sharedDirector].winSize;
         self.isTouchEnabled = YES;
         
-        CCSprite *processIcon = [CCSprite spriteWithSpriteFrameName:@"process_icon.png"];
+        CCSprite *processIcon = [CCSprite spriteWithFile:@"process_icon.png"];
         processIcon.anchorPoint = ccp(0.42, 0.5);
         processIcon.position = ccp(screenSize.width * 0.5, screenSize.height * 0.5);
         [self addChild:processIcon];

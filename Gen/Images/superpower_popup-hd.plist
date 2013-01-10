@@ -7,7 +7,7 @@
             <key>best_value_label.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{465,577},{59,45}}</string>
+                <string>{{465,513},{59,45}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -33,7 +33,7 @@
             <key>button_close.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{253,858},{86,85}}</string>
+                <string>{{253,840},{86,85}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -72,33 +72,20 @@
             <key>price_background.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{445,711},{94,52}}</string>
+                <string>{{346,331},{94,52}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{1,0},{94,52}}</string>
                 <key>sourceSize</key>
                 <string>{96,52}</string>
             </dict>
-            <key>process_icon.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{346,195},{116,118}}</string>
-                <key>offset</key>
-                <string>{-1,1}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{2,2},{116,118}}</string>
-                <key>sourceSize</key>
-                <string>{122,124}</string>
-            </dict>
             <key>sp_big_anim0001.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{346,313},{134,117}}</string>
+                <string>{{346,195},{134,117}}</string>
                 <key>offset</key>
                 <string>{9,-4}</string>
                 <key>rotated</key>
@@ -254,7 +241,7 @@
             <key>sp_big_anim0013.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{312,577},{132,151}}</string>
+                <string>{{312,513},{132,151}}</string>
                 <key>offset</key>
                 <string>{9,-4}</string>
                 <key>rotated</key>
@@ -267,7 +254,7 @@
             <key>sp_big_anim0014.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{317,449},{126,147}}</string>
+                <string>{{317,385},{126,147}}</string>
                 <key>offset</key>
                 <string>{9,-4}</string>
                 <key>rotated</key>
@@ -280,7 +267,7 @@
             <key>sp_big_anim0015.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{304,711},{128,139}}</string>
+                <string>{{304,647},{128,139}}</string>
                 <key>offset</key>
                 <string>{10,-6}</string>
                 <key>rotated</key>
@@ -332,7 +319,7 @@
             <key>sp_icon.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{445,807},{49,50}}</string>
+                <string>{{445,647},{49,50}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -365,7 +352,7 @@
             <key>size</key>
             <string>{512,1024}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:caa5afda064a8cc39d11906879ea859d$</string>
+            <string>$TexturePacker:SmartUpdate:363304914071a8adeddfc007bbf9d8bb$</string>
             <key>textureFileName</key>
             <string>superpower_popup-hd.pvr.ccz</string>
         </dict>

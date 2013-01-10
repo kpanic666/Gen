@@ -14,19 +14,28 @@
 #import "Helper.h"
 #import "IAPHelper.h"
 #import "ShopLayer.h"
+#import "ProcessingLayer.h"
 
 @interface LevelSelectLayer()
 {
     NSMutableArray *allItems;
+    CGSize screenSize;
     CCMenu *buttonsMenu;
     SlidingMenuGrid *menuGrid;
     CCSprite *spSprite;
+    NSNumberFormatter * _priceFormatter;
     CCLabelTTF *spCounter;
+    BOOL levelpackBuyed;
+    CCSprite *lpPlateSprite;
+    CCSprite *processIcon;
+    CCSprite *processText;
+    CCSpriteBatchNode *levelpackBatchNode;
 }
 - (void)displayLevelSelectMenuButtons;
 - (void)playScene:(CCMenuItemFont*)itemPassedIn;
 - (void)backButtonPressed;
 - (void)spButtonPressed;
+- (void)lpButtonPressed;
 - (void)inAppPurchaseBuyed:(NSNotification *)notify;
 @end
 
@@ -65,6 +74,8 @@
 
 - (void)spButtonPressed
 {
+    // Открывает окно с покупкой суперсил
+    
     // Проверяем не создан ли уже слой с паузой
     if ([self getChildByTag:kShopLayer]) {
         return;
@@ -75,6 +86,52 @@
     // Добавляем слой с магазином
     ShopLayer *shopLayer = [ShopLayer node];
     [self addChild:shopLayer z:10 tag:kShopLayer];
+}
+
+- (void)lpButtonPressed
+{
+    // Покупка доп. уровней
+    if (![IAPHelper sharedInstance].isProductsAvailable) {
+        CCLOG(@"IAP: Level Pack can't be purchased now! Waiting list of products...");
+        return;
+    }
+    
+    PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
+    
+    // Показываем новый слой с надписью "Обработка"
+    ProcessingLayer *procLayer = [[[ProcessingLayer alloc] initWithColor:ccc4(0, 0, 0, 200)] autorelease];
+    [self addChild:procLayer z:2];
+    
+    // Извлекаем нужный продукт из кэша IAPHelpera
+    SKProduct *product;
+    NSUInteger index = [[IAPHelper sharedInstance].productsCache indexOfObjectPassingTest:^BOOL (SKProduct *obj, NSUInteger idx, BOOL *stop)
+    {
+        return [kInAppLevelpack isEqualToString:obj.productIdentifier];
+    }];
+    
+    if (index != NSNotFound)
+    {
+        product = [[IAPHelper sharedInstance].productsCache objectAtIndex:index];
+    }
+    else
+    {
+        CCLOG(@"IAP: Level Pack can't be purchased now! Can't find product in cache");
+        return;
+    }
+    
+    // Покупаем продукт, если он был найден в кэше
+    
+    [[IAPHelper sharedInstance] buyFeature:product onComplete:^(NSString* purchasedFeature)
+     {
+         [procLayer removeFromParentAndCleanup:YES];
+         PLAYSOUNDEFFECT(@"INAPP_PURCHASED");
+     }
+                               onCancelled:^
+     {
+         // User cancels the transaction, you can log this using any analytics software like Flurry.
+         [procLayer removeFromParentAndCleanup:YES];
+     }];
+
 }
 
 -(void) updateScore:(NSString*)productIdentifier
@@ -120,7 +177,7 @@
     
     if ([productIdentifier isEqualToString:kInAppLevelpack])
     {
-        
+        [[GameManager sharedGameManager] runSceneWithID:kLevelSelectScene];
     }
     else
     {
@@ -130,13 +187,20 @@
 
 - (void)displayLevelSelectMenuButtons
 {
-    CGSize screenSize = [[CCDirector sharedDirector] winSize];
-    
     // Init item array
     allItems = [[NSMutableArray alloc] init];
     
+    // Определяем куплены доп. уровни или нет. Если нет то показываем только первые (бесплатные)
+    uint maxLvl = 15;
+    int nCols = 3;
+    if (levelpackBuyed)
+    {
+        maxLvl = kLevelCount;
+        nCols = 4;
+    }
+    
     // Create CCMenuItemSprite objects with tags, callback methods
-	for (int i = 1; i <= kLevelCount; ++i)
+	for (int i = 1; i <= maxLvl; ++i)
     {
         CCSprite *normalSprite = [CCSprite spriteWithSpriteFrameName:@"choose_level_button.png"];
         CCSprite *selectedSprite = [CCSprite spriteWithSpriteFrameName:@"choose_level_buttonPressed.png"];
@@ -169,8 +233,8 @@
 	}
 	
 	//Init SlidingMenuGrid object with array and some other information
-    CCSprite *normalSprite = [CCSprite spriteWithSpriteFrameName:@"choose_level_button.png"];; // Only for size of texture
-    menuGrid = [SlidingMenuGrid menuWithArray:allItems cols:4 rows:5
+    CCSprite *normalSprite = [CCSprite spriteWithSpriteFrameName:@"choose_level_button.png"]; // Only for size of texture
+    menuGrid = [SlidingMenuGrid menuWithArray:allItems cols:nCols rows:5
                                                       position:ccp(screenSize.width*0.18, screenSize.height*0.89)
                                                       padding:ccp(normalSprite.contentSize.width*1.18, normalSprite.contentSize.height * 1.26)
                                                       verticalPages:false];
@@ -217,13 +281,76 @@
     
     // Make menu for buttons
     buttonsMenu = [CCMenu menuWithItems:backButton, spButton, nil];
-    [self addChild:buttonsMenu z:5];
+    [self addChild:buttonsMenu z:5];    
+}
+
+- (void)displayLevelPackButtons
+{
+    // Создаем кнопки для покупки доп. уровней
+    // Добавляем Баннер с предложением купить уровни и кнопку
+    CCSprite *lpButtonSprite = [CCSprite spriteWithSpriteFrameName:@"button_get.png"];
+    lpButtonSprite.position = ccp(lpPlateSprite.position.x,
+                                  CGRectGetMinY(lpPlateSprite.boundingBox));
+    [levelpackBatchNode addChild:lpButtonSprite z:2];
+    
+    CCMenuItemSpriteIndependent *lpPlateButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:lpPlateSprite selectedSprite:nil target:self selector:@selector(lpButtonPressed)];
+    CCMenuItemSpriteIndependent *lpButton = [CCMenuItemSpriteIndependent itemWithNormalSprite:lpButtonSprite selectedSprite:nil target:self selector:@selector(lpButtonPressed)];
+    
+    // Пишем номер уровня на уже пройденных уровнях
+    CCLabelBMFont *lpText = [CCLabelBMFont labelWithString:@"Buy\n25 New Levels" fntFile:@"levelselectNumbers.fnt"];
+    lpText.position = ccp(lpPlateSprite.position.x, lpPlateSprite.position.y + lpText.contentSize.height * 2);
+    lpText.alignment = kCCTextAlignmentCenter;
+    [self addChild:lpText z:2];
+    
+    [buttonsMenu addChild:lpPlateButton];
+    [buttonsMenu addChild:lpButton];
+}
+
+- (void)waitingForProducts
+{
+    if (lpPlateSprite == nil)
+    {
+        levelpackBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"levelpack.pvr.ccz"];
+        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"levelpack.plist"];
+        [self addChild:levelpackBatchNode z:1];
+        
+        lpPlateSprite = [CCSprite spriteWithSpriteFrameName:@"levelpack_plate.png"];
+        lpPlateSprite.position = ccp(screenSize.width * 0.75, screenSize.height * 0.6);
+        [levelpackBatchNode addChild:lpPlateSprite];
+    }
+    
+    if ([IAPHelper sharedInstance].isProductsAvailable)
+    {
+        // Если информация по продуктам IAP уже загрузилась и доступна
+        if (processIcon != nil && [processIcon isRunning]) {
+            [processIcon removeFromParentAndCleanup:YES];
+            [processText removeFromParentAndCleanup:YES];
+            processIcon = nil;
+            processText = nil;
+        }
+        [self unschedule:_cmd];
+        [self displayLevelPackButtons];
+    }
+    else if (processIcon == nil && processText == nil)
+    {
+        processIcon = [CCSprite spriteWithFile:@"process_icon.png"];
+        processIcon.anchorPoint = ccp(0.42, 0.5);
+        processIcon.position = lpPlateSprite.position;
+        [self addChild:processIcon z:2];
+        
+        processText = [CCLabelTTF labelWithString:@"Loading..." fontName:@"Tahoma" fontSize:[Helper convertFontSize:14]];
+        processText.color = ccc3(50, 50, 50);
+        processText.position = ccp(lpPlateSprite.position.x, lpPlateSprite.position.y - processIcon.contentSize.height * 0.75);
+        [self addChild:processText z:2];
+        
+        [processIcon runAction:[CCRepeatForever actionWithAction:[CCRotateBy actionWithDuration:2 angle:360]]];
+    }
 }
 
 - (id)init
 {
     if ((self = [super init])) {
-        CGSize screenSize = [[CCDirector sharedDirector] winSize];
+        screenSize = [[CCDirector sharedDirector] winSize];
         
         // Добавляем обзорщик событий для покупки внутриигровых объектов
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inAppPurchaseBuyed:) name:IAPHelperProductPurchasedNotification object:nil];
@@ -240,8 +367,21 @@
         [chooseLevelLabel setPosition:ccp(screenSize.width*0.78, screenSize.height*0.14)];
         [self addChild:chooseLevelLabel];
         
+        // Проверяем куплены или нет платные уровни
+        levelpackBuyed = [[IAPHelper sharedInstance] productPurchased:kInAppLevelpack];
+        
         // Display Main Menu Buttons
         [self displayLevelSelectMenuButtons];
+        
+        // Проверяем готовы ли данные по продаваемым продуктам, если нет то отключаем кнопки на покупку уровней, если готовы - показываем
+        if (levelpackBuyed == NO)
+        {
+            _priceFormatter = [[NSNumberFormatter alloc] init];
+            [_priceFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+            [_priceFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+            
+            [self schedule:@selector(waitingForProducts) interval:0.2];
+        }
     }
     return self;
 }
@@ -249,6 +389,10 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:IAPHelperProductPurchasedNotification object:nil];
+    
+    if (_priceFormatter != nil) {
+        [_priceFormatter release];
+    }
     
     [allItems release];
     allItems = nil;
