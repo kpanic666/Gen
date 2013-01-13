@@ -15,6 +15,7 @@
 #import "SimpleQueryCallback.h"
 #import "HMVectorNode.h"
 #import "TBXML.h"
+#import "iRate.h"
 
 static inline ccColor3B
 ccc3FromUInt(const uint bytes)
@@ -792,6 +793,9 @@ ccc3FromUInt(const uint bytes)
     for (CCNode *tempNode in [sceneSpriteBatchNode children]) {
         [tempNode pauseSchedulerAndActions];
     }
+    
+    // Count level Complete events for iRate
+    [[iRate sharedInstance] logEvent:NO]; 
 }
 
 - (void)showTipsElement:(CCNode*)element delay:(float)delay

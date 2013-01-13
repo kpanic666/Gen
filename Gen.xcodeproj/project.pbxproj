@@ -29,6 +29,8 @@
 		E9081A8D164F9791000D151D /* scene37bodies.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9081A8C164F9791000D151D /* scene37bodies.plist */; };
 		E9081A8F164FBF8C000D151D /* scene38bodies.plist in Resources */ = {isa = PBXBuildFile; fileRef = E9081A8E164FBF8C000D151D /* scene38bodies.plist */; };
 		E90BB36015298B1400C8909B /* MagneticCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = E90BB35F15298B1400C8909B /* MagneticCell.mm */; };
+		E912206E16A04B6A00B860BE /* iRate.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E912206B16A04B6A00B860BE /* iRate.bundle */; };
+		E912206F16A04B6A00B860BE /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = E912206D16A04B6A00B860BE /* iRate.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		E915C14E161B0BD900EF97BA /* background1-hd.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E915C14A161B0BD900EF97BA /* background1-hd.jpg */; };
 		E915C14F161B0BD900EF97BA /* background1-ipad-hd.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E915C14B161B0BD900EF97BA /* background1-ipad-hd.jpg */; };
 		E915C150161B0BD900EF97BA /* background1-ipad.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E915C14C161B0BD900EF97BA /* background1-ipad.jpg */; };
@@ -630,6 +632,9 @@
 		E9081A8E164FBF8C000D151D /* scene38bodies.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = scene38bodies.plist; sourceTree = "<group>"; };
 		E90BB35E15298B1400C8909B /* MagneticCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagneticCell.h; sourceTree = "<group>"; };
 		E90BB35F15298B1400C8909B /* MagneticCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MagneticCell.mm; sourceTree = "<group>"; };
+		E912206B16A04B6A00B860BE /* iRate.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = iRate.bundle; sourceTree = "<group>"; };
+		E912206C16A04B6A00B860BE /* iRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iRate.h; sourceTree = "<group>"; };
+		E912206D16A04B6A00B860BE /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
 		E915C14A161B0BD900EF97BA /* background1-hd.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background1-hd.jpg"; sourceTree = "<group>"; };
 		E915C14B161B0BD900EF97BA /* background1-ipad-hd.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background1-ipad-hd.jpg"; sourceTree = "<group>"; };
 		E915C14C161B0BD900EF97BA /* background1-ipad.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background1-ipad.jpg"; sourceTree = "<group>"; };
@@ -1531,9 +1536,20 @@
 			name = Superpower;
 			sourceTree = "<group>";
 		};
+		E912206A16A04B6A00B860BE /* iRate */ = {
+			isa = PBXGroup;
+			children = (
+				E912206B16A04B6A00B860BE /* iRate.bundle */,
+				E912206C16A04B6A00B860BE /* iRate.h */,
+				E912206D16A04B6A00B860BE /* iRate.m */,
+			);
+			path = iRate;
+			sourceTree = "<group>";
+		};
 		E9198DE215981D4B0000A971 /* Etc Classes */ = {
 			isa = PBXGroup;
 			children = (
+				E912206A16A04B6A00B860BE /* iRate */,
 				E98A54B61619AFBD00ADD6BC /* TBXML.m */,
 				E98A54B81619AFC600ADD6BC /* TBXML.h */,
 				E981C0891557D5BC00AC32C0 /* SlidingMenuGrid.h */,
@@ -3633,6 +3649,7 @@
 				E98B8A11169EAB330013D794 /* process_icon-hd.png in Resources */,
 				E98B8A12169EAB330013D794 /* process_icon-ipad-hd.png in Resources */,
 				E98B8A13169EAB330013D794 /* process_icon.png in Resources */,
+				E912206E16A04B6A00B860BE /* iRate.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3909,6 +3926,7 @@
 				E940BCDC166B89820020F109 /* IAPHelper.m in Sources */,
 				E99CA2AE1684A04D00CA03DE /* ShopLayer.mm in Sources */,
 				E98D7017168AFD34009EA6CD /* ProcessingLayer.m in Sources */,
+				E912206F16A04B6A00B860BE /* iRate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

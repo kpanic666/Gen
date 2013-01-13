@@ -11,6 +11,7 @@
 #import "GCHelper.h"
 #import "TestFlight.h"
 #import "IAPHelper.h"
+#import "iRate.h"
 
 @interface MyRootViewController : UINavigationController
 
@@ -31,6 +32,14 @@
 @implementation AppController
 
 @synthesize window=window_, navController=navController_, director=director_;
+
++ (void)initialize
+{
+    //configure iRate
+    [iRate sharedInstance].daysUntilPrompt = 5;
+    [iRate sharedInstance].usesUntilPrompt = 4;
+    [iRate sharedInstance].remindPeriod = 2;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
