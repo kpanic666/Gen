@@ -14,6 +14,7 @@
 #import "ChildCell.h"
 #import "GB2ShapeCache.h"
 #import "IAPHelper.h"
+#import "ProcessingLayer.h"
 // Needed to obtain the Navigation Controller
 #import "AppDelegate.h"
 
@@ -57,13 +58,17 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
 {
     PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
     
+    // Показываем новый слой с надписью "Обработка"
+    ProcessingLayer *procLayer = [[[ProcessingLayer alloc] initWithColor:ccc4(0, 0, 0, 200)] autorelease];
+    [self addChild:procLayer z:6];
+    
     [[IAPHelper sharedInstance] restorePreviousTransactionsOnComplete:^
      {
-         
+         [procLayer removeFromParentAndCleanup:YES];
      }
                                                               onError:^(NSError *error)
      {
-         
+         [procLayer removeFromParentAndCleanup:YES];
      }];
 }
 
@@ -116,13 +121,8 @@ uint fallenBlocksCounter = 0;  // Счетчик частоты выпадени
 - (void)showCredits
 {
     PLAYSOUNDEFFECT(@"BUTTON_PRESSED");
-    // Delete on RELEASE
-    [[GCHelper sharedInstance] resetAchievements];
-    [[GameState sharedInstance] resetState];
-    [[IAPHelper sharedInstance] removeAllKeychainData];
-    
-//    CCLOG(@"OptionsMenu->Info Button Pressed!");
-//	[[GameManager sharedGameManager] runSceneWithID:kCreditsScene];
+
+	[[GameManager sharedGameManager] runSceneWithID:kCreditsScene];
 }
 
 - (void)musicTogglePressed

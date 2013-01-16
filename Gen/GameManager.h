@@ -69,7 +69,6 @@
 - (ALuint)playSoundEffect:(NSString*)soundEffectKey;
 - (void)stopSoundEffect:(ALuint)soundEffectID;
 - (void)playBackgroundTrack:(NSString*)trackFileName;
-- (CGSize)getDimensionsOfCurrentScene;
 - (void)setMusicState:(BOOL)state;
 
 @end

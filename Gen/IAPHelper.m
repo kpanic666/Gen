@@ -9,6 +9,8 @@
 #import "IAPHelper.h"
 #import <StoreKit/StoreKit.h>
 #import "Constants.h"
+#import "GameState.h"
+#import "GCHelper.h"
 
 NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurchasedNotification";
 
@@ -273,11 +275,21 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
 #pragma mark In-App purchases callbacks
 -(void) provideContentForProductIdentifier:(NSString*) productIdentifier
 {
+    GameState *gameState = [GameState sharedInstance];
+    
     if ([productIdentifier isEqualToString:kInAppLevelpack])
     {
         [_purchasedProductIdentifiers addObject:productIdentifier];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:productIdentifier];
         [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        // Check Achievement - More Fun
+        if (!gameState.completedMoreFun)
+        {
+            gameState.completedMoreFun = true;
+            [[GCHelper sharedInstance] reportAchievement:kAchievementMoreFun percentComplete:100];
+            [gameState save];
+        }
     }
     else
     {
@@ -302,6 +314,9 @@ NSString *const IAPHelperProductPurchasedNotification = @"IAPHelperProductPurcha
         
         [[NSUserDefaults standardUserDefaults] setInteger:currentValue forKey:kInAppMagicShieldsRefName];
         [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        // Check Achievement - Second Chance
+        [[GCHelper sharedInstance] reportAchievement:kAchievementSecondChance percentComplete:100];
     }
     
     if(self.onTransactionCompleted)

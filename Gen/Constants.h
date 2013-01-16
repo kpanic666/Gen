@@ -43,8 +43,6 @@
 #define kGoalCellsMulti 100
 #define kStarAchievedMulti 1000
 #define kTapMulti -50
-// Testflight
-#define kTestFlightTeamToken @"544c9348f13c1963799af034d50d7e9c_MTA5NDMzMjAxMi0wNy0xMiAxMjoxMjo1OC42NzUwMjY"
 // Achievements
 #define kAchievementLevel10 @"com.atomgames.genby.achievement.level10"
 #define kAchievementLevel20 @"com.atomgames.genby.achievement.level20"
@@ -53,7 +51,7 @@
 #define kAchievementStarry @"com.atomgames.genby.achievement.starry"
 #define kAchievementStarryNum 15
 #define kAchievementStargazer @"com.atomgames.genby.achievement.stargazer"
-#define kAchievementStargazerNum 50
+#define kAchievementStargazerNum 45
 #define kAchievementSuperstar @"com.atomgames.genby.achievement.superstar"
 #define kAchievementSuperstarNum 100
 #define kAchievementAwesome @"com.atomgames.genby.achievement.awesome"
@@ -77,6 +75,8 @@
 #define kAchievementUnwaryNum 50
 #define kAchievementCellDestroyer @"com.atomgames.genby.achievement.celldestroyer" // Destroy 100 cells
 #define kAchievementCellDestroyerNum 100
+#define kAchievementSecondChance @"com.atomgames.genby.achievement.secondchance"
+#define kAchievementMoreFun @"com.atomgames.genby.achievement.morefun"
 // Leaderboards
 #define kLeaderboardChapter1 @"com.atomgames.genby.leaderboard.chapter1"
 // In App Purchases IDs
@@ -111,7 +111,7 @@ typedef enum {
 typedef enum {
     kNoSceneUninitialized=0,
     kMainMenuScene=1,
-    kInfoScene=2,
+    kCreditsScene=2,
     kLoadingScene=3,
     kLevelSelectScene=4,
     kGameLevel1=101,
@@ -159,6 +159,9 @@ typedef enum {
 typedef enum {
     kLinkTypeGameSite,
     kLinkTypeDeveloperSite,
+    kLinkTypeDeveloperEmail,
+    kLinkTypeArtistEmail,
+    kLinkTypeMusicSite,
     kLinkTypePublisherSite
 } LinkTypes;
 

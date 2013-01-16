@@ -125,6 +125,7 @@
      {
          [procLayer removeFromParentAndCleanup:YES];
          PLAYSOUNDEFFECT(@"INAPP_PURCHASED");
+         
      }
                                onCancelled:^
      {

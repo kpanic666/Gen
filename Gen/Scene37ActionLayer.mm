@@ -14,6 +14,7 @@
 {
     if ((self = [super init])) {
         uiLayer = box2DUILayer;
+        CGPoint cellPos;
         
         // add background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
@@ -22,11 +23,17 @@
         [self addChild:background z:-4];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
-        [self setFlowing:b2Vec2(-5.0f, 0)];
+        // Add moving walls
+        cellPos = [Helper convertPosition:ccp(195, 557)];
+        [self createMovingWallAtLocation:cellPos vertical:YES negOffset:-10.0f posOffset:0 speed:2];
+        cellPos = [Helper convertPosition:ccp(415, 76)];
+        [self createMovingWallAtLocation:cellPos vertical:YES negOffset:0 posOffset:10.0f speed:2];
+        cellPos = [Helper convertPosition:ccp(677, 557)];
+        [self createMovingWallAtLocation:cellPos vertical:YES negOffset:-10.0f posOffset:0 speed:2];
         
+        [self setFlowing:b2Vec2(8.0f, 0)];
     }
     return self;
 }
-
 
 @end

@@ -49,6 +49,8 @@
 #import "Scene40.h"
 #import "MainMenuLayer.h"
 #import "LevelSelectLayer.h"
+#import "CreditsLayer.h"
+#import "IAPHelper.h"
 
 @implementation GameManager
 
@@ -160,8 +162,8 @@ static GameManager* _sharedGameManager = nil;
         case kMainMenuScene:
             result = @"kMainMenuScene";
             break;
-        case kInfoScene:
-            result = @"kInfoScene";
+        case kCreditsScene:
+            result = @"kCreditsScene";
             break;
         case kLoadingScene:
             result = @"kLoadingScene";
@@ -342,7 +344,19 @@ static GameManager* _sharedGameManager = nil;
 }
 
 - (void)runNextScene {
-    [self runSceneWithID:(SceneTypes) (curLevel + 1)];
+    SceneTypes nextLevelId = (SceneTypes) (curLevel + 1);
+    SceneTypes lastSceneId;
+    if ([[IAPHelper sharedInstance] productPurchased:kInAppLevelpack]) {
+        lastSceneId = kGameLevel40;
+    }
+    else
+    {
+        lastSceneId = kGameLevel15;
+    }
+    
+    if (nextLevelId <= lastSceneId) {
+        [self runSceneWithID:nextLevelId];
+    }
 }
 
 - (void)runSceneWithID:(SceneTypes)sceneID {
@@ -368,8 +382,8 @@ static GameManager* _sharedGameManager = nil;
             [self playBackgroundTrack:BACKGROUND_TRACK_1];
             break;
             
-        case kInfoScene:
-            //sceneToRun = [CreditsScene node];
+        case kCreditsScene:
+            sceneToRun = [CreditsLayer scene];
             break;
             
         case kLoadingScene:
@@ -433,7 +447,22 @@ static GameManager* _sharedGameManager = nil;
             
         case kLinkTypePublisherSite:
             CCLOG(@"Opening Publisher Site");
-            urlToOpen = [NSURL URLWithString:@"http://www.chillingo.com"];
+            urlToOpen = [NSURL URLWithString:@"http://www.fdg-entertainment.com"];
+            break;
+            
+        case kLinkTypeDeveloperEmail:
+            CCLOG(@"Opening Mail to Developer");
+            urlToOpen = [NSURL URLWithString:@"mailto:korikov.av@gmail.com"];
+            break;
+            
+        case kLinkTypeArtistEmail:
+            CCLOG(@"Opening Mail to Artist");
+            urlToOpen = [NSURL URLWithString:@"mailto:darya.romanova.st@gmail.com"];
+            break;
+            
+        case kLinkTypeMusicSite:
+            CCLOG(@"Opening Musician Site");
+            urlToOpen = [NSURL URLWithString:@"http://www.incompetech.com"];
             break;
  
         default:
@@ -445,32 +474,6 @@ static GameManager* _sharedGameManager = nil;
         CCLOG(@"%@%@",@"Failed to open url:",[urlToOpen description]);
         [self runSceneWithID:kMainMenuScene];
     }
-}
-
-- (CGSize)getDimensionsOfCurrentScene {
-    CGSize screenSize = [[CCDirector sharedDirector] winSize];
-    CGSize levelSize;
-    switch (currentScene) {
-        case kGameLevel1:
-            levelSize = screenSize;
-            break;
-//        case kGameLevel4:
-//            levelSize = CGSizeMake(screenSize.width * 4.0f, screenSize.height);
-//            break;
-        default:
-            CCLOG(@"Unknown Scene ID, returning default size");
-            levelSize = screenSize;
-            break;
-    }
-    
-    // Делаем рамку уровня если игра запускается на iPad, чтобы не менять графику и физ объекты, мы просто все поменщаем в центр экрана
-    // Слева и справа по 32 поинта, сверхи и снизу по 64
-    // Iphone Screen to iPad
-//    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-//        levelSize = CGSizeMake(levelSize.width - kiPadScreenOffsetX * 2, levelSize.height - kiPadScreenOffsetY * 2);
-//    }
-
-    return levelSize;
 }
 
 #pragma mark -

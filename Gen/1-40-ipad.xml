@@ -1,0 +1,9 @@
+<map>
+<groundCell1 x='679' y='571' />
+<groundCell2 x='844' y='363' />
+<groundCell3 x='572' y='167' />
+<groundCell4 x='470' y='528' />
+<groundCell5 x='211' y='387' />
+<ExitCell x='88' y='667' />
+<Settings maxCellsCount='0' needCellsCount='2' />
+</map>

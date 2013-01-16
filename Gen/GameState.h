@@ -38,6 +38,7 @@
 @property (assign) BOOL completedAwesome;
 @property (assign) BOOL completedRushHour;
 @property (assign) BOOL completedTrueGenbyFan;
+@property (assign) BOOL completedMoreFun;
 @property (assign) double gameTotalRunTime; // Суммарное игровое время, когда игра была запущенна
 @property (assign) unsigned int cellsKilled;
 @property (assign) unsigned int foodEaten;

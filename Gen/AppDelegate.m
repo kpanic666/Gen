@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import "GameManager.h"
 #import "GCHelper.h"
-#import "TestFlight.h"
 #import "IAPHelper.h"
 #import "iRate.h"
 
@@ -36,9 +35,10 @@
 + (void)initialize
 {
     //configure iRate
-    [iRate sharedInstance].daysUntilPrompt = 5;
+    [iRate sharedInstance].daysUntilPrompt = 3;
     [iRate sharedInstance].usesUntilPrompt = 4;
     [iRate sharedInstance].remindPeriod = 2;
+//    [iRate sharedInstance].previewMode = TRUE;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -121,10 +121,6 @@
     
     // Авторизируем игрока в Game Center
     [[GCHelper sharedInstance] authenticateLocalUser];
-    
-    // Запускаем SDK TestFlight для аналитики бета теста и аналитики реального использования
-    [TestFlight takeOff:kTestFlightTeamToken];
-//    [TestFlight setDeviceIdentifier:[[[UIDevice currentDevice] identifierForVendor] UUIDString]];
     
     [[GameManager sharedGameManager] setupAudioEngine];
     [[GameManager sharedGameManager] runSceneWithID:kMainMenuScene];

@@ -18,7 +18,7 @@
 		<key>LEVEL_BUTTON_PRESSED</key>
 		<string>levelselect_button_pressed.caf</string>
 	</dict>
-	<key>kInfoScene</key>
+	<key>kCreditsScene</key>
 	<dict/>
 	<key>kLoadingScene</key>
 	<dict/>

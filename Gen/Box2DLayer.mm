@@ -9,7 +9,6 @@
 #import "Box2DLayer.h"
 #import "Box2DSprite.h"
 #import "GameManager.h"
-#import "TestFlight.h"
 #import "GameState.h"
 #import "GCHelper.h"
 #import "SimpleQueryCallback.h"
@@ -54,11 +53,10 @@ ccc3FromUInt(const uint bytes)
 
 - (void)createGround
 {
-    CGSize levelSize = [[GameManager sharedGameManager] getDimensionsOfCurrentScene];
     b2Vec2 lowerLeft = b2Vec2(0, 0);
-    b2Vec2 lowerRight = lowerLeft + b2Vec2(levelSize.width/PTM_RATIO, 0);
-    b2Vec2 upperRight = lowerRight + b2Vec2(0, levelSize.height/PTM_RATIO);
-    b2Vec2 upperLeft = lowerLeft + b2Vec2(0, levelSize.height/PTM_RATIO);
+    b2Vec2 lowerRight = lowerLeft + b2Vec2(screenSize.width/PTM_RATIO, 0);
+    b2Vec2 upperRight = lowerRight + b2Vec2(0, screenSize.height/PTM_RATIO);
+    b2Vec2 upperLeft = lowerLeft + b2Vec2(0, screenSize.height/PTM_RATIO);
     
     b2BodyDef groundBodyDef;
     groundBodyDef.type = b2_staticBody;
@@ -840,6 +838,10 @@ ccc3FromUInt(const uint bytes)
     }
     // Исключение для 6 уровня
     if (gameManager.curLevel == kGameLevel6 && gameManager.levelStarsNum > 0) {
+        gameManager.levelStarsNum = 3;
+    }
+    // Исключение для 39 уровня
+    if (gameManager.curLevel == kGameLevel39 && gameManager.levelStarsNum > 1) {
         gameManager.levelStarsNum = 3;
     }
     gameManager.levelTotalScore += gameManager.levelStarsNum * kStarAchievedMulti;
