@@ -56,7 +56,7 @@
                     float atanFromDistance = atan2f(distanceDiff.y, distanceDiff.x);
                     float xForce = (lenght - magneticRadius) * cosf(atanFromDistance) * kMagneticPowerMultiplier;
                     float yForce = (lenght - magneticRadius) * sinf(atanFromDistance) * kMagneticPowerMultiplier;
-                    spriteObj.body->ApplyForceToCenter(b2Vec2 (xForce, yForce));
+                    spriteObj.body->ApplyForceToCenter(b2Vec2(xForce / PTM_RATIO, yForce / PTM_RATIO));
                     
                     // Добавляем координаты дочерней клетки для дальнейшей отрисовки линий
                     [cellsPosToDraw addObject:NSStringFromCGPoint(spriteObj.position)];

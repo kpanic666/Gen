@@ -111,7 +111,7 @@
 		<key>deadfish_anim_timer</key>
 		<dict>
 			<key>delayPerUnit</key>
-			<real>0.23000000417232513</real>
+			<real>0.2300000041723251</real>
 			<key>frames</key>
 			<array>
 				<dict>
@@ -255,7 +255,7 @@
 		<key>genby_anim_blink</key>
 		<dict>
 			<key>delayPerUnit</key>
-			<real>0.059999998658895493</real>
+			<real>0.05999999865889549</real>
 			<key>frames</key>
 			<array>
 				<dict>
@@ -299,12 +299,12 @@
 		<key>genby_anim_closemouth</key>
 		<dict>
 			<key>delayPerUnit</key>
-			<real>0.039999999105930328</real>
+			<real>0.03999999910593033</real>
 			<key>frames</key>
 			<array>
 				<dict>
 					<key>delayUnits</key>
-					<real>15</real>
+					<integer>1</integer>
 					<key>notification</key>
 					<dict/>
 					<key>offset</key>
@@ -363,7 +363,7 @@
 		<key>genby_anim_eating</key>
 		<dict>
 			<key>delayPerUnit</key>
-			<real>0.10000000149011612</real>
+			<real>0.1000000014901161</real>
 			<key>frames</key>
 			<array>
 				<dict>
@@ -418,7 +418,7 @@
 				</dict>
 				<dict>
 					<key>delayUnits</key>
-					<real>0.20000000298023224</real>
+					<real>0.2000000029802322</real>
 					<key>notification</key>
 					<dict/>
 					<key>offset</key>
@@ -428,7 +428,7 @@
 				</dict>
 				<dict>
 					<key>delayUnits</key>
-					<real>0.20000000298023224</real>
+					<real>0.2000000029802322</real>
 					<key>notification</key>
 					<dict/>
 					<key>offset</key>
@@ -438,7 +438,7 @@
 				</dict>
 				<dict>
 					<key>delayUnits</key>
-					<real>0.20000000298023224</real>
+					<real>0.2000000029802322</real>
 					<key>notification</key>
 					<dict/>
 					<key>offset</key>
@@ -448,7 +448,7 @@
 				</dict>
 				<dict>
 					<key>delayUnits</key>
-					<real>0.20000000298023224</real>
+					<real>0.2000000029802322</real>
 					<key>notification</key>
 					<dict/>
 					<key>offset</key>
@@ -467,7 +467,7 @@
 		<key>genby_anim_openmouth</key>
 		<dict>
 			<key>delayPerUnit</key>
-			<real>0.029999999329447746</real>
+			<real>0.02999999932944775</real>
 			<key>frames</key>
 			<array>
 				<dict>
@@ -541,7 +541,7 @@
 		<key>genby_anim_sad</key>
 		<dict>
 			<key>delayPerUnit</key>
-			<real>0.079999998211860657</real>
+			<real>0.07999999821186066</real>
 			<key>frames</key>
 			<array>
 				<dict>
@@ -675,7 +675,7 @@
 		<key>genby_anim_tentacles</key>
 		<dict>
 			<key>delayPerUnit</key>
-			<real>0.10000000149011612</real>
+			<real>0.1000000014901161</real>
 			<key>frames</key>
 			<array>
 				<dict>
@@ -749,7 +749,7 @@
 		<key>genby_anim_tongue</key>
 		<dict>
 			<key>delayPerUnit</key>
-			<real>0.070000000298023224</real>
+			<real>0.07000000029802322</real>
 			<key>frames</key>
 			<array>
 				<dict>

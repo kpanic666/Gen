@@ -1,0 +1,41 @@
+<map>
+<dec_stones2 x='197' y='665' />
+<dec_stones3 x='130' y='622' />
+<dec_stones1 x='266' y='633' />
+<dec_anchor x='196' y='644' scaleX='1.61' scaleY='1.78' />
+<dec_stones3 x='254' y='687' flipX='YES' />
+<dec_wheel x='339' y='667' />
+<dec_stones1 x='663' y='169' />
+<dec_stones2 x='814' y='212' />
+<dec_stones3 x='930' y='126' />
+<dec_stones2 x='835' y='136' />
+<dec_stones2 x='912' y='184' />
+<dec_stones1 x='784' y='131' />
+<dec_stones1 x='728' y='242' flipX='YES' />
+<dec_stones2 x='728' y='205' flipY='YES' />
+<dec_stones2 x='881' y='200' flipY='YES' />
+<dec_plant4 x='834' y='667' />
+<dec_plant3 x='781' y='679' />
+<dec_stones3 x='181' y='460' />
+<dec_stones2 x='87' y='470' />
+<dec_stones2 x='164' y='518' />
+<dec_stones1 x='35' y='465' />
+<dec_plant2 x='41' y='462' />
+<dec_wood1 x='107' y='460' rotation='22' scaleX='1.41' scaleY='1.36' />
+<dec_plant2 x='61' y='472' />
+<dec_plant2 x='41' y='472' />
+<dec_plant2 x='212' y='462' flipX='YES' />
+<dec_plant2 x='192' y='472' flipX='YES' />
+<dec_plant2 x='212' y='472' flipX='YES' />
+<ChildCell x='941' y='331' />
+<ExitCell x='106' y='363' />
+<ChildCell x='941' y='389' />
+<ChildCell x='883' y='331' />
+<ChildCell x='883' y='389' />
+<ChildCell x='945' y='450' />
+<ChildCell x='885' y='450' />
+<ChildCell x='825' y='331' />
+<ChildCell x='825' y='389' />
+<ChildCell x='825' y='450' />
+<Settings maxCellsCount='9' needCellsCount='7' />
+</map>

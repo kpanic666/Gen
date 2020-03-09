@@ -1,0 +1,45 @@
+<map>
+<dec_barrel x='177' y='631' scaleX='0.807' scaleY='0.807' />
+<dec_barrel x='94' y='623' flipX='YES' scaleX='0.807' scaleY='0.807' />
+<ChildCell x='125' y='112' />
+<ChildCell x='199' y='68' />
+<ChildCell x='292' y='64' />
+<ChildCell x='377' y='97' />
+<ChildCell x='416' y='153' />
+<ChildCell x='419' y='236' />
+<ChildCell x='380' y='324' />
+<ChildCell x='307' y='371' />
+<ChildCell x='211' y='371' />
+<ChildCell x='134' y='329' />
+<ChildCell x='93' y='254' />
+<ChildCell x='93' y='177' />
+<dec_barrel x='102' y='682' />
+<dec_barrel x='183' y='668' flipX='YES' />
+<dec_barrel x='303' y='663' scaleX='0.807' scaleY='0.807' />
+<dec_barrel x='252' y='605' flipX='YES' />
+<dec_barrel x='139' y='555' />
+<dec_bottle1 x='125' y='560' />
+<dec_bottle2 x='244' y='653' />
+<dec_bone3 x='752' y='141' rotation='129' scaleX='0.975' scaleY='0.975' />
+<dec_bone1 x='731' y='133' />
+<dec_bone1 x='714' y='159' scaleX='0.742' scaleY='0.742' />
+<dec_bone1 x='787' y='160' rotation='-75' />
+<dec_bone1 x='752' y='132' rotation='-90' scaleX='0.517' scaleY='0.517' />
+<dec_bone1 x='804' y='182' rotation='-75' scaleX='0.742' scaleY='0.742' />
+<dec_bone1 x='767' y='141' rotation='-90' scaleX='0.517' scaleY='0.517' />
+<dec_bone1 x='746' y='140' rotation='-90' scaleX='0.517' scaleY='0.517' />
+<dec_bone1 x='761' y='149' rotation='-90' scaleX='0.517' scaleY='0.517' />
+<dec_bone1 x='741' y='148' rotation='-90' scaleX='0.517' scaleY='0.517' />
+<dec_bone1 x='756' y='157' rotation='-90' scaleX='0.517' scaleY='0.517' />
+<dec_bone1 x='737' y='156' rotation='-90' scaleX='0.517' scaleY='0.517' />
+<dec_bone1 x='752' y='165' rotation='-90' scaleX='0.517' scaleY='0.517' />
+<dec_bone1 x='740' y='185' rotation='-30' scaleX='0.742' scaleY='0.742' />
+<dec_bone1 x='724' y='173' rotation='30' scaleX='0.742' scaleY='0.742' />
+<dec_bone1 x='738' y='210' rotation='-30' scaleX='0.742' scaleY='0.742' />
+<dec_bone1 x='700' y='184' rotation='30' scaleX='0.742' scaleY='0.742' />
+<ExitCell x='917' y='661' />
+<groundCell1 x='696' y='715' />
+<redCell1 x='929' y='465' />
+<groundCell2 x='261' y='217' />
+<Settings maxCellsCount='12' needCellsCount='10' />
+</map>

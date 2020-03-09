@@ -21,7 +21,7 @@
 
 - (void)checkAndClampSpritePosition {
     CGPoint currentSpritePosition = [self position];
-    CGSize levelSize = [[GameManager sharedGameManager] getDimensionsOfCurrentScene];
+    CGSize levelSize = [[CCDirector sharedDirector] winSize];
     float xOffset;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {

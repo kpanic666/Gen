@@ -12,6 +12,7 @@
 {
     BOOL activated; // была активирована, но еще не взорвалась
     BOOL exploded; // была взорвана
+    ALuint timerSound;
 } 
 
 @property (nonatomic, retain) CCAnimation *boomAnim;

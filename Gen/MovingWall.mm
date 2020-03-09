@@ -55,6 +55,7 @@
     shape.SetAsBox(self.contentSize.width / 2 / PTM_RATIO, self.contentSize.height / 2 / PTM_RATIO);
     fixtureDef.shape = &shape;
     fixtureDef.density = 2.0f;
+    fixtureDef.friction = 5.0f;
     fixtureDef.filter.categoryBits = kMovingWallFilterCategory;
     fixtureDef.filter.maskBits = kChildCellFilterCategory;
     body->CreateFixture(&fixtureDef);

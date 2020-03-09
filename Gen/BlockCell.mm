@@ -263,23 +263,9 @@
         MaskedSprite *resultSprite = [[[MaskedSprite alloc] initWithTexture:mainTexture rect:texRect maskTexture:maskTexture] autorelease];
         
         // Добавляем к спрайту фигуры эффект тени (слева сверху источник света).
-//        if (gameObjectType != kMetalType)
-//        {
-            CCTexture2D *glowTexture = [self addGlowToSprite:resultSprite with:maskTexture];
-            [self setTexture:glowTexture];
-            [self setTextureRect:texRect rotated:NO untrimmedSize:texSize];
-//        }
-//        else
-//        {
-//            CCRenderTexture *rt = [CCRenderTexture renderTextureWithWidth:texSize.width height:texSize.height pixelFormat:kCCTexture2DPixelFormat_RGBA4444];
-//            [rt begin];
-//            [resultSprite setPosition:ccp(texSize.width/2, texSize.height/2)];
-//            [resultSprite visit];
-//            [rt end];
-//            
-//            [self setTexture:rt.sprite.texture];
-//            [self setTextureRect:texRect rotated:NO untrimmedSize:texSize];
-//        }
+        CCTexture2D *glowTexture = [self addGlowToSprite:resultSprite with:maskTexture];
+        [self setTexture:glowTexture];
+        [self setTextureRect:texRect rotated:NO untrimmedSize:texSize];
     }
     return self;
 }

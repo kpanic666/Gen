@@ -26,12 +26,12 @@
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
         // add MetalCell
-        cellPos = [Helper convertPosition:ccp(465, 526)];
+        cellPos = ccp(screenSize.width*0.5, screenSize.height*0.25);
         MetalCell *metalCell1 = [MetalCell metalCellInWorld:world position:cellPos name:@"metalCell1"];
         [self addChild:metalCell1 z:0];
         
         // add ChildCells and joint the last with Metal Cell
-        ChildCell *childCell = [self createChildCellAtLocation:[Helper convertPosition:ccp(459, 579)]];
+        ChildCell *childCell = [self createChildCellAtLocation:ccp(screenSize.width*0.5, screenSize.height*0.2)];
         
         b2DistanceJointDef disJointDef;
         disJointDef.bodyA = childCell.body;

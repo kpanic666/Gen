@@ -8,16 +8,19 @@
 
 #define kBox2DLayer 15
 #define kPauseLayer 16
+#define kShopLayer 24
 #define kGameOverLayer 17
 #define kMainSpriteBatchNode 18
 #define kBubbleCellTagValue 19
+#define kSuperpowerNoneIconTag 9
+#define kSuperpowerBuyedIconTag 10
 #define kExitCellSpriteTagValue 20
 #define kExitCellPlayingWhenIdleTimer 4.0f
 #define kDrawNodeTagValue 21
 #define kChildCellHealth 100
 #define kParentCellSpriteTagValue 10
 #define kRedCellDamage 100
-#define kMagneticPowerMultiplier 0.1
+#define kMagneticPowerMultiplier 8
 #define kLevelCount 40
 // Air bubbles and sun bliks properties
 #define kWaterWaveForegroundTag 22
@@ -26,8 +29,6 @@
 #define kMaxBubbleMoveDelay 10
 #define kMinBubbleMoveDelay 0
 #define kMaxNumOfBubbleOnScene 13
-#define kiPadScreenOffsetX 32
-#define kiPadScreenOffsetY 64
 // Parent Cell Radius drawing
 #define kSuperpowerNumOfWaves 4
 #define kSuperpowerScaleChangeSpeed 0.1
@@ -42,31 +43,54 @@
 #define kGoalCellsMulti 100
 #define kStarAchievedMulti 1000
 #define kTapMulti -50
-// Testflight
-#define kTestFlightTeamToken @"544c9348f13c1963799af034d50d7e9c_MTA5NDMzMjAxMi0wNy0xMiAxMjoxMjo1OC42NzUwMjY"
 // Achievements
 #define kAchievementLevel10 @"com.atomgames.genby.achievement.level10"
 #define kAchievementLevel20 @"com.atomgames.genby.achievement.level20"
 #define kAchievementLevel30 @"com.atomgames.genby.achievement.level30"
 #define kAchievementLevel40 @"com.atomgames.genby.achievement.level40"
-#define kAchievementFirstFail @"com.atomgames.genby.achievement.firstfail"
 #define kAchievementStarry @"com.atomgames.genby.achievement.starry"
+#define kAchievementStarryNum 15
 #define kAchievementStargazer @"com.atomgames.genby.achievement.stargazer"
+#define kAchievementStargazerNum 45
 #define kAchievementSuperstar @"com.atomgames.genby.achievement.superstar"
-#define kAchievementUnwary @"com.atomgames.genby.achievement.unwary"
-#define kAchievementBubblepopper @"com.atomgames.genby.achievement.bubblepopper"
-#define kAchievementLighthunger @"com.atomgames.genby.achievement.lighthunger"
-#define kAchievementIFeelGood @"com.atomgames.genby.achievement.ifeelgood"
+#define kAchievementSuperstarNum 100
 #define kAchievementAwesome @"com.atomgames.genby.achievement.awesome"
-#define kAchievementTrueGenbyFan @"com.atomgames.genby.achievement.truegenbyfan"
-#define kAchievementFastAndSatisfying @"com.atomgames.genby.achievement.fastandsatisfying"
-#define kAchievementRushHour @"com.atomgames.genby.achievement.rushhour"
-#define kAchievementBomber @"com.atomgames.genby.achievement.bomber"
+#define kAchievementBubblepopper @"com.atomgames.genby.achievement.bubblepopper"
+#define kAchievementBubblepopperNum 50
+#define kAchievementLighthunger @"com.atomgames.genby.achievement.lighthunger"
+#define kAchievementLighthungerNum 50
+#define kAchievementIFeelGood @"com.atomgames.genby.achievement.ifeelgood"
+#define kAchievementIFeelGoodNum 300
 #define kAchievementOhNoNo @"com.atomgames.genby.achievement.ohnono"
+#define kAchievementOhNoNoNum 500
+#define kAchievementTrueGenbyFan @"com.atomgames.genby.achievement.truegenbyfan"
+#define kAchievementTrueGenbyFanNum 1800
+#define kAchievementRushHour @"com.atomgames.genby.achievement.rushhour"
+#define kAchievementRushHourNum 5
+#define kAchievementBomber @"com.atomgames.genby.achievement.bomber"
+#define kAchievementBomberNum 20
+#define kAchievementFirstFail @"com.atomgames.genby.achievement.firstfail"
+#define kAchievementFirstFailNum 1
+#define kAchievementUnwary @"com.atomgames.genby.achievement.unwary"
+#define kAchievementUnwaryNum 50
 #define kAchievementCellDestroyer @"com.atomgames.genby.achievement.celldestroyer" // Destroy 100 cells
 #define kAchievementCellDestroyerNum 100
+#define kAchievementSecondChance @"com.atomgames.genby.achievement.secondchance"
+#define kAchievementMoreFun @"com.atomgames.genby.achievement.morefun"
 // Leaderboards
 #define kLeaderboardChapter1 @"com.atomgames.genby.leaderboard.chapter1"
+// In App Purchases IDs
+#define kInAppLevelpack @"com.atomgames.genby.levelpack"
+#define kInAppMagicShieldsRefName @"com.atomgames.genby.magicshields"
+#define kInAppMagicShieldsSmall @"com.atomgames.genby.magicshields10"
+#define kInAppMagicShieldsSmallNum 10
+#define kInAppMagicShieldsMedium @"com.atomgames.genby.magicshields25"
+#define kInAppMagicShieldsMediumNum 25
+#define kInAppMagicShieldsLarge @"com.atomgames.genby.magicshields60"
+#define kInAppMagicShieldsLargeNum 60
+#define kInAppMagicShieldsSuperLarge @"com.atomgames.genby.magicshields100"
+#define kInAppMagicShieldsSuperLargeNum 100
+
 
 // Collision Filter Categories. 0×1, 0×2, 0×4, 0×8, 0×10, 0×20, 0×40, 0×80.. From 0×0001 to 0×8000 and only power of 2!
 // You can use ^ to exclude category from maskbit or use | to sum category in mask bits. maskbits = 0xFFFF ^ 0x0002
@@ -87,7 +111,7 @@ typedef enum {
 typedef enum {
     kNoSceneUninitialized=0,
     kMainMenuScene=1,
-    kInfoScene=2,
+    kCreditsScene=2,
     kLoadingScene=3,
     kLevelSelectScene=4,
     kGameLevel1=101,
@@ -135,6 +159,9 @@ typedef enum {
 typedef enum {
     kLinkTypeGameSite,
     kLinkTypeDeveloperSite,
+    kLinkTypeDeveloperEmail,
+    kLinkTypeArtistEmail,
+    kLinkTypeMusicSite,
     kLinkTypePublisherSite
 } LinkTypes;
 
@@ -162,22 +189,15 @@ typedef enum {
 
 // Background Music
 // Menu Scenes
-//#define BACKGROUND_TRACK_MAIN_MENU @"VikingPreludeV1.mp3"
-
-// GameLevel1
 #define BACKGROUND_TRACK_1 @"back_Wallpaper.mp3"
-
-// GameLevel2
-//#define BACKGROUND_TRACK_PUZZLE @"VikingPreludeV1.mp3"
-
-// GameLevel3
-//#define BACKGROUND_TRACK_MINECRAFT @"DrillBitV2.mp3"
-
-// GameLevel4
-//#define BACKGROUND_TRACK_ESCAPE @"EscapeTheFutureV3.mp3"
+// GameLevel 1-20
+#define BACK_1 @"back_1.mp3"
+// GameLevel 21-40
+#define BACK_2 @"back_2.mp3"
 
 // PTM ratio for Box2D
 #define PTM_RATIO ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 64.0 : 32.0)
+//#define PTM_RATIO 32.0f
 
 // iOS version check macros
 #define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)

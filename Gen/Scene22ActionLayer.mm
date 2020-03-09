@@ -71,11 +71,11 @@
 {
     if ((self = [super init])) {
         uiLayer = box2DUILayer;
-        CGPoint cellPos;
+        CGPoint cellPos, cellPos1;
         
         // add background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.jpg"];
+        CCSprite *background = [CCSprite spriteWithFile:@"background2.jpg"];
         [background setPosition:[Helper screenCenter]];
         [self addChild:background z:-4];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
@@ -84,11 +84,17 @@
         float offset = 25; // Расстояние между элементами куба (между ячейками)
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             offset *= 2;
+            cellPos = ccp(34, screenSize.height * 0.9);
+            cellPos1 = ccp(34, screenSize.height * 0.2);
         }
-        cellPos = [Helper convertPosition:ccp(34, 34)]; // Top left corner of Cube
+        else
+        {
+            cellPos = [Helper convertPosition:ccp(34, 68)]; // Top left corner of Cube
+            cellPos1 = [Helper convertPosition:ccp(34, 470)]; // Top left corner of Cube
+        }
+        
         [self makeCubeWithDimention:2 offset:offset atPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(34, 470)]; // Top left corner of Cube
-        [self makeCubeWithDimention:3 offset:offset atPos:cellPos];
+        [self makeCubeWithDimention:3 offset:offset atPos:cellPos1];
         
         [[GameManager sharedGameManager] setNumOfMaxCells:[GameManager sharedGameManager].numOfTotalCells];
     }

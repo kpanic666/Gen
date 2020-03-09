@@ -7,6 +7,7 @@
 //
 
 #import "BubbleCell.h"
+#import "GameState.h"
 
 @interface BubbleCell()
 {
@@ -67,11 +68,7 @@
         // С постоянной силой двигаем пузырь вверх до верхней границы экрана. Если выходит за границу - уничтожаем
         if (body->GetPosition().y < topBorder)
         {
-            float yForce = 1.0;
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                yForce *= 2;
-            }
-            body->ApplyForceToCenter(b2Vec2(0,yForce));
+            body->ApplyForceToCenter(b2Vec2(0,2));
         }
         else
         {
@@ -108,6 +105,8 @@
                 ropeJointDef.collideConnected = false;
                 ropeJointDef.userData = @"BubbleJoint";
                 world->CreateJoint(&ropeJointDef);
+                
+                return;
             }
         }
     }
@@ -137,7 +136,8 @@
             for (b2JointEdge *edge = body->GetJointList(); edge; edge = edge->next)
             {
                 Box2DSprite *childCell = (Box2DSprite*) edge->joint->GetBodyB()->GetUserData();
-                if ([childCell gameObjectType] == kChildCellType) {
+                if ([childCell gameObjectType] == kChildCellType)
+                {
                     if (body->GetPosition().y < topBorder)
                     {
                         [childCell changeState:kStateIdle];
@@ -146,7 +146,6 @@
                     {
                         [childCell changeState:kStateTakingDamage];
                     }
-                    
                 }
             }
             
@@ -184,6 +183,7 @@
             // И начинает лететь вверх увлекая за собой этот ChildCell
         {
             // Actions
+            PLAYSOUNDEFFECT(@"BUBBLECELL");
             id scaleAction = [CCScaleBy actionWithDuration:0.4 scaleX:1.3 scaleY:0.8];
             id scaleSeqAction = [CCSequence actions:scaleAction, [scaleAction reverse], nil];
             [self runAction:[CCRepeatForever actionWithAction:scaleSeqAction]];

@@ -18,7 +18,7 @@
         
         // add background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.jpg"];
+        CCSprite *background = [CCSprite spriteWithFile:@"background2.jpg"];
         [background setPosition:[Helper screenCenter]];
         [self addChild:background z:-4];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
@@ -26,7 +26,7 @@
         [self setFlowing:b2Vec2(9.0f, 0)];
         
         // Add moving metal cell, that will move slowly to the left
-        cellPos = [Helper convertPosition:ccp(920, 320)];
+        cellPos = ccp(screenSize.width * 0.95, screenSize.height * 0.5);
         MetalCell *metalCell1 = [self createMetalCellInWorld:world position:cellPos name:@"metalCell1"];
         b2PrismaticJointDef prismJD;
         prismJD.Initialize(groundBody, metalCell1.body, metalCell1.body->GetWorldCenter(), b2Vec2(1.0f, 0));

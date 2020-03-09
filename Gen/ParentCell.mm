@@ -151,7 +151,7 @@
 
 - (void)initSuperpowerWaves
 {
-    glBlendColor(1.0f, 0, 0, 30.0/255);
+    glBlendColor(0.0f, 0, 0, 30.0/255);
     _superpowerBatchNode.blendFunc = (ccBlendFunc){GL_CONSTANT_ALPHA, GL_ONE};
     _superpowerBatchNode.visible = false;
     for (int x = 1; x <= kSuperpowerNumOfWaves; x++) {

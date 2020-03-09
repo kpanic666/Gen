@@ -11,17 +11,45 @@
 	</dict>
 	<key>kLevelSelectScene</key>
 	<dict>
+		<key>INAPP_PURCHASED</key>
+		<string>inapp_purchased.caf</string>
 		<key>BUTTON_PRESSED</key>
 		<string>button_pressed.caf</string>
 		<key>LEVEL_BUTTON_PRESSED</key>
 		<string>levelselect_button_pressed.caf</string>
 	</dict>
-	<key>kInfoScene</key>
+	<key>kCreditsScene</key>
 	<dict/>
 	<key>kLoadingScene</key>
 	<dict/>
 	<key>kGeneralSounds</key>
 	<dict>
+		<key>WATERSHIELDS_START</key>
+		<string>watershields_start.caf</string>
+		<key>INAPP_PURCHASED</key>
+		<string>inapp_purchased.caf</string>
+		<key>STAR3</key>
+		<string>star_3.caf</string>
+		<key>STAR2</key>
+		<string>star_2.caf</string>
+		<key>STAR1</key>
+		<string>star_1.caf</string>
+		<key>BUBBLECELL</key>
+		<string>bubblecell.caf</string>
+		<key>BUBBLECELL_PRESSED</key>
+		<string>bubblecell_pressed.caf</string>
+		<key>GENBY_SAD</key>
+		<string>genby_sad.caf</string>
+		<key>GENBY_SWALLOW</key>
+		<string>genby_swallow.caf</string>
+		<key>GENBY_CLOSE</key>
+		<string>genby_close.caf</string>
+		<key>GENBY_OPEN</key>
+		<string>genby_open.caf</string>
+		<key>BOMBCELL_EXPLOSION</key>
+		<string>bombcell_explosion.caf</string>
+		<key>BOMBCELL_TIMER</key>
+		<string>bombcell_timer.caf</string>
 		<key>GROUNDCELL_BUMPED</key>
 		<string>groundcell_bumped.caf</string>
 		<key>LEVELCOMPLETE_FAILE</key>
@@ -32,6 +60,10 @@
 		<string>childcell_connected.caf</string>
 		<key>CHILDCELL_SOUL_1</key>
 		<string>childcell_soul_1.caf</string>
+		<key>CHILDCELL_SOUL_2</key>
+		<string>childcell_soul_2.caf</string>
+		<key>CHILDCELL_SOUL_3</key>
+		<string>childcell_soul_3.caf</string>
 		<key>CHILDCELL_DYING_1</key>
 		<string>childcell_dying_1.caf</string>
 		<key>PAUSEMENU_OPENING</key>

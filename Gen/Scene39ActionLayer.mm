@@ -10,6 +10,63 @@
 
 @implementation Scene39ActionLayer
 
+- (void)makeCubeWithDimention:(int)dim offset:(float)offset atPos:(CGPoint)startPos
+{
+    // Создаем массив для хранения ссылок на созданные ячейки куба
+    id cellsBodyArray[dim][dim];
+    
+    // Создаем куб и заполняем массив для дальнейшего связывания ячеек джойнтами
+    for (int r=0; r < dim; r++)
+    {
+        for (int c=0; c < dim; c++)
+        {
+            cellsBodyArray[c][r] = [self createChildCellAtLocation:ccpAdd(startPos, ccp(offset * c, -offset * r))];
+        }
+    }
+    
+    // Соединяем элементы куба между собой RevoluteJoint'ами
+    b2DistanceJointDef disJointDef;
+    disJointDef.localAnchorA.SetZero();
+    disJointDef.localAnchorB.SetZero();
+    for (int r=0; r < dim; r++)
+    {
+        for (int c=0; c < dim; c++)
+        {
+            // Соединяем ячейку с предыдущей в ряду
+            if (c > 0)
+            {
+                ChildCell *tempCell = (ChildCell*)cellsBodyArray[c-1][r];
+                disJointDef.bodyA = tempCell.body;
+                tempCell = (ChildCell*)cellsBodyArray[c][r];
+                disJointDef.bodyB = tempCell.body;
+                disJointDef.length = offset / PTM_RATIO;
+                world->CreateJoint(&disJointDef);
+            }
+            // Соединяем ячейку с предыдущей в столбце
+            if (r > 0)
+            {
+                ChildCell *tempCell = (ChildCell*)cellsBodyArray[c][r-1];
+                disJointDef.bodyA = tempCell.body;
+                tempCell = (ChildCell*)cellsBodyArray[c][r];
+                disJointDef.bodyB = tempCell.body;
+                disJointDef.length = offset / PTM_RATIO;
+                world->CreateJoint(&disJointDef);
+            }
+            // Соединяем ячейки по диагонали для прочности.
+            if (c > 0 && r > 0)
+            {
+                ChildCell *tempCell = (ChildCell*)cellsBodyArray[c-1][r-1];
+                disJointDef.bodyA = tempCell.body;
+                tempCell = (ChildCell*)cellsBodyArray[c][r];
+                disJointDef.bodyB = tempCell.body;
+                // Вычисляем длину гиппотенузы
+                disJointDef.length = sqrtf(2 * offset * offset) / PTM_RATIO;
+                world->CreateJoint(&disJointDef);
+            }
+        }
+    }
+}
+
 - (id)initWithBox2DUILayer:(Box2DUILayer *)box2DUILayer
 {
     if ((self = [super init])) {
@@ -18,42 +75,23 @@
         
         // add background
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_RGB565];
-        CCSprite *background = [CCSprite spriteWithFile:@"background1.jpg"];
+        CCSprite *background = [CCSprite spriteWithFile:@"background2.jpg"];
         [background setPosition:[Helper screenCenter]];
         [self addChild:background z:-4];
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
-        // Add metalCells cross
-        cellPos = [Helper convertPosition:ccp(259, 124)];
-        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(117, 276)];
-        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(94, 469)];
-        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(277, 293)];
-        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(271, 529)];
-        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(434, 95)];
-        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(445, 311)];
-        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(426, 476)];
-        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(581, 140)];
-        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(608, 294)];
-        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(591, 495)];
-        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(739, 105)];
-        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(728, 351)];
-        [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        cellPos = [Helper convertPosition:ccp(749, 517)];
-        MetalCell *metalCell1 = [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
-        metalCell1.pinJoint->SetLimits(CC_DEGREES_TO_RADIANS(0), CC_DEGREES_TO_RADIANS(90));
-        metalCell1.pinJoint->EnableLimit(YES);
+        // add ChildCells
+        float offset = 25; // Расстояние между элементами куба (между ячейками)
+        cellPos = ccp(34, screenSize.height * 0.5);
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            offset *= 2;
+            
+        }
+        
+        [self makeCubeWithDimention:4 offset:offset atPos:cellPos];
+        
+        [[GameManager sharedGameManager] setNumOfMaxCells:[GameManager sharedGameManager].numOfTotalCells];
+        
         
         
     }

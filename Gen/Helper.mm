@@ -9,20 +9,36 @@
 
 #import "Helper.h"
 
-
 @implementation Helper
 
-
-// convenience method to convert a CGPoint to a b2Vec2
 +(b2Vec2) toMeters:(CGPoint)point
 {
 	return b2Vec2(point.x / PTM_RATIO, point.y / PTM_RATIO);
 }
 
-// convenience method to convert a b2Vec2 to a CGPoint
++(b2Vec2) toMetersFromPixels:(CGPoint)point
+{
+    return b2Vec2(point.x / [Helper pixelsToMeterRatio], point.y / [Helper pixelsToMeterRatio]);
+}
+
 +(CGPoint) toPoints:(b2Vec2)vec
 {
 	return ccpMult(CGPointMake(vec.x, vec.y), PTM_RATIO);
+}
+
++(CGPoint) toPixels:(b2Vec2)vec
+{
+	return ccpMult(CGPointMake(vec.x, vec.y), [Helper pixelsToMeterRatio]);
+}
+
++(float) pixelsToMeterRatio
+{
+	return (CC_CONTENT_SCALE_FACTOR() * PTM_RATIO);
+}
+
++(float) pointsToMeterRatio
+{
+	return (PTM_RATIO);
 }
 
 +(CGPoint) locationFromTouch:(UITouch*)touch
@@ -45,15 +61,16 @@
 // Конвертирует точку из координат iPhoneRetina в любые другие в зависимости от устройства на котором вызывается
 +(CGPoint) convertPosition:(CGPoint)point
 {
-    point = ccp(point.x, 640-point.y);
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
     {
+        point = ccp(point.x, 640-point.y);
         return ccpMult(point, 0.5);
     }
     else
     {
         // Центрируем все объекты на экране iPad, используя координаты для iPhone.
-        return ccpAdd(point, ccp(32, 64));
+        point = ccp(point.x, 768-point.y);
+        return point;
     }
 }
 

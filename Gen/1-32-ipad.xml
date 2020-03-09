@@ -1,0 +1,16 @@
+<map>
+<groundCell2 x='515' y='196' />
+<groundCell1 x='516' y='581' />
+<groundCell3 x='512' y='739' />
+<groundCell4 x='513' y='28' />
+<ChildCell x='146' y='473' />
+<ExitCell x='889' y='383' />
+<ChildCell x='109' y='386' />
+<ChildCell x='208' y='385' />
+<ChildCell x='182' y='333' />
+<ChildCell x='181' y='435' />
+<ChildCell x='142' y='298' />
+<ChildCell x='159' y='384' />
+<ChildCell x='65' y='386' />
+<Settings maxCellsCount='8' needCellsCount='8' />
+</map>

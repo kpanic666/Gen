@@ -17,6 +17,7 @@
 
 @property (readwrite) int characterHealth;
 @property (readwrite) CharacterStates characterState;
+@property (readwrite) CharacterStates lastCharacterState;
 @property (readwrite) int magneticCount;
 
 - (void)checkAndClampSpritePosition;

@@ -1,0 +1,41 @@
+<map>
+<dec_plant3 x='837' y='585' />
+<dec_plant4 x='226' y='592' />
+<dec_plant5 x='213' y='605' />
+<dec_plant6 x='181' y='580' />
+<dec_stones1 x='301' y='513' />
+<dec_stones2 x='326' y='568' />
+<dec_stones3 x='794' y='198' />
+<dec_stones2 x='849' y='249' />
+<dec_stones2 x='737' y='154' />
+<dec_stones2 x='802' y='144' />
+<dec_stones1 x='227' y='204' />
+<dec_stones1 x='295' y='182' flipX='YES' flipY='YES' />
+<dec_stones1 x='850' y='658' />
+<dec_stones1 x='918' y='636' flipX='YES' flipY='YES' />
+<dec_stones2 x='187' y='137' />
+<dec_stones1 x='910' y='614' rotation='170' />
+<dec_stones3 x='129' y='145' />
+<dec_stones2 x='184' y='196' />
+<dec_stones2 x='72' y='101' />
+<dec_stones2 x='137' y='91' />
+<dec_stones2 x='226' y='101' />
+<dec_stones2 x='143' y='210' />
+<dec_stones2 x='205' y='244' />
+<dec_plant7 x='825' y='178' scaleX='0.959' scaleY='0.793' />
+<dec_plant7 x='789' y='157' />
+<dec_plant6 x='850' y='168' scaleX='0.561' scaleY='0.41' />
+<dec_plant6 x='872' y='149' scaleX='0.805' scaleY='0.998' />
+<ExitCell x='528' y='391' />
+<ChildCell x='525' y='207' />
+<MagneticCell x='538' y='381' />
+<MagneticCell x='518' y='401' />
+<ChildCell x='652' y='263' />
+<ChildCell x='721' y='385' />
+<ChildCell x='652' y='522' />
+<ChildCell x='526' y='593' />
+<ChildCell x='398' y='522' />
+<ChildCell x='338' y='379' />
+<ChildCell x='398' y='263' />
+<Settings maxCellsCount='8' needCellsCount='8' />
+</map>

@@ -1,0 +1,42 @@
+<map>
+<dec_plant6 x='105' y='656' rotation='-8' scaleX='0.919' scaleY='0.889' alpha='0.7' />
+<dec_plant6 x='183' y='631' rotation='7' alpha='0.8' />
+<dec_stones3 x='933' y='694' />
+<dec_plant4 x='789' y='680' />
+<dec_plant4 x='922' y='691' scaleX='0.701' scaleY='0.636' />
+<dec_plant4 x='881' y='680' flipX='YES' scaleX='1.19' scaleY='1.25' />
+<dec_plant4 x='779' y='680' flipX='YES' scaleX='1.19' scaleY='1.25' />
+<dec_plant6 x='897' y='657' tintColor='4611167' tintMultiplier='0.43' />
+<dec_plant6 x='825' y='641' alpha='0.7' />
+<dec_plant6 x='800' y='647' rotation='-8' alpha='0.7' />
+<dec_plant4 x='121' y='665' />
+<dec_plant4 x='254' y='676' scaleX='0.701' scaleY='0.636' />
+<dec_plant4 x='213' y='665' flipX='YES' scaleX='1.19' scaleY='1.25' />
+<dec_plant4 x='111' y='665' flipX='YES' scaleX='1.19' scaleY='1.25' tintColor='10713722' tintMultiplier='0.8' />
+<dec_plant6 x='229' y='654' tintColor='4353536' tintMultiplier='0.43' />
+<dec_plant6 x='157' y='626' alpha='0.7' />
+<dec_plant6 x='132' y='632' rotation='-8' alpha='0.7' />
+<dec_plant2 x='252' y='713' />
+<dec_plant2 x='219' y='720' scaleX='1.5' />
+<dec_plant2 x='157' y='704' scaleX='1.5' />
+<dec_plant2 x='144' y='709' scaleX='0.891' scaleY='1.55' />
+<dec_plant2 x='91' y='719' scaleX='0.891' scaleY='1.55' />
+<dec_plant2 x='163' y='725' scaleX='0.891' scaleY='1.55' />
+<dec_plant2 x='126' y='714' scaleX='0.891' scaleY='1.55' />
+<dec_plant1 x='188' y='715' />
+<dec_plant1 x='261' y='731' />
+<dec_plant1 x='238' y='730' />
+<dec_plant1 x='188' y='730' />
+<dec_plant1 x='197' y='730' />
+<dec_plant2 x='163' y='694' scaleX='0.891' scaleY='1.55' />
+<ExitCell x='531' y='232' />
+<ChildCell x='674' y='149' />
+<ChildCell x='696' y='302' />
+<ChildCell x='850' y='96' />
+<ChildCell x='894' y='265' />
+<ChildCell x='384' y='149' />
+<ChildCell x='349' y='292' />
+<ChildCell x='213' y='99' />
+<ChildCell x='164' y='261' />
+<Settings maxCellsCount='8' needCellsCount='9' />
+</map>

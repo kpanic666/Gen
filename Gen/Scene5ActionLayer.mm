@@ -24,7 +24,13 @@
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
 
         // add MetalCell with Pin at Center
-        cellPos = [Helper convertPosition:ccp(442, 331)];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            cellPos = [Helper convertPosition:ccp(442, 383)];
+        }
+        else
+        {
+            cellPos = [Helper convertPosition:ccp(442, 331)];
+        }
         [self createMetalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
         
         // Add Tutorial text and arrows

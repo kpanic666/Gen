@@ -1,0 +1,21 @@
+<map>
+<dec_crab x='658' y='626' rotation='-141' />
+<redCell2 x='422' y='117' />
+<redCell1 x='595' y='374' />
+<groundCell2 x='200' y='538' />
+<groundCell1 x='82' y='105' />
+<BubbleCell x='852' y='579' />
+<BubbleCell x='953' y='579' />
+<BubbleCell x='852' y='626' />
+<BubbleCell x='953' y='623' />
+<BubbleCell x='852' y='512' />
+<BubbleCell x='953' y='512' />
+<ExitCell x='893' y='230' />
+<ChildCell x='37' y='703' />
+<ChildCell x='104' y='703' />
+<ChildCell x='104' y='653' />
+<ChildCell x='37' y='653' />
+<ChildCell x='37' y='600' />
+<ChildCell x='104' y='600' />
+<Settings maxCellsCount='6' needCellsCount='6' />
+</map>

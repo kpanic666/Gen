@@ -9,12 +9,12 @@
 #import "Box2DLayer.h"
 #import "Box2DSprite.h"
 #import "GameManager.h"
-#import "TestFlight.h"
 #import "GameState.h"
 #import "GCHelper.h"
 #import "SimpleQueryCallback.h"
 #import "HMVectorNode.h"
 #import "TBXML.h"
+#import "iRate.h"
 
 static inline ccColor3B
 ccc3FromUInt(const uint bytes)
@@ -29,7 +29,6 @@ ccc3FromUInt(const uint bytes)
 @interface Box2DLayer()
 {
     // Added for game stat and scores
-    double levelStartTime;
     double levelRemainingTime;
 }
 
@@ -52,30 +51,12 @@ ccc3FromUInt(const uint bytes)
 	world->SetContinuousPhysics(TRUE);
 }
 
-- (void)setupDebugDraw
-{
-    m_debugDraw = new GLESDebugDraw(PTM_RATIO);
-    world->SetDebugDraw(m_debugDraw);
-    uint32 flags = 0;
-	flags += b2Draw::e_shapeBit;
-	flags += b2Draw::e_jointBit;
-//    flags += b2Draw::e_aabbBit;
-	//		flags += b2Draw::e_pairBit;
-	//		flags += b2Draw::e_centerOfMassBit;
-	m_debugDraw->SetFlags(flags);
-}
-
 - (void)createGround
 {
-    CGSize levelSize = [[GameManager sharedGameManager] getDimensionsOfCurrentScene];
     b2Vec2 lowerLeft = b2Vec2(0, 0);
-    // Сдвигаем рамку земли в центр экрана если игра запущена на iPad
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        lowerLeft += b2Vec2(kiPadScreenOffsetX / PTM_RATIO, kiPadScreenOffsetY / PTM_RATIO);
-    }
-    b2Vec2 lowerRight = lowerLeft + b2Vec2(levelSize.width/PTM_RATIO, 0);
-    b2Vec2 upperRight = lowerRight + b2Vec2(0, levelSize.height/PTM_RATIO);
-    b2Vec2 upperLeft = lowerLeft + b2Vec2(0, levelSize.height/PTM_RATIO);
+    b2Vec2 lowerRight = lowerLeft + b2Vec2(screenSize.width/PTM_RATIO, 0);
+    b2Vec2 upperRight = lowerRight + b2Vec2(0, screenSize.height/PTM_RATIO);
+    b2Vec2 upperLeft = lowerLeft + b2Vec2(0, screenSize.height/PTM_RATIO);
     
     b2BodyDef groundBodyDef;
     groundBodyDef.type = b2_staticBody;
@@ -161,7 +142,6 @@ ccc3FromUInt(const uint bytes)
 {
     GroundCell *groundCell = [GroundCell groundCellInWorld:theWorld position:pos name:name];
     [self addChild:groundCell z:-1];
-//    [groundCell createParticles];
     return groundCell;
 }
 
@@ -273,8 +253,31 @@ ccc3FromUInt(const uint bytes)
     [self resetBubbleWithNode:bubbleSprite];
 }
 
-#pragma mark -
-#pragma mark Water and Waves
+- (void)activateWaterShields:(NSNotification *)notify
+{
+    // Загружаем атлас с графикой супер силы
+    watershieldsBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"watershields.pvr.ccz" capacity:42];
+    [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"watershields.plist"];
+    [self addChild:watershieldsBatchNode z:2];
+    
+    // Add animation cache
+    [[CCAnimationCache sharedAnimationCache] addAnimationsWithFile:@"watershields_anim.plist"];
+    
+    // Включаем суперсилу для еды
+    for (CCSprite *tempSprite in [sceneSpriteBatchNode children])
+    {
+        if ([tempSprite isKindOfClass:[ChildCell class]])
+        {
+            ChildCell *childCell = (ChildCell*) tempSprite;
+            if (childCell.gameObjectType == kChildCellType)
+            {
+                [childCell activateWaterShieldsWithBatchNode:watershieldsBatchNode];
+            }
+        }
+    }
+}
+
+#pragma mark - Water and Waves
 
 - (void)resetBlickWithNode:(id)node
 {
@@ -362,26 +365,6 @@ ccc3FromUInt(const uint bytes)
     }
 }
 
-- (void)updateWater:(ccTime)dt
-{
-    float dX = kWaterWavesPPS * dt;
-    leftmostXPosOfWave += dX;
-    rightmostXPosOfWave -= dX;
-    
-    // False - to the left, True - to the right
-    for (CCSprite *tempSprite in [waterBatchNode children])
-    {
-        if (tempSprite.tag == kWaterWaveBackgroundTag)
-        {
-            [self moveWaterWithSprite:tempSprite andDirection:false dX:dX];
-        }
-        else if (tempSprite.tag == kWaterWaveForegroundTag)
-        {
-            [self moveWaterWithSprite:tempSprite andDirection:true dX:dX];
-        }
-    }
-}
-
 - (void)moveWaterWithSprite:(CCSprite*)sprite andDirection:(BOOL)toRight dX:(float)dX
 {
     if (toRight == TRUE) {
@@ -423,7 +406,7 @@ ccc3FromUInt(const uint bytes)
 
 - (void)displayLevelName
 {
-    [uiLayer displayText:[NSString stringWithFormat:@"Level %@", [GameManager sharedGameManager].levelName]];
+    [uiLayer displayText:[[GameManager sharedGameManager].levelName substringFromIndex:2]];
 }
 
 - (BOOL)loadLevelMapFromXML
@@ -432,8 +415,18 @@ ccc3FromUInt(const uint bytes)
     NSError *error;
     TBXML *xml;
     
-    // 1. Load XML from local build
-    xml = [[[TBXML alloc] initWithXMLFile:[GameManager sharedGameManager].levelName fileExtension:@"xml" error:&error] autorelease];
+    // 1. Определяем имя файла с координатами объектов в нем
+    NSString *xmlFileName = [NSString stringWithFormat:@"%@.xml", [GameManager sharedGameManager].levelName];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && [[CCFileUtils sharedFileUtils] iPadFileExistsAtPath:xmlFileName]) {
+        xmlFileName = [NSString stringWithFormat:@"%@-ipad.xml", [GameManager sharedGameManager].levelName];
+    }
+    else
+    {
+        xmlFileName = [NSString stringWithFormat:@"%@.xml", [GameManager sharedGameManager].levelName];
+    }
+    
+    // 2. Load XML from local build
+    xml = [[[TBXML alloc] initWithXMLFile:xmlFileName error:&error] autorelease];
     if (error) {
         CCLOG(@"TBXML Error-Failed to open local file:%@ %@", [error localizedDescription], [error userInfo]);
     }
@@ -453,10 +446,10 @@ ccc3FromUInt(const uint bytes)
         }
     }
     
-    // 2. If nothing found on local disk, than Load XML from network
+    // 3. If nothing found on local disk, than Load XML from network
     // Create a success block to be called when the asyn request completes
 //    NSString *urlString = [NSString stringWithFormat:@"http://192.168.2.1/%@.xml",[GameManager sharedGameManager].levelName];
-    NSString *urlString = [NSString stringWithFormat:@"http://127.0.0.1/%@.xml",[GameManager sharedGameManager].levelName];
+    NSString *urlString = [NSString stringWithFormat:@"http://127.0.0.1/%@",xmlFileName];
     NSURL *url = [NSURL URLWithString:urlString];
     NSData *xmlData = [[NSData alloc] initWithContentsOfURL:url];
     TBXML *xmlInet = [[TBXML alloc] initWithXMLData:xmlData error:&error];
@@ -486,8 +479,7 @@ ccc3FromUInt(const uint bytes)
     return true;
 }
 
-#pragma mark -
-#pragma mark XML Level Parser
+#pragma mark - XML Level Parser
 
 - (void)traverseLevelMapElements:(TBXMLElement*)element
 {
@@ -633,8 +625,11 @@ ccc3FromUInt(const uint bytes)
         bodiesToDestroy = [[NSMutableArray alloc] init];
         
         // Обнуляем переменные для статистики и счета
-        levelStartTime = CACurrentMediaTime();
+        [GameManager sharedGameManager].levelElapsedTime = 0;
         levelRemainingTime = 0;
+        
+        // Start listening WaterShields Activated message from SuperPower button. When it is tapped, we will know about this
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activateWaterShields:) name:@"WaterShieldsActivatedNotification" object:nil];
         
         [self setupWorld];
         [self createGround];
@@ -686,6 +681,7 @@ ccc3FromUInt(const uint bytes)
         [self createWater];
         
         [self scheduleUpdate];
+        [self schedule:@selector(levelTimeTick:) interval:1];
         
         // Create plankton particles
         psPlankton = [CCParticleSystemQuad particleWithFile:@"ps_plankton.plist"];
@@ -706,8 +702,15 @@ ccc3FromUInt(const uint bytes)
     return self;
 }
 
+- (id)initWithBox2DUILayer:(Box2DUILayer *)box2DUILayer
+{
+    return self;
+}
+
 -(void) dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"WaterShieldsActivatedNotification" object:nil];
+    
     delete contactListener;
     contactListener = NULL;
     [bodiesToDestroy release];
@@ -724,6 +727,19 @@ ccc3FromUInt(const uint bytes)
     }
     
     [super dealloc];
+}
+
+- (void)setupDebugDraw
+{
+    m_debugDraw = new GLESDebugDraw(PTM_RATIO);
+    world->SetDebugDraw(m_debugDraw);
+    uint32 flags = 0;
+	flags += b2Draw::e_shapeBit;
+	flags += b2Draw::e_jointBit;
+    //    flags += b2Draw::e_aabbBit;
+	//		flags += b2Draw::e_pairBit;
+	//		flags += b2Draw::e_centerOfMassBit;
+	m_debugDraw->SetFlags(flags);
 }
 
 - (void)draw
@@ -775,6 +791,9 @@ ccc3FromUInt(const uint bytes)
     for (CCNode *tempNode in [sceneSpriteBatchNode children]) {
         [tempNode pauseSchedulerAndActions];
     }
+    
+    // Count level Complete events for iRate
+    [[iRate sharedInstance] logEvent:NO]; 
 }
 
 - (void)showTipsElement:(CCNode*)element delay:(float)delay
@@ -797,7 +816,6 @@ ccc3FromUInt(const uint bytes)
 - (void)calcScore
 {
     GameManager *gameManager = [GameManager sharedGameManager];
-    gameManager.levelElapsedTime = CACurrentMediaTime() - levelStartTime;
     levelRemainingTime = kLevelMaxTime - gameManager.levelElapsedTime;
     
     // Проверяем оставшееся время. может быть отрицательным если игрок сильно замешкался, то ставим в 0
@@ -818,6 +836,14 @@ ccc3FromUInt(const uint bytes)
     if (gameManager.numOfSavedCells == gameManager.numOfMaxCells) {
         gameManager.levelStarsNum = 3;
     }
+    // Исключение для 6 уровня
+    if (gameManager.curLevel == kGameLevel6 && gameManager.levelStarsNum > 0) {
+        gameManager.levelStarsNum = 3;
+    }
+    // Исключение для 39 уровня
+    if (gameManager.curLevel == kGameLevel39 && gameManager.levelStarsNum > 1) {
+        gameManager.levelStarsNum = 3;
+    }
     gameManager.levelTotalScore += gameManager.levelStarsNum * kStarAchievedMulti;
     // Насчитываем очки за кол-во нажатий на игровое поле при прохождении уровня. За каждое нажатие вычитаем очки
     gameManager.levelTotalScore += gameManager.levelTappedNum * kTapMulti;
@@ -825,8 +851,8 @@ ccc3FromUInt(const uint bytes)
     gameManager.levelTotalScore = MAX(0, gameManager.levelTotalScore);
 }
 
-#pragma mark -
-#pragma mark Bubble Tap Check
+#pragma mark - Bubble Tap Check
+
 - (BOOL)bubbleTapCheckAtLoc:(b2Vec2)locationWorld
 {
     b2AABB aabb;
@@ -840,7 +866,13 @@ ccc3FromUInt(const uint bytes)
     {
         b2Body *foundBody = callback.fixtureFound->GetBody();
         Box2DSprite *foundSprite = (Box2DSprite*) foundBody->GetUserData();
-        if (foundSprite.characterState == kStateTraveling) {
+        if (foundSprite.characterState == kStateTraveling)
+        {
+            // Count number of destroyed cells for all time for achievement
+            if ([GameState sharedInstance].bubblesPoped < kAchievementBubblepopperNum) {
+                [GameState sharedInstance].bubblesPoped++;
+            }
+            
             [foundSprite changeState:kStateTakingDamage];
             return true;
         }
@@ -848,8 +880,8 @@ ccc3FromUInt(const uint bytes)
     return false;
 }
 
-#pragma mark -
-#pragma mark Achievements checking
+#pragma mark - Achievements checking
+
 - (void)checkAchievements
 {
     GameManager *gameManager = [GameManager sharedGameManager];
@@ -858,32 +890,177 @@ ccc3FromUInt(const uint bytes)
     // Check Complete level 10
     if (!gameState.completedLevel10) {
         if (gameManager.curLevel == kGameLevel10 && gameManager.hasLevelWin) {
-            CCLOG(@"Achievement Complete! Finished level 10");
             gameState.completedLevel10 = true;
             [[GCHelper sharedInstance] reportAchievement:kAchievementLevel10 percentComplete:100.0];
         }
     }
-    
-    // Check Complete level 20
     if (!gameState.completedLevel20) {
         if (gameManager.curLevel == kGameLevel20 && gameManager.hasLevelWin) {
-            CCLOG(@"Achievement Complete! Finished level 20");
             gameState.completedLevel20 = true;
             [[GCHelper sharedInstance] reportAchievement:kAchievementLevel20 percentComplete:100.0];
         }
     }
+    if (!gameState.completedLevel30) {
+        if (gameManager.curLevel == kGameLevel30 && gameManager.hasLevelWin) {
+            gameState.completedLevel30 = true;
+            [[GCHelper sharedInstance] reportAchievement:kAchievementLevel30 percentComplete:100.0];
+        }
+    }
+    if (!gameState.completedLevel40) {
+        if (gameManager.curLevel == kGameLevel40 && gameManager.hasLevelWin) {
+            gameState.completedLevel40 = true;
+            [[GCHelper sharedInstance] reportAchievement:kAchievementLevel40 percentComplete:100.0];
+        }
+    }
     
-    // Check Kill 100 cells
-    if (gameState.cellsKilled <= kAchievementCellDestroyerNum)
+    // Check First Fail, Unwary, Destroyer (1, 50, 100 spoiled food)
+    if (gameState.cellsKilled > 0 && gameState.cellsKilled <= kAchievementCellDestroyerNum)
     {
-        float pctComplete = ( (float)gameState.cellsKilled / (int)kAchievementCellDestroyerNum ) * 100.0;
-        [[GCHelper sharedInstance] reportAchievement:kAchievementCellDestroyer percentComplete:pctComplete];
-        if (gameState.cellsKilled >= kAchievementCellDestroyerNum) {
-            gameState.cellsKilled++;
+        if (gameState.cellsKilled < kAchievementFirstFailNum) {
+            [self calcAndReportAchievement:kAchievementFirstFail curValue:gameState.cellsKilled maxValue:kAchievementFirstFailNum];
+            [self calcAndReportAchievement:kAchievementUnwary curValue:gameState.cellsKilled maxValue:kAchievementUnwaryNum];
+            [self calcAndReportAchievement:kAchievementCellDestroyer curValue:gameState.cellsKilled maxValue:kAchievementCellDestroyerNum];
+        }
+        else if (gameState.cellsKilled < kAchievementUnwaryNum)
+        {
+            if (!gameState.completedFirstFail) {
+                gameState.completedFirstFail = true;
+                [self calcAndReportAchievement:kAchievementFirstFail curValue:gameState.cellsKilled maxValue:kAchievementFirstFailNum];
+            }
+            [self calcAndReportAchievement:kAchievementUnwary curValue:gameState.cellsKilled maxValue:kAchievementUnwaryNum];
+            [self calcAndReportAchievement:kAchievementCellDestroyer curValue:gameState.cellsKilled maxValue:kAchievementCellDestroyerNum];
+        }
+        else if (gameState.cellsKilled < kAchievementCellDestroyerNum)
+        {
+            if (!gameState.completedUnwary) {
+                gameState.completedUnwary = true;
+                [self calcAndReportAchievement:kAchievementUnwary curValue:gameState.cellsKilled maxValue:kAchievementUnwaryNum];
+            }
+            [self calcAndReportAchievement:kAchievementCellDestroyer curValue:gameState.cellsKilled maxValue:kAchievementCellDestroyerNum];
+        }
+        else
+        {
+            [self calcAndReportAchievement:kAchievementCellDestroyer curValue:gameState.cellsKilled maxValue:kAchievementCellDestroyerNum];
+            // Прекращает подсчитывать кол-во уничтоженной еды после получения макс ачивки
+            if (gameState.cellsKilled >= kAchievementCellDestroyerNum) {
+                gameState.cellsKilled++;
+            }
+        }
+    }
+    
+    // Check Light Hunger, I feel Good, On no no (50, 150, 300 eaten food)
+    if (gameState.foodEaten > 0 && gameState.foodEaten <= kAchievementOhNoNoNum)
+    {
+        if (gameState.foodEaten < kAchievementLighthungerNum) {
+            [self calcAndReportAchievement:kAchievementLighthunger curValue:gameState.foodEaten maxValue:kAchievementLighthungerNum];
+            [self calcAndReportAchievement:kAchievementIFeelGood curValue:gameState.foodEaten maxValue:kAchievementIFeelGoodNum];
+            [self calcAndReportAchievement:kAchievementOhNoNo curValue:gameState.foodEaten maxValue:kAchievementOhNoNoNum];
+        }
+        else if (gameState.foodEaten < kAchievementIFeelGoodNum)
+        {
+            if (!gameState.completedLightHunger) {
+                gameState.completedLightHunger = true;
+                [self calcAndReportAchievement:kAchievementLighthunger curValue:gameState.foodEaten maxValue:kAchievementLighthungerNum];
+            }
+            [self calcAndReportAchievement:kAchievementIFeelGood curValue:gameState.foodEaten maxValue:kAchievementIFeelGoodNum];
+            [self calcAndReportAchievement:kAchievementOhNoNo curValue:gameState.foodEaten maxValue:kAchievementOhNoNoNum];
+        }
+        else if (gameState.foodEaten < kAchievementOhNoNoNum)
+        {
+            if (!gameState.completedIFeelGood) {
+                gameState.completedIFeelGood = true;
+                [self calcAndReportAchievement:kAchievementIFeelGood curValue:gameState.foodEaten maxValue:kAchievementIFeelGoodNum];
+            }
+            [self calcAndReportAchievement:kAchievementOhNoNo curValue:gameState.foodEaten maxValue:kAchievementOhNoNoNum];
+        }
+        else
+        {
+            [self calcAndReportAchievement:kAchievementOhNoNo curValue:gameState.foodEaten maxValue:kAchievementOhNoNoNum];
+            // Прекращает подсчитывать кол-во уничтоженной еды после получения макс ачивки
+            if (gameState.foodEaten >= kAchievementOhNoNoNum) {
+                gameState.foodEaten++;
+            }
+        }
+    }
+    
+    // Check Starry, Stargazer, Superstar, Awesome (15, 50, 100, all stars collected)
+    if (gameState.totalNumOfReceivedStars > 0 && gameState.totalNumOfReceivedStars < kAchievementStarryNum)
+    {
+        [self calcAndReportAchievement:kAchievementStarry curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementStarryNum];
+        [self calcAndReportAchievement:kAchievementStargazer curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementStargazerNum];
+        [self calcAndReportAchievement:kAchievementSuperstar curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementSuperstarNum];
+    }
+    else if (gameState.totalNumOfReceivedStars < kAchievementStargazerNum)
+    {
+        if (!gameState.completedStarry) {
+            gameState.completedStarry = true;
+            [self calcAndReportAchievement:kAchievementStarry curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementStarryNum];
+        }
+        [self calcAndReportAchievement:kAchievementStargazer curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementStargazerNum];
+        [self calcAndReportAchievement:kAchievementSuperstar curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementSuperstarNum];
+    }
+    else if (gameState.totalNumOfReceivedStars < kAchievementSuperstarNum)
+    {
+        if (!gameState.completedStargazer) {
+            gameState.completedStargazer = true;
+            [self calcAndReportAchievement:kAchievementStargazer curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementStargazerNum];
+        }
+        [self calcAndReportAchievement:kAchievementSuperstar curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementSuperstarNum];
+    }
+    else
+    {
+        if (!gameState.completedSuperstar) {
+            gameState.completedSuperstar = true;
+            [self calcAndReportAchievement:kAchievementSuperstar curValue:gameState.totalNumOfReceivedStars maxValue:kAchievementSuperstarNum];
+        }
+        [self calcAndReportAchievement:kAchievementAwesome curValue:gameState.totalNumOfReceivedStars maxValue:kLevelCount * 3];
+    }
+    
+    // Check Bubblepoper
+    if (gameState.bubblesPoped <= kAchievementBubblepopperNum)
+    {
+        [self calcAndReportAchievement:kAchievementBubblepopper curValue:gameState.bubblesPoped maxValue:kAchievementBubblepopperNum];
+        if (gameState.bubblesPoped >= kAchievementBubblepopperNum) {
+            gameState.bubblesPoped++;
+        }
+    }
+    
+    // Check Bomber
+    if (gameState.bombsExploded <= kAchievementBomberNum)
+    {
+        [self calcAndReportAchievement:kAchievementBomber curValue:gameState.bombsExploded maxValue:kAchievementBomberNum];
+        if (gameState.bombsExploded >= kAchievementBomberNum) {
+            gameState.bombsExploded++;
+        }
+    }
+    
+    // Check Rush Hour
+    if (!gameState.completedRushHour && gameManager.hasLevelWin == true)
+    {
+        if (gameManager.levelElapsedTime <= kAchievementRushHourNum)
+        {
+            gameState.completedRushHour = true;
+            [[GCHelper sharedInstance] reportAchievement:kAchievementRushHour percentComplete:100];
+        }
+    }
+    
+    // Check True genby fan
+    if (!gameState.completedTrueGenbyFan)
+    {
+        if (gameState.gameTotalRunTime >= kAchievementTrueGenbyFanNum)
+        {
+            gameState.completedTrueGenbyFan = true;
+            [[GCHelper sharedInstance] reportAchievement:kAchievementTrueGenbyFan percentComplete:100];
         }
     }
     
     [gameState save];
+}
+
+- (void)calcAndReportAchievement:(NSString*)achiv curValue:(unsigned int)curValue maxValue:(unsigned int)maxValue
+{
+    float pctComplete = MIN(((float)curValue / maxValue) * 100.0, 100);
+    [[GCHelper sharedInstance] reportAchievement:achiv percentComplete:pctComplete];
 }
 
 - (void)updateGameStatsAndProgress
@@ -896,8 +1073,16 @@ ccc3FromUInt(const uint bytes)
     if ([GameState sharedInstance].highestOpenedLevel == levelNum) [GameState sharedInstance].highestOpenedLevel++;
     
     // Запоминаем кол-во набранных звезд если их больше чем было
-    if (gameManager.levelStarsNum > [[gameState.levelHighestStarsNumArray objectAtIndex:levelNum-1] integerValue]) {
+    if (gameManager.levelStarsNum > [[gameState.levelHighestStarsNumArray objectAtIndex:levelNum-1] integerValue])
+    {
         [[gameState levelHighestStarsNumArray] replaceObjectAtIndex:levelNum-1 withObject:[NSNumber numberWithInt:gameManager.levelStarsNum]];
+        
+        // Подсчитываем общее кол-во полученных звезд
+        gameState.totalNumOfReceivedStars = 0;
+        for (id levelStar in gameState.levelHighestStarsNumArray)
+        {
+            gameState.totalNumOfReceivedStars += [levelStar integerValue];
+        }
     }
     
     // Запоминаем High Score для уровня и докладываем в GameCenter если значение изменилось
@@ -908,7 +1093,8 @@ ccc3FromUInt(const uint bytes)
         
         // Доложить Score в GameCenter
         unsigned int summaryScore = 0;
-        for (int i=0; i < [gameState.levelHighestScoreArray count]; i++) {
+        for (int i=0; i < [gameState.levelHighestScoreArray count]; i++)
+        {
             summaryScore += [[gameState.levelHighestScoreArray objectAtIndex:i] integerValue];
         }
         [[GCHelper sharedInstance] reportScore:kLeaderboardChapter1 score:summaryScore];
@@ -917,7 +1103,7 @@ ccc3FromUInt(const uint bytes)
     [gameState save];
 }
 
-#pragma mark Update
+#pragma mark - Loops
 
 - (void)update:(ccTime)dt
 {
@@ -966,7 +1152,7 @@ ccc3FromUInt(const uint bytes)
         {
             GameCharacter *tempChar = (GameCharacter*)tempSprite;
             // Заставляем осьминожку грустить если еда пропадает
-            if (tempChar.gameObjectType == kChildCellType && tempChar.characterState == kStateDead) {
+            if (tempChar.gameObjectType == kChildCellType && tempChar.characterState == kStateTakingDamage) {
                 [exitCell changeState:kStateSad];
             }
             [tempChar updateStateWithDeltaTime:dt andListOfGameObjects:listOfGameObjects];
@@ -992,8 +1178,8 @@ ccc3FromUInt(const uint bytes)
             gameOver = true;
             [gameManager setHasLevelWin:YES];
             [self calcScore];
-            [self checkAchievements];
             [self updateGameStatsAndProgress];
+            [self checkAchievements];
             [self scheduleOnce:@selector(displayGameOverLayer) delay:1.5];
         }
         else if (gameManager.numOfTotalCells == 0 && gameManager.numOfSavedCells < gameManager.numOfNeededCells)
@@ -1001,6 +1187,32 @@ ccc3FromUInt(const uint bytes)
             gameOver = true;
             [self checkAchievements];
             [self scheduleOnce:@selector(displayGameOverLayer) delay:1.5];
+        }
+    }
+}
+
+-(void) levelTimeTick:(ccTime)dt
+{
+    [GameManager sharedGameManager].levelElapsedTime += dt;
+    [GameState sharedInstance].gameTotalRunTime += dt;
+}
+
+- (void)updateWater:(ccTime)dt
+{
+    float dX = kWaterWavesPPS * dt;
+    leftmostXPosOfWave += dX;
+    rightmostXPosOfWave -= dX;
+    
+    // False - to the left, True - to the right
+    for (CCSprite *tempSprite in [waterBatchNode children])
+    {
+        if (tempSprite.tag == kWaterWaveBackgroundTag)
+        {
+            [self moveWaterWithSprite:tempSprite andDirection:false dX:dX];
+        }
+        else if (tempSprite.tag == kWaterWaveForegroundTag)
+        {
+            [self moveWaterWithSprite:tempSprite andDirection:true dX:dX];
         }
     }
 }
@@ -1023,7 +1235,7 @@ ccc3FromUInt(const uint bytes)
     [bodiesToDestroy removeAllObjects];
 }
 
-#pragma mark Touch Events
+#pragma mark - Touch Events
 
 - (void)registerWithTouchDispatcher
 {
@@ -1068,12 +1280,6 @@ ccc3FromUInt(const uint bytes)
 {    
     // Прячем главную клетку и перестаем притягивать
     [parentCell changeState:kStateIdle];
-}
-
-
-- (id)initWithBox2DUILayer:(Box2DUILayer *)box2DUILayer
-{
-    return self;
 }
 
 @end

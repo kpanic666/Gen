@@ -13,6 +13,7 @@
 @interface GameManager : NSObject {
     BOOL isMusicON;
     BOOL isSoundEffectsON;
+    NSString *playedBackgroundMusic;
     BOOL hasLevelWin;
     SceneTypes currentScene;
     SceneTypes curLevel;
@@ -68,7 +69,6 @@
 - (ALuint)playSoundEffect:(NSString*)soundEffectKey;
 - (void)stopSoundEffect:(ALuint)soundEffectID;
 - (void)playBackgroundTrack:(NSString*)trackFileName;
-- (CGSize)getDimensionsOfCurrentScene;
 - (void)setMusicState:(BOOL)state;
 
 @end

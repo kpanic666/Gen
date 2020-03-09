@@ -1,0 +1,58 @@
+<map>
+<dec_bone1 x='238' y='620' />
+<dec_bone2 x='248' y='623' />
+<dec_bone2 x='262' y='617' />
+<dec_bone2 x='248' y='615' flipX='YES' />
+<dec_bone2 x='242' y='609' scaleX='0.721' scaleY='0.636' />
+<dec_bone2 x='246' y='627' scaleX='0.721' scaleY='0.636' />
+<dec_bone2 x='258' y='622' scaleX='0.548' scaleY='0.44' />
+<dec_bone2 x='248' y='601' scaleX='0.548' scaleY='0.44' />
+<dec_bone2 x='264' y='605' scaleX='0.548' scaleY='0.44' />
+<dec_bone3 x='239' y='619' />
+<dec_bone4 x='251' y='608' />
+<dec_plant2 x='439' y='298' />
+<dec_plant2 x='471' y='271' />
+<dec_plant2 x='436' y='325' rotation='-113' />
+<dec_plant2 x='488' y='350' rotation='-113' />
+<dec_plant2 x='515' y='335' rotation='-55' scaleX='0.863' scaleY='0.775' />
+<dec_plant1 x='489' y='273' />
+<dec_plant1 x='449' y='343' />
+<dec_plant1 x='478' y='355' />
+<dec_plant2 x='508' y='287' rotation='8' />
+<dec_plant3 x='239' y='116' />
+<dec_shell1 x='193' y='117' />
+<dec_shell2 x='229' y='160' />
+<dec_plant5 x='580' y='691' rotation='-180' />
+<dec_plant7 x='706' y='687' rotation='-165' />
+<dec_plant5 x='599' y='695' rotation='171' scaleX='0.776' scaleY='1.26' />
+<dec_plant5 x='616' y='680' rotation='-180' />
+<dec_plant5 x='635' y='680' rotation='-180' scaleX='0.762' scaleY='0.613' />
+<dec_plant7 x='762' y='692' rotation='168' />
+<dec_plant7 x='723' y='683' rotation='13' scaleX='0.456' scaleY='0.877' />
+<dec_plant7 x='796' y='695' rotation='-165' />
+<dec_plant7 x='868' y='691' rotation='168' />
+<dec_plant7 x='813' y='691' rotation='13' scaleX='0.456' scaleY='0.877' />
+<dec_plant7 x='86' y='659' rotation='-165' />
+<dec_plant7 x='142' y='664' rotation='168' />
+<dec_plant7 x='103' y='655' rotation='13' scaleX='0.456' scaleY='0.877' />
+<dec_sponge1 x='887' y='681' rotation='173' />
+<dec_plant5 x='9' y='669' rotation='-180' />
+<dec_plant5 x='28' y='673' rotation='171' scaleX='0.776' scaleY='1.26' />
+<dec_plant5 x='45' y='658' rotation='-180' />
+<dec_plant5 x='64' y='658' rotation='-180' scaleX='0.762' scaleY='0.613' />
+<dec_star x='307' y='728' />
+<dec_star x='323' y='741' scaleX='0.464' scaleY='0.73' />
+<groundCell1 x='94' y='92' />
+<redCell1 x='723' y='550' />
+<redCell2 x='118' y='550' />
+<redCell4 x='487' y='-44' />
+<redCell3 x='319' y='509' />
+<redCell5 x='68' y='74' />
+<redCell6 x='112' y='74' />
+<ExitCell x='425' y='568' />
+<ChildCell x='769' y='222' />
+<ChildCell x='796' y='266' />
+<ChildCell x='796' y='329' />
+<ChildCell x='772' y='379' />
+<Settings maxCellsCount='4' needCellsCount='4' />
+</map>

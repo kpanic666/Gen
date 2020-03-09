@@ -23,44 +23,11 @@
     CCSpriteBatchNode *buttonsBatchNode;
 }
 - (void)displayGameOverMenuButtons;
-- (void)rollBorderFrame;
-- (CCTexture2D*)genBorderWithSize:(CGSize)textureSize;
 - (void)popUpStars;
 - (float)showMenuNodes;
 @end
 
 @implementation CompleteLevelLayer
-
-- (void)rollBorderFrame
-{
-//    CGSize screenSize = [CCDirector sharedDirector].winSize;
-//    CGSize borderSize = CGSizeMake(screenSize.width, screenSize.height * 0.1);
-//    
-//    CCTexture2D *borderTex = [self genBorderWithSize:borderSize];
-//    CCSprite *borderTop = [CCSprite spriteWithTexture:borderTex];
-//    CCSprite *borderBottom = [CCSprite spriteWithTexture:borderTex];
-//    borderTop.anchorPoint = ccp(0.5, 0);
-//    borderTop.position = ccp(screenSize.width * 0.5, screenSize.height);
-//    borderBottom.anchorPoint = ccp(0.5, 1);
-//    borderBottom.position = ccp(screenSize.width * 0.5, 0);
-//    [self addChild:borderTop];
-//    [self addChild:borderBottom];
-//    
-//    // Actions
-//    id callAction = [CCCallFunc actionWithTarget:self selector:@selector(displayGameOverMenuButtons)];
-//    CGPoint borderPos = ccp(screenSize.width * 0.5, screenSize.height - [borderTop contentSize].height);
-//    [borderTop runAction:[CCMoveTo actionWithDuration:0.5 position:borderPos]];
-//    borderPos = ccp(screenSize.width * 0.5, [borderBottom contentSize].height);
-//    [borderBottom runAction:[CCSequence actions:[CCMoveTo actionWithDuration:0.5 position:borderPos], callAction, nil]];
-} 
-
-- (CCTexture2D*)genBorderWithSize:(CGSize)textureSize {
-    
-    CCRenderTexture *rt = [CCRenderTexture renderTextureWithWidth:textureSize.width height:textureSize.height pixelFormat:kCCTexture2DPixelFormat_RGB565];
-    [rt beginWithClear:0 g:0 b:0 a:1];
-    [rt end];
-    return rt.sprite.texture;
-}
 
 - (id)initWithColor:(ccColor4B)color
 {
@@ -73,8 +40,6 @@
         buttonsBatchNode = [CCSpriteBatchNode batchNodeWithFile:@"buttons_sheet_1.pvr.ccz"];
         [self addChild:buttonsBatchNode];
         
-        // Опускаем черный рамки сверху и снизу. Как только они на месте - постепенно осветляем фон
-//        [self rollBorderFrame];
         [self displayGameOverMenuButtons];
     }
     
@@ -409,6 +374,20 @@
 
 - (void)explodeStar:(CCSprite*)star
 {
+    switch ([star tag]) {
+        case 1:
+            PLAYSOUNDEFFECT(@"STAR1");
+            break;
+            
+        case 2:
+            PLAYSOUNDEFFECT(@"STAR2");
+            break;
+            
+        case 3:
+            PLAYSOUNDEFFECT(@"STAR3");
+            break;
+    }
+    
     // Add Sound to Pop UP THE STAR
     [star setScale:0.1];
     [star setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"star_on.png"]];

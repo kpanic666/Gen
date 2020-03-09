@@ -33,9 +33,15 @@
     if (characterState == kStateDead) {
         return;
     }
-    if ((characterState == kStateTakingDamage) && ([self numberOfRunningActions] > 0)) {
+    
+    if ((characterState == kStateTakingDamage) && ([self numberOfRunningActions] > 0 || [watershieldSprite numberOfRunningActions] > 0)) {
         return;
     }
+    
+    if (characterState == kStateTakingDamage && characterHealth > 0) {
+        [self changeState:self.lastCharacterState];
+    }
+    
     if ([self numberOfRunningActions] == 0) {
         if (characterHealth <= 0 && characterState != kStateSoul) {
             [self changeState:kStateDead];
@@ -49,8 +55,22 @@
     if (characterState == kStateSoul && [self numberOfRunningActions] == 0) {
         if (body == nil) {
 
-            [self removeFromParentAndCleanup:YES];
+            [self removeCellSprite];
+            return;
         }
+    }
+    
+    if (_spActive == TRUE && [watershieldSprite numberOfRunningActions] > 0)
+    {
+        watershieldSprite.position = self.position;
+        watershieldSprite.rotation = self.rotation;
+    }
+    
+    if (_spActive == TRUE && [watershieldSprite numberOfRunningActions] == 0)
+    {
+        _spActive = FALSE;
+        [watershieldSprite removeFromParentAndCleanup:YES];
+        watershieldSprite = nil;
     }
     
     if (characterState == kStateBubbling)
@@ -79,7 +99,9 @@
 {
     if ((self = [super init])) {
         world = theWorld;
-        _dontCount = false;
+        _dontCount = FALSE;
+        _spActive = FALSE;
+        watershieldSprite = nil;
         // Выбираем рэндомную текстуру еды для объекта и сохраняем в глобальную переменную для дальнейшего использования
         NSString *foodNames[] = {
             @"food_apple",
@@ -102,9 +124,21 @@
     return self;
 }
 
+- (void)initAnimation
+{
+    CCAnimationCache *animCache = [CCAnimationCache sharedAnimationCache];
+    
+	self.watershieldCycleAnim = [animCache animationByName:@"ws_cycle_anim"];
+    self.watershieldStartAnim = [animCache animationByName:@"ws_start_anim"];
+}
+
 - (void) removeCellSprite {
     
     [self setIsActive:FALSE];
+    if (watershieldSprite != nil) {
+        [watershieldSprite removeFromParentAndCleanup:YES];
+        watershieldSprite = nil;
+    }
     [self removeFromParentAndCleanup:YES];
 }
 
@@ -126,26 +160,48 @@
         return;
     }
     
+    [self setLastCharacterState:characterState];
     [self stopAllActions];
     [self setCharacterState:newState];
     
     switch (newState) {
         case kStateTakingDamage:
         {
-            characterHealth -= kRedCellDamage;
-            
-            // Destroy Physics body
-            self.markedForDestruction = YES;
-            if (_dontCount == false) {
-                [GameManager sharedGameManager].numOfTotalCells--;
+            // Если еда за пределами верхней границы экрана - то убиваем ее даже если она с супер силой
+            float topBorder = [[CCDirector sharedDirector] winSize].height + self.contentSize.height / 2;
+            if (self.position.y > topBorder)
+            {
+                characterHealth = 0;
+                [watershieldSprite stopAllActions];
+            }
+            else
+            {
+                characterHealth -= kRedCellDamage;
             }
             
-            // Count number of destroyed cells for all time for achievement
-            if ([GameState sharedInstance].cellsKilled < kAchievementCellDestroyerNum) {
-                [GameState sharedInstance].cellsKilled++;
+            if (characterHealth <= 0)
+            {
+                // Destroy Physics body
+                self.markedForDestruction = YES;
+                if (_dontCount == false) {
+                    [GameManager sharedGameManager].numOfTotalCells--;
+                }
+                
+                // Count number of destroyed cells for all time for achievement
+                if ([GameState sharedInstance].cellsKilled < kAchievementCellDestroyerNum) {
+                    [GameState sharedInstance].cellsKilled++;
+                }
+                
+                PLAYSOUNDEFFECT(@"CHILDCELL_DYING_1");
             }
-        
-            PLAYSOUNDEFFECT(@"CHILDCELL_DYING_1");
+            else
+            {
+                // Анимируем отключение суперсилы
+                [watershieldSprite stopAllActions];
+                id startReverseAnimAct = [CCAnimate actionWithAnimation:self.watershieldStartAnim];
+                [watershieldSprite runAction:[startReverseAnimAct reverse]];
+            }
+            
             break;
         }
             
@@ -203,7 +259,13 @@
             // Клетка ударилась об выход и должна уничтожить физ тело и сменить спрайт и дрыгаться внутри выхода
             [self setCharacterHealth:0];
             
-            PLAYSOUNDEFFECT(@"CHILDCELL_SOUL_1");
+            NSString *soundName = [NSString stringWithFormat:@"CHILDCELL_SOUL_%i", (int)random() % 3 + 1];
+            PLAYSOUNDEFFECT(soundName);
+            
+            // Count number of eaten food for achievement
+            if ([GameState sharedInstance].foodEaten < kAchievementOhNoNoNum) {
+                [GameState sharedInstance].foodEaten++;
+            }
             
             // 2. Двигаем мертвые клетки (души) в центр выхода
             exitCellSprite = (GameCharacter*) [[self parent] getChildByTag:kExitCellSpriteTagValue];
@@ -212,6 +274,12 @@
             id fadeOut = [CCFadeOut actionWithDuration:0.2];
             id spawnScaleFade = [CCSpawn actions:moveToMouth, fadeOut, scaleDown, nil];
             [self runAction:spawnScaleFade];
+            
+            // и супер силу если она есть двигаем тоже
+            if (watershieldSprite) {
+                id wsSpawn = [CCSpawn actionOne:[[fadeOut copy] autorelease] two:[[scaleDown copy] autorelease]];
+                [watershieldSprite runAction:wsSpawn];
+            }
 
             break;
         }
@@ -264,7 +332,6 @@
             
         case kStateBubbled:
         {
-            
             break;
         }
             
@@ -273,9 +340,36 @@
     }
 }
 
+#pragma mark -
+#pragma mark Water Shields
+
+- (void)activateWaterShieldsWithBatchNode:(CCSpriteBatchNode *)wsBatchNode
+{
+    [self initAnimation];
+    
+    self.watershieldsBatchNode = wsBatchNode;
+    self.spActive = TRUE;
+    characterHealth *= 2;
+    
+    watershieldSprite = [CCSprite spriteWithSpriteFrameName:@"water_shield_start0001.png"];
+    watershieldSprite.rotation = self.rotation;
+    watershieldSprite.position = self.position;
+    [self.watershieldsBatchNode addChild:watershieldSprite];
+    
+    // Run animation
+    id startAnimAct = [CCAnimate actionWithAnimation:self.watershieldStartAnim];
+    id cycleAnimAct = [CCAnimate actionWithAnimation:self.watershieldCycleAnim];
+    
+    [watershieldSprite runAction:[CCSequence actions:startAnimAct, cycleAnimAct, nil]];
+//    [watershieldSprite runAction:cycleAnimAct];
+}
+
 - (void)dealloc
 {
+    [_watershieldCycleAnim release];
+    [_watershieldStartAnim release];
     exitCellSprite = nil;
+    _watershieldsBatchNode = nil;
     [super dealloc];
 }
 

@@ -25,7 +25,7 @@
         [CCTexture2D setDefaultAlphaPixelFormat:kCCTexture2DPixelFormat_Default];
         
         // add MetalCell and pin at Center. MetalCell will rotate
-        cellPos = [Helper convertPosition:ccp(480, 261)];
+        cellPos = ccp(screenSize.width*0.5, screenSize.height*0.6);;
         MetalCell *metalCell1 = [MetalCell metalCellInWorld:world position:cellPos name:@"metalCell1" withPinAtPos:cellPos];
         [self addChild:metalCell1 z:0];
         [sceneSpriteBatchNode addChild:metalCell1.pin];

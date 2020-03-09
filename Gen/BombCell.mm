@@ -7,13 +7,16 @@
 //
 
 #import "BombCell.h"
+#import "GameState.h"
 
 @implementation BombCell
 
 - (id)initWithWorld:(b2World *)theWorld atLocation:(CGPoint)location
 {
     if ((self = [super init])) {
-        self.dontCount = false;
+        self.dontCount = FALSE;
+        self.spActive = FALSE;
+        
         world = theWorld;
         [self setFoodTextureName:@"deadfish_idle"];
         [self setDisplayFrame:[[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:@"deadfish_idle.png"]];
@@ -87,6 +90,7 @@
         case kStateTakingDamage:
         {
             characterHealth -= kRedCellDamage;
+            STOPSOUNDEFFECT(timerSound);
             
             // Destroy Physics body
             self.markedForDestruction = YES;
@@ -95,9 +99,13 @@
             }
             
             
-            if (exploded) {
-                
-                // Add sound of explosion
+            if (exploded == true)
+            {
+                // Count number of destroyed cells for all time for achievement
+                if ([GameState sharedInstance].bombsExploded < kAchievementBomberNum) {
+                    [GameState sharedInstance].bombsExploded++;
+                }
+                PLAYSOUNDEFFECT(@"BOMBCELL_EXPLOSION");
             }
             else
             {
@@ -115,10 +123,10 @@
         case kStateConnected:
         {
             // Нужно менять вид клетки. Это состояние принимается клеткой когда был создан джойнт
-            PLAYSOUNDEFFECT(@"CHILDCELL_CONNECTED");
             if (!activated)
             {
                 activated = YES;
+                timerSound = PLAYSOUNDEFFECT(@"BOMBCELL_TIMER");
                 [self runAction:[CCSequence actions:
                                  [CCAnimate actionWithAnimation:self.timerAnim],
                                  [CCCallFunc actionWithTarget:self selector:@selector(boom)],
@@ -141,6 +149,7 @@
         case kStateBeforeSoul:
         {
             [self stopAllActions];
+            STOPSOUNDEFFECT(timerSound);
             self.markedForDestruction = YES;
             if (self.dontCount == false) {
                 [GameManager sharedGameManager].numOfTotalCells--;
@@ -206,6 +215,11 @@
         default:
             break;
     }
+}
+
+- (void) activateWaterShieldsWithBatchNode:(CCSpriteBatchNode *)wsBatchNode
+{
+    return;
 }
 
 - (void)dealloc

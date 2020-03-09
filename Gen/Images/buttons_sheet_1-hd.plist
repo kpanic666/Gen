@@ -7,7 +7,7 @@
             <key>button_achievments.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{114,105},{109,101}}</string>
+                <string>{{334,142},{109,101}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -20,7 +20,7 @@
             <key>button_back.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{225,197},{78,77}}</string>
+                <string>{{2,289},{78,77}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -46,7 +46,7 @@
             <key>button_info.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,217},{60,60}}</string>
+                <string>{{445,206},{60,60}}</string>
                 <key>offset</key>
                 <string>{-1,1}</string>
                 <key>rotated</key>
@@ -59,7 +59,7 @@
             <key>button_leaderboard.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{321,142},{93,88}}</string>
+                <string>{{98,197},{93,88}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -72,7 +72,7 @@
             <key>button_level_select.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{416,142},{77,77}}</string>
+                <string>{{2,368},{77,77}}</string>
                 <key>offset</key>
                 <string>{-1,1}</string>
                 <key>rotated</key>
@@ -85,7 +85,7 @@
             <key>button_music_off.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,387},{51,51}}</string>
+                <string>{{233,299},{51,51}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -98,7 +98,7 @@
             <key>button_music_off_pressed.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{247,276},{53,53}}</string>
+                <string>{{112,447},{53,53}}</string>
                 <key>offset</key>
                 <string>{-1,1}</string>
                 <key>rotated</key>
@@ -111,7 +111,7 @@
             <key>button_music_on.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{55,334},{51,51}}</string>
+                <string>{{180,299},{51,51}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -124,7 +124,7 @@
             <key>button_music_on_pressed.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{192,276},{53,53}}</string>
+                <string>{{57,447},{53,53}}</string>
                 <key>offset</key>
                 <string>{-1,1}</string>
                 <key>rotated</key>
@@ -137,7 +137,7 @@
             <key>button_options.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{225,105},{94,90}}</string>
+                <string>{{2,197},{94,90}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -150,7 +150,7 @@
             <key>button_pause.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{114,208},{76,76}}</string>
+                <string>{{81,369},{76,76}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -163,20 +163,33 @@
             <key>button_reset.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{305,232},{75,77}}</string>
+                <string>{{238,352},{75,77}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{2,2},{75,77}}</string>
                 <key>sourceSize</key>
                 <string>{79,81}</string>
             </dict>
+            <key>button_restore_purchase.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{445,142},{62,62}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{1,1},{62,62}}</string>
+                <key>sourceSize</key>
+                <string>{64,64}</string>
+            </dict>
             <key>button_resume.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,105},{110,110}}</string>
+                <string>{{222,105},{110,110}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -189,7 +202,7 @@
             <key>button_sfx_off.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,334},{51,51}}</string>
+                <string>{{220,446},{51,51}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -202,7 +215,7 @@
             <key>button_sfx_off_pressed.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{57,279},{53,53}}</string>
+                <string>{{2,447},{53,53}}</string>
                 <key>offset</key>
                 <string>{-1,1}</string>
                 <key>rotated</key>
@@ -215,7 +228,7 @@
             <key>button_sfx_on.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{112,286},{51,51}}</string>
+                <string>{{167,446},{51,51}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -228,7 +241,7 @@
             <key>button_sfx_on_pressed.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,279},{53,53}}</string>
+                <string>{{275,217},{53,53}}</string>
                 <key>offset</key>
                 <string>{-1,1}</string>
                 <key>rotated</key>
@@ -241,7 +254,7 @@
             <key>button_skip.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{416,221},{75,77}}</string>
+                <string>{{159,369},{75,77}}</string>
                 <key>offset</key>
                 <string>{0,1}</string>
                 <key>rotated</key>
@@ -250,6 +263,45 @@
                 <string>{{2,1},{75,77}}</string>
                 <key>sourceSize</key>
                 <string>{79,81}</string>
+            </dict>
+            <key>button_sp_buyed.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{98,287},{80,80}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{1,1},{80,80}}</string>
+                <key>sourceSize</key>
+                <string>{82,82}</string>
+            </dict>
+            <key>button_sp_none.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{193,217},{80,80}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{1,1},{80,80}}</string>
+                <key>sourceSize</key>
+                <string>{82,82}</string>
+            </dict>
+            <key>middle_button.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,105},{218,90}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{218,90}}</string>
+                <key>sourceSize</key>
+                <string>{218,90}</string>
             </dict>
             <key>optionsButtonUnder.png</key>
             <dict>
@@ -274,7 +326,7 @@
             <key>size</key>
             <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:a5a31be46815e7d362c9743f2d2bfe98$</string>
+            <string>$TexturePacker:SmartUpdate:39e3d6d115b6ec70a4b1ab90315b90c7$</string>
             <key>textureFileName</key>
             <string>buttons_sheet_1-hd.pvr.ccz</string>
         </dict>

@@ -9,7 +9,8 @@
 #import "AppDelegate.h"
 #import "GameManager.h"
 #import "GCHelper.h"
-#import "TestFlight.h"
+#import "IAPHelper.h"
+#import "iRate.h"
 
 @interface MyRootViewController : UINavigationController
 
@@ -31,8 +32,20 @@
 
 @synthesize window=window_, navController=navController_, director=director_;
 
++ (void)initialize
+{
+    //configure iRate
+    [iRate sharedInstance].daysUntilPrompt = 3;
+    [iRate sharedInstance].usesUntilPrompt = 4;
+    [iRate sharedInstance].remindPeriod = 2;
+//    [iRate sharedInstance].previewMode = TRUE;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Запускаем обработчик внутриигровых покупок
+    [IAPHelper sharedInstance];
+    
 	// Create the main window
 	window_ = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
@@ -109,10 +122,6 @@
     // Авторизируем игрока в Game Center
     [[GCHelper sharedInstance] authenticateLocalUser];
     
-    // Запускаем SDK TestFlight для аналитики бета теста и аналитики реального использования
-    [TestFlight takeOff:kTestFlightTeamToken];
-//    [TestFlight setDeviceIdentifier:[[[UIDevice currentDevice] identifierForVendor] UUIDString]];
-    
     [[GameManager sharedGameManager] setupAudioEngine];
     [[GameManager sharedGameManager] runSceneWithID:kMainMenuScene];
     
@@ -149,6 +158,9 @@
 {
 	if( [navController_ visibleViewController] == director_ )
 		[director_ startAnimation];
+    
+    // Запрашиваем данные по продуктам из inAppPurchase
+    [[IAPHelper sharedInstance] reloadProducts];
 }
 
 // application will be killed
